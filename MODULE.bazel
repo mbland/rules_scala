@@ -1,0 +1,122 @@
+"""Bazel module definition for rules_scala"""
+
+module(
+    name = "rules_scala", version = "6.6.1", repo_name = "io_bazel_rules_scala"
+)
+
+http_archive = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
+)
+
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+bazel_dep(name = "rules_cc", version = "0.0.9")
+bazel_dep(name = "rules_java", version = "7.9.1")
+bazel_dep(name = "rules_proto", version = "6.0.2")
+
+bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
+bazel_dep(name = "buildozer", version = "7.1.2")
+# unused_deps?
+
+#_build_tools_release = "5.1.0"
+#
+#http_archive(
+#    name = "com_github_bazelbuild_buildtools",
+#    sha256 = "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
+#    strip_prefix = "buildtools-%s" % _build_tools_release,
+#    url = "https://github.com/bazelbuild/buildtools/archive/%s.tar.gz" % _build_tools_release,
+#)
+
+SCALA_VERSION = "2.13.14"
+SCALA_VERSIONS = [SCALA_VERSION]
+
+scala_config = use_extension("//scala/extensions:config.bzl", "scala_config")
+scala_config.settings(
+    scala_version = SCALA_VERSION,
+    scala_versions = SCALA_VERSIONS,
+)
+use_repo(
+    scala_config,
+    "io_bazel_rules_scala_config",
+)
+
+repos = [
+    "io_bazel_rules_scala_scala_compiler",
+    "io_bazel_rules_scala_scala_library",
+    "io_bazel_rules_scala_scala_parser_combinators",
+    "io_bazel_rules_scala_scala_reflect",
+    "io_bazel_rules_scala_scala_xml",
+    "io_bazel_rules_scala_scalactic",
+    "io_bazel_rules_scala_scalatest",
+    "io_bazel_rules_scala_scalatest_core",
+    "io_bazel_rules_scala_scalatest_compatible",
+    "io_bazel_rules_scala_scalatest_featurespec",
+    "io_bazel_rules_scala_scalatest_flatspec",
+    "io_bazel_rules_scala_scalatest_freespec",
+    "io_bazel_rules_scala_scalatest_funspec",
+    "io_bazel_rules_scala_scalatest_funsuite",
+    "io_bazel_rules_scala_scalatest_matchers_core",
+    "io_bazel_rules_scala_scalatest_mustmatchers",
+    "io_bazel_rules_scala_scalatest_shouldmatchers",
+    "io_bazel_rules_scala_org_specs2_specs2_common",
+    "io_bazel_rules_scala_org_specs2_specs2_core",
+    "io_bazel_rules_scala_org_specs2_specs2_fp",
+    "io_bazel_rules_scala_org_specs2_specs2_matcher",
+    "io_bazel_rules_scala_org_specs2_specs2_junit",
+    "io_bazel_rules_scala_junit_junit",
+    "io_bazel_rules_scala_org_hamcrest_hamcrest_core",
+]
+
+toolchains = [
+    "@io_bazel_rules_scala//scala:toolchain",
+    "@io_bazel_rules_scala//testing:scalatest_toolchain",
+]
+
+dev_toolchains = ["@io_bazel_rules_scala//testing:testing_toolchain"]
+
+scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
+[
+    (
+        [use_repo(scala_deps, repo + suffix) for repo in repos],
+        [register_toolchains(toolchain + suffix) for toolchain in toolchains],
+        [
+            register_toolchains(toolchain + suffix, dev_dependency = True)
+            for toolchain in dev_toolchains
+        ],
+    )
+    # The v.replace() expression mimics the logic to generate version specific
+    # repo suffixes from rules_scala.
+    for suffix in ["_" + v.replace(".", "_") for v in SCALA_VERSIONS]
+]
+
+# Dev dependencies
+
+use_repo(
+    scala_deps,
+    "scala_proto_rules_scalapb_fastparse",
+    "scala_proto_rules_protoc_bridge",
+    "scala_proto_rules_scalapb_plugin",
+    "scala_proto_rules_scalapb_lenses",
+    "scala_proto_rules_netty_handler_proxy",
+)
+
+bazel_dep(
+    name = "protobuf",
+    version = "28.0-rc2",
+    repo_name = "com_google_protobuf",
+)
+
+bazel_dep(
+    name = "bazel_ci_rules",
+    version = "1.0.0",
+    repo_name = "bazelci_rules",
+    dev_dependency = True,
+)
+
+register_toolchains(
+    "//scala_proto:default_deps_toolchain",
+    "@io_bazel_rules_scala//twitter_scrooge:scrooge_toolchain",
+    "@io_bazel_rules_scala//test/proto:scalapb_toolchain",
+    dev_dependency = True,
+)
+
