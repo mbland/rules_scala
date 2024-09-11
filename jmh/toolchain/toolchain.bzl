@@ -1,5 +1,5 @@
 load("//scala/private/toolchain_deps:toolchain_deps.bzl", "expose_toolchain_deps")
-load("@io_bazel_rules_scala//scala:providers.bzl", _DepsInfo = "DepsInfo")
+load("//scala:providers.bzl", _DepsInfo = "DepsInfo")
 
 def _jmh_toolchain_impl(ctx):
     toolchain = platform_common.ToolchainInfo(
@@ -12,10 +12,10 @@ jmh_toolchain = rule(
     attrs = {
         "dep_providers": attr.label_list(
             default = [
-                "@io_bazel_rules_scala//jmh:jmh_classpath_provider",
-                "@io_bazel_rules_scala//jmh:jmh_core_provider",
-                "@io_bazel_rules_scala//jmh:benchmark_generator_provider",
-                "@io_bazel_rules_scala//jmh:benchmark_generator_runtime_provider",
+                "//jmh:jmh_classpath_provider",
+                "//jmh:jmh_core_provider",
+                "//jmh:benchmark_generator_provider",
+                "//jmh:benchmark_generator_runtime_provider",
             ],
             providers = [_DepsInfo],
         ),
@@ -23,7 +23,7 @@ jmh_toolchain = rule(
 )
 
 def _export_toolchain_deps_impl(ctx):
-    return expose_toolchain_deps(ctx, "@io_bazel_rules_scala//jmh/toolchain:jmh_toolchain_type")
+    return expose_toolchain_deps(ctx, "//jmh/toolchain:jmh_toolchain_type")
 
 export_toolchain_deps = rule(
     _export_toolchain_deps_impl,
@@ -32,6 +32,6 @@ export_toolchain_deps = rule(
             mandatory = True,
         ),
     },
-    toolchains = ["@io_bazel_rules_scala//jmh/toolchain:jmh_toolchain_type"],
+    toolchains = ["//jmh/toolchain:jmh_toolchain_type"],
     incompatible_use_toolchain_transition = True,
 )

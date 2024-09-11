@@ -1,5 +1,6 @@
 load("//twitter_scrooge/toolchain:toolchain.bzl", "export_scrooge_deps", "scrooge_toolchain")
 load("//scala:providers.bzl", "declare_deps_provider")
+load("//scala:artifacts.bzl", "versioned_artifact_repos")
 
 scrooge_toolchain(
     name = "scrooge_toolchain_impl",
@@ -17,11 +18,12 @@ declare_deps_provider(
     name = "aspect_compile_classpath_provider",
     deps_id = "aspect_compile_classpath",
     visibility = ["//visibility:public"],
-    deps = [
-        "//external:io_bazel_rules_scala/dependency/thrift/javax_annotation_api",
-        "//external:io_bazel_rules_scala/dependency/thrift/libthrift",
-        "//external:io_bazel_rules_scala/dependency/thrift/scrooge_core",
-        "//external:io_bazel_rules_scala/dependency/thrift/util_core",
+    deps = versioned_artifact_repos([
+        "@io_bazel_rules_scala_javax_annotation_api",
+        "@libthrift",
+        "@io_bazel_rules_scala_scrooge_core",
+        "@io_bazel_rules_scala_util_core",
+    ]) + [
         "//scala/private/toolchain_deps:scala_library_classpath",
     ],
 )
@@ -30,9 +32,10 @@ declare_deps_provider(
     name = "compile_classpath_provider",
     deps_id = "compile_classpath",
     visibility = ["//visibility:public"],
-    deps = [
-        "//external:io_bazel_rules_scala/dependency/thrift/libthrift",
-        "//external:io_bazel_rules_scala/dependency/thrift/scrooge_core",
+    deps = versioned_artifact_repos([
+        "@libthrift",
+        "@io_bazel_rules_scala_scrooge_core",
+    ]) + [
         "//scala/private/toolchain_deps:scala_library_classpath",
     ],
 )
@@ -41,21 +44,22 @@ declare_deps_provider(
     name = "scrooge_generator_classpath_provider",
     deps_id = "scrooge_generator_classpath",
     visibility = ["//visibility:public"],
-    deps = [
-        "//external:io_bazel_rules_scala/dependency/thrift/scrooge_generator",
-    ],
+    deps = versioned_artifact_repos([
+        "@io_bazel_rules_scala_scrooge_generator",
+    ]),
 )
 
 declare_deps_provider(
     name = "compiler_classpath_provider",
     deps_id = "compiler_classpath",
     visibility = ["//visibility:public"],
-    deps = [
-        "//external:io_bazel_rules_scala/dependency/thrift/mustache",
-        "//external:io_bazel_rules_scala/dependency/thrift/scopt",
-        "//external:io_bazel_rules_scala/dependency/thrift/scrooge_generator",
-        "//external:io_bazel_rules_scala/dependency/thrift/util_core",
-        "//external:io_bazel_rules_scala/dependency/thrift/util_logging",
+    deps = versioned_artifact_repos([
+        "@io_bazel_rules_scala_mustache",
+        "@io_bazel_rules_scala_scopt",
+        "@io_bazel_rules_scala_scrooge_generator",
+        "@io_bazel_rules_scala_util_core",
+        "@io_bazel_rules_scala_util_logging",
+    ]) + [
         "//scala/private/toolchain_deps:parser_combinators",
     ],
 )

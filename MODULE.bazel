@@ -40,16 +40,45 @@ use_repo(
     "io_bazel_rules_scala_config",
 )
 
-repos = [
+# These repos come from //third_party/repositories/scala_*.bzl.
+artifacts = [
+    "com_geirsson_metaconfig_core",
+    "com_geirsson_metaconfig_typesafe_config",
+    "com_google_protobuf_protobuf_java",
+    "com_lihaoyi_fansi",
+    "com_lihaoyi_fastparse",
+    "com_lihaoyi_geny",
+    "com_lihaoyi_pprint",
+    "com_lihaoyi_sourcecode",
+    "com_thesamet_scalapb_lenses",
+    "com_thesamet_scalapb_scalapb_runtime",
+    "com_typesafe_config",
+    "io_bazel_rules_scala_guava",
+    "io_bazel_rules_scala_javax_annotation_api",
+    "io_bazel_rules_scala_junit_junit",
+    "io_bazel_rules_scala_mustache",
+    "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
+    "io_bazel_rules_scala_org_apache_commons_commons_math3",
+    "io_bazel_rules_scala_org_hamcrest_hamcrest_core",
+    "io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
+    "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
+    "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection",
+    "io_bazel_rules_scala_org_ows2_asm_asm",
+    "io_bazel_rules_scala_org_specs2_specs2_common",
+    "io_bazel_rules_scala_org_specs2_specs2_core",
+    "io_bazel_rules_scala_org_specs2_specs2_fp",
+    "io_bazel_rules_scala_org_specs2_specs2_junit",
+    "io_bazel_rules_scala_org_specs2_specs2_matcher",
     "io_bazel_rules_scala_scala_compiler",
     "io_bazel_rules_scala_scala_library",
+    "io_bazel_rules_scala_scala_parallel_collections",
     "io_bazel_rules_scala_scala_parser_combinators",
     "io_bazel_rules_scala_scala_reflect",
     "io_bazel_rules_scala_scala_xml",
     "io_bazel_rules_scala_scalactic",
     "io_bazel_rules_scala_scalatest",
-    "io_bazel_rules_scala_scalatest_core",
     "io_bazel_rules_scala_scalatest_compatible",
+    "io_bazel_rules_scala_scalatest_core",
     "io_bazel_rules_scala_scalatest_featurespec",
     "io_bazel_rules_scala_scalatest_flatspec",
     "io_bazel_rules_scala_scalatest_freespec",
@@ -58,26 +87,79 @@ repos = [
     "io_bazel_rules_scala_scalatest_matchers_core",
     "io_bazel_rules_scala_scalatest_mustmatchers",
     "io_bazel_rules_scala_scalatest_shouldmatchers",
-    "io_bazel_rules_scala_org_specs2_specs2_common",
-    "io_bazel_rules_scala_org_specs2_specs2_core",
-    "io_bazel_rules_scala_org_specs2_specs2_fp",
-    "io_bazel_rules_scala_org_specs2_specs2_matcher",
-    "io_bazel_rules_scala_org_specs2_specs2_junit",
-    "io_bazel_rules_scala_junit_junit",
-    "io_bazel_rules_scala_org_hamcrest_hamcrest_core",
+    "io_bazel_rules_scala_scopt",
+    "io_bazel_rules_scala_scrooge_core",
+    "io_bazel_rules_scala_scrooge_generator",
+    "io_bazel_rules_scala_util_core",
+    "io_bazel_rules_scala_util_logging",
+    "libthrift",
+    "org_scala_lang_modules_scala_collection_compat",
+    "org_scala_lang_scalap",
+    "org_scalameta_common",
+    "org_scalameta_fastparse",
+    "org_scalameta_fastparse_utils",
+    "org_scalameta_parsers",
+    "org_scalameta_scalafmt_core",
+    "org_scalameta_scalameta",
+    "org_scalameta_semanticdb_scalac",
+    "org_scalameta_trees",
+    "org_typelevel_paiges_core",
+    "scala_proto_rules_disruptor",
+    "scala_proto_rules_google_instrumentation",
+    "scala_proto_rules_grpc_api",
+    "scala_proto_rules_grpc_context",
+    "scala_proto_rules_grpc_core",
+    "scala_proto_rules_grpc_netty",
+    "scala_proto_rules_grpc_protobuf",
+    "scala_proto_rules_grpc_stub",
+    "scala_proto_rules_guava",
+    "scala_proto_rules_netty_buffer",
+    "scala_proto_rules_netty_codec",
+    "scala_proto_rules_netty_codec_http",
+    "scala_proto_rules_netty_codec_http2",
+    "scala_proto_rules_netty_codec_socks",
+    "scala_proto_rules_netty_common",
+    "scala_proto_rules_netty_handler",
+    "scala_proto_rules_netty_handler_proxy",
+    "scala_proto_rules_netty_resolver",
+    "scala_proto_rules_netty_transport",
+    "scala_proto_rules_opencensus_api",
+    "scala_proto_rules_opencensus_contrib_grpc_metrics",
+    "scala_proto_rules_opencensus_impl",
+    "scala_proto_rules_opencensus_impl_core",
+    "scala_proto_rules_perfmark_api",
+    "scala_proto_rules_protoc_bridge",
+    "scala_proto_rules_scalapb_fastparse",
+    "scala_proto_rules_scalapb_lenses",
+    "scala_proto_rules_scalapb_plugin",
+    "scala_proto_rules_scalapb_runtime",
+    "scala_proto_rules_scalapb_runtime_grpc",
+]
+
+test_only_artifacts = [
+    "com_github_jnr_jffi_native",
+    "com_google_guava_guava_21_0",
+    "com_google_guava_guava_21_0_with_file",
+    "com_twitter__scalding_date",
+    "org_apache_commons_commons_lang_3_5",
+    "org_springframework_spring_core",
+    "org_springframework_spring_tx",
+    "org_typelevel__cats_core",
+    "org_typelevel_kind_projector",
 ]
 
 toolchains = [
-    "@io_bazel_rules_scala//scala:toolchain",
-    "@io_bazel_rules_scala//testing:scalatest_toolchain",
+    "//scala:toolchain",
+    "//testing:scalatest_toolchain",
 ]
 
-dev_toolchains = ["@io_bazel_rules_scala//testing:testing_toolchain"]
+dev_toolchains = ["//testing:testing_toolchain"]
 
 scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
 [
     (
-        [use_repo(scala_deps, repo + suffix) for repo in repos],
+        [use_repo(scala_deps, repo + suffix) for repo in artifacts],
+        [use_repo(scala_deps, repo + suffix) for repo in test_only_artifacts],
         [register_toolchains(toolchain + suffix) for toolchain in toolchains],
         [
             register_toolchains(toolchain + suffix, dev_dependency = True)
@@ -90,15 +172,6 @@ scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
 ]
 
 # Dev dependencies
-
-use_repo(
-    scala_deps,
-    "scala_proto_rules_scalapb_fastparse",
-    "scala_proto_rules_protoc_bridge",
-    "scala_proto_rules_scalapb_plugin",
-    "scala_proto_rules_scalapb_lenses",
-    "scala_proto_rules_netty_handler_proxy",
-)
 
 bazel_dep(
     name = "protobuf",
@@ -114,9 +187,10 @@ bazel_dep(
 )
 
 register_toolchains(
+    "//jmh:jmh_toolchain",
     "//scala_proto:default_deps_toolchain",
-    "@io_bazel_rules_scala//twitter_scrooge:scrooge_toolchain",
-    "@io_bazel_rules_scala//test/proto:scalapb_toolchain",
+    "//twitter_scrooge:scrooge_toolchain",
+    "//test/proto:scalapb_toolchain",
     dev_dependency = True,
 )
 

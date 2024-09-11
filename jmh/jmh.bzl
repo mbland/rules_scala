@@ -1,3 +1,4 @@
+load("//scala:artifacts.bzl", "versioned_artifact_repos")
 load("//scala:scala.bzl", "scala_binary", "scala_library")
 load(
     "//scala:scala_cross_version.bzl",
@@ -9,7 +10,7 @@ def jmh_repositories(
         maven_servers = default_maven_server_urls(),
         overriden_artifacts = {}):
     repositories(
-        for_artifact_ids = [
+        for_artifact_ids = versioned_artifact_repos([
             "io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
             "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
             "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection",
@@ -17,13 +18,13 @@ def jmh_repositories(
             "io_bazel_rules_scala_org_ows2_asm_asm",
             "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
             "io_bazel_rules_scala_org_apache_commons_commons_math3",
-        ],
+        ]),
         fetch_sources = False,
         maven_servers = maven_servers,
         overriden_artifacts = {},
     )
 
-    native.register_toolchains("@io_bazel_rules_scala//jmh:jmh_toolchain")
+    native.register_toolchains("//jmh:jmh_toolchain")
 
 def _scala_generate_benchmark(ctx):
     # we use required providers to ensure JavaInfo exists

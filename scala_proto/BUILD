@@ -10,6 +10,7 @@ load(
 )
 load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala_proto/private:toolchain_deps.bzl", "export_scalapb_toolchain_deps")
+load("//scala:artifacts.bzl", "versioned_artifact_repos")
 
 toolchain_type(
     name = "toolchain_type",
@@ -82,9 +83,10 @@ declare_deps_provider(
     visibility = ["//visibility:public"],
     deps = [
         "@com_google_protobuf//:protobuf_java",
+    ] + versioned_artifact_repos([
         "@scala_proto_rules_protoc_bridge",
         "@scala_proto_rules_scalapb_plugin",
-    ],
+    ]),
 )
 
 export_scalapb_toolchain_deps(

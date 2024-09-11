@@ -6,15 +6,18 @@
 # for you, then you should only need much shorter dependency lists. This needs to be the unrolled
 # transitive path to be used without such a facility.
 #
-DEFAULT_SCALAPB_COMPILE_DEPS = [
+load("//scala:artifacts.bzl", "versioned_artifact_repos")
+
+DEFAULT_SCALAPB_COMPILE_DEPS = versioned_artifact_repos([
     "@scala_proto_rules_scalapb_runtime",
-    "@com_google_protobuf//:protobuf_java",
     "@scala_proto_rules_scalapb_lenses",
     "@scala_proto_rules_scalapb_fastparse",
+]) + [
+    "@com_google_protobuf//:protobuf_java",
     "//scala/private/toolchain_deps:scala_library_classpath",
 ]
 
-DEFAULT_SCALAPB_GRPC_DEPS = [
+DEFAULT_SCALAPB_GRPC_DEPS = versioned_artifact_repos([
     "@scala_proto_rules_grpc_api",
     "@scala_proto_rules_perfmark_api",
     "@scala_proto_rules_scalapb_runtime_grpc",
@@ -40,4 +43,4 @@ DEFAULT_SCALAPB_GRPC_DEPS = [
     "@scala_proto_rules_netty_resolver",
     "@scala_proto_rules_netty_common",
     "@scala_proto_rules_netty_handler_proxy",
-]
+])
