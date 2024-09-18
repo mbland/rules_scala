@@ -12,6 +12,9 @@ http_archive = use_repo_rule(
 SCALA_VERSION = "2.13.14"
 SCALA_VERSIONS = [SCALA_VERSION]
 
+# `v.replace()` mimics `version_suffix()` from `//scala:scala_cross_version.bzl`.
+SCALA_VERSION_SUFFIXES = ["_" + v.replace(".", "_") for v in SCALA_VERSIONS]
+
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_cc", version = "0.0.9")
 bazel_dep(name = "rules_java", version = "7.11.1")
@@ -42,17 +45,17 @@ use_repo(
 
 # These repos come from //third_party/repositories/scala_*.bzl.
 artifacts = [
-    "com_geirsson_metaconfig_core",
-    "com_geirsson_metaconfig_typesafe_config",
-    "com_google_protobuf_protobuf_java",
-    "com_lihaoyi_fansi",
-    "com_lihaoyi_fastparse",
-    "com_lihaoyi_geny",
-    "com_lihaoyi_pprint",
-    "com_lihaoyi_sourcecode",
-    "com_thesamet_scalapb_lenses",
-    "com_thesamet_scalapb_scalapb_runtime",
-    "com_typesafe_config",
+    #"com_geirsson_metaconfig_core",
+    #"com_geirsson_metaconfig_typesafe_config",
+    #"com_google_protobuf_protobuf_java",
+    #"com_lihaoyi_fansi",
+    #"com_lihaoyi_fastparse",
+    #"com_lihaoyi_geny",
+    #"com_lihaoyi_pprint",
+    #"com_lihaoyi_sourcecode",
+    #"com_thesamet_scalapb_lenses",
+    #"com_thesamet_scalapb_scalapb_runtime",
+    #"com_typesafe_config",
     "io_bazel_rules_scala_guava",
     "io_bazel_rules_scala_javax_annotation_api",
     "io_bazel_rules_scala_junit_junit",
@@ -69,41 +72,24 @@ artifacts = [
     "io_bazel_rules_scala_org_specs2_specs2_fp",
     "io_bazel_rules_scala_org_specs2_specs2_junit",
     "io_bazel_rules_scala_org_specs2_specs2_matcher",
-    "io_bazel_rules_scala_scala_compiler",
-    "io_bazel_rules_scala_scala_library",
     "io_bazel_rules_scala_scala_parallel_collections",
-    "io_bazel_rules_scala_scala_parser_combinators",
-    "io_bazel_rules_scala_scala_reflect",
-    "io_bazel_rules_scala_scala_xml",
-    "io_bazel_rules_scala_scalactic",
-    "io_bazel_rules_scala_scalatest",
-    "io_bazel_rules_scala_scalatest_compatible",
-    "io_bazel_rules_scala_scalatest_core",
-    "io_bazel_rules_scala_scalatest_featurespec",
-    "io_bazel_rules_scala_scalatest_flatspec",
-    "io_bazel_rules_scala_scalatest_freespec",
-    "io_bazel_rules_scala_scalatest_funspec",
-    "io_bazel_rules_scala_scalatest_funsuite",
-    "io_bazel_rules_scala_scalatest_matchers_core",
-    "io_bazel_rules_scala_scalatest_mustmatchers",
-    "io_bazel_rules_scala_scalatest_shouldmatchers",
     "io_bazel_rules_scala_scopt",
     "io_bazel_rules_scala_scrooge_core",
     "io_bazel_rules_scala_scrooge_generator",
     "io_bazel_rules_scala_util_core",
     "io_bazel_rules_scala_util_logging",
     "libthrift",
-    "org_scala_lang_modules_scala_collection_compat",
-    "org_scala_lang_scalap",
-    "org_scalameta_common",
-    "org_scalameta_fastparse",
-    "org_scalameta_fastparse_utils",
-    "org_scalameta_parsers",
-    "org_scalameta_scalafmt_core",
-    "org_scalameta_scalameta",
-    "org_scalameta_semanticdb_scalac",
-    "org_scalameta_trees",
-    "org_typelevel_paiges_core",
+    #"org_scala_lang_modules_scala_collection_compat",
+    #"org_scala_lang_scalap",
+    #"org_scalameta_common",
+    #"org_scalameta_fastparse",
+    #"org_scalameta_fastparse_utils",
+    #"org_scalameta_parsers",
+    #"org_scalameta_scalafmt_core",
+    #"org_scalameta_scalameta",
+    #"org_scalameta_semanticdb_scalac",
+    #"org_scalameta_trees",
+    #"org_typelevel_paiges_core",
     "scala_proto_rules_disruptor",
     "scala_proto_rules_google_instrumentation",
     "scala_proto_rules_grpc_api",
@@ -136,16 +122,38 @@ artifacts = [
     "scala_proto_rules_scalapb_runtime_grpc",
 ]
 
-test_only_artifacts = [
-    "com_github_jnr_jffi_native",
-    "com_google_guava_guava_21_0",
-    "com_google_guava_guava_21_0_with_file",
-    "com_twitter__scalding_date",
-    "org_apache_commons_commons_lang_3_5",
-    "org_springframework_spring_core",
-    "org_springframework_spring_tx",
-    "org_typelevel__cats_core",
-    "org_typelevel_kind_projector",
+scalatest_artifacts = [
+    "io_bazel_rules_scala_scalactic",
+    "io_bazel_rules_scala_scalatest",
+    "io_bazel_rules_scala_scalatest_compatible",
+    "io_bazel_rules_scala_scalatest_core",
+    "io_bazel_rules_scala_scalatest_featurespec",
+    "io_bazel_rules_scala_scalatest_flatspec",
+    "io_bazel_rules_scala_scalatest_freespec",
+    "io_bazel_rules_scala_scalatest_funspec",
+    "io_bazel_rules_scala_scalatest_funsuite",
+    "io_bazel_rules_scala_scalatest_matchers_core",
+    "io_bazel_rules_scala_scalatest_mustmatchers",
+    "io_bazel_rules_scala_scalatest_shouldmatchers",
+]
+
+toolchain_artifacts = [
+    "io_bazel_rules_scala_scala_compiler",
+    "io_bazel_rules_scala_scala_library",
+    "io_bazel_rules_scala_scala_parser_combinators",
+    "io_bazel_rules_scala_scala_reflect",
+    "io_bazel_rules_scala_scala_xml",
+    "org_scalameta_semanticdb_scalac",
+] if SCALA_VERSION.startswith("2") else [
+    "io_bazel_rules_scala_scala_library",
+    "io_bazel_rules_scala_scala_compiler",
+    "io_bazel_rules_scala_scala_interfaces",
+    "io_bazel_rules_scala_scala_tasty_core",
+    "io_bazel_rules_scala_scala_asm",
+    "io_bazel_rules_scala_scala_xml",
+    "io_bazel_rules_scala_scala_parser_combinators",
+    "io_bazel_rules_scala_scala_library_2",
+    "org_scala_sbt_compiler_interface",
 ]
 
 toolchains = [
@@ -159,16 +167,15 @@ scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
 [
     (
         [use_repo(scala_deps, repo + suffix) for repo in artifacts],
-        [use_repo(scala_deps, repo + suffix) for repo in test_only_artifacts],
+        [use_repo(scala_deps, repo + suffix) for repo in scalatest_artifacts],
+        [use_repo(scala_deps, repo + suffix) for repo in toolchain_artifacts],
         [register_toolchains(toolchain + suffix) for toolchain in toolchains],
         [
             register_toolchains(toolchain + suffix, dev_dependency = True)
             for toolchain in dev_toolchains
         ],
     )
-    # The v.replace() expression mimics the logic to generate version specific
-    # repo suffixes from rules_scala.
-    for suffix in ["_" + v.replace(".", "_") for v in SCALA_VERSIONS]
+    for suffix in SCALA_VERSION_SUFFIXES
 ]
 
 # Dev dependencies
@@ -208,3 +215,32 @@ go_sdk.download(
     version = go_version,
 )
 use_repo(go_sdk, "go_sdk")
+
+test_only_artifacts = [
+    # test adding a scala jar:
+    "com_twitter__scalding_date",
+    # test of strict deps (scalac plugin UT + E2E)
+    "com_google_guava_guava_21_0_with_file",
+    "com_github_jnr_jffi_native",
+    "org_apache_commons_commons_lang_3_5",
+    "com_google_guava_guava_21_0",
+    # test of import external
+    # scala maven import external decodes maven artifacts to its parts
+    # (group id, artifact id, packaging, version and classifier). To make sure
+    # the decoding and then the download url composition are working the artifact example
+    # must contain all the different parts and sha256s so the downloaded content will be
+    # validated against it
+    "org_springframework_spring_core",
+    "org_springframework_spring_tx",
+    "org_typelevel_kind_projector",
+    # For testing that we don't include sources jars to the classpath
+    "org_typelevel__cats_core",
+]
+
+[
+    (
+        [use_repo(scala_deps, repo + suffix) for repo in test_only_artifacts],
+    )
+    for suffix in SCALA_VERSION_SUFFIXES
+]
+

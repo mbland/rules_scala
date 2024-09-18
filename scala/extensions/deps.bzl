@@ -2,8 +2,55 @@
 
 load("//scala:scala.bzl", "scala_repositories")
 load("//testing:scalatest.bzl", "scalatest_repositories")
+load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
-def _scala_dependencies_impl(_ctx):
+_settings = tag_class(
+    attrs = {
+        "maven_servers": attr.string_list(
+            mandatory = False, default = default_maven_server_urls()
+        ),
+        "overriden_artifacts": attr.string_dict(
+            mandatory = False,
+        ),
+        "load_dep_rules": attr.bool(
+            mandatory = False, default = True
+        ),
+        "load_jar_deps": attr.bool(
+            mandatory = False, default = True
+        ),
+        "fetch_sources": attr.bool(
+            mandatory = False, default = False
+        ),
+        "validate_scala_version": attr.bool(
+            mandatory = False, default = True
+        ),
+    },
+)
+
+_scala_compiler_srcjar = tag_class(
+    attrs = {
+        "url": attr.string(
+            mandatory = False,
+            default = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/" +
+                "%s/scala-compiler-%s-sources.jar" % (SCALA_VERSION, SCALA_VERSION),
+        ),
+        "urls": attr.string_list(
+            mandatory = False,
+        ),
+        "label": attr.string(
+            mandatory = False,
+        ),
+        "sha256": attr.string(
+            mandatory = False,
+        ),
+        "integrity": attr.string(
+            mandatory = False,
+        ),
+    },
+)
+
+def _scala_dependencies_impl(module_ctx):
     scala_repositories(load_dep_rules=False)
     scalatest_repositories()
     # rules_scala_toolchain_deps_repositories(fetch_sources = True)
