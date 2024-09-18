@@ -49,6 +49,7 @@ _artifacts = tag_class(
         "toolchain_scala_3": attr.string_list(),
         "scalatest": attr.string_list(),
         "testonly": attr.string_list(),
+        "twitter_scrooge": attr.string_list(),
     }
 )
 
@@ -91,6 +92,7 @@ def _get_artifacts(module_ctx):
     toolchain_scala_3 = {}
     scalatest = {}
     testonly = {}
+    twitter_scrooge = {}
 
     for mod in module_ctx.modules:
         for artifacts in mod.tags.artifacts:
@@ -104,6 +106,8 @@ def _get_artifacts(module_ctx):
                 scalatest[artifact] = None
             for artifact in artifacts.testonly:
                 testonly[artifact] = None
+            for artifact in artifacts.twitter_scrooge:
+                twitter_scrooge[artifact] = None
 
     return {
         "toolchain_common": toolchain_common.keys(),
@@ -111,6 +115,7 @@ def _get_artifacts(module_ctx):
         "toolchain_scala_3": toolchain_scala_3.keys(),
         "scalatest": scalatest.keys(),
         "testonly": testonly.keys(),
+        "twitter_scrooge": twitter_scrooge.keys(),
     }
 
 def _scala_dependencies_impl(module_ctx):
@@ -134,10 +139,17 @@ def _scala_dependencies_impl(module_ctx):
                 **settings,
             )
 
-        # Replace scalatest_repositories()
+        # Replace:
+        # - scalatest_repositories()
+        # - twitter_scrooge()
+        remaining_artifacts = (
+            artifacts["scalatest"] +
+            artifacts["twitter_scrooge"]
+        )
+
         repositories(
             scala_version = scala_version,
-            for_artifact_ids = artifacts["scalatest"],
+            for_artifact_ids = remaining_artifacts,
             **settings,
         )
 

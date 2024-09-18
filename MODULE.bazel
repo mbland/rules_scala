@@ -56,10 +56,7 @@ artifacts = [
     #"com_thesamet_scalapb_lenses",
     #"com_thesamet_scalapb_scalapb_runtime",
     #"com_typesafe_config",
-    "io_bazel_rules_scala_guava",
-    "io_bazel_rules_scala_javax_annotation_api",
     "io_bazel_rules_scala_junit_junit",
-    "io_bazel_rules_scala_mustache",
     "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
     "io_bazel_rules_scala_org_apache_commons_commons_math3",
     "io_bazel_rules_scala_org_hamcrest_hamcrest_core",
@@ -73,12 +70,6 @@ artifacts = [
     "io_bazel_rules_scala_org_specs2_specs2_junit",
     "io_bazel_rules_scala_org_specs2_specs2_matcher",
     "io_bazel_rules_scala_scala_parallel_collections",
-    "io_bazel_rules_scala_scopt",
-    "io_bazel_rules_scala_scrooge_core",
-    "io_bazel_rules_scala_scrooge_generator",
-    "io_bazel_rules_scala_util_core",
-    "io_bazel_rules_scala_util_logging",
-    "libthrift",
     #"org_scala_lang_modules_scala_collection_compat",
     #"org_scala_lang_scalap",
     #"org_scalameta_common",
@@ -157,6 +148,18 @@ scalatest_artifacts = [
     "io_bazel_rules_scala_scalactic",
 ]
 
+twitter_scrooge_artifacts = [
+    "libthrift",
+    "io_bazel_rules_scala_scrooge_core",
+    "io_bazel_rules_scala_scrooge_generator",
+    "io_bazel_rules_scala_util_core",
+    "io_bazel_rules_scala_util_logging",
+    "io_bazel_rules_scala_guava",
+    "io_bazel_rules_scala_javax_annotation_api",
+    "io_bazel_rules_scala_mustache",
+    "io_bazel_rules_scala_scopt",
+]
+
 testonly_artifacts = [
     # test adding a scala jar:
     "com_twitter__scalding_date",
@@ -183,7 +186,9 @@ toolchains = [
     "//testing:scalatest_toolchain",
 ]
 
-dev_toolchains = ["//testing:testing_toolchain"]
+dev_toolchains = [
+    "//testing:testing_toolchain",
+]
 
 scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
 scala_deps.artifacts(
@@ -192,6 +197,7 @@ scala_deps.artifacts(
     toolchain_scala_3 = toolchain_scala_3_artifacts,
     scalatest = scalatest_artifacts,
     testonly = testonly_artifacts,
+    twitter_scrooge = twitter_scrooge_artifacts,
 )
 
 all_artifacts = (
@@ -199,7 +205,8 @@ all_artifacts = (
     scalatest_artifacts +
     toolchain_common_artifacts +
     toolchain_scala_2_artifacts +
-    toolchain_scala_3_artifacts
+    toolchain_scala_3_artifacts +
+    twitter_scrooge_artifacts
 )
 
 [
@@ -245,7 +252,11 @@ bazel_dep(
 )
 
 go_version = "1.23.1"
-go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
+go_sdk = use_extension(
+    "@io_bazel_rules_go//go:extensions.bzl",
+    "go_sdk",
+    dev_dependency = True,
+)
 go_sdk.download(
     name = "go_sdk",
     version = go_version,
