@@ -1,59 +1,146 @@
 """Exports repos used by @io_bazel_rules_scala rules"""
 
-load("//scala:scala.bzl", "scala_repositories")
-load("//testing:scalatest.bzl", "scalatest_repositories")
+load(
+    "//scala/private:macros/scala_repositories.bzl",
+    "dt_patched_compiler_setup",
+)
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
+load("//third_party/repositories:repositories.bzl", "repositories")
+load(
+    "@io_bazel_rules_scala_config//:config.bzl",
+    "SCALA_VERSION",
+    "SCALA_VERSIONS",
+)
 
 _settings = tag_class(
     attrs = {
         "maven_servers": attr.string_list(
-            mandatory = False, default = default_maven_server_urls()
+            default = default_maven_server_urls(),
         ),
-        "overriden_artifacts": attr.string_dict(
-            mandatory = False,
-        ),
-        "load_dep_rules": attr.bool(
-            mandatory = False, default = True
-        ),
-        "load_jar_deps": attr.bool(
-            mandatory = False, default = True
-        ),
-        "fetch_sources": attr.bool(
-            mandatory = False, default = False
-        ),
-        "validate_scala_version": attr.bool(
-            mandatory = False, default = True
-        ),
+        # Correct spelling of "overridden"
+        "overridden_artifacts": attr.string_dict(),
+        "load_dep_rules": attr.bool(default = True),
+        "load_jar_deps": attr.bool(default = True),
+        "fetch_sources": attr.bool(),
+        "validate_scala_version": attr.bool(default = True),
     },
+)
+
+_scala_compiler_srcjar_default_url = ("https://repo1.maven.org/maven2/org/" +
+    "scala-lang/scala-compiler/%s/scala-compiler-%s-sources.jar" % (
+        SCALA_VERSION, SCALA_VERSION
+    )
 )
 
 _scala_compiler_srcjar = tag_class(
     attrs = {
-        "url": attr.string(
-            mandatory = False,
-            default = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/" +
-                "%s/scala-compiler-%s-sources.jar" % (SCALA_VERSION, SCALA_VERSION),
-        ),
-        "urls": attr.string_list(
-            mandatory = False,
-        ),
-        "label": attr.string(
-            mandatory = False,
-        ),
-        "sha256": attr.string(
-            mandatory = False,
-        ),
-        "integrity": attr.string(
-            mandatory = False,
-        ),
+        "url": attr.string(default = _scala_compiler_srcjar_default_url),
+        "urls": attr.string_list(),
+        "label": attr.string(),
+        "sha256": attr.string(),
+        "integrity": attr.string(),
     },
 )
 
+_artifacts = tag_class(
+    attrs = {
+        "toolchain_common": attr.string_list(),
+        "toolchain_scala_2": attr.string_list(),
+        "toolchain_scala_3": attr.string_list(),
+        "scalatest": attr.string_list(),
+        "testonly": attr.string_list(),
+    }
+)
+
+def _get_settings(module_ctx):
+    root_settings = module_ctx.modules[0].tags.settings
+
+    if len(root_settings) == 0:
+        return True, True, {"maven_servers": default_maven_server_urls()}
+    settings = root_settings[0]
+    return settings.load_dep_rules, settings.load_jar_deps, {
+        "maven_servers": settings.maven_servers,
+        # internal macros misspell "overridden"
+        "overriden_artifacts": settings.overridden_artifacts,
+        "fetch_sources": settings.fetch_sources,
+        "validate_scala_version": settings.validate_scala_version,
+    }
+
+def _add_if_not_empty(name, value, result):
+    if len(value) != 0:
+        result[name] = value
+
+def _get_scala_compiler_srcjar(module_ctx):
+    root_srcjar = module_ctx.modules[0].tags.scala_compiler_srcjar
+
+    if len(root_srcjar) == 0:
+        return None
+    srcjar = root_srcjar[0]
+
+    result = {}
+    _add_if_not_empty("url", srcjar.url, result)
+    _add_if_not_empty("urls", srcjar.urls, result)
+    _add_if_not_empty("label", srcjar.label, result)
+    _add_if_not_empty("sha256", srcjar.sha256, result)
+    _add_if_not_empty("integrity", srcjar.integrity, result)
+    return result
+
+def _get_artifacts(module_ctx):
+    toolchain_common = {}
+    toolchain_scala_2 = {}
+    toolchain_scala_3 = {}
+    scalatest = {}
+    testonly = {}
+
+    for mod in module_ctx.modules:
+        for artifacts in mod.tags.artifacts:
+            for artifact in artifacts.toolchain_common:
+                toolchain_common[artifact] = None
+            for artifact in artifacts.toolchain_scala_2:
+                toolchain_scala_2[artifact] = None
+            for artifact in artifacts.toolchain_scala_3:
+                toolchain_scala_3[artifact] = None
+            for artifact in artifacts.scalatest:
+                scalatest[artifact] = None
+            for artifact in artifacts.testonly:
+                testonly[artifact] = None
+
+    return {
+        "toolchain_common": toolchain_common.keys(),
+        "toolchain_scala_2": toolchain_scala_2.keys(),
+        "toolchain_scala_3": toolchain_scala_3.keys(),
+        "scalatest": scalatest.keys(),
+        "testonly": testonly.keys(),
+    }
+
 def _scala_dependencies_impl(module_ctx):
-    scala_repositories(load_dep_rules=False)
-    scalatest_repositories()
-    # rules_scala_toolchain_deps_repositories(fetch_sources = True)
+    load_dep_rules, load_jar_deps, settings = _get_settings(module_ctx)
+    artifacts = _get_artifacts(module_ctx)
+    srcjar = _get_scala_compiler_srcjar(module_ctx)
+
+    for scala_version in SCALA_VERSIONS:
+        # Replace scala_repositories()
+        if load_dep_rules:
+            # Replace rules_scala_setup()
+            dt_patched_compiler_setup(scala_version, srcjar)
+
+        if load_jar_deps:
+            # Replace rules_scala_toolchain_deps_repositories()
+            toolchain_ids = artifacts["toolchain_common"]
+            toolchain_ids += artifacts["toolchain_scala_%s" % scala_version[0]]
+            repositories(
+                scala_version = scala_version,
+                for_artifact_ids = toolchain_ids,
+                **settings,
+            )
+
+        # Replace scalatest_repositories()
+        repositories(
+            scala_version = scala_version,
+            for_artifact_ids = artifacts["scalatest"],
+            **settings,
+        )
+
     # twitter_scrooge()
     # jmh_repositories()
     # scala_proto_repositories()
@@ -73,7 +160,12 @@ def _scala_dependencies_impl(module_ctx):
     # repositories() - see WORKSPACE
 
 scala_deps = module_extension(
-    implementation = _scala_dependencies_impl
+    implementation = _scala_dependencies_impl,
+    tag_classes = {
+        "settings": _settings,
+        "scala_compiler_srcjar": _scala_compiler_srcjar,
+        "artifacts": _artifacts,
+    }
 )
 
 #new_local_repository(

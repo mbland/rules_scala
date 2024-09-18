@@ -5,15 +5,9 @@ load("//scala/private:default_scala_version.bzl", "DEFAULT_SCALA_VERSION")
 
 _settings = tag_class(
     attrs = {
-        "scala_version": attr.string(
-            mandatory = False, default = DEFAULT_SCALA_VERSION
-        ),
-        "scala_versions": attr.string_list(
-            mandatory = False, default = []
-        ),
-        "enable_compiler_dependency_tracking": attr.bool(
-            mandatory = False, default = False
-        ),
+        "scala_version": attr.string(default = DEFAULT_SCALA_VERSION),
+        "scala_versions": attr.string_list(),
+        "enable_compiler_dependency_tracking": attr.bool(),
     },
 )
 

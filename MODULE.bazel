@@ -122,8 +122,27 @@ artifacts = [
     "scala_proto_rules_scalapb_runtime_grpc",
 ]
 
+toolchain_common_artifacts = [
+    "io_bazel_rules_scala_scala_compiler",
+    "io_bazel_rules_scala_scala_library",
+    "io_bazel_rules_scala_scala_parser_combinators",
+    "io_bazel_rules_scala_scala_xml",
+]
+
+toolchain_scala_2_artifacts = [
+    "io_bazel_rules_scala_scala_reflect",
+    "org_scalameta_semanticdb_scalac",
+]
+
+toolchain_scala_3_artifacts = [
+    "io_bazel_rules_scala_scala_interfaces",
+    "io_bazel_rules_scala_scala_tasty_core",
+    "io_bazel_rules_scala_scala_asm",
+    "io_bazel_rules_scala_scala_library_2",
+    "org_scala_sbt_compiler_interface",
+]
+
 scalatest_artifacts = [
-    "io_bazel_rules_scala_scalactic",
     "io_bazel_rules_scala_scalatest",
     "io_bazel_rules_scala_scalatest_compatible",
     "io_bazel_rules_scala_scalatest_core",
@@ -135,25 +154,28 @@ scalatest_artifacts = [
     "io_bazel_rules_scala_scalatest_matchers_core",
     "io_bazel_rules_scala_scalatest_mustmatchers",
     "io_bazel_rules_scala_scalatest_shouldmatchers",
+    "io_bazel_rules_scala_scalactic",
 ]
 
-toolchain_artifacts = [
-    "io_bazel_rules_scala_scala_compiler",
-    "io_bazel_rules_scala_scala_library",
-    "io_bazel_rules_scala_scala_parser_combinators",
-    "io_bazel_rules_scala_scala_reflect",
-    "io_bazel_rules_scala_scala_xml",
-    "org_scalameta_semanticdb_scalac",
-] if SCALA_VERSION.startswith("2") else [
-    "io_bazel_rules_scala_scala_library",
-    "io_bazel_rules_scala_scala_compiler",
-    "io_bazel_rules_scala_scala_interfaces",
-    "io_bazel_rules_scala_scala_tasty_core",
-    "io_bazel_rules_scala_scala_asm",
-    "io_bazel_rules_scala_scala_xml",
-    "io_bazel_rules_scala_scala_parser_combinators",
-    "io_bazel_rules_scala_scala_library_2",
-    "org_scala_sbt_compiler_interface",
+testonly_artifacts = [
+    # test adding a scala jar:
+    "com_twitter__scalding_date",
+    # test of strict deps (scalac plugin UT + E2E)
+    "com_google_guava_guava_21_0_with_file",
+    "com_github_jnr_jffi_native",
+    "org_apache_commons_commons_lang_3_5",
+    "com_google_guava_guava_21_0",
+    # test of import external
+    # scala maven import external decodes maven artifacts to its parts
+    # (group id, artifact id, packaging, version and classifier). To make sure
+    # the decoding and then the download url composition are working the artifact example
+    # must contain all the different parts and sha256s so the downloaded content will be
+    # validated against it
+    "org_springframework_spring_core",
+    "org_springframework_spring_tx",
+    "org_typelevel_kind_projector",
+    # For testing that we don't include sources jars to the classpath
+    "org_typelevel__cats_core",
 ]
 
 toolchains = [
@@ -164,11 +186,25 @@ toolchains = [
 dev_toolchains = ["//testing:testing_toolchain"]
 
 scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
+scala_deps.artifacts(
+    toolchain_common = toolchain_common_artifacts,
+    toolchain_scala_2 = toolchain_scala_2_artifacts,
+    toolchain_scala_3 = toolchain_scala_3_artifacts,
+    scalatest = scalatest_artifacts,
+    testonly = testonly_artifacts,
+)
+
+all_artifacts = (
+    artifacts +
+    scalatest_artifacts +
+    toolchain_common_artifacts +
+    toolchain_scala_2_artifacts +
+    toolchain_scala_3_artifacts
+)
+
 [
     (
-        [use_repo(scala_deps, repo + suffix) for repo in artifacts],
-        [use_repo(scala_deps, repo + suffix) for repo in scalatest_artifacts],
-        [use_repo(scala_deps, repo + suffix) for repo in toolchain_artifacts],
+        [use_repo(scala_deps, repo + suffix) for repo in all_artifacts],
         [register_toolchains(toolchain + suffix) for toolchain in toolchains],
         [
             register_toolchains(toolchain + suffix, dev_dependency = True)
@@ -216,31 +252,7 @@ go_sdk.download(
 )
 use_repo(go_sdk, "go_sdk")
 
-test_only_artifacts = [
-    # test adding a scala jar:
-    "com_twitter__scalding_date",
-    # test of strict deps (scalac plugin UT + E2E)
-    "com_google_guava_guava_21_0_with_file",
-    "com_github_jnr_jffi_native",
-    "org_apache_commons_commons_lang_3_5",
-    "com_google_guava_guava_21_0",
-    # test of import external
-    # scala maven import external decodes maven artifacts to its parts
-    # (group id, artifact id, packaging, version and classifier). To make sure
-    # the decoding and then the download url composition are working the artifact example
-    # must contain all the different parts and sha256s so the downloaded content will be
-    # validated against it
-    "org_springframework_spring_core",
-    "org_springframework_spring_tx",
-    "org_typelevel_kind_projector",
-    # For testing that we don't include sources jars to the classpath
-    "org_typelevel__cats_core",
-]
-
 [
-    (
-        [use_repo(scala_deps, repo + suffix) for repo in test_only_artifacts],
-    )
+    [use_repo(scala_deps, repo + suffix) for repo in testonly_artifacts]
     for suffix in SCALA_VERSION_SUFFIXES
 ]
-
