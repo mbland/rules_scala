@@ -56,19 +56,12 @@ artifacts = [
     #"com_thesamet_scalapb_lenses",
     #"com_thesamet_scalapb_scalapb_runtime",
     #"com_typesafe_config",
-    "io_bazel_rules_scala_junit_junit",
     "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
     "io_bazel_rules_scala_org_apache_commons_commons_math3",
-    "io_bazel_rules_scala_org_hamcrest_hamcrest_core",
     "io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
     "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
     "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection",
     "io_bazel_rules_scala_org_ows2_asm_asm",
-    "io_bazel_rules_scala_org_specs2_specs2_common",
-    "io_bazel_rules_scala_org_specs2_specs2_core",
-    "io_bazel_rules_scala_org_specs2_specs2_fp",
-    "io_bazel_rules_scala_org_specs2_specs2_junit",
-    "io_bazel_rules_scala_org_specs2_specs2_matcher",
     "io_bazel_rules_scala_scala_parallel_collections",
     #"org_scala_lang_modules_scala_collection_compat",
     #"org_scala_lang_scalap",
@@ -148,6 +141,19 @@ scalatest_artifacts = [
     "io_bazel_rules_scala_scalactic",
 ]
 
+junit_artifacts = [
+    "io_bazel_rules_scala_junit_junit",
+    "io_bazel_rules_scala_org_hamcrest_hamcrest_core",
+]
+
+specs2_artifacts = [
+    "io_bazel_rules_scala_org_specs2_specs2_common",
+    "io_bazel_rules_scala_org_specs2_specs2_core",
+    "io_bazel_rules_scala_org_specs2_specs2_fp",
+    "io_bazel_rules_scala_org_specs2_specs2_matcher",
+    "io_bazel_rules_scala_org_specs2_specs2_junit",
+]
+
 twitter_scrooge_artifacts = [
     "libthrift",
     "io_bazel_rules_scala_scrooge_core",
@@ -195,30 +201,37 @@ scala_deps.artifacts(
     toolchain_common = toolchain_common_artifacts,
     toolchain_scala_2 = toolchain_scala_2_artifacts,
     toolchain_scala_3 = toolchain_scala_3_artifacts,
+    junit = junit_artifacts,
     scalatest = scalatest_artifacts,
+    specs2 = specs2_artifacts,
     testonly = testonly_artifacts,
     twitter_scrooge = twitter_scrooge_artifacts,
 )
 
-all_artifacts = (
-    artifacts +
+common_artifacts = (
+    junit_artifacts +
     scalatest_artifacts +
+    specs2_artifacts +
     toolchain_common_artifacts +
-    toolchain_scala_2_artifacts +
-    toolchain_scala_3_artifacts +
     twitter_scrooge_artifacts
 )
 
 [
     (
-        [use_repo(scala_deps, repo + suffix) for repo in all_artifacts],
+        [use_repo(scala_deps, repo + suffix) for repo in common_artifacts],
         [register_toolchains(toolchain + suffix) for toolchain in toolchains],
-        [
-            register_toolchains(toolchain + suffix, dev_dependency = True)
-            for toolchain in dev_toolchains
-        ],
     )
     for suffix in SCALA_VERSION_SUFFIXES
+]
+
+[
+    [use_repo(scala_deps, repo + suffix) for repo in toolchain_scala_2_artifacts]
+    for suffix in SCALA_VERSION_SUFFIXES if suffix.startswith("_2")
+]
+
+[
+    [use_repo(scala_deps, repo + suffix) for repo in toolchain_scala_3_artifacts]
+    for suffix in SCALA_VERSION_SUFFIXES if suffix.startswith("_3")
 ]
 
 # Dev dependencies
@@ -227,6 +240,7 @@ bazel_dep(
     name = "protobuf",
     version = "28.0-rc2",
     repo_name = "com_google_protobuf",
+    dev_dependency = True,
 )
 
 bazel_dep(
@@ -241,6 +255,8 @@ register_toolchains(
     "//scala_proto:default_deps_toolchain",
     "//twitter_scrooge:scrooge_toolchain",
     "//test/proto:scalapb_toolchain",
+    "//testing:junit_toolchain",
+    "//testing:specs2_junit_toolchain",
     dev_dependency = True,
 )
 
@@ -264,6 +280,11 @@ go_sdk.download(
 use_repo(go_sdk, "go_sdk")
 
 [
-    [use_repo(scala_deps, repo + suffix) for repo in testonly_artifacts]
+    (
+        [
+            register_toolchains(toolchain + suffix, dev_dependency = True)
+            for toolchain in dev_toolchains
+        ],
+    )
     for suffix in SCALA_VERSION_SUFFIXES
 ]

@@ -47,7 +47,9 @@ _artifacts = tag_class(
         "toolchain_common": attr.string_list(),
         "toolchain_scala_2": attr.string_list(),
         "toolchain_scala_3": attr.string_list(),
+        "junit": attr.string_list(),
         "scalatest": attr.string_list(),
+        "specs2": attr.string_list(),
         "testonly": attr.string_list(),
         "twitter_scrooge": attr.string_list(),
     }
@@ -90,7 +92,9 @@ def _get_artifacts(module_ctx):
     toolchain_common = {}
     toolchain_scala_2 = {}
     toolchain_scala_3 = {}
+    junit = {}
     scalatest = {}
+    specs2 = {}
     testonly = {}
     twitter_scrooge = {}
 
@@ -102,8 +106,12 @@ def _get_artifacts(module_ctx):
                 toolchain_scala_2[artifact] = None
             for artifact in artifacts.toolchain_scala_3:
                 toolchain_scala_3[artifact] = None
+            for artifact in artifacts.junit:
+                junit[artifact] = None
             for artifact in artifacts.scalatest:
                 scalatest[artifact] = None
+            for artifact in artifacts.specs2:
+                specs2[artifact] = None
             for artifact in artifacts.testonly:
                 testonly[artifact] = None
             for artifact in artifacts.twitter_scrooge:
@@ -113,7 +121,9 @@ def _get_artifacts(module_ctx):
         "toolchain_common": toolchain_common.keys(),
         "toolchain_scala_2": toolchain_scala_2.keys(),
         "toolchain_scala_3": toolchain_scala_3.keys(),
+        "junit": junit.keys(),
         "scalatest": scalatest.keys(),
+        "specs2": specs2.keys(),
         "testonly": testonly.keys(),
         "twitter_scrooge": twitter_scrooge.keys(),
     }
@@ -142,8 +152,12 @@ def _scala_dependencies_impl(module_ctx):
         # Replace:
         # - scalatest_repositories()
         # - twitter_scrooge()
+        # - junit_repositories()
+        # - specs2_junit_repositories()
         remaining_artifacts = (
+            artifacts["junit"] +
             artifacts["scalatest"] +
+            artifacts["specs2"] +
             artifacts["twitter_scrooge"]
         )
 
@@ -153,10 +167,8 @@ def _scala_dependencies_impl(module_ctx):
             **settings,
         )
 
-    # twitter_scrooge()
     # jmh_repositories()
     # scala_proto_repositories()
-    # specs2_junit_repositories()
     # scalafmt_default_config()
     # scalafmt_repositories()
     # proto_cross_repo_boundary_repository()
