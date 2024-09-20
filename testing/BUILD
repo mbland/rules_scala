@@ -1,5 +1,5 @@
 load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load("//scala:scala_cross_version.bzl", "version_suffix")
+load("//scala:scala_cross_version.bzl", "repositories", "version_suffix")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION", "SCALA_VERSIONS")
 
 _SPECS2_DEPS = [
@@ -38,7 +38,7 @@ _SCALATEST_DEPS = [
         name = "testing_toolchain" + version_suffix(scala_version),
         junit_classpath = _JUNIT_DEPS,
         scala_version = scala_version,
-        scalatest_classpath = [dep + version_suffix(scala_version) for dep in _SCALATEST_DEPS],
+        scalatest_classpath = repositories(scala_version, _SCALATEST_DEPS),
         specs2_classpath = _SPECS2_DEPS,
         specs2_junit_classpath = _SPECS2_JUNIT_DEPS,
         visibility = ["//visibility:public"],
@@ -50,7 +50,7 @@ _SCALATEST_DEPS = [
     setup_scala_testing_toolchain(
         name = "scalatest_toolchain" + version_suffix(scala_version),
         scala_version = scala_version,
-        scalatest_classpath = [dep + version_suffix(scala_version) for dep in _SCALATEST_DEPS],
+        scalatest_classpath = repositories(scala_version, _SCALATEST_DEPS),
         visibility = ["//visibility:public"],
     )
     for scala_version in SCALA_VERSIONS

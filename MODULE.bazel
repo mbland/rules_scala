@@ -8,6 +8,10 @@ http_archive = use_repo_rule(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
 )
+local_repository = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:local.bzl",
+    "local_repository",
+)
 
 SCALA_VERSION = "2.13.14"
 SCALA_VERSIONS = [SCALA_VERSION]
@@ -19,19 +23,6 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_cc", version = "0.0.9")
 bazel_dep(name = "rules_java", version = "7.11.1")
 bazel_dep(name = "rules_proto", version = "6.0.2")
-
-bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
-bazel_dep(name = "buildozer", version = "7.1.2")
-# unused_deps?
-
-#_build_tools_release = "5.1.0"
-#
-#http_archive(
-#    name = "com_github_bazelbuild_buildtools",
-#    sha256 = "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
-#    strip_prefix = "buildtools-%s" % _build_tools_release,
-#    url = "https://github.com/bazelbuild/buildtools/archive/%s.tar.gz" % _build_tools_release,
-#)
 
 scala_config = use_extension("//scala/extensions:config.bzl", "scala_config")
 scala_config.settings(
@@ -187,10 +178,10 @@ testonly_artifacts = [
     "org_typelevel__cats_core",
 ]
 
-toolchains = [
-    "//scala:toolchain",
+register_toolchains(
+    "//scala:all",
     "//testing:scalatest_toolchain",
-]
+)
 
 dev_toolchains = [
     "//testing:testing_toolchain",
@@ -212,15 +203,11 @@ common_artifacts = (
     junit_artifacts +
     scalatest_artifacts +
     specs2_artifacts +
-    toolchain_common_artifacts +
-    twitter_scrooge_artifacts
+    toolchain_common_artifacts
 )
 
 [
-    (
-        [use_repo(scala_deps, repo + suffix) for repo in common_artifacts],
-        [register_toolchains(toolchain + suffix) for toolchain in toolchains],
-    )
+    [use_repo(scala_deps, repo + suffix) for repo in common_artifacts]
     for suffix in SCALA_VERSION_SUFFIXES
 ]
 
@@ -238,7 +225,7 @@ common_artifacts = (
 
 bazel_dep(
     name = "protobuf",
-    version = "28.0-rc2",
+    version = "28.2",
     repo_name = "com_google_protobuf",
     dev_dependency = True,
 )
@@ -279,8 +266,13 @@ go_sdk.download(
 )
 use_repo(go_sdk, "go_sdk")
 
+dev_artifacts = (
+    twitter_scrooge_artifacts
+)
+
 [
     (
+        [use_repo(scala_deps, repo + suffix) for repo in dev_artifacts],
         [
             register_toolchains(toolchain + suffix, dev_dependency = True)
             for toolchain in dev_toolchains
@@ -288,3 +280,25 @@ use_repo(go_sdk, "go_sdk")
     )
     for suffix in SCALA_VERSION_SUFFIXES
 ]
+
+bazel_dep(name = "rules_python", version = "0.35.0", dev_dependency = True)
+
+_build_tools_release = "7.3.1"
+bazel_dep(
+    name = "buildtools",
+    repo_name = "com_github_bazelbuild_buildtools",
+    dev_dependency = True,
+)
+archive_override(
+    module_name = "buildtools",
+    integrity = "sha256-BRlRwQ/4rd608QvjsM9HSzBLLM1nXyzHaDzdkBAyDKk=",
+    strip_prefix = "buildtools-%s" % _build_tools_release,
+    urls = [
+        "https://github.com/bazelbuild/buildtools/archive/v%s.tar.gz" % _build_tools_release,
+    ],
+)
+
+local_repository(
+    name = "example_external_workspace",
+    path = "third_party/test/example_external_workspace",
+)
