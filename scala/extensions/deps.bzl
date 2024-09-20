@@ -128,6 +128,57 @@ def _get_artifacts(module_ctx):
         "twitter_scrooge": twitter_scrooge.keys(),
     }
 
+_SCALA_TOOLCHAIN_BUILD = """
+load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
+load(
+    "@io_bazel_rules_scala//scala/private:macros/setup_scala_toolchain.bzl",
+    "setup_scala_toolchain",
+)
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
+
+[
+    setup_scala_toolchain(
+        name = "toolchain" + version_suffix(scala_version),
+        scala_version = scala_version,
+        use_argument_file_in_runner = True,
+    )
+    for scala_version in SCALA_VERSIONS
+]
+"""
+
+_SCALATEST_TOOLCHAIN_BUILD = """
+load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
+load(
+    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
+    "repositories",
+    "version_suffix",
+)
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION", "SCALA_VERSIONS")
+load("@io_bazel_rules_scala//testing:deps.bzl", "SCALATEST_DEPS")
+
+[
+    setup_scala_testing_toolchain(
+        name = "scalatest_toolchain" + version_suffix(scala_version),
+        scala_version = scala_version,
+        scalatest_classpath = repositories(scala_version, SCALATEST_DEPS),
+        visibility = ["//visibility:public"],
+    )
+    for scala_version in SCALA_VERSIONS
+]
+"""
+
+def _scala_toolchain_repos_impl(repository_ctx):
+    repository_ctx.file(
+        "scala/BUILD", content=_SCALA_TOOLCHAIN_BUILD, executable=False,
+    )
+    repository_ctx.file(
+        "scalatest/BUILD", content=_SCALATEST_TOOLCHAIN_BUILD, executable=False,
+    )
+
+scala_toolchain_repos = repository_rule(
+    implementation = _scala_toolchain_repos_impl,
+)
+
 def _scala_dependencies_impl(module_ctx):
     load_dep_rules, load_jar_deps, settings = _get_settings(module_ctx)
     artifacts = _get_artifacts(module_ctx)
@@ -167,6 +218,7 @@ def _scala_dependencies_impl(module_ctx):
             **settings,
         )
 
+    scala_toolchain_repos(name = "rules_scala_toolchains")
     # jmh_repositories()
     # scala_proto_repositories()
     # scalafmt_default_config()

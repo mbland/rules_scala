@@ -179,8 +179,8 @@ testonly_artifacts = [
 ]
 
 register_toolchains(
-    "//scala:all",
-    "//testing:scalatest_toolchain",
+    "@rules_scala_toolchains//scala:all",
+    "@rules_scala_toolchains//scalatest:all",
 )
 
 dev_toolchains = [
@@ -201,24 +201,14 @@ scala_deps.artifacts(
 
 common_artifacts = (
     junit_artifacts +
-    scalatest_artifacts +
-    specs2_artifacts +
-    toolchain_common_artifacts
+    specs2_artifacts
 )
+
+use_repo(scala_deps, "rules_scala_toolchains")
 
 [
     [use_repo(scala_deps, repo + suffix) for repo in common_artifacts]
     for suffix in SCALA_VERSION_SUFFIXES
-]
-
-[
-    [use_repo(scala_deps, repo + suffix) for repo in toolchain_scala_2_artifacts]
-    for suffix in SCALA_VERSION_SUFFIXES if suffix.startswith("_2")
-]
-
-[
-    [use_repo(scala_deps, repo + suffix) for repo in toolchain_scala_3_artifacts]
-    for suffix in SCALA_VERSION_SUFFIXES if suffix.startswith("_3")
 ]
 
 # Dev dependencies

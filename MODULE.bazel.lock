@@ -182,7 +182,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "WJfAlXUKMjZfmojFmCsHvDC7MhtMxZlzeGh06z0sAZo=",
+        "bzlTransitiveDigest": "+kOQ+2GAmPnus+eLsw6PR9RL7jwrVCl+yq0rfDRo1q8=",
         "usagesDigest": "kZVtvSpNJMK9CDssfp/KzWYiGyZHAaA8kbb095I47HI=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -822,6 +822,11 @@
             "attributes": {
               "target": "io_bazel_rules_scala_javax_annotation_api_2_13_14"
             }
+          },
+          "rules_scala_toolchains": {
+            "bzlFile": "@@//scala/extensions:deps.bzl",
+            "ruleClassName": "scala_toolchain_repos",
+            "attributes": {}
           },
           "io_bazel_rules_scala_scalactic": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
