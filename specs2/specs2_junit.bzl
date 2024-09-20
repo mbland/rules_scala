@@ -12,9 +12,11 @@ load("//third_party/repositories:repositories.bzl", "repositories")
 
 def specs2_junit_repositories(
         maven_servers = _default_maven_server_urls(),
-        overriden_artifacts = {}):
+        overriden_artifacts = {},
+        create_junit_repositories = True):
     specs2_repositories(maven_servers)
-    junit_repositories()
+    if create_junit_repositories:
+        junit_repositories()
 
     repositories(
         for_artifact_ids = [

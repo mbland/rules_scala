@@ -3,9 +3,15 @@
 load(
     "//scala/private:macros/scala_repositories.bzl",
     "dt_patched_compiler_setup",
+    "rules_scala_toolchain_deps_repositories",
 )
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
-load("//third_party/repositories:repositories.bzl", "repositories")
+load("@io_bazel_rules_scala//junit:junit.bzl", "junit_repositories")
+load("@io_bazel_rules_scala//scalatest:scalatest.bzl", "scalatest_repositories")
+load(
+    "@io_bazel_rules_scala//specs2:specs2_junit.bzl",
+    "specs2_junit_repositories",
+)
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
     "SCALA_VERSION",
@@ -42,16 +48,12 @@ _scala_compiler_srcjar = tag_class(
     },
 )
 
-_artifacts = tag_class(
+_toolchains = tag_class(
     attrs = {
-        "toolchain_common": attr.string_list(),
-        "toolchain_scala_2": attr.string_list(),
-        "toolchain_scala_3": attr.string_list(),
-        "junit": attr.string_list(),
-        "scalatest": attr.string_list(),
-        "specs2": attr.string_list(),
-        "testonly": attr.string_list(),
-        "twitter_scrooge": attr.string_list(),
+        "scala": attr.bool(default = True),
+        "scalatest": attr.bool(default = True),
+        "junit": attr.bool(),
+        "specs2": attr.bool(),
     }
 )
 
@@ -88,45 +90,20 @@ def _get_scala_compiler_srcjar(module_ctx):
     _add_if_not_empty("integrity", srcjar.integrity, result)
     return result
 
-def _get_artifacts(module_ctx):
-    toolchain_common = {}
-    toolchain_scala_2 = {}
-    toolchain_scala_3 = {}
-    junit = {}
-    scalatest = {}
-    specs2 = {}
-    testonly = {}
-    twitter_scrooge = {}
+def _get_toolchains(module_ctx):
+    result = {}
 
     for mod in module_ctx.modules:
-        for artifacts in mod.tags.artifacts:
-            for artifact in artifacts.toolchain_common:
-                toolchain_common[artifact] = None
-            for artifact in artifacts.toolchain_scala_2:
-                toolchain_scala_2[artifact] = None
-            for artifact in artifacts.toolchain_scala_3:
-                toolchain_scala_3[artifact] = None
-            for artifact in artifacts.junit:
-                junit[artifact] = None
-            for artifact in artifacts.scalatest:
-                scalatest[artifact] = None
-            for artifact in artifacts.specs2:
-                specs2[artifact] = None
-            for artifact in artifacts.testonly:
-                testonly[artifact] = None
-            for artifact in artifacts.twitter_scrooge:
-                twitter_scrooge[artifact] = None
-
-    return {
-        "toolchain_common": toolchain_common.keys(),
-        "toolchain_scala_2": toolchain_scala_2.keys(),
-        "toolchain_scala_3": toolchain_scala_3.keys(),
-        "junit": junit.keys(),
-        "scalatest": scalatest.keys(),
-        "specs2": specs2.keys(),
-        "testonly": testonly.keys(),
-        "twitter_scrooge": twitter_scrooge.keys(),
-    }
+        for toolchains in mod.tags.toolchains:
+            if toolchains.scala:
+                result["scala"] = _SCALA_TOOLCHAIN_BUILD
+            if toolchains.scalatest:
+                result["scalatest"] = _SCALATEST_TOOLCHAIN_BUILD
+            if toolchains.junit:
+                result["junit"] = _JUNIT_TOOLCHAIN_BUILD
+            if toolchains.specs2:
+                result["specs2"] = _SPECS2_TOOLCHAIN_BUILD
+    return result
 
 _SCALA_TOOLCHAIN_BUILD = """
 load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
@@ -153,7 +130,7 @@ load(
     "repositories",
     "version_suffix",
 )
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION", "SCALA_VERSIONS")
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 load("@io_bazel_rules_scala//testing:deps.bzl", "SCALATEST_DEPS")
 
 [
@@ -167,58 +144,93 @@ load("@io_bazel_rules_scala//testing:deps.bzl", "SCALATEST_DEPS")
 ]
 """
 
+_JUNIT_TOOLCHAIN_BUILD = """
+load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
+load(
+    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
+    "repositories",
+    "version_suffix",
+)
+load("@io_bazel_rules_scala//testing:deps.bzl", "JUNIT_DEPS")
+
+setup_scala_testing_toolchain(
+    name = "junit_toolchain",
+    junit_classpath = JUNIT_DEPS,
+    visibility = ["//visibility:public"],
+)
+"""
+
+_SPECS2_TOOLCHAIN_BUILD = """
+load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
+load(
+    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
+    "repositories",
+    "version_suffix",
+)
+load(
+    "@io_bazel_rules_scala//testing:deps.bzl",
+    "JUNIT_DEPS",
+    "SPECS2_DEPS",
+    "SPECS2_JUNIT_DEPS",
+)
+
+setup_scala_testing_toolchain(
+    name = "specs2_junit_toolchain",
+    junit_classpath = JUNIT_DEPS,
+    specs2_classpath = SPECS2_DEPS,
+    specs2_junit_classpath = SPECS2_JUNIT_DEPS,
+    visibility = ["//visibility:public"],
+)
+"""
+
 def _scala_toolchain_repos_impl(repository_ctx):
-    repository_ctx.file(
-        "scala/BUILD", content=_SCALA_TOOLCHAIN_BUILD, executable=False,
-    )
-    repository_ctx.file(
-        "scalatest/BUILD", content=_SCALATEST_TOOLCHAIN_BUILD, executable=False,
-    )
+    for pkg, build in repository_ctx.attr.package_to_build_file_content.items():
+        repository_ctx.file(pkg + "/BUILD", content=build, executable=False)
 
 scala_toolchain_repos = repository_rule(
     implementation = _scala_toolchain_repos_impl,
+    attrs = {
+        "package_to_build_file_content": attr.string_dict(mandatory = True),
+    },
 )
 
-def _scala_dependencies_impl(module_ctx):
+def strip_artifact_prefix(deps):
+    return [dep.removeprefix("@") for dep in deps]
+
+def _scala_deps_impl(module_ctx):
     load_dep_rules, load_jar_deps, settings = _get_settings(module_ctx)
-    artifacts = _get_artifacts(module_ctx)
+    toolchains = _get_toolchains(module_ctx)
     srcjar = _get_scala_compiler_srcjar(module_ctx)
 
+    # Replace scala_repositories()
     for scala_version in SCALA_VERSIONS:
-        # Replace scala_repositories()
         if load_dep_rules:
             # Replace rules_scala_setup()
             dt_patched_compiler_setup(scala_version, srcjar)
 
-        if load_jar_deps:
-            # Replace rules_scala_toolchain_deps_repositories()
-            toolchain_ids = artifacts["toolchain_common"]
-            toolchain_ids += artifacts["toolchain_scala_%s" % scala_version[0]]
-            repositories(
-                scala_version = scala_version,
-                for_artifact_ids = toolchain_ids,
-                **settings,
-            )
+    if load_jar_deps:
+        rules_scala_toolchain_deps_repositories(**settings)
 
-        # Replace:
-        # - scalatest_repositories()
-        # - twitter_scrooge()
-        # - junit_repositories()
-        # - specs2_junit_repositories()
-        remaining_artifacts = (
-            artifacts["junit"] +
-            artifacts["scalatest"] +
-            artifacts["specs2"] +
-            artifacts["twitter_scrooge"]
+    repositories_options = {
+        k: settings.get(k) for k in ["maven_servers", "fetch_sources"]
+    }
+
+    if "scalatest" in toolchains:
+        scalatest_repositories(**repositories_options)
+    if "junit" in toolchains:
+        junit_repositories(**repositories_options)
+    if "specs2" in toolchains:
+        specs2_junit_repositories(
+            maven_servers = settings.get("maven_servers"),
+            overriden_artifacts = settings.get("overriden_artifacts", {}),
+            create_junit_repositories = "junit" not in toolchains,
         )
 
-        repositories(
-            scala_version = scala_version,
-            for_artifact_ids = remaining_artifacts,
-            **settings,
+    if len(toolchains) != 0:
+        scala_toolchain_repos(
+            name = "io_bazel_rules_scala_toolchains",
+            package_to_build_file_content = toolchains,
         )
-
-    scala_toolchain_repos(name = "rules_scala_toolchains")
     # jmh_repositories()
     # scala_proto_repositories()
     # scalafmt_default_config()
@@ -236,11 +248,11 @@ def _scala_dependencies_impl(module_ctx):
     # repositories() - see WORKSPACE
 
 scala_deps = module_extension(
-    implementation = _scala_dependencies_impl,
+    implementation = _scala_deps_impl,
     tag_classes = {
         "settings": _settings,
+        "toolchains": _toolchains,
         "scala_compiler_srcjar": _scala_compiler_srcjar,
-        "artifacts": _artifacts,
     }
 )
 

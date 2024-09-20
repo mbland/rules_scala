@@ -3,7 +3,8 @@ load("//third_party/repositories:repositories.bzl", "repositories")
 
 def scala_proto_default_repositories(
         maven_servers = default_maven_server_urls(),
-        overriden_artifacts = {}):
+        overriden_artifacts = {},
+        register_toolchains = True):
     repositories(
         for_artifact_ids = [
             "scala_proto_rules_scalapb_plugin",
@@ -42,4 +43,7 @@ def scala_proto_default_repositories(
         overriden_artifacts = overriden_artifacts,
     )
 
-    native.register_toolchains("@io_bazel_rules_scala//scala_proto:default_deps_toolchain")
+    if register_toolchains:
+        native.register_toolchains(
+            "@io_bazel_rules_scala//scala_proto:default_deps_toolchain"
+        )

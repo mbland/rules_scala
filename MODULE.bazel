@@ -97,41 +97,6 @@ artifacts = [
     "scala_proto_rules_scalapb_runtime_grpc",
 ]
 
-toolchain_common_artifacts = [
-    "io_bazel_rules_scala_scala_compiler",
-    "io_bazel_rules_scala_scala_library",
-    "io_bazel_rules_scala_scala_parser_combinators",
-    "io_bazel_rules_scala_scala_xml",
-]
-
-toolchain_scala_2_artifacts = [
-    "io_bazel_rules_scala_scala_reflect",
-    "org_scalameta_semanticdb_scalac",
-]
-
-toolchain_scala_3_artifacts = [
-    "io_bazel_rules_scala_scala_interfaces",
-    "io_bazel_rules_scala_scala_tasty_core",
-    "io_bazel_rules_scala_scala_asm",
-    "io_bazel_rules_scala_scala_library_2",
-    "org_scala_sbt_compiler_interface",
-]
-
-scalatest_artifacts = [
-    "io_bazel_rules_scala_scalatest",
-    "io_bazel_rules_scala_scalatest_compatible",
-    "io_bazel_rules_scala_scalatest_core",
-    "io_bazel_rules_scala_scalatest_featurespec",
-    "io_bazel_rules_scala_scalatest_flatspec",
-    "io_bazel_rules_scala_scalatest_freespec",
-    "io_bazel_rules_scala_scalatest_funspec",
-    "io_bazel_rules_scala_scalatest_funsuite",
-    "io_bazel_rules_scala_scalatest_matchers_core",
-    "io_bazel_rules_scala_scalatest_mustmatchers",
-    "io_bazel_rules_scala_scalatest_shouldmatchers",
-    "io_bazel_rules_scala_scalactic",
-]
-
 junit_artifacts = [
     "io_bazel_rules_scala_junit_junit",
     "io_bazel_rules_scala_org_hamcrest_hamcrest_core",
@@ -178,38 +143,38 @@ testonly_artifacts = [
     "org_typelevel__cats_core",
 ]
 
-register_toolchains(
-    "@rules_scala_toolchains//scala:all",
-    "@rules_scala_toolchains//scalatest:all",
-)
-
 dev_toolchains = [
     "//testing:testing_toolchain",
 ]
 
 scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
-scala_deps.artifacts(
-    toolchain_common = toolchain_common_artifacts,
-    toolchain_scala_2 = toolchain_scala_2_artifacts,
-    toolchain_scala_3 = toolchain_scala_3_artifacts,
-    junit = junit_artifacts,
-    scalatest = scalatest_artifacts,
-    specs2 = specs2_artifacts,
-    testonly = testonly_artifacts,
-    twitter_scrooge = twitter_scrooge_artifacts,
+scala_deps.toolchains()
+
+use_repo(scala_deps, "io_bazel_rules_scala_toolchains")
+register_toolchains(
+    # We must register the scalatest toolchains first, as the junit and specs2
+    # toolchains have an ordering dependency on it for now:
+    #
+    # ERROR: .../rules_scala~/testing/toolchain/BUILD:14:23:
+    #   in testing_toolchain_deps rule
+    #   @@rules_scala~//testing/toolchain:scalatest_classpath:                                                                                                                 
+    #   [ ...snip... ]
+    #   File ".../rules_scala~/scala/private/toolchain_deps/toolchain_deps.bzl",
+    #     line 13, column 9, in _lookup_provider_by_id                                                                                                                                
+    # Error in fail: scalatest_classpath requires mapping of scalatest_classpath
+    #   provider id on the toolchain
+    #   @io_bazel_rules_scala//testing/toolchain:testing_toolchain_type                                 
+    # ERROR: .../rules_scala~/testing/toolchain/BUILD:14:23: Analysis of target
+    #   '@@rules_scala~//testing/toolchain:scalatest_classpath' failed
+    "@io_bazel_rules_scala_toolchains//scalatest:all",
+    "@io_bazel_rules_scala_toolchains//...:all",
 )
 
-common_artifacts = (
-    junit_artifacts +
-    specs2_artifacts
-)
-
-use_repo(scala_deps, "rules_scala_toolchains")
-
-[
-    [use_repo(scala_deps, repo + suffix) for repo in common_artifacts]
-    for suffix in SCALA_VERSION_SUFFIXES
-]
+#common_artifacts = ()
+#[
+#    [use_repo(scala_deps, repo + suffix) for repo in common_artifacts]
+#    for suffix in SCALA_VERSION_SUFFIXES
+#]
 
 # Dev dependencies
 
@@ -256,20 +221,20 @@ go_sdk.download(
 )
 use_repo(go_sdk, "go_sdk")
 
-dev_artifacts = (
-    twitter_scrooge_artifacts
-)
-
-[
-    (
-        [use_repo(scala_deps, repo + suffix) for repo in dev_artifacts],
-        [
-            register_toolchains(toolchain + suffix, dev_dependency = True)
-            for toolchain in dev_toolchains
-        ],
-    )
-    for suffix in SCALA_VERSION_SUFFIXES
-]
+#dev_artifacts = (
+#    twitter_scrooge_artifacts
+#)
+#
+#[
+#    (
+#        [use_repo(scala_deps, repo + suffix) for repo in dev_artifacts],
+#        [
+#            register_toolchains(toolchain + suffix, dev_dependency = True)
+#            for toolchain in dev_toolchains
+#        ],
+#    )
+#    for suffix in SCALA_VERSION_SUFFIXES
+#]
 
 bazel_dep(name = "rules_python", version = "0.35.0", dev_dependency = True)
 
