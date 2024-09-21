@@ -1,5 +1,6 @@
 """Exports repos used by @io_bazel_rules_scala rules"""
 
+load("//scala/private/extensions:toolchains.bzl", "scala_toolchains_repo")
 load(
     "//scala/private:macros/scala_repositories.bzl",
     "dt_patched_compiler_setup",
@@ -71,7 +72,7 @@ def _get_settings(module_ctx):
         "validate_scala_version": settings.validate_scala_version,
     }
 
-def _add_if_not_empty(name, value, result):
+def _add_if_not_empty(result, name, value):
     if len(value) != 0:
         result[name] = value
 
@@ -83,11 +84,11 @@ def _get_scala_compiler_srcjar(module_ctx):
     srcjar = root_srcjar[0]
 
     result = {}
-    _add_if_not_empty("url", srcjar.url, result)
-    _add_if_not_empty("urls", srcjar.urls, result)
-    _add_if_not_empty("label", srcjar.label, result)
-    _add_if_not_empty("sha256", srcjar.sha256, result)
-    _add_if_not_empty("integrity", srcjar.integrity, result)
+    _add_if_not_empty(result, "url", srcjar.url)
+    _add_if_not_empty(result, "urls", srcjar.urls)
+    _add_if_not_empty(result, "label", srcjar.label)
+    _add_if_not_empty(result, "sha256", srcjar.sha256)
+    _add_if_not_empty(result, "integrity", srcjar.integrity)
     return result
 
 def _get_toolchains(module_ctx):
@@ -96,106 +97,14 @@ def _get_toolchains(module_ctx):
     for mod in module_ctx.modules:
         for toolchains in mod.tags.toolchains:
             if toolchains.scala:
-                result["scala"] = _SCALA_TOOLCHAIN_BUILD
+                result["scala"] = True
             if toolchains.scalatest:
-                result["scalatest"] = _SCALATEST_TOOLCHAIN_BUILD
+                result["scalatest"] = True
             if toolchains.junit:
-                result["junit"] = _JUNIT_TOOLCHAIN_BUILD
+                result["junit"] = True
             if toolchains.specs2:
-                result["specs2"] = _SPECS2_TOOLCHAIN_BUILD
+                result["specs2"] = True
     return result
-
-_SCALA_TOOLCHAIN_BUILD = """
-load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
-load(
-    "@io_bazel_rules_scala//scala/private:macros/setup_scala_toolchain.bzl",
-    "setup_scala_toolchain",
-)
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
-
-[
-    setup_scala_toolchain(
-        name = "toolchain" + version_suffix(scala_version),
-        scala_version = scala_version,
-        use_argument_file_in_runner = True,
-    )
-    for scala_version in SCALA_VERSIONS
-]
-"""
-
-_SCALATEST_TOOLCHAIN_BUILD = """
-load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load(
-    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
-    "repositories",
-    "version_suffix",
-)
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
-load("@io_bazel_rules_scala//testing:deps.bzl", "SCALATEST_DEPS")
-
-[
-    setup_scala_testing_toolchain(
-        name = "scalatest_toolchain" + version_suffix(scala_version),
-        scala_version = scala_version,
-        scalatest_classpath = repositories(scala_version, SCALATEST_DEPS),
-        visibility = ["//visibility:public"],
-    )
-    for scala_version in SCALA_VERSIONS
-]
-"""
-
-_JUNIT_TOOLCHAIN_BUILD = """
-load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load(
-    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
-    "repositories",
-    "version_suffix",
-)
-load("@io_bazel_rules_scala//testing:deps.bzl", "JUNIT_DEPS")
-
-setup_scala_testing_toolchain(
-    name = "junit_toolchain",
-    junit_classpath = JUNIT_DEPS,
-    visibility = ["//visibility:public"],
-)
-"""
-
-_SPECS2_TOOLCHAIN_BUILD = """
-load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load(
-    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
-    "repositories",
-    "version_suffix",
-)
-load(
-    "@io_bazel_rules_scala//testing:deps.bzl",
-    "JUNIT_DEPS",
-    "SPECS2_DEPS",
-    "SPECS2_JUNIT_DEPS",
-)
-
-setup_scala_testing_toolchain(
-    name = "specs2_junit_toolchain",
-    junit_classpath = JUNIT_DEPS,
-    specs2_classpath = SPECS2_DEPS,
-    specs2_junit_classpath = SPECS2_JUNIT_DEPS,
-    visibility = ["//visibility:public"],
-)
-"""
-
-def _scala_toolchain_repos_impl(repository_ctx):
-    for pkg, build in repository_ctx.attr.package_to_build_file_content.items():
-        repository_ctx.file(pkg + "/BUILD", content=build, executable=False)
-
-scala_toolchain_repos = repository_rule(
-    implementation = _scala_toolchain_repos_impl,
-    attrs = {
-        "package_to_build_file_content": attr.string_dict(mandatory = True),
-    },
-)
-
-def strip_artifact_prefix(deps):
-    return [dep.removeprefix("@") for dep in deps]
 
 def _scala_deps_impl(module_ctx):
     load_dep_rules, load_jar_deps, settings = _get_settings(module_ctx)
@@ -227,25 +136,13 @@ def _scala_deps_impl(module_ctx):
         )
 
     if len(toolchains) != 0:
-        scala_toolchain_repos(
+        scala_toolchains_repo(
             name = "io_bazel_rules_scala_toolchains",
-            package_to_build_file_content = toolchains,
+            scala = "scala" in toolchains,
+            scalatest = "scalatest" in toolchains,
+            junit = "junit" in toolchains,
+            specs2 = "specs2" in toolchains,
         )
-    # jmh_repositories()
-    # scala_proto_repositories()
-    # scalafmt_default_config()
-    # scalafmt_repositories()
-    # proto_cross_repo_boundary_repository()
-    # new_local_repository()...
-    # local_repository()...
-    # scala_register_unused_deps_toolchains()
-    # java_import_external() - see WORKSPACE
-
-    # We need to select based on platform when we use these
-    # https://github.com/bazelbuild/bazel/issues/11655
-    #remote_jdk8_repos()
-
-    # repositories() - see WORKSPACE
 
 scala_deps = module_extension(
     implementation = _scala_deps_impl,
@@ -255,31 +152,3 @@ scala_deps = module_extension(
         "scala_compiler_srcjar": _scala_compiler_srcjar,
     }
 )
-
-#new_local_repository(
-#    name = "test_new_local_repo",
-#    build_file_content =
-#        """
-#filegroup(
-#    name = "data",
-#    srcs = glob(["**/*.txt"]),
-#    visibility = ["//visibility:public"],
-#)
-#""",
-#    path = "third_party/test/new_local_repo",
-#)
-
-#local_repository(
-#    name = "example_external_workspace",
-#    path = "third_party/test/example_external_workspace",
-#)
-
-# load("@bazelci_rules//:rbe_repo.bzl", "rbe_preconfig")
-# rbe_preconfig(
-#     name = "rbe_default",
-#     toolchain = "ubuntu2004-bazel-java11",
-# )
-
-# load("//test/toolchains:jdk.bzl", "remote_jdk21_repositories", "remote_jdk21_toolchains")
-# remote_jdk21_repositories()
-# remote_jdk21_toolchains()

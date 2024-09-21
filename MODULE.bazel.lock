@@ -182,7 +182,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "uyki+LSaZCOo5V/0CI+heDo1O75ECXf7HHPr1ugzqPc=",
+        "bzlTransitiveDigest": "I9IdvbhJazCpkznWIGg9xC6Lo1Ots7RBnlmmwhgUXJc=",
         "usagesDigest": "kYht5F4FXwCYfkyr/HQ1y2rCas7BbX5wR7oQRYAvsKQ=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -732,13 +732,13 @@
             }
           },
           "io_bazel_rules_scala_toolchains": {
-            "bzlFile": "@@//scala/extensions:deps.bzl",
-            "ruleClassName": "scala_toolchain_repos",
+            "bzlFile": "@@//scala/private/extensions:toolchains.bzl",
+            "ruleClassName": "_scala_toolchains_repo",
             "attributes": {
-              "package_to_build_file_content": {
-                "scala": "\nload(\"@io_bazel_rules_scala//scala:scala_cross_version.bzl\", \"version_suffix\")\nload(\n    \"@io_bazel_rules_scala//scala/private:macros/setup_scala_toolchain.bzl\",\n    \"setup_scala_toolchain\",\n)\nload(\"@io_bazel_rules_scala_config//:config.bzl\", \"SCALA_VERSIONS\")\n\n[\n    setup_scala_toolchain(\n        name = \"toolchain\" + version_suffix(scala_version),\n        scala_version = scala_version,\n        use_argument_file_in_runner = True,\n    )\n    for scala_version in SCALA_VERSIONS\n]\n",
-                "scalatest": "\nload(\"@io_bazel_rules_scala//scala:scala.bzl\", \"setup_scala_testing_toolchain\")\nload(\n    \"@io_bazel_rules_scala//scala:scala_cross_version.bzl\",\n    \"repositories\",\n    \"version_suffix\",\n)\nload(\"@io_bazel_rules_scala_config//:config.bzl\", \"SCALA_VERSIONS\")\nload(\"@io_bazel_rules_scala//testing:deps.bzl\", \"SCALATEST_DEPS\")\n\n[\n    setup_scala_testing_toolchain(\n        name = \"scalatest_toolchain\" + version_suffix(scala_version),\n        scala_version = scala_version,\n        scalatest_classpath = repositories(scala_version, SCALATEST_DEPS),\n        visibility = [\"//visibility:public\"],\n    )\n    for scala_version in SCALA_VERSIONS\n]\n"
-              }
+              "scala": true,
+              "scalatest": true,
+              "junit": false,
+              "specs2": false
             }
           },
           "io_bazel_rules_scala_scalatest_funspec": {
