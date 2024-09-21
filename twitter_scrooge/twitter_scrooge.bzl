@@ -17,12 +17,10 @@ load(
     "compile_java",
     "compile_scala",
 )
-load("@io_bazel_rules_scala//thrift:thrift_info.bzl", "ThriftInfo")
-load(
-    "@io_bazel_rules_scala//thrift:thrift.bzl",
-    "merge_thrift_infos",
-)
+load("//thrift:thrift_info.bzl", "ThriftInfo")
+load("//thrift:thrift.bzl", "merge_thrift_infos")
 load("//third_party/repositories:repositories.bzl", "repositories")
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 _jar_extension = ".jar"
 
@@ -31,9 +29,11 @@ def _declare_and_bind(
         artifact_id,
         external_artifact_id,
         overriden_artifacts,
-        maven_servers):
+        maven_servers,
+        do_bind):
     if not label:
         repositories(
+            scala_version = SCALA_VERSION,
             for_artifact_ids = [
                 artifact_id,
             ],
@@ -43,10 +43,11 @@ def _declare_and_bind(
         )
         label = "@" + artifact_id
 
-    native.bind(
-        name = external_artifact_id,
-        actual = label,
-    )
+    if do_bind:
+        native.bind(
+            name = external_artifact_id,
+            actual = label,
+        )
 
 def twitter_scrooge(
         maven_servers = _default_maven_server_urls(),
@@ -57,13 +58,15 @@ def twitter_scrooge(
         scrooge_core = None,
         scrooge_generator = None,
         util_core = None,
-        util_logging = None):
+        util_logging = None,
+        do_bind = True):
     _declare_and_bind(
         libthrift,
         "libthrift",
         "io_bazel_rules_scala/dependency/thrift/libthrift",
         overriden_artifacts,
         maven_servers,
+        do_bind,
     )
 
     _declare_and_bind(
@@ -72,6 +75,7 @@ def twitter_scrooge(
         "io_bazel_rules_scala/dependency/thrift/scrooge_core",
         overriden_artifacts,
         maven_servers,
+        do_bind,
     )
 
     _declare_and_bind(
@@ -80,6 +84,7 @@ def twitter_scrooge(
         "io_bazel_rules_scala/dependency/thrift/scrooge_generator",
         overriden_artifacts,
         maven_servers,
+        do_bind,
     )
 
     _declare_and_bind(
@@ -88,6 +93,7 @@ def twitter_scrooge(
         "io_bazel_rules_scala/dependency/thrift/util_core",
         overriden_artifacts,
         maven_servers,
+        do_bind,
     )
 
     _declare_and_bind(
@@ -96,9 +102,11 @@ def twitter_scrooge(
         "io_bazel_rules_scala/dependency/thrift/util_logging",
         overriden_artifacts,
         maven_servers,
+        do_bind,
     )
 
     repositories(
+        scala_version = SCALA_VERSION,
         for_artifact_ids = [
             "io_bazel_rules_scala_mustache",  # Mustache is needed to generate java from thrift, and is passed further down.
             "io_bazel_rules_scala_guava",
@@ -109,6 +117,9 @@ def twitter_scrooge(
         fetch_sources = False,
         overriden_artifacts = overriden_artifacts,
     )
+
+    if not do_bind:
+        return
 
     native.bind(
         name = "io_bazel_rules_scala/dependency/thrift/mustache",

@@ -1,5 +1,6 @@
 """Exports repos used by @io_bazel_rules_scala rules"""
 
+load("//junit:junit.bzl", "junit_repositories")
 load("//scala/private/extensions:toolchains.bzl", "scala_toolchains_repo")
 load(
     "//scala/private:macros/scala_repositories.bzl",
@@ -7,12 +8,9 @@ load(
     "rules_scala_toolchain_deps_repositories",
 )
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
-load("@io_bazel_rules_scala//junit:junit.bzl", "junit_repositories")
-load("@io_bazel_rules_scala//scalatest:scalatest.bzl", "scalatest_repositories")
-load(
-    "@io_bazel_rules_scala//specs2:specs2_junit.bzl",
-    "specs2_junit_repositories",
-)
+load("//scalatest:scalatest.bzl", "scalatest_repositories")
+load("//specs2:specs2_junit.bzl", "specs2_junit_repositories")
+load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
     "SCALA_VERSION",
@@ -55,6 +53,7 @@ _toolchains = tag_class(
         "scalatest": attr.bool(default = True),
         "junit": attr.bool(),
         "specs2": attr.bool(),
+        "twitter_scrooge": attr.bool(),
     }
 )
 
@@ -104,6 +103,8 @@ def _get_toolchains(module_ctx):
                 result["junit"] = True
             if toolchains.specs2:
                 result["specs2"] = True
+            if toolchains.twitter_scrooge:
+                result["twitter_scrooge"] = True
     return result
 
 def _scala_deps_impl(module_ctx):
@@ -134,6 +135,8 @@ def _scala_deps_impl(module_ctx):
             overriden_artifacts = settings.get("overriden_artifacts", {}),
             create_junit_repositories = "junit" not in toolchains,
         )
+    if "twitter_scrooge" in toolchains:
+        twitter_scrooge(do_bind = False)
 
     if len(toolchains) != 0:
         scala_toolchains_repo(
@@ -142,6 +145,7 @@ def _scala_deps_impl(module_ctx):
             scalatest = "scalatest" in toolchains,
             junit = "junit" in toolchains,
             specs2 = "specs2" in toolchains,
+            twitter_scrooge = "twitter_scrooge" in toolchains,
         )
 
 scala_deps = module_extension(
