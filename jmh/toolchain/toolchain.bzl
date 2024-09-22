@@ -79,7 +79,7 @@ def setup_jmh_toolchain(name):
         deps_id = "benchmark_generator",
         visibility = ["//visibility:public"],
         deps = [
-            "//src/java/io/bazel/rulesscala/jar",
+            "@io_bazel_rules_scala//src/java/io/bazel/rulesscala/jar",
         ] + versioned_artifact_repos([
             "@io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
             "@io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
