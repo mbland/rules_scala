@@ -1,12 +1,11 @@
+load("//twitter_scrooge/toolchain:toolchain.bzl", "DEP_PROVIDERS")
+
 [
     alias(
-        name = "%s_classpath" % target,
+        name = "%s" % target,
         actual = (
-            "@io_bazel_rules_scala_toolchains//twitter_scrooge:%s_classpath" %
-            target
+            "@io_bazel_rules_scala_toolchains//twitter_scrooge:%s" % target
         ),
     )
-    for target in [
-        "compile", "aspect_compile", "scrooge_generator", "compiler"
-    ]
+    for target in DEP_PROVIDERS
 ]

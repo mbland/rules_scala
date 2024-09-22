@@ -14,6 +14,8 @@ def _scala_toolchains_repo_impl(repository_ctx):
         toolchains["specs2"] = _SPECS2_TOOLCHAIN_BUILD
     if repo_attr.twitter_scrooge:
         toolchains["twitter_scrooge"] = _TWITTER_SCROOGE_TOOLCHAIN_BUILD
+    if repo_attr.jmh:
+        toolchains["jmh"] = _JMH_TOOLCHAIN_BUILD
 
     if len(toolchains) == 0:
         fail("no toolchains specified")
@@ -29,6 +31,7 @@ scala_toolchains_repo = repository_rule(
         "junit": attr.bool(),
         "specs2": attr.bool(),
         "twitter_scrooge": attr.bool(),
+        "jmh": attr.bool(),
     },
 )
 
@@ -104,4 +107,10 @@ load(
 )
 
 setup_scrooge_toolchain(name = "scrooge_toolchain")
+"""
+
+_JMH_TOOLCHAIN_BUILD = """
+load("@io_bazel_rules_scala//jmh/toolchain:toolchain.bzl", "setup_jmh_toolchain")
+
+setup_jmh_toolchain(name = "jmh_toolchain")
 """

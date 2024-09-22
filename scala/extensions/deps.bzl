@@ -1,5 +1,6 @@
 """Exports repos used by @io_bazel_rules_scala rules"""
 
+load("//jmh:jmh.bzl", "jmh_repositories")
 load("//junit:junit.bzl", "junit_repositories")
 load("//scala/private/extensions:toolchains.bzl", "scala_toolchains_repo")
 load(
@@ -54,6 +55,7 @@ _toolchains = tag_class(
         "junit": attr.bool(),
         "specs2": attr.bool(),
         "twitter_scrooge": attr.bool(),
+        "jmh": attr.bool(),
     }
 )
 
@@ -61,15 +63,16 @@ def _get_settings(module_ctx):
     root_settings = module_ctx.modules[0].tags.settings
 
     if len(root_settings) == 0:
-        return True, True, {"maven_servers": default_maven_server_urls()}
+        return True, True, default_maven_server_urls(), {}, False, True
     settings = root_settings[0]
-    return settings.load_dep_rules, settings.load_jar_deps, {
-        "maven_servers": settings.maven_servers,
-        # internal macros misspell "overridden"
-        "overriden_artifacts": settings.overridden_artifacts,
-        "fetch_sources": settings.fetch_sources,
-        "validate_scala_version": settings.validate_scala_version,
-    }
+    return (
+        settings.load_dep_rules,
+        settings.load_jar_deps,
+        settings.maven_servers,
+        settings.overridden_artifacts,
+        settings.fetch_sources,
+        settings.validate_scala_version,
+    )
 
 def _add_if_not_empty(result, name, value):
     if len(value) != 0:
@@ -105,10 +108,19 @@ def _get_toolchains(module_ctx):
                 result["specs2"] = True
             if toolchains.twitter_scrooge:
                 result["twitter_scrooge"] = True
+            if toolchains.jmh:
+                result["jmh"] = True
     return result
 
 def _scala_deps_impl(module_ctx):
-    load_dep_rules, load_jar_deps, settings = _get_settings(module_ctx)
+    (
+        load_dep_rules,
+        load_jar_deps,
+        maven_servers,
+        overridden_artifacts,
+        fetch_sources,
+        validate_scala_version,
+    ) = _get_settings(module_ctx)
     toolchains = _get_toolchains(module_ctx)
     srcjar = _get_scala_compiler_srcjar(module_ctx)
 
@@ -119,24 +131,36 @@ def _scala_deps_impl(module_ctx):
             dt_patched_compiler_setup(scala_version, srcjar)
 
     if load_jar_deps:
-        rules_scala_toolchain_deps_repositories(**settings)
-
-    repositories_options = {
-        k: settings.get(k) for k in ["maven_servers", "fetch_sources"]
-    }
+        rules_scala_toolchain_deps_repositories(
+            maven_servers = maven_servers,
+            # Note the internal macro parameters misspell "overriden".
+            overriden_artifacts = overridden_artifacts,
+            fetch_sources = fetch_sources,
+            validate_scala_version = validate_scala_version,
+        )
 
     if "scalatest" in toolchains:
-        scalatest_repositories(**repositories_options)
+        scalatest_repositories(
+            maven_servers = maven_servers, fetch_sources = fetch_sources,
+        )
     if "junit" in toolchains:
-        junit_repositories(**repositories_options)
+        junit_repositories(
+            maven_servers = maven_servers, fetch_sources = fetch_sources,
+        )
     if "specs2" in toolchains:
         specs2_junit_repositories(
-            maven_servers = settings.get("maven_servers"),
-            overriden_artifacts = settings.get("overriden_artifacts", {}),
+            maven_servers = maven_servers,
+            overriden_artifacts = overridden_artifacts,
             create_junit_repositories = "junit" not in toolchains,
         )
     if "twitter_scrooge" in toolchains:
-        twitter_scrooge(do_bind = False)
+        twitter_scrooge(bzlmod_enabled = True)
+    if "jmh" in toolchains:
+        jmh_repositories(
+            maven_servers = maven_servers,
+            overriden_artifacts = overridden_artifacts,
+            bzlmod_enabled = True,
+        )
 
     if len(toolchains) != 0:
         scala_toolchains_repo(
@@ -146,6 +170,7 @@ def _scala_deps_impl(module_ctx):
             junit = "junit" in toolchains,
             specs2 = "specs2" in toolchains,
             twitter_scrooge = "twitter_scrooge" in toolchains,
+            jmh = "jmh" in toolchains,
         )
 
 scala_deps = module_extension(

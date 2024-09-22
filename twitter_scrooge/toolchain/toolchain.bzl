@@ -6,6 +6,13 @@ load(
 load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala:artifacts.bzl", "versioned_artifact_repos")
 
+DEP_PROVIDERS = [
+    "compile_classpath",
+    "aspect_compile_classpath",
+    "scrooge_generator_classpath",
+    "compiler_classpath",
+]
+
 def _scrooge_toolchain_impl(ctx):
     toolchain = platform_common.ToolchainInfo(
         dep_providers = ctx.attr.dep_providers,
@@ -41,12 +48,7 @@ export_scrooge_deps = rule(
 def setup_scrooge_toolchain(name):
     scrooge_toolchain(
         name = "%s_impl" % name,
-        dep_providers = [
-            ":compile_classpath_provider",
-            ":aspect_compile_classpath_provider",
-            ":compiler_classpath_provider",
-            ":scrooge_generator_classpath_provider",
-        ],
+        dep_providers = [":%s_provider" % p for p in DEP_PROVIDERS],
         visibility = ["//visibility:public"],
     )
 
@@ -54,6 +56,7 @@ def setup_scrooge_toolchain(name):
         name = name,
         toolchain = ":%s_impl" % name,
         toolchain_type = Label(
+            "@io_bazel_rules_scala" +
             "//twitter_scrooge/toolchain:scrooge_toolchain_type"
         ),
         visibility = ["//visibility:public"],
@@ -109,26 +112,9 @@ def setup_scrooge_toolchain(name):
         ],
     )
 
-    export_scrooge_deps(
-        name = "compile_classpath",
-        deps_id = "compile_classpath",
-        visibility = ["//visibility:public"],
-    )
-
-    export_scrooge_deps(
-        name = "aspect_compile_classpath",
-        deps_id = "aspect_compile_classpath",
-        visibility = ["//visibility:public"],
-    )
-
-    export_scrooge_deps(
-        name = "scrooge_generator_classpath",
-        deps_id = "scrooge_generator_classpath",
-        visibility = ["//visibility:public"],
-    )
-
-    export_scrooge_deps(
-        name = "compiler_classpath",
-        deps_id = "compiler_classpath",
-        visibility = ["//visibility:public"],
-    )
+    for provider in DEP_PROVIDERS:
+        export_scrooge_deps(
+            name = provider,
+            deps_id = provider,
+            visibility = ["//visibility:public"],
+        )

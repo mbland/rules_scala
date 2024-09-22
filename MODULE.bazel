@@ -62,6 +62,7 @@ dev_deps.toolchains(
     junit = True,
     specs2 = True,
     twitter_scrooge = True,
+    jmh = True,
 )
 
 bazel_dep(

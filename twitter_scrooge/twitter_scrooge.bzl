@@ -30,7 +30,7 @@ def _declare_and_bind(
         external_artifact_id,
         overriden_artifacts,
         maven_servers,
-        do_bind):
+        bzlmod_enabled):
     if not label:
         repositories(
             scala_version = SCALA_VERSION,
@@ -43,7 +43,7 @@ def _declare_and_bind(
         )
         label = "@" + artifact_id
 
-    if do_bind:
+    if not bzlmod_enabled:
         native.bind(
             name = external_artifact_id,
             actual = label,
@@ -59,14 +59,14 @@ def twitter_scrooge(
         scrooge_generator = None,
         util_core = None,
         util_logging = None,
-        do_bind = True):
+        bzlmod_enabled = False):
     _declare_and_bind(
         libthrift,
         "libthrift",
         "io_bazel_rules_scala/dependency/thrift/libthrift",
         overriden_artifacts,
         maven_servers,
-        do_bind,
+        bzlmod_enabled,
     )
 
     _declare_and_bind(
@@ -75,7 +75,7 @@ def twitter_scrooge(
         "io_bazel_rules_scala/dependency/thrift/scrooge_core",
         overriden_artifacts,
         maven_servers,
-        do_bind,
+        bzlmod_enabled,
     )
 
     _declare_and_bind(
@@ -84,7 +84,7 @@ def twitter_scrooge(
         "io_bazel_rules_scala/dependency/thrift/scrooge_generator",
         overriden_artifacts,
         maven_servers,
-        do_bind,
+        bzlmod_enabled,
     )
 
     _declare_and_bind(
@@ -93,7 +93,7 @@ def twitter_scrooge(
         "io_bazel_rules_scala/dependency/thrift/util_core",
         overriden_artifacts,
         maven_servers,
-        do_bind,
+        bzlmod_enabled,
     )
 
     _declare_and_bind(
@@ -102,7 +102,7 @@ def twitter_scrooge(
         "io_bazel_rules_scala/dependency/thrift/util_logging",
         overriden_artifacts,
         maven_servers,
-        do_bind,
+        bzlmod_enabled,
     )
 
     repositories(
@@ -118,7 +118,7 @@ def twitter_scrooge(
         overriden_artifacts = overriden_artifacts,
     )
 
-    if not do_bind:
+    if bzlmod_enabled:
         return
 
     native.bind(
@@ -145,7 +145,9 @@ def twitter_scrooge(
             actual = "@io_bazel_rules_scala_javax_annotation_api",
         )
 
-    native.register_toolchains("@io_bazel_rules_scala//twitter_scrooge:scrooge_toolchain")
+    native.register_toolchains(
+        "@io_bazel_rules_scala_toolchains//twitter_scrooge:scrooge_toolchain"
+    )
 
 def _colon_paths(data):
     return ":".join([f.path for f in sorted(data)])
