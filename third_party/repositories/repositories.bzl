@@ -123,7 +123,9 @@ def repositories(
             licenses = ["notice"],
             server_urls = maven_servers,
             deps = [dep + suffix for dep in artifacts[id].get("deps", [])],
-            runtime_deps = artifacts[id].get("runtime_deps", []),
+            runtime_deps = [
+                dep + suffix for dep in artifacts[id].get("runtime_deps", [])
+            ],
             testonly_ = artifacts[id].get("testonly", False),
             fetch_sources = fetch_sources,
         )

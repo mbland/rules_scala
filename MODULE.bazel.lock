@@ -182,7 +182,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "aaFMgdjeKLGSsLm8cIzcApWK8EyuhS6epiS3j38Yh1Y=",
+        "bzlTransitiveDigest": "OlxuoEEsgKyUUJhb4KAvXPhCkeQWpjCBO4oLr2QUtYY=",
         "usagesDigest": "I1nVMvQqeNZ7YzK0yAjs6v4cH9N5nMnYzF9WyKKJCtA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1107,9 +1107,9 @@
               ],
               "deps": [],
               "runtime_deps": [
-                "@io_bazel_rules_scala_guava",
-                "@io_bazel_rules_scala_mustache",
-                "@io_bazel_rules_scala_scopt"
+                "@io_bazel_rules_scala_guava_2_13_14",
+                "@io_bazel_rules_scala_mustache_2_13_14",
+                "@io_bazel_rules_scala_scopt_2_13_14"
               ],
               "testonly_": false
             }
