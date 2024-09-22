@@ -14,7 +14,7 @@ DEFAULT_SCALAPB_COMPILE_DEPS = versioned_artifact_repos([
     "@scala_proto_rules_scalapb_fastparse",
 ]) + [
     "@com_google_protobuf//:protobuf_java",
-    "//scala/private/toolchain_deps:scala_library_classpath",
+    Label("//scala/private/toolchain_deps:scala_library_classpath"),
 ]
 
 DEFAULT_SCALAPB_GRPC_DEPS = versioned_artifact_repos([

@@ -16,6 +16,10 @@ def _scala_toolchains_repo_impl(repository_ctx):
         toolchains["twitter_scrooge"] = _TWITTER_SCROOGE_TOOLCHAIN_BUILD
     if repo_attr.jmh:
         toolchains["jmh"] = _JMH_TOOLCHAIN_BUILD
+    if repo_attr.scala_proto or repo_attr.scala_proto_enable_all_options:
+        toolchains["scala_proto"] = _SCALA_PROTO_TOOLCHAIN_BUILD % (
+            repo_attr.scala_proto_enable_all_options
+        )
 
     if len(toolchains) == 0:
         fail("no toolchains specified")
@@ -32,6 +36,8 @@ scala_toolchains_repo = repository_rule(
         "specs2": attr.bool(),
         "twitter_scrooge": attr.bool(),
         "jmh": attr.bool(),
+        "scala_proto": attr.bool(),
+        "scala_proto_enable_all_options": attr.bool(),
     },
 )
 
@@ -113,4 +119,15 @@ _JMH_TOOLCHAIN_BUILD = """
 load("@io_bazel_rules_scala//jmh/toolchain:toolchain.bzl", "setup_jmh_toolchain")
 
 setup_jmh_toolchain(name = "jmh_toolchain")
+"""
+
+_SCALA_PROTO_TOOLCHAIN_BUILD = """
+load(
+    "@io_bazel_rules_scala//scala_proto:toolchains.bzl",
+    "setup_scala_proto_toolchains",
+)
+
+setup_scala_proto_toolchains(
+    name = "scala_proto", enable_all_options = %s
+)
 """

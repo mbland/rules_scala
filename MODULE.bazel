@@ -63,6 +63,8 @@ dev_deps.toolchains(
     specs2 = True,
     twitter_scrooge = True,
     jmh = True,
+    scala_proto = True,
+    #scala_proto_enable_all_options = True,
 )
 
 bazel_dep(

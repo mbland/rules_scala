@@ -9,6 +9,7 @@ load(
     "rules_scala_toolchain_deps_repositories",
 )
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
+load("//scala_proto:scala_proto.bzl", "scala_proto_repositories")
 load("//scalatest:scalatest.bzl", "scalatest_repositories")
 load("//specs2:specs2_junit.bzl", "specs2_junit_repositories")
 load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
@@ -56,6 +57,8 @@ _toolchains = tag_class(
         "specs2": attr.bool(),
         "twitter_scrooge": attr.bool(),
         "jmh": attr.bool(),
+        "scala_proto": attr.bool(),
+        "scala_proto_enable_all_options": attr.bool(),
     }
 )
 
@@ -110,6 +113,10 @@ def _get_toolchains(module_ctx):
                 result["twitter_scrooge"] = True
             if toolchains.jmh:
                 result["jmh"] = True
+            if toolchains.scala_proto:
+                result["scala_proto"] = True
+            if toolchains.scala_proto_enable_all_options:
+                result["scala_proto_enable_all_options"] = True
     return result
 
 def _scala_deps_impl(module_ctx):
@@ -161,6 +168,15 @@ def _scala_deps_impl(module_ctx):
             overriden_artifacts = overridden_artifacts,
             bzlmod_enabled = True,
         )
+    if (
+        "scala_proto" in toolchains or
+        "scala_proto_enable_all_options" in toolchains
+    ):
+        scala_proto_repositories(
+            maven_servers = maven_servers,
+            overriden_artifacts = overridden_artifacts,
+            register_toolchains = False,
+        )
 
     if len(toolchains) != 0:
         scala_toolchains_repo(
@@ -171,6 +187,10 @@ def _scala_deps_impl(module_ctx):
             specs2 = "specs2" in toolchains,
             twitter_scrooge = "twitter_scrooge" in toolchains,
             jmh = "jmh" in toolchains,
+            scala_proto = "scala_proto" in toolchains,
+            scala_proto_enable_all_options = (
+                "scala_proto_enable_all_options" in toolchains
+            ),
         )
 
 scala_deps = module_extension(
