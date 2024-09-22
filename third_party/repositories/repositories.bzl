@@ -95,6 +95,7 @@ def repositories(
     default_artifacts = artifacts_by_major_scala_version[major_scala_version]
     artifacts = dict(default_artifacts.items() + overriden_artifacts.items())
     for id in for_artifact_ids:
+        unmangled_id = _unmangle_bzlmod_repo_name(id)
         _scala_maven_import_external(
             name = id + suffix,
             # Split the last component off of mangled bzlmod repo names to
@@ -116,7 +117,7 @@ def repositories(
             #   .../_main~scala_deps~io_bazel_rules_scala_scala_compiler/BUILD
             # and referenced by '@@_main~_repo_rules~io_bazel_rules_scala
             #   //scala:default_toolchain_scala_compile_classpath_provider'
-            generated_rule_name = _unmangle_bzlmod_repo_name(id) + suffix,
+            generated_rule_name = unmangled_id + suffix,
             artifact = artifacts[id]["artifact"],
             artifact_sha256 = artifacts[id]["sha256"],
             licenses = ["notice"],
@@ -131,7 +132,7 @@ def repositories(
         # See: https://github.com/bazelbuild/rules_scala/pull/1573
         # Hopefully we can deprecate and remove it one day.
         if suffix and scala_version == SCALA_VERSION:
-            _alias_repository(name = id, target = id + suffix)
+            _alias_repository(name = id, target = unmangled_id + suffix)
 
 def _unmangle_bzlmod_repo_name(name):
     """Return the correct repository name under bzlmod.
@@ -190,7 +191,7 @@ def _alias_repository_impl(rctx):
     """ Builds a repository containing just two aliases to the Scala Maven artifacts in the `target` repository. """
 
     format_kwargs = {
-        "name": rctx.name,
+        "name": _unmangle_bzlmod_repo_name(rctx.name),
         "target": rctx.attr.target,
     }
     rctx.file("BUILD", """alias(
