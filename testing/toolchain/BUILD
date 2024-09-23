@@ -9,22 +9,16 @@ toolchain_type(
     visibility = ["//visibility:public"],
 )
 
-testing_toolchain_deps(
-    name = "junit_classpath",
-    deps_id = "junit_classpath" + _VERSION_SUFFIX,
-)
-
-testing_toolchain_deps(
-    name = "scalatest_classpath",
-    deps_id = "scalatest_classpath" + _VERSION_SUFFIX,
-)
-
-testing_toolchain_deps(
-    name = "specs2_classpath",
-    deps_id = "specs2_classpath" + _VERSION_SUFFIX,
-)
-
-testing_toolchain_deps(
-    name = "specs2_junit_classpath",
-    deps_id = "specs2_junit_classpath" + _VERSION_SUFFIX,
-)
+[
+    testing_toolchain_deps(
+        name = dep,
+        deps_id = dep + _VERSION_SUFFIX,
+        visibility = ["//visibility:public"],
+    )
+    for dep in [
+        "junit_classpath",
+        "scalatest_classpath",
+        "specs2_classpath",
+        "specs2_junit_classpath",
+    ]
+]

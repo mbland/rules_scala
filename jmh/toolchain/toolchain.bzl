@@ -95,10 +95,3 @@ def setup_jmh_toolchain(name):
             "@io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
         ]),
     )
-
-    for provider in DEP_PROVIDERS:
-        export_toolchain_deps(
-            name = provider,
-            deps_id = provider,
-            visibility = ["//visibility:public"],
-        )

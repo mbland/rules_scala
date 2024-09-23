@@ -111,10 +111,3 @@ def setup_scrooge_toolchain(name):
             Label("//scala/private/toolchain_deps:parser_combinators"),
         ],
     )
-
-    for provider in DEP_PROVIDERS:
-        export_scrooge_deps(
-            name = provider,
-            deps_id = provider,
-            visibility = ["//visibility:public"],
-        )

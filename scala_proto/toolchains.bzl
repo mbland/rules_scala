@@ -95,10 +95,3 @@ def setup_scala_proto_toolchains(name, enable_all_options = False):
             "@scala_proto_rules_scalapb_plugin",
         ]),
     )
-
-    for provider in DEP_PROVIDERS:
-        export_scalapb_toolchain_deps(
-            name = provider,
-            deps_id = provider,
-            visibility = ["//visibility:public"],
-        )

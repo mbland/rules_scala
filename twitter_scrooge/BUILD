@@ -1,11 +1,14 @@
-load("//twitter_scrooge/toolchain:toolchain.bzl", "DEP_PROVIDERS")
+load(
+    "//twitter_scrooge/toolchain:toolchain.bzl",
+    "DEP_PROVIDERS",
+    "export_scrooge_deps",
+)
 
 [
-    alias(
-        name = "%s" % target,
-        actual = (
-            "@io_bazel_rules_scala_toolchains//twitter_scrooge:%s" % target
-        ),
+    export_scrooge_deps(
+        name = dep,
+        deps_id = dep,
+        visibility = ["//visibility:public"],
     )
-    for target in DEP_PROVIDERS
+    for dep in DEP_PROVIDERS
 ]
