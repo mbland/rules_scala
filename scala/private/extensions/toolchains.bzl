@@ -20,6 +20,8 @@ def _scala_toolchains_repo_impl(repository_ctx):
         toolchains["scala_proto"] = _SCALA_PROTO_TOOLCHAIN_BUILD % (
             repo_attr.scala_proto_enable_all_options
         )
+    if repo_attr.testing:
+        toolchains["testing"] = _TESTING_TOOLCHAIN_BUILD
 
     if len(toolchains) == 0:
         fail("no toolchains specified")
@@ -38,6 +40,7 @@ scala_toolchains_repo = repository_rule(
         "jmh": attr.bool(),
         "scala_proto": attr.bool(),
         "scala_proto_enable_all_options": attr.bool(),
+        "testing": attr.bool(),
     },
 )
 
@@ -61,19 +64,15 @@ load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 _SCALATEST_TOOLCHAIN_BUILD = """
 load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load(
-    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
-    "repositories",
-    "version_suffix",
-)
 load("@io_bazel_rules_scala//testing:deps.bzl", "SCALATEST_DEPS")
+load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 [
     setup_scala_testing_toolchain(
         name = "scalatest_toolchain" + version_suffix(scala_version),
         scala_version = scala_version,
-        scalatest_classpath = repositories(scala_version, SCALATEST_DEPS),
+        scalatest_classpath = SCALATEST_DEPS,
     )
     for scala_version in SCALA_VERSIONS
 ]
@@ -130,4 +129,29 @@ load(
 setup_scala_proto_toolchains(
     name = "scala_proto", enable_all_options = %s
 )
+"""
+
+_TESTING_TOOLCHAIN_BUILD = """
+load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
+load(
+    "@io_bazel_rules_scala//testing:deps.bzl",
+    "JUNIT_DEPS",
+    "SCALATEST_DEPS",
+    "SPECS2_DEPS",
+    "SPECS2_JUNIT_DEPS",
+)
+load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
+
+[
+    setup_scala_testing_toolchain(
+        name = "testing_toolchain" + version_suffix(scala_version),
+        junit_classpath = JUNIT_DEPS,
+        scala_version = scala_version,
+        scalatest_classpath = SCALATEST_DEPS,
+        specs2_classpath = SPECS2_DEPS,
+        specs2_junit_classpath = SPECS2_JUNIT_DEPS,
+    )
+    for scala_version in SCALA_VERSIONS
+]
 """

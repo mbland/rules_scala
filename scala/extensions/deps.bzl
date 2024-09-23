@@ -12,6 +12,7 @@ load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//scala_proto:scala_proto.bzl", "scala_proto_repositories")
 load("//scalatest:scalatest.bzl", "scalatest_repositories")
 load("//specs2:specs2_junit.bzl", "specs2_junit_repositories")
+load("//testing/private:repositories.bzl", "testing_repositories")
 load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
@@ -59,6 +60,7 @@ _toolchains = tag_class(
         "jmh": attr.bool(),
         "scala_proto": attr.bool(),
         "scala_proto_enable_all_options": attr.bool(),
+        "testing": attr.bool(),
     }
 )
 
@@ -109,6 +111,8 @@ def _get_toolchains(module_ctx):
                 result["junit"] = True
             if toolchains.specs2:
                 result["specs2"] = True
+                result["junit"] = True
+                result["scalatest"] = True
             if toolchains.twitter_scrooge:
                 result["twitter_scrooge"] = True
             if toolchains.jmh:
@@ -117,6 +121,11 @@ def _get_toolchains(module_ctx):
                 result["scala_proto"] = True
             if toolchains.scala_proto_enable_all_options:
                 result["scala_proto_enable_all_options"] = True
+            if toolchains.testing:
+                result["testing"] = True
+                result["scalatest"] = True
+                result["junit"] = True
+                result["specs2"] = True
     return result
 
 def _scala_deps_impl(module_ctx):
@@ -150,16 +159,22 @@ def _scala_deps_impl(module_ctx):
         scalatest_repositories(
             maven_servers = maven_servers, fetch_sources = fetch_sources,
         )
-    if "junit" in toolchains:
-        junit_repositories(
-            maven_servers = maven_servers, fetch_sources = fetch_sources,
-        )
-    if "specs2" in toolchains:
-        specs2_junit_repositories(
-            maven_servers = maven_servers,
-            overriden_artifacts = overridden_artifacts,
-            create_junit_repositories = "junit" not in toolchains,
-        )
+
+    for scala_version in SCALA_VERSIONS:
+        if "junit" in toolchains:
+            junit_repositories(
+                maven_servers = maven_servers,
+                scala_version = scala_version,
+                fetch_sources = fetch_sources,
+            )
+        if "specs2" in toolchains:
+            specs2_junit_repositories(
+                maven_servers = maven_servers,
+                scala_version = scala_version,
+                overriden_artifacts = overridden_artifacts,
+                create_junit_repositories = "junit" not in toolchains,
+            )
+
     if "twitter_scrooge" in toolchains:
         twitter_scrooge(bzlmod_enabled = True)
     if "jmh" in toolchains:
@@ -177,6 +192,11 @@ def _scala_deps_impl(module_ctx):
             overriden_artifacts = overridden_artifacts,
             register_toolchains = False,
         )
+    if "testing" in toolchains:
+        testing_repositories(
+            maven_servers = maven_servers,
+            fetch_sources = False,
+        )
 
     if len(toolchains) != 0:
         scala_toolchains_repo(
@@ -191,6 +211,7 @@ def _scala_deps_impl(module_ctx):
             scala_proto_enable_all_options = (
                 "scala_proto_enable_all_options" in toolchains
             ),
+            testing = "testing" in toolchains,
         )
 
 scala_deps = module_extension(

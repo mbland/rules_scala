@@ -33,22 +33,7 @@ scala_deps.toolchains()
 
 use_repo(scala_deps, "io_bazel_rules_scala_toolchains")
 register_toolchains(
-    # We must register the scalatest toolchains first, as the junit and specs2
-    # toolchains have an ordering dependency on it for now:
-    #
-    # ERROR: .../rules_scala~/testing/toolchain/BUILD:14:23:
-    #   in testing_toolchain_deps rule
-    #   @@rules_scala~//testing/toolchain:scalatest_classpath:                                                                                                                 
-    #   [ ...snip... ]
-    #   File ".../rules_scala~/scala/private/toolchain_deps/toolchain_deps.bzl",
-    #     line 13, column 9, in _lookup_provider_by_id                                                                                                                                
-    # Error in fail: scalatest_classpath requires mapping of scalatest_classpath
-    #   provider id on the toolchain
-    #   @io_bazel_rules_scala//testing/toolchain:testing_toolchain_type                                 
-    # ERROR: .../rules_scala~/testing/toolchain/BUILD:14:23: Analysis of target
-    #   '@@rules_scala~//testing/toolchain:scalatest_classpath' failed
-    "@io_bazel_rules_scala_toolchains//scalatest:all",
-    "@io_bazel_rules_scala_toolchains//...:all",
+    "@io_bazel_rules_scala_toolchains//scala:all",
 )
 
 # Dev dependencies
@@ -65,6 +50,15 @@ dev_deps.toolchains(
     jmh = True,
     scala_proto = True,
     #scala_proto_enable_all_options = True,
+    testing = True,
+)
+
+register_toolchains(
+    "@io_bazel_rules_scala_toolchains//twitter_scrooge:all",
+    "@io_bazel_rules_scala_toolchains//jmh:all",
+    "@io_bazel_rules_scala_toolchains//scala_proto:all",
+    "@io_bazel_rules_scala_toolchains//testing:all",
+    dev_dependency = True,
 )
 
 bazel_dep(
