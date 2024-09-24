@@ -33,7 +33,7 @@ scala_deps.toolchains()
 
 use_repo(scala_deps, "io_bazel_rules_scala_toolchains")
 register_toolchains(
-    "@io_bazel_rules_scala_toolchains//scala:all",
+    "@io_bazel_rules_scala_toolchains//...:all",
 )
 
 # Dev dependencies
@@ -44,21 +44,13 @@ dev_deps = use_extension(
     dev_dependency = True,
 )
 dev_deps.toolchains(
-    junit = True,
-    specs2 = True,
+    #junit = True,
+    #specs2 = True,
     twitter_scrooge = True,
     jmh = True,
     scala_proto = True,
     #scala_proto_enable_all_options = True,
     testing = True,
-)
-
-register_toolchains(
-    "@io_bazel_rules_scala_toolchains//twitter_scrooge:all",
-    "@io_bazel_rules_scala_toolchains//jmh:all",
-    "@io_bazel_rules_scala_toolchains//scala_proto:all",
-    "@io_bazel_rules_scala_toolchains//testing:all",
-    dev_dependency = True,
 )
 
 bazel_dep(

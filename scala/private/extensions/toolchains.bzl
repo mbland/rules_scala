@@ -6,12 +6,6 @@ def _scala_toolchains_repo_impl(repository_ctx):
 
     if repo_attr.scala:
         toolchains["scala"] = _SCALA_TOOLCHAIN_BUILD
-    if repo_attr.scalatest:
-        toolchains["scalatest"] = _SCALATEST_TOOLCHAIN_BUILD
-    if repo_attr.junit:
-        toolchains["junit"] = _JUNIT_TOOLCHAIN_BUILD
-    if repo_attr.specs2:
-        toolchains["specs2"] = _SPECS2_TOOLCHAIN_BUILD
     if repo_attr.twitter_scrooge:
         toolchains["twitter_scrooge"] = _TWITTER_SCROOGE_TOOLCHAIN_BUILD
     if repo_attr.jmh:
@@ -20,8 +14,15 @@ def _scala_toolchains_repo_impl(repository_ctx):
         toolchains["scala_proto"] = _SCALA_PROTO_TOOLCHAIN_BUILD % (
             repo_attr.scala_proto_enable_all_options
         )
+
     if repo_attr.testing:
         toolchains["testing"] = _TESTING_TOOLCHAIN_BUILD
+    elif repo_attr.scalatest:
+        toolchains["scalatest"] = _SCALATEST_TOOLCHAIN_BUILD
+    elif repo_attr.specs2:
+        toolchains["specs2"] = _SPECS2_TOOLCHAIN_BUILD
+    elif repo_attr.junit:
+        toolchains["junit"] = _JUNIT_TOOLCHAIN_BUILD
 
     if len(toolchains) == 0:
         fail("no toolchains specified")
