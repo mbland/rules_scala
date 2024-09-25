@@ -10,9 +10,6 @@ def _lookup_provider_by_id(ctx, toolchain_type_label, dep_providers, deps_id):
     for dep_provider in dep_providers:
         if dep_provider[DepsInfo].deps_id == deps_id:
             return dep_provider
-    print("type:      " + toolchain_type_label)
-    print("deps_id:   " + deps_id)
-    print("providers: " + ", ".join([p[DepsInfo].deps_id for p in dep_providers]))
     fail(_required_deps_id_message(ctx.attr.name, toolchain_type_label, deps_id))
 
 def find_deps_info_on(ctx, toolchain_type_label, deps_id):

@@ -53,7 +53,7 @@ _scala_compiler_srcjar = tag_class(
 _toolchains = tag_class(
     attrs = {
         "scala": attr.bool(default = True),
-        "scalatest": attr.bool(default = True),
+        "scalatest": attr.bool(),
         "junit": attr.bool(),
         "specs2": attr.bool(),
         "twitter_scrooge": attr.bool(),
@@ -112,7 +112,6 @@ def _get_toolchains(module_ctx):
             if toolchains.specs2:
                 result["specs2"] = True
                 result["junit"] = True
-                result["scalatest"] = True
             if toolchains.twitter_scrooge:
                 result["twitter_scrooge"] = True
             if toolchains.jmh:

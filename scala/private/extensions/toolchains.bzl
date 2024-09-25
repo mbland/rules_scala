@@ -1,5 +1,33 @@
 """Creates a repo containing Scala toolchain packages"""
 
+def _generate_testing_toolchain_build_file(repo_attr):
+    framework_deps = {}
+
+    if repo_attr.testing:
+        framework_deps = {
+            "scalatest": "SCALATEST_DEPS",
+            "junit": "JUNIT_DEPS",
+            "specs2": "SPECS2_DEPS"
+        }
+    if repo_attr.scalatest:
+        framework_deps["scalatest"] = "SCALATEST_DEPS"
+    if repo_attr.specs2:
+        framework_deps["specs2"] = "SPECS2_DEPS"
+        framework_deps["specs2_junit"] = "SPECS2_JUNIT_DEPS"
+        framework_deps["junit"] = "JUNIT_DEPS"
+    if repo_attr.junit:
+        framework_deps["junit"] = "JUNIT_DEPS"
+
+    if len(framework_deps) == 0:
+        return None
+    return _TESTING_TOOLCHAIN_BUILD.format(
+        deps_symbols="\",\n    \"".join([s for s in framework_deps.values()]),
+        scalatest = framework_deps.get("scalatest"),
+        junit = framework_deps.get("junit"),
+        specs2 = framework_deps.get("specs2"),
+        specs2_junit = framework_deps.get("specs2_junit"),
+    )
+
 def _scala_toolchains_repo_impl(repository_ctx):
     repo_attr = repository_ctx.attr
     toolchains = {}
@@ -15,14 +43,9 @@ def _scala_toolchains_repo_impl(repository_ctx):
             repo_attr.scala_proto_enable_all_options
         )
 
-    if repo_attr.testing:
-        toolchains["testing"] = _TESTING_TOOLCHAIN_BUILD
-    elif repo_attr.scalatest:
-        toolchains["scalatest"] = _SCALATEST_TOOLCHAIN_BUILD
-    elif repo_attr.specs2:
-        toolchains["specs2"] = _SPECS2_TOOLCHAIN_BUILD
-    elif repo_attr.junit:
-        toolchains["junit"] = _JUNIT_TOOLCHAIN_BUILD
+    testing_build_file = _generate_testing_toolchain_build_file(repo_attr)
+    if testing_build_file != None:
+        toolchains["testing"] = testing_build_file
 
     if len(toolchains) == 0:
         fail("no toolchains specified")
@@ -63,49 +86,6 @@ load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 ]
 """
 
-_SCALATEST_TOOLCHAIN_BUILD = """
-load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load("@io_bazel_rules_scala//testing:deps.bzl", "SCALATEST_DEPS")
-load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
-
-[
-    setup_scala_testing_toolchain(
-        name = "scalatest_toolchain" + version_suffix(scala_version),
-        scala_version = scala_version,
-        scalatest_classpath = SCALATEST_DEPS,
-    )
-    for scala_version in SCALA_VERSIONS
-]
-"""
-
-_JUNIT_TOOLCHAIN_BUILD = """
-load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load("@io_bazel_rules_scala//testing:deps.bzl", "JUNIT_DEPS")
-
-setup_scala_testing_toolchain(
-    name = "junit_toolchain",
-    junit_classpath = JUNIT_DEPS,
-)
-"""
-
-_SPECS2_TOOLCHAIN_BUILD = """
-load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load(
-    "@io_bazel_rules_scala//testing:deps.bzl",
-    "JUNIT_DEPS",
-    "SPECS2_DEPS",
-    "SPECS2_JUNIT_DEPS",
-)
-
-setup_scala_testing_toolchain(
-    name = "specs2_junit_toolchain",
-    junit_classpath = JUNIT_DEPS,
-    specs2_classpath = SPECS2_DEPS,
-    specs2_junit_classpath = SPECS2_JUNIT_DEPS,
-)
-"""
-
 _TWITTER_SCROOGE_TOOLCHAIN_BUILD = """
 load(
     "@io_bazel_rules_scala//twitter_scrooge/toolchain:toolchain.bzl",
@@ -134,24 +114,21 @@ setup_scala_proto_toolchains(
 
 _TESTING_TOOLCHAIN_BUILD = """
 load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
+load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
 load(
     "@io_bazel_rules_scala//testing:deps.bzl",
-    "JUNIT_DEPS",
-    "SCALATEST_DEPS",
-    "SPECS2_DEPS",
-    "SPECS2_JUNIT_DEPS",
+    "{deps_symbols}",
 )
-load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 [
     setup_scala_testing_toolchain(
         name = "testing_toolchain" + version_suffix(scala_version),
-        junit_classpath = JUNIT_DEPS,
+        junit_classpath = {junit},
         scala_version = scala_version,
-        scalatest_classpath = SCALATEST_DEPS,
-        specs2_classpath = SPECS2_DEPS,
-        specs2_junit_classpath = SPECS2_JUNIT_DEPS,
+        scalatest_classpath = {scalatest},
+        specs2_classpath = {specs2},
+        specs2_junit_classpath = {specs2_junit},
     )
     for scala_version in SCALA_VERSIONS
 ]

@@ -44,6 +44,7 @@ dev_deps = use_extension(
     dev_dependency = True,
 )
 dev_deps.toolchains(
+    #scalatest = True,
     #junit = True,
     #specs2 = True,
     twitter_scrooge = True,
