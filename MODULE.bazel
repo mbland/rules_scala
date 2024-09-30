@@ -12,6 +12,10 @@ local_repository = use_repo_rule(
     "@bazel_tools//tools/build_defs/repo:local.bzl",
     "local_repository",
 )
+new_local_repository = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:local.bzl",
+    "new_local_repository",
+)
 
 SCALA_VERSION = "2.13.14"
 SCALA_VERSIONS = [SCALA_VERSION]
@@ -52,6 +56,59 @@ dev_deps.toolchains(
     scala_proto = True,
     #scala_proto_enable_all_options = True,
     testing = True,
+)
+
+use_repo(
+    dev_deps,
+    "com_google_guava_guava_21_0_with_file",
+    "org_apache_commons_commons_lang_3_5",
+    #"scalafmt_default",
+)
+
+# Repos used by `bash test_all.sh`
+[
+    use_repo(dev_deps, repo + "_" + SCALA_VERSION.replace(".", "_"))
+    for repo in [
+        "io_bazel_rules_scala_scala_compiler",
+        "io_bazel_rules_scala_scala_library",
+        "io_bazel_rules_scala_scala_parser_combinators",
+        "io_bazel_rules_scala_scala_reflect",
+        "io_bazel_rules_scala_scala_xml",
+        "org_scalameta_semanticdb_scalac",
+        "scala_proto_rules_protoc_bridge",
+        "scala_proto_rules_scalapb_plugin",
+    ]
+]
+
+test_deps = use_extension(
+    "//scala/private/extensions:test_deps.bzl",
+    "test_deps",
+    dev_dependency = True,
+)
+use_repo(
+    test_deps,
+    "remote_jdk8_linux",
+    "remote_jdk8_macos",
+    "remote_jdk8_windows",
+    "remotejdk21_linux",
+    "remotejdk21_linux_toolchain_config_repo",
+    "remotejdk21_macos",
+    "remotejdk21_macos_toolchain_config_repo",
+    "remotejdk21_win",
+    "remotejdk21_win_toolchain_config_repo",
+)
+register_toolchains(
+    "//test/toolchains:java21_toolchain_definition",
+    "@remotejdk21_linux_toolchain_config_repo//:all",
+    "@remotejdk21_macos_toolchain_config_repo//:all",
+    "@remotejdk21_win_toolchain_config_repo//:all",
+    dev_dependency = True,
+)
+
+bazel_dep(
+    name = "platforms",
+    version = "0.0.10",
+    dev_dependency = True,
 )
 
 bazel_dep(
@@ -107,4 +164,10 @@ archive_override(
 local_repository(
     name = "example_external_workspace",
     path = "third_party/test/example_external_workspace",
+)
+
+new_local_repository(
+    name = "proto_cross_repo_boundary",
+    path = "test/proto_cross_repo_boundary/repo",
+    build_file = "test/proto_cross_repo_boundary/repo/BUILD.repo",
 )

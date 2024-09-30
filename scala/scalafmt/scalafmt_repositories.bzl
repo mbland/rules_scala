@@ -48,7 +48,8 @@ def _artifact_ids(scala_version):
 
 def scalafmt_repositories(
         maven_servers = _default_maven_server_urls(),
-        overriden_artifacts = {}):
+        overriden_artifacts = {},
+        bzlmod_enabled = False):
     for scala_version in SCALA_VERSIONS:
         repositories(
             scala_version = scala_version,
@@ -56,7 +57,9 @@ def scalafmt_repositories(
             maven_servers = maven_servers,
             overriden_artifacts = overriden_artifacts,
         )
-    _register_scalafmt_toolchains()
+
+    if not bzlmod_enabled:
+        _register_scalafmt_toolchains()
 
 def _register_scalafmt_toolchains():
     for scala_version in SCALA_VERSIONS:

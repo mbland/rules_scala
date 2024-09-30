@@ -8,6 +8,7 @@ load(
     "dt_patched_compiler_setup",
     "rules_scala_toolchain_deps_repositories",
 )
+load("//scala/scalafmt:scalafmt_repositories.bzl", "scalafmt_repositories")
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//scala_proto:scala_proto.bzl", "scala_proto_repositories")
 load("//scalatest:scalatest.bzl", "scalatest_repositories")
@@ -61,6 +62,7 @@ _toolchains = tag_class(
         "scala_proto": attr.bool(),
         "scala_proto_enable_all_options": attr.bool(),
         "testing": attr.bool(),
+        "scalafmt": attr.bool(),
     }
 )
 
@@ -125,6 +127,8 @@ def _get_toolchains(module_ctx):
                 result["scalatest"] = True
                 result["junit"] = True
                 result["specs2"] = True
+            if toolchains.scalafmt:
+                result["scalafmt"] = True
     return result
 
 def _scala_deps_impl(module_ctx):
@@ -173,6 +177,16 @@ def _scala_deps_impl(module_ctx):
                 overriden_artifacts = overridden_artifacts,
                 create_junit_repositories = "junit" not in toolchains,
             )
+        if (
+            "scala_proto" in toolchains or
+            "scala_proto_enable_all_options" in toolchains
+        ):
+            scala_proto_repositories(
+                maven_servers = maven_servers,
+                scala_version = scala_version,
+                overriden_artifacts = overridden_artifacts,
+                register_toolchains = False,
+            )
 
     if "twitter_scrooge" in toolchains:
         twitter_scrooge(bzlmod_enabled = True)
@@ -182,19 +196,16 @@ def _scala_deps_impl(module_ctx):
             overriden_artifacts = overridden_artifacts,
             bzlmod_enabled = True,
         )
-    if (
-        "scala_proto" in toolchains or
-        "scala_proto_enable_all_options" in toolchains
-    ):
-        scala_proto_repositories(
-            maven_servers = maven_servers,
-            overriden_artifacts = overridden_artifacts,
-            register_toolchains = False,
-        )
     if "testing" in toolchains:
         testing_repositories(
             maven_servers = maven_servers,
             fetch_sources = False,
+        )
+    if "scalfmt" in toolchains:
+        scalafmt_repositories(
+            maven_servers = maven_servers,
+            overriden_artifacts = overridden_artifacts,
+            bzlmod_enabled = True,
         )
 
     if len(toolchains) != 0:
@@ -211,6 +222,7 @@ def _scala_deps_impl(module_ctx):
                 "scala_proto_enable_all_options" in toolchains
             ),
             testing = "testing" in toolchains,
+            scalafmt = "scalafmt" in toolchains,
         )
 
 scala_deps = module_extension(

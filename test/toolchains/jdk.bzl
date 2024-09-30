@@ -1,7 +1,13 @@
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
-load("@bazel_tools//tools/jdk:remote_java_repository.bzl", "remote_java_repository")
+load(
+    "@rules_java//toolchains:remote_java_repository.bzl",
+    "remote_java_repository",
+)
 
-def remote_jdk21_repositories():
+# We don't use remote_java_repository from
+# bazel_tools/tools/jdk/remote_java_repository.bzl directly because it calls
+# native.register_toolchain, which breaks Bzlmod.
+def remote_jdk21_repositories(bzlmod_enabled = False):
     maybe(
         remote_java_repository,
         name = "remotejdk21_linux",
@@ -49,6 +55,14 @@ def remote_jdk21_repositories():
         ],
         version = "21",
     )
+
+    # Copied from bazel_tools/tools/jdk/remote_java_repository.bzl.
+    if not bzlmod_enabled:
+        for platform in ["linux", "macos", "win"]:
+            native.register_toolchains(
+                "@remotejdk21_" + platform + "_toolchain_config_repo//:all"
+            )
+
 
 def remote_jdk21_toolchains():
     native.register_toolchains("//test/toolchains:java21_toolchain_definition")

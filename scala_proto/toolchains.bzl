@@ -14,13 +14,10 @@ load("//scala:artifacts.bzl", "versioned_artifact_repos")
 
 # We only publicly export one provider.
 DEP_PROVIDERS = [
-    "scalapb_worker_deps",
-]
-
-_INTERNAL_DEP_PROVIDERS = [
     "scalapb_compile_deps",
     "scalapb_grpc_deps",
-] + DEP_PROVIDERS
+    "scalapb_worker_deps",
+]
 
 def scala_proto_register_toolchains():
     native.register_toolchains("@io_bazel_rules_scala//scala_proto:default_toolchain")
@@ -31,7 +28,7 @@ def scala_proto_register_enable_all_options_toolchain():
 def setup_scala_proto_toolchains(name, enable_all_options = False):
     scala_proto_deps_toolchain(
         name = "%s_default_deps_toolchain_impl" % name,
-        dep_providers = [":%s_provider" % p for p in _INTERNAL_DEP_PROVIDERS],
+        dep_providers = [":%s_provider" % p for p in DEP_PROVIDERS],
         visibility = ["//visibility:public"],
     )
 

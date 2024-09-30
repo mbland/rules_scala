@@ -36,12 +36,13 @@ scalafmt_singleton(
     visibility = ["//visibility:public"],
 )
 
-setup_scalafmt_toolchains()
-
 # Alias for backward compatibility:
 alias(
     name = "scalafmt_toolchain",
-    actual = "scalafmt_toolchain" + version_suffix(SCALA_VERSION),
+    actual = (
+        "@io_bazel_rules_scala_toolchains//scalafmt:scalafmt_toolchain" +
+        version_suffix(SCALA_VERSION)
+    )
 )
 
 export_scalafmt_deps(

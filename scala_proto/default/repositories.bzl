@@ -4,10 +4,11 @@ load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 def scala_proto_default_repositories(
         maven_servers = default_maven_server_urls(),
+        scala_version = SCALA_VERSION,
         overriden_artifacts = {},
         register_toolchains = True):
     repositories(
-        scala_version = SCALA_VERSION,
+        scala_version = scala_version,
         for_artifact_ids = [
             "scala_proto_rules_scalapb_plugin",
             "scala_proto_rules_protoc_bridge",
