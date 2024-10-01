@@ -3,13 +3,19 @@ load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala:scala_cross_version.bzl", "version_suffix")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
-_SCALAFMT_DEPS = [
+_SCALAFMT_DEPS_2_11 = [
     "@com_geirsson_metaconfig_core",
     "@org_scalameta_common",
     "@org_scalameta_parsers",
     "@org_scalameta_scalafmt_core",
     "@org_scalameta_scalameta",
     "@org_scalameta_trees",
+]
+
+_SCALAFMT_DEPS = _SCALAFMT_DEPS_2_11 + [
+    "@org_scalameta_mdoc_parser",
+    "@org_scalameta_scalafmt_config",
+    "@org_scalameta_scalafmt_sysops",
 ]
 
 def setup_scalafmt_toolchain(
@@ -48,4 +54,8 @@ def setup_scalafmt_toolchains():
         )
 
 def _deps(scala_version):
-    return [dep + version_suffix(scala_version) for dep in _SCALAFMT_DEPS]
+    deps = _SCALAFMT_DEPS
+    if scala_version.startswith("2.11"):
+        deps = _SCALAFMT_DEPS_2_11
+
+    return [dep + version_suffix(scala_version) for dep in deps]

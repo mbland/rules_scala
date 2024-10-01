@@ -1,8 +1,8 @@
 load("//scala:scala.bzl", "scala_binary")
 load("//scala:scala_cross_version.bzl", "version_suffix")
 load("//scala/scalafmt/toolchain:toolchain.bzl", "export_scalafmt_deps")
-load("//scala/scalafmt/toolchain:setup_scalafmt_toolchain.bzl", "setup_scalafmt_toolchains")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
+load("//scala/scalafmt/toolchain:setup_scalafmt_toolchain.bzl", "setup_scalafmt_toolchains")
 load(
     "//scala/scalafmt:phase_scalafmt_ext.bzl",
     "scalafmt_singleton",

@@ -45,11 +45,19 @@ _SCALAFMT_DEPS = [
     "com_geirsson_metaconfig_typesafe_config",
 ]
 
+_SCALAFMT_DEPS_2_11 = [
+    "com_geirsson_metaconfig_pprint",
+    "org_scalameta_mdoc_parser",
+    "org_scalameta_scalafmt_config",
+    "org_scalameta_scalafmt_sysops",
+]
+
 def _artifact_ids(scala_version):
     major_version = extract_major_version(scala_version)
+    extra_deps = _SCALAFMT_DEPS_2_11 if major_version != "2.11" else []
     geny = ["com_lihaoyi_geny"] if major_version != "2.11" else []
     parallel_collections = ["io_bazel_rules_scala_scala_parallel_collections"] if major_version == "2.13" or major_version.startswith("3") else []
-    return _SCALAFMT_DEPS + geny + parallel_collections
+    return _SCALAFMT_DEPS + extra_deps + geny + parallel_collections
 
 def scalafmt_repositories(
         maven_servers = _default_maven_server_urls(),
