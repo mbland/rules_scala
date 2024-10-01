@@ -695,12 +695,15 @@ check_statsfile("ScalaBinary")
 check_statsfile("ScalaLibBinary")
 
 #discovering tests from a separate target
+
+junit_deps = [
+    "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
+]
+
 scala_library(
     name = "JunitSeparateTarget",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitSeparateTargetTest.scala"],
-    deps = [
-        "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
-    ],
+    deps = junit_deps,
 )
 
 scala_junit_test(
@@ -714,9 +717,7 @@ scala_junit_test(
 java_library(
     name = "JunitJavaSeparateTarget",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitJavaSeparateTargetTest.java"],
-    deps = [
-        "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
-    ],
+    deps = junit_deps,
 )
 
 scala_junit_test(
@@ -736,6 +737,7 @@ scala_library(
     name = "JunitSeparateTargetWithDependencyOnTest",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitSeparateTargetTest.scala"],
     runtime_deps = [":TargetWithTestThatShouldNotRun"],
+    deps = junit_deps,
 )
 
 scala_junit_test(
@@ -750,9 +752,7 @@ java_library(
     name = "JunitSeparateJavaTargetWithDependencyOnTest",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitJavaSeparateTargetTest.java"],
     runtime_deps = [":TargetWithTestThatShouldNotRun"],
-    deps = [
-        "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
-    ],
+    deps = junit_deps,
 )
 
 scala_junit_test(
@@ -769,6 +769,7 @@ scala_library(
         "src/main/scala/scalarules/test/junit/separate_target/JunitJavaSeparateTargetTest.java",
         "src/main/scala/scalarules/test/junit/separate_target/SomeScalaClass.scala",
     ],
+    deps = junit_deps,
 )
 
 scala_junit_test(
