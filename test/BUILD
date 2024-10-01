@@ -610,9 +610,14 @@ scala_library(
     ],
 )
 
+junit_deps = [
+    "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
+]
+
 scala_library(
     name = "customJunitRunner",
     srcs = ["src/main/scala/scalarules/test/junit/JunitCustomRunner.java"],
+    deps = junit_deps,
 )
 
 # make sure making a fat jar strips signatures
@@ -695,10 +700,6 @@ check_statsfile("ScalaBinary")
 check_statsfile("ScalaLibBinary")
 
 #discovering tests from a separate target
-
-junit_deps = [
-    "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
-]
 
 scala_library(
     name = "JunitSeparateTarget",

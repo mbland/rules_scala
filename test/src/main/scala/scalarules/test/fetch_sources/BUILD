@@ -4,4 +4,5 @@ scala_library(
     name = "fetch_sources",
     testonly = True,
     srcs = ["FetchSources.scala"],
+    deps = ["@com_google_guava_guava_21_0"],
 )
