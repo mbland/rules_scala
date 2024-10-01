@@ -51,13 +51,14 @@ scala_library(
     name = "source_jar_not_oncp",
     testonly = True,
     srcs = ["ReferCatsImplicits.scala"],
+    deps = ["@org_typelevel__cats_core"],
 )
 
 ##Runtime deps
 scala_import(
     name = "indirection_for_transitive_runtime_deps",
     testonly = True,
-    jars = [],
+    jars = ["@org_typelevel__cats_core//jar"],
 )
 
 scala_import(
