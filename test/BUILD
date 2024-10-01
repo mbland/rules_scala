@@ -731,6 +731,7 @@ scala_junit_test(
 scala_library(
     name = "TargetWithTestThatShouldNotRun",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/FailingTest.scala"],
+    deps = junit_deps,
 )
 
 scala_library(
@@ -785,6 +786,7 @@ scala_library(
     srcs = [
         "src/main/scala/scalarules/test/junit/runtime_platform/JunitRuntimePlatformTest.java",
     ],
+    deps = junit_deps,
     # make sure java compilation toolchain matches runtime toolchain ie --target
     java_compile_toolchain = "@bazel_tools//tools/jdk:toolchain_java11",
 )

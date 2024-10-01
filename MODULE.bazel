@@ -71,6 +71,7 @@ use_repo(
     "org_springframework_spring_tx",
     "org_typelevel__cats_core",
     "org_typelevel_kind_projector",
+    "scala_proto_rules_protoc_bridge",
     "scalafmt_default",
 )
 

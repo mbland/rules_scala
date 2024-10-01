@@ -31,16 +31,14 @@ scala_library(
     srcs = ["DummyGenerator.scala"],
     deps = [
         "@com_google_protobuf//:protobuf_java",
+        "@scala_proto_rules_protoc_bridge"
     ],
 )
 
 declare_deps_provider(
     name = "scalapb_worker_deps_provider",
     deps_id = "scalapb_worker_deps",
-    deps = [
-        ":DummyGenerator",
-        "@com_google_protobuf//:protobuf_java",
-    ],
+    deps = [":DummyGenerator"],
 )
 
 scala_proto_deps_toolchain(
@@ -70,15 +68,16 @@ toolchain(
 scala_library(
     name = "FailingGenerator",
     srcs = ["FailingGenerator.scala"],
+    deps = [
+        "@com_google_protobuf//:protobuf_java",
+        "@scala_proto_rules_protoc_bridge"
+    ],
 )
 
 declare_deps_provider(
     name = "failing_scalapb_worker_deps_provider",
     deps_id = "scalapb_worker_deps",
-    deps = [
-        ":FailingGenerator",
-        "@com_google_protobuf//:protobuf_java",
-    ],
+    deps = [":FailingGenerator"],
 )
 
 scala_proto_deps_toolchain(
