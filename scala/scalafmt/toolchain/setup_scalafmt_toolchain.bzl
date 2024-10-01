@@ -33,7 +33,9 @@ def setup_scalafmt_toolchain(
         name = name,
         target_settings = ["@io_bazel_rules_scala_config//:scala_version" + version_suffix(scala_version)],
         toolchain = ":%s_impl" % name,
-        toolchain_type = "//scala/scalafmt/toolchain:scalafmt_toolchain_type",
+        toolchain_type = Label(
+            "//scala/scalafmt/toolchain:scalafmt_toolchain_type"
+        ),
         visibility = visibility,
     )
 

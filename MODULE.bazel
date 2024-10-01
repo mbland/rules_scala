@@ -56,29 +56,23 @@ dev_deps.toolchains(
     scala_proto = True,
     #scala_proto_enable_all_options = True,
     testing = True,
+    scalafmt = True,
 )
 
+# See //testing/private:repositories.bzl for notes on some of these repos.
 use_repo(
     dev_deps,
+    "com_github_jnr_jffi_native",
+    "com_google_guava_guava_21_0",
     "com_google_guava_guava_21_0_with_file",
+    "com_twitter__scalding_date",
     "org_apache_commons_commons_lang_3_5",
-    #"scalafmt_default",
+    "org_springframework_spring_core",
+    "org_springframework_spring_tx",
+    "org_typelevel__cats_core",
+    "org_typelevel_kind_projector",
+    "scalafmt_default",
 )
-
-# Repos used by `bash test_all.sh`
-[
-    use_repo(dev_deps, repo + "_" + SCALA_VERSION.replace(".", "_"))
-    for repo in [
-        "io_bazel_rules_scala_scala_compiler",
-        "io_bazel_rules_scala_scala_library",
-        "io_bazel_rules_scala_scala_parser_combinators",
-        "io_bazel_rules_scala_scala_reflect",
-        "io_bazel_rules_scala_scala_xml",
-        "org_scalameta_semanticdb_scalac",
-        "scala_proto_rules_protoc_bridge",
-        "scala_proto_rules_scalapb_plugin",
-    ]
-]
 
 test_deps = use_extension(
     "//scala/private/extensions:test_deps.bzl",
@@ -87,6 +81,8 @@ test_deps = use_extension(
 )
 use_repo(
     test_deps,
+    "example_external_workspace",
+    "proto_cross_repo_boundary",
     "remote_jdk8_linux",
     "remote_jdk8_macos",
     "remote_jdk8_windows",
@@ -96,6 +92,7 @@ use_repo(
     "remotejdk21_macos_toolchain_config_repo",
     "remotejdk21_win",
     "remotejdk21_win_toolchain_config_repo",
+    "test_new_local_repo",
 )
 register_toolchains(
     "//test/toolchains:java21_toolchain_definition",
@@ -159,15 +156,4 @@ archive_override(
     urls = [
         "https://github.com/bazelbuild/buildtools/archive/v%s.tar.gz" % _build_tools_release,
     ],
-)
-
-local_repository(
-    name = "example_external_workspace",
-    path = "third_party/test/example_external_workspace",
-)
-
-new_local_repository(
-    name = "proto_cross_repo_boundary",
-    path = "test/proto_cross_repo_boundary/repo",
-    build_file = "test/proto_cross_repo_boundary/repo/BUILD.repo",
 )

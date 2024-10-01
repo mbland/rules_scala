@@ -5,6 +5,7 @@ load(
     _default_maven_server_urls = "default_maven_server_urls",
 )
 load("//third_party/repositories:repositories.bzl", "repositories")
+load("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 def scalafmt_default_config(path = ".scalafmt.conf"):
@@ -14,7 +15,12 @@ def scalafmt_default_config(path = ".scalafmt.conf"):
     build.append("    srcs = [\"{}\"],".format(path))
     build.append("    visibility = [\"//visibility:public\"],")
     build.append(")")
-    native.new_local_repository(name = "scalafmt_default", build_file_content = "\n".join(build), path = "")
+
+    new_local_repository(
+        name = "scalafmt_default",
+        build_file_content = "\n".join(build),
+        path = "",
+    )
 
 _SCALAFMT_DEPS = [
     "org_scalameta_common",
@@ -31,7 +37,6 @@ _SCALAFMT_DEPS = [
     "com_thesamet_scalapb_scalapb_runtime",
     "com_lihaoyi_fansi",
     "com_lihaoyi_fastparse",
-    "org_scalameta_fastparse_utils",
     "org_scala_lang_modules_scala_collection_compat",
     "com_lihaoyi_pprint",
     "com_lihaoyi_sourcecode",

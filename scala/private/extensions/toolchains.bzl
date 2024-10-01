@@ -140,7 +140,7 @@ load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 _SCALAFMT_TOOLCHAIN_BUILD = """
 load(
-    "@io_bazel_rules_scala//scala/scalafmt:setup_scalafmt_toolchain.bzl",
+    "@io_bazel_rules_scala//scala/scalafmt/toolchain:setup_scalafmt_toolchain.bzl",
     "setup_scalafmt_toolchains",
 )
 

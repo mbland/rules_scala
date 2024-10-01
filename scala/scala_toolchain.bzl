@@ -1,11 +1,10 @@
-load(
-    "@io_bazel_rules_scala//scala:providers.bzl",
-    _DepsInfo = "DepsInfo",
-)
+load("//scala:providers.bzl", _DepsInfo = "DepsInfo")    
+load("//scala:scala_cross_version.bzl", "version_suffix")
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
     "ENABLE_COMPILER_DEPENDENCY_TRACKING",
     "SCALA_MAJOR_VERSION",
+    "SCALA_VERSION",
 )
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
@@ -82,6 +81,10 @@ def _scala_toolchain_impl(ctx):
     all_unused_deps_patterns = ctx.attr.dependency_tracking_unused_deps_patterns
     unused_deps_includes, unused_deps_excludes = _partition_patterns(all_unused_deps_patterns)
 
+    dep_providers = ctx.attr.dep_providers
+    if len(dep_providers) == 0:
+        dep_providers = _default_dep_providers(ctx.attr.enable_semanticdb)
+
     toolchain = platform_common.ToolchainInfo(
         scalacopts = ctx.attr.scalacopts,
         dep_providers = ctx.attr.dep_providers,
@@ -106,24 +109,28 @@ def _scala_toolchain_impl(ctx):
     )
     return [toolchain]
 
-def _default_dep_providers():
+def _default_dep_providers(enable_semanticdb = False):
     dep_providers = [
-        "@io_bazel_rules_scala//scala:scala_xml_provider",
-        "@io_bazel_rules_scala//scala:parser_combinators_provider",
-        "@io_bazel_rules_scala//scala:scala_compile_classpath_provider",
-        "@io_bazel_rules_scala//scala:scala_library_classpath_provider",
-        "@io_bazel_rules_scala//scala:scala_macro_classpath_provider",
+        "scala_xml",
+        "parser_combinators",
+        "scala_compile_classpath",
+        "scala_library_classpath",
+        "scala_macro_classpath",
     ]
-    if SCALA_MAJOR_VERSION.startswith("2"):
-        dep_providers.append("@io_bazel_rules_scala//scala:semanticdb_provider")
-    return dep_providers
+    if enable_semanticdb:
+        dep_providers.append("semanticdb_deps")
+
+    target_fmt = (
+        "@io_bazel_rules_scala_toolchains//scala:" +
+        "toolchain" + version_suffix(SCALA_VERSION) + "_{provider}_provider"
+    )
+    return [target_fmt.format(provider = p) for p in dep_providers]
 
 scala_toolchain = rule(
     _scala_toolchain_impl,
     attrs = {
         "scalacopts": attr.string_list(),
         "dep_providers": attr.label_list(
-            default = _default_dep_providers(),
             providers = [_DepsInfo],
         ),
         "dependency_mode": attr.string(

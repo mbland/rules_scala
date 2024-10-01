@@ -1,9 +1,7 @@
 load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala:scala.bzl", "scala_library", "scala_test")
-load("//scala:scala_cross_version.bzl", "repositories")
 load("//scala_proto:scala_proto.bzl", "scala_proto_library")
 load("//scala_proto:scala_proto_toolchain.bzl", "scala_proto_deps_toolchain", "scala_proto_toolchain")
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 # This package contains manual tests for custom generators:
 #
@@ -33,7 +31,6 @@ scala_library(
     srcs = ["DummyGenerator.scala"],
     deps = [
         "@com_google_protobuf//:protobuf_java",
-        "@scala_proto_rules_protoc_bridge",
     ],
 )
 
@@ -43,10 +40,7 @@ declare_deps_provider(
     deps = [
         ":DummyGenerator",
         "@com_google_protobuf//:protobuf_java",
-    ] + repositories(SCALA_VERSION, [
-        "@scala_proto_rules_protoc_bridge",
-        "@scala_proto_rules_scalapb_plugin",
-    ]),
+    ],
 )
 
 scala_proto_deps_toolchain(
@@ -78,9 +72,6 @@ toolchain(
 scala_library(
     name = "FailingGenerator",
     srcs = ["FailingGenerator.scala"],
-    deps = [
-        "@scala_proto_rules_protoc_bridge",
-    ],
 )
 
 declare_deps_provider(
@@ -89,10 +80,7 @@ declare_deps_provider(
     deps = [
         ":FailingGenerator",
         "@com_google_protobuf//:protobuf_java",
-    ] + repositories(SCALA_VERSION, [
-        "@scala_proto_rules_protoc_bridge",
-        "@scala_proto_rules_scalapb_plugin",
-    ]),
+    ],
 )
 
 scala_proto_deps_toolchain(

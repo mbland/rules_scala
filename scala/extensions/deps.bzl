@@ -8,7 +8,11 @@ load(
     "dt_patched_compiler_setup",
     "rules_scala_toolchain_deps_repositories",
 )
-load("//scala/scalafmt:scalafmt_repositories.bzl", "scalafmt_repositories")
+load(
+    "//scala/scalafmt:scalafmt_repositories.bzl",
+    "scalafmt_default_config",
+    "scalafmt_repositories",
+)
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//scala_proto:scala_proto.bzl", "scala_proto_repositories")
 load("//scalatest:scalatest.bzl", "scalatest_repositories")
@@ -201,7 +205,8 @@ def _scala_deps_impl(module_ctx):
             maven_servers = maven_servers,
             fetch_sources = False,
         )
-    if "scalfmt" in toolchains:
+    if "scalafmt" in toolchains:
+        scalafmt_default_config()
         scalafmt_repositories(
             maven_servers = maven_servers,
             overriden_artifacts = overridden_artifacts,
