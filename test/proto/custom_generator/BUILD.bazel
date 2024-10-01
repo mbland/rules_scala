@@ -47,8 +47,6 @@ scala_proto_deps_toolchain(
     name = "scala_proto_deps_toolchain_def",
     dep_providers = [
         ":scalapb_worker_deps_provider",
-        "//scala_proto:scalapb_compile_deps_provider",
-        "//scala_proto:scalapb_grpc_deps_provider",
     ],
 )
 
@@ -87,8 +85,6 @@ scala_proto_deps_toolchain(
     name = "failing_scala_proto_deps_toolchain_def",
     dep_providers = [
         ":failing_scalapb_worker_deps_provider",
-        "//scala_proto:scalapb_compile_deps_provider",
-        "//scala_proto:scalapb_grpc_deps_provider",
     ],
 )
 
