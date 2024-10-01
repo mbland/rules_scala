@@ -74,11 +74,19 @@ use_repo(
     "scalafmt_default",
 )
 
+[
+    use_repo(dev_deps, dep + "_" + SCALA_VERSION.replace(".", "_"))
+    for dep in [
+        "io_bazel_rules_scala_junit_junit",
+    ]
+]
+
 test_deps = use_extension(
     "//scala/private/extensions:test_deps.bzl",
     "test_deps",
     dev_dependency = True,
 )
+
 use_repo(
     test_deps,
     "example_external_workspace",
@@ -94,6 +102,7 @@ use_repo(
     "remotejdk21_win_toolchain_config_repo",
     "test_new_local_repo",
 )
+
 register_toolchains(
     "//test/toolchains:java21_toolchain_definition",
     "@remotejdk21_linux_toolchain_config_repo//:all",

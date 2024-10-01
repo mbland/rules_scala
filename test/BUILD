@@ -1,5 +1,7 @@
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 load("@rules_python//python:defs.bzl", "py_binary")
 load("@rules_java//java:defs.bzl", "java_binary", "java_library")
+load("//scala:scala_cross_version.bzl", "version_suffix")
 load(
     "//scala:scala.bzl",
     "scala_binary",
@@ -696,6 +698,9 @@ check_statsfile("ScalaLibBinary")
 scala_library(
     name = "JunitSeparateTarget",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitSeparateTargetTest.scala"],
+    deps = [
+        "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
+    ],
 )
 
 scala_junit_test(
@@ -709,6 +714,9 @@ scala_junit_test(
 java_library(
     name = "JunitJavaSeparateTarget",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitJavaSeparateTargetTest.java"],
+    deps = [
+        "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
+    ],
 )
 
 scala_junit_test(
@@ -742,6 +750,9 @@ java_library(
     name = "JunitSeparateJavaTargetWithDependencyOnTest",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitJavaSeparateTargetTest.java"],
     runtime_deps = [":TargetWithTestThatShouldNotRun"],
+    deps = [
+        "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
+    ],
 )
 
 scala_junit_test(
