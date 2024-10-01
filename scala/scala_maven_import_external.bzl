@@ -35,6 +35,7 @@ the following macros are defined below that utilize jvm_import_external:
 - java_import_external - to demonstrate that the original functionality of `java_import_external` stayed intact.
 """
 
+load("//scala/private:macros/bzlmod.bzl", "apparent_repo_name")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "read_netrc", "read_user_netrc", "use_netrc")
 
 # https://github.com/bazelbuild/bazel/issues/13709#issuecomment-1336699672
@@ -136,7 +137,7 @@ def _jvm_import_external(repository_ctx):
         "",
         "alias(",
         "    name = \"jar\",",
-        "    actual = \"@%s\"," % repository_ctx.name,
+        "    actual = \"@%s\"," % apparent_repo_name(repository_ctx.name),
         ")",
         "",
     ]))
