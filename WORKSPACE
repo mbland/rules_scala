@@ -46,15 +46,6 @@ load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 
-load("//scala:protoc_deps.bzl", "scala_protoc_setup")
-
-scala_protoc_setup()
-
-load("//scala:protoc_toolchain.bzl", "protoc_toolchains")
-
-protoc_toolchains(name = "io_bazel_rules_scala_protoc")
-register_toolchains("@io_bazel_rules_scala_protoc//:all")
-
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
 
@@ -265,3 +256,23 @@ http_archive(
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
+
+http_archive(
+    name = "platforms",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.10/platforms-0.0.10.tar.gz",
+        "https://github.com/bazelbuild/platforms/releases/download/0.0.10/platforms-0.0.10.tar.gz",
+    ],
+    sha256 = "218efe8ee736d26a3572663b374a253c012b716d8af0c07e842e82f238a0a7ee",
+)
+
+# Loading host_platform_repo manually to work around:
+# - https://github.com/bazelbuild/bazel/issues/22558
+load("@platforms//host:extension.bzl", "host_platform_repo")
+
+host_platform_repo(name = "host_platform")
+
+load("//scala:protoc_deps.bzl", "scala_protoc_toolchains")
+
+scala_protoc_toolchains(name = "io_bazel_rules_scala_protoc")
+register_toolchains("@io_bazel_rules_scala_protoc//:all")

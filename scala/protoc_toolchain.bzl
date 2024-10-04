@@ -1,5 +1,7 @@
 """Prepares the precompiled protoc toolchain"""
 
+load("@platforms//host:constraints.bzl", "HOST_CONSTRAINTS")
+
 PROTOBUF_VERSION = "28.2"
 PROTOBUF_SHA256 = (
     "b2340aa47faf7ef10a0328190319d3f3bee1b24f426d4ce8f4253b6f27ce16db"
@@ -103,25 +105,48 @@ proto_toolchains = {{
 ]
 """
 
-_PROTOC_TOOLCHAIN_TEMPLATE= """    {build}: [\n{specs}\n    ],"""
+_PROTOC_TOOLCHAIN_INFO_TEMPLATE= """    {build}: [\n{specs}\n    ],"""
+
+def _default_protoc_build():
+    host_platform = sorted(HOST_CONSTRAINTS)
+    for build, info in _PROTOC_BUILDS.items():
+        if sorted(info.exec_compat) == host_platform:
+            return build
+    fail(
+        "no protoc build from version %s found " % PROTOBUF_VERSION +
+        "for host platform with constraints: %s" % HOST_CONSTRAINTS
+    )
+
+def _download_protoc_and_emit_toolchain_info(repository_ctx, build):
+    if build not in _PROTOC_BUILDS:
+        fail(
+            "no protoc build from version %s found " % PROTOBUF_VERSION +
+            "with build identifier: %s" % build
+        )
+
+    protoc_build = _PROTOC_BUILDS[build]
+    repository_ctx.download_and_extract(
+        url = _PROTOC_DOWNLOAD_URL.format(platform = build),
+        output = build,
+        integrity = protoc_build.integrity,
+    )
+    return _PROTOC_TOOLCHAIN_INFO_TEMPLATE.format(
+        build = '"%s"' % build,
+        specs = "\n".join([
+            '        "%s",' % s for s in protoc_build.exec_compat
+        ])
+    )
 
 def _protoc_toolchains_impl(repository_ctx):
-    proto_toolchains = []
+    builds = repository_ctx.attr.builds
 
-    for build in repository_ctx.attr.protoc_builds:
-        protoc_build = _PROTOC_BUILDS[build]
-        repository_ctx.download_and_extract(
-            url = _PROTOC_DOWNLOAD_URL.format(platform = build),
-            output = build,
-            integrity = protoc_build.integrity,
-        )
-        proto_toolchains.append(_PROTOC_TOOLCHAIN_TEMPLATE.format(
-            build = '"%s"' % build,
-            specs = "\n".join([
-                '        "%s",' % s for s in protoc_build.exec_compat
-            ])
-        ))
+    if len(builds) == 0:
+        builds = [_default_protoc_build()]
 
+    proto_toolchains = [
+        _download_protoc_and_emit_toolchain_info(repository_ctx, build)
+        for build in builds
+    ]
     build_content = _PROTOC_BUILD_TEMPLATE.format(
         name = repository_ctx.attr.name,
         proto_toolchains = "\n".join(proto_toolchains)
@@ -131,18 +156,13 @@ def _protoc_toolchains_impl(repository_ctx):
 protoc_toolchains = repository_rule(
     implementation = _protoc_toolchains_impl,
     attrs = {
-        "protoc_builds": attr.string_list(
+        "builds": attr.string_list(
             doc = (
                 "os and arch identifiers for precompiled protoc release " +
-                "download filenames from " + _PROTOC_RELEASES_URL
+                "download filenames from " + _PROTOC_RELEASES_URL +
+                "; if unspecified, will use the identifier matching the " +
+                "HOST_CONSTRAINTS from @platforms//host:constraints.bzl"
             ),
-            default = [
-                "linux-aarch_64",
-                "linux-x86_64",
-                "osx-aarch_64",
-                "osx-x86_64",
-                "win64",
-            ],
         ),
     }
 )
