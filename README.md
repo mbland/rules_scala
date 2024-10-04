@@ -62,6 +62,13 @@ load("@rules_scala//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
+# The next two calls instantiate the `@host_platform` repo to work around:
+# - https://github.com/bazelbuild/bazel/issues/22558
+# Only required if using `--incompatible_enable_proto_toolchain_resolution`.
+load("@platforms//host:extension.bzl", "host_platform_repo")
+
+host_platform_repo(name = "host_platform")
+
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
 rules_java_dependencies()
@@ -167,6 +174,40 @@ load(
     "scala_test",
 )
 ```
+
+### <a id="protoc"></a>Using a precompiled protocol compiler
+
+`rules_scala` now supports
+[`--incompatible_enable_proto_toolchain_resolution`][]. When using this flag,
+`rules_scala` will use a precompiled protocol compiler binary by default. To set
+it in your `.bazelrc` file:
+
+[`--incompatible_enable_proto_toolchain_resolution`]: https://bazel.build/reference/command-line-reference#flag--incompatible_enable_proto_toolchain_resolution
+
+```txt
+common --incompatible_enable_proto_toolchain_resolution
+```
+
+Set the `protoc_platforms` attribute of `scala_toolchains()` if you need to
+configure protocol compilers for platforms other than the host platform.
+
+Windows builds now require the precompiled protocol compiler toolchain. See the
+[Windows MSVC builds of protobuf broken by default](#protoc-msvc) section
+below for details.
+
+More background on proto toolchainization:
+
+- [Proto Toolchainisation Design Doc](
+    https://docs.google.com/document/d/1CE6wJHNfKbUPBr7-mmk_0Yo3a4TaqcTPE0OWNuQkhPs/edit)
+
+- [bazelbuild/bazel#7095: Protobuf repo recompilation sensitivity](
+    https://github.com/bazelbuild/bazel/issues/7095)
+
+- [bazelbuild/rules_proto#179: Implement proto toolchainisation](
+    https://github.com/bazelbuild/rules_proto/issues/179)
+
+- [rules_proto 6.0.0 release notes mentioning Protobuf Toolchainization](
+    https://github.com/bazelbuild/rules_proto/releases/tag/6.0.0)
 
 ### Persistent workers
 
@@ -566,6 +607,25 @@ http_archive(
     ...
 )
 ```
+
+### <a id="protoc-msvc"></a>Windows MSVC builds of `protobuf` broken by default
+
+MSVC builds of recent `protobuf` versions started failing, as first noted in
+bazelbuild/rules_scala#1710. On top of that, `protobuf` is planning to stop
+supporting Bazel + MSVC builds per:
+
+- [protocolbuffers/protobuf#12947: src build on windows not working](
+    https://github.com/protocolbuffers/protobuf/issues/12947)
+
+- [protobuf.dev News Announcements for Version 30.x:Poison MSVC + Bazel](
+    https://protobuf.dev/news/v30/#poison-msvc--bazel)
+
+- [protocolbuffers/protobuf#20085: Breaking Change: Dropping support for
+    Bazel+MSVC](https://github.com/protocolbuffers/protobuf/issues/20085)
+
+Enable [protocol compiler toolchainization](#protoc) to avoid recompiling
+`@com_google_protobuf//:protoc` on Windows platforms and fix broken Windows
+builds.
 
 ### Bzlmod configuration (coming soon!)
 

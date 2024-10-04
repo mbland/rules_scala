@@ -1,5 +1,11 @@
 """Repository rule to instantiate @rules_scala_toolchains"""
 
+load("//scala/private:protoc/protoc_integrity.bzl", "PROTOC_RELEASES_URL")
+load(
+    "//scala/private:protoc/protoc_toolchain.bzl",
+    "generate_protoc_toolchains",
+)
+
 def _generate_testing_toolchain_build_file_args(repo_attr):
     framework_deps = {}
 
@@ -52,6 +58,11 @@ def _scala_toolchains_repo_impl(repository_ctx):
 
     if repo_attr.scala:
         toolchains["scala"] = _SCALA_TOOLCHAIN_BUILD
+    if repo_attr.protoc:
+        toolchains["protoc"] = _PROTOC_TOOLCHAIN_BUILD
+        format_args.update({
+            "protoc_platforms": generate_protoc_toolchains(repository_ctx),
+        })
     if repo_attr.scala_proto:
         toolchains["scala_proto"] = _SCALA_PROTO_TOOLCHAIN_BUILD
     if repo_attr.jmh:
@@ -88,6 +99,19 @@ _scala_toolchains_repo = repository_rule(
         "scala": attr.bool(
             doc = "Instantiate the Scala compiler toolchain",
             default = True,
+        ),
+        "protoc": attr.bool(
+            doc = "Instantiate the precompiled `protoc` toolchain",
+        ),
+        "protoc_platforms": attr.string_list(
+            doc = (
+                "Operating system and architecture identifiers for " +
+                "precompiled protocol compiler release download filenames " +
+                "from " + PROTOC_RELEASES_URL + ". If unspecified, will use " +
+                "the identifier matching the HOST_CONSTRAINTS from " +
+                "@platforms//host:constraints.bzl. Only takes effect if " +
+                "`protoc` is `True`."
+            ),
         ),
         "scalatest": attr.bool(doc = "Instantiate the ScalaTest toolchain"),
         "junit": attr.bool(doc = "Instantiate the JUnit toolchain"),
@@ -163,6 +187,40 @@ load("@rules_scala_config//:config.bzl", "SCALA_VERSION", "SCALA_VERSIONS")
         "scala_macro_classpath",
         "semanticdb",
     ]
+]
+"""
+
+_PROTOC_TOOLCHAIN_BUILD = """
+load(
+    "@com_google_protobuf//bazel/toolchains:proto_toolchain.bzl",
+    "proto_toolchain",
+)
+load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain")
+
+toolchain_type(
+    name = "toolchain_type",
+    visibility = ["//visibility:public"],
+)
+
+proto_lang_toolchain(
+    name = "protoc_scala_toolchain",
+    command_line = "unused-because-we-pass-protoc-to-scalapb",
+    toolchain_type = ":toolchain_type",
+)
+
+protoc_platforms = {{
+{protoc_platforms}
+}}
+
+[
+    proto_toolchain(
+        name = platform,
+        proto_compiler = ":%s/bin/protoc%s" % (
+            platform, ".exe" if platform.startswith("win") else ""
+        ),
+        exec_compatible_with = specs,
+    )
+    for platform, specs in protoc_platforms.items()
 ]
 """
 

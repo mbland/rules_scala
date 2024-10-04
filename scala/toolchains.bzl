@@ -24,6 +24,7 @@ load(
     "twitter_scrooge_artifact_ids",
     _TWITTER_SCROOGE_DEPS = "TOOLCHAIN_DEPS",
 )
+load("@com_google_protobuf//bazel/common:proto_common.bzl", "proto_common")
 load("@rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 def _get_unknown_entries(entries, allowed_entries):
@@ -36,6 +37,7 @@ def scala_toolchains(
         fetch_sources = False,
         validate_scala_version = True,
         scala_compiler_srcjars = {},
+        protoc_platforms = [],
         scalatest = False,
         junit = False,
         specs2 = False,
@@ -80,6 +82,11 @@ def scala_toolchains(
             compiler srcjar metadata dictionaries containing:
             - exactly one "label", "url", or "urls" key
             - optional "integrity" or "sha256" keys
+        protoc_builds: Operating system and architecture identifiers for
+            precompiled protocol compiler releases. If unspecified, will use the
+            identifier matching the `HOST_CONSTRAINTS` from
+            `@platforms//host:constraints.bzl`. Only takes effect when
+            `--incompatible_enable_proto_toolchain_resolution` is `True`.
         scalatest: whether to instantiate the ScalaTest toolchain
         junit: whether to instantiate the JUnit toolchain
         specs2: whether to instantiate the Specs2 JUnit toolchain
@@ -178,6 +185,8 @@ def scala_toolchains(
         )
 
     scala_toolchains_repo(
+        protoc = proto_common.INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION,
+        protoc_platforms = protoc_platforms,
         scalatest = scalatest,
         junit = junit,
         specs2 = specs2,

@@ -5,6 +5,13 @@ load("//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
+# The next two calls instantiate the `@host_platform` repo to work around:
+# - https://github.com/bazelbuild/bazel/issues/22558
+# Only required if using `--incompatible_enable_proto_toolchain_resolution`.
+load("@platforms//host:extension.bzl", "host_platform_repo")
+
+host_platform_repo(name = "host_platform")
+
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
 rules_java_dependencies()
