@@ -46,6 +46,15 @@ load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 
+load("//scala:protoc_deps.bzl", "scala_protoc_setup")
+
+scala_protoc_setup()
+
+load("//scala:protoc_toolchain.bzl", "protoc_toolchains")
+
+protoc_toolchains(name = "io_bazel_rules_scala_protoc")
+register_toolchains("@io_bazel_rules_scala_protoc//:all")
+
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
 
