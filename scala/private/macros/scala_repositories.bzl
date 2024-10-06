@@ -95,9 +95,9 @@ def rules_scala_setup(scala_compiler_srcjar = None):
     if not native.existing_rule("com_google_protobuf"):
         http_archive(
             name = "com_google_protobuf",
-            sha256 = "bea4a2bdad77d3f089cea5751f9b1a8c00436c74468e728a9a4b8be9e4baee48",
-            strip_prefix = "protobuf-25.5",
-            url = "https://github.com/protocolbuffers/protobuf/releases/download/v25.5/protobuf-25.5.zip",
+            sha256 = "e07046fbac432b05adc1fd1318c6f19ab1b0ec0655f7f4e74627d9713959a135",
+            strip_prefix = "protobuf-21.7",
+            url = "https://github.com/protocolbuffers/protobuf/releases/download/v21.7/protobuf-all-21.7.tar.gz",
         )
 
     if not native.existing_rule("rules_proto"):
