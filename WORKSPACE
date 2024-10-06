@@ -45,12 +45,19 @@ rules_scala_setup()
 
 rules_scala_toolchain_deps_repositories(fetch_sources = True)
 
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
-# Declares @com_google_protobuf//:protoc pointing to released binary
-# This should stop building protoc during bazel build
-# See https://github.com/bazelbuild/rules_proto/pull/36
+protobuf_deps()
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
+
 rules_proto_dependencies()
+
+load("@rules_proto//proto:setup.bzl", "rules_proto_setup")
+
+rules_proto_setup()
+
+load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 

@@ -92,6 +92,22 @@ def rules_scala_setup(scala_compiler_srcjar = None):
             ],
         )
 
+    if not native.existing_rule("com_google_protobuf"):
+        http_archive(
+            name = "com_google_protobuf",
+            sha256 = "b2340aa47faf7ef10a0328190319d3f3bee1b24f426d4ce8f4253b6f27ce16db",
+            strip_prefix = "protobuf-28.2",
+            url = "https://github.com/protocolbuffers/protobuf/releases/download/v28.2/protobuf-28.2.tar.gz",
+        )
+
+    if not native.existing_rule("rules_proto"):
+        http_archive(
+            name = "rules_proto",
+            sha256 = "6fb6767d1bef535310547e03247f7518b03487740c11b6c6adb7952033fe1295",
+            strip_prefix = "rules_proto-6.0.2",
+            url = "https://github.com/bazelbuild/rules_proto/releases/download/6.0.2/rules_proto-6.0.2.tar.gz",
+        )
+
     if not native.existing_rule("rules_cc"):
         http_archive(
             name = "rules_cc",
@@ -107,17 +123,6 @@ def rules_scala_setup(scala_compiler_srcjar = None):
                 "https://github.com/bazelbuild/rules_java/releases/download/7.9.0/rules_java-7.9.0.tar.gz",
             ],
             sha256 = "41131de4417de70b9597e6ebd515168ed0ba843a325dc54a81b92d7af9a7b3ea",
-        )
-
-    if not native.existing_rule("rules_proto"):
-        http_archive(
-            name = "rules_proto",
-            sha256 = "dc3fb206a2cb3441b485eb1e423165b231235a1ea9b031b4433cf7bc1fa460dd",
-            strip_prefix = "rules_proto-5.3.0-21.7",
-            urls = [
-                "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
-                "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
-            ],
         )
 
     for scala_version in SCALA_VERSIONS:
