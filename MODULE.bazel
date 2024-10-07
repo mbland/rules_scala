@@ -40,6 +40,9 @@ use_repo(scala_config, "io_bazel_rules_scala_config")
 scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
 scala_deps.toolchains()
 
+# Register our testing toolchain first, only when building our repo.
+register_toolchains("//test/proto:scalapb_toolchain", dev_dependency = True)
+
 use_repo(scala_deps, "io_bazel_rules_scala_toolchains")
 register_toolchains(
     "@io_bazel_rules_scala_toolchains//...:all",
