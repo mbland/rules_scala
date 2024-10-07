@@ -34,14 +34,19 @@ scala_config = use_extension("//scala/extensions:config.bzl", "scala_config")
 scala_config.settings(
     scala_version = SCALA_VERSION,
     scala_versions = SCALA_VERSIONS,
+    enable_compiler_dependency_tracking = True,
 )
 use_repo(scala_config, "io_bazel_rules_scala_config")
 
 scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
 scala_deps.toolchains()
 
-# Register our testing toolchain first, only when building our repo.
-register_toolchains("//test/proto:scalapb_toolchain", dev_dependency = True)
+# Register some of our testing toolchains first when building our repo.
+register_toolchains(
+    "//scala:unused_dependency_checker_error_toolchain",
+    "//test/proto:scalapb_toolchain",
+    dev_dependency = True,
+)
 
 use_repo(scala_deps, "io_bazel_rules_scala_toolchains")
 register_toolchains(
@@ -87,6 +92,10 @@ use_repo(
     use_repo(dev_deps, dep + "_" + SCALA_VERSION.replace(".", "_"))
     for dep in [
         "io_bazel_rules_scala_junit_junit",
+        "io_bazel_rules_scala_scala_compiler",
+        "io_bazel_rules_scala_scala_library",
+        "io_bazel_rules_scala_scala_reflect",
+        "scala_compiler_source"
     ]
 ]
 

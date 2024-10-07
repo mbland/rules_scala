@@ -20,19 +20,16 @@ alias(
     ),
 )
 
-setup_scala_toolchain(
-    name = "unused_dependency_checker_error_toolchain",
-    dependency_tracking_method = "ast-plus",
-    unused_dependency_checker_mode = "error",
-)
-
-setup_scala_toolchain(
-    name = "minimal_direct_source_deps",
-    dependency_mode = "plus-one",
-    dependency_tracking_method = "ast",
-    strict_deps_mode = "error",
-    unused_dependency_checker_mode = "error",
-)
+[
+    alias(
+        name = toolchain,
+        actual = "@io_bazel_rules_scala_toolchains//scala:" + toolchain,
+    )
+    for toolchain in [
+        "unused_dependency_checker_error_toolchain",
+        "minimal_direct_source_deps",
+    ]
+]
 
 java_import(
     name = "bazel_test_runner_deploy",
