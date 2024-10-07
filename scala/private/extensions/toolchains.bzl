@@ -50,6 +50,9 @@ def _scala_toolchains_repo_impl(repository_ctx):
     if repo_attr.scalafmt:
         toolchains["scalafmt"] = _SCALAFMT_TOOLCHAIN_BUILD
 
+    if repo_attr.rules_scala_test:
+        toolchains["rules_scala_test"] = _RULES_SCALA_TEST_TOOLCHAIN_BUILD
+
     if len(toolchains) == 0:
         fail("no toolchains specified")
 
@@ -69,6 +72,7 @@ scala_toolchains_repo = repository_rule(
         "scala_proto_enable_all_options": attr.bool(),
         "testing": attr.bool(),
         "scalafmt": attr.bool(),
+        "rules_scala_test": attr.bool(),
     },
 )
 
@@ -159,4 +163,13 @@ load(
 )
 
 setup_scalafmt_toolchains()
+"""
+
+_RULES_SCALA_TEST_TOOLCHAIN_BUILD = """
+load(
+    "@io_bazel_rules_scala//test/toolchains:setup.bzl",
+    "setup_rules_scala_test_toolchains",
+)
+
+setup_rules_scala_test_toolchains()
 """

@@ -189,3 +189,7 @@ load("//test/toolchains:jdk.bzl", "remote_jdk21_repositories", "remote_jdk21_too
 remote_jdk21_repositories()
 
 remote_jdk21_toolchains()
+
+load("//test/toolchains:setup.bzl", "setup_rules_scala_test_toolchains")
+
+setup_rules_scala_test_toolchains()

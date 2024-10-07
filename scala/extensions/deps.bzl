@@ -230,6 +230,13 @@ def _scala_deps_impl(module_ctx):
             scalafmt = "scalafmt" in toolchains,
         )
 
+    # Always create this repo, since the aliases in
+    # test/toolchains/BUILD.bazel need to point at valid targets.
+    scala_toolchains_repo(
+        name = "io_bazel_rules_scala_test_toolchains",
+        rules_scala_test = True,
+    )
+
 scala_deps = module_extension(
     implementation = _scala_deps_impl,
     tag_classes = {
