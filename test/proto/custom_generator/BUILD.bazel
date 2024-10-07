@@ -69,7 +69,6 @@ scala_library(
     name = "FailingGenerator",
     srcs = ["FailingGenerator.scala"],
     deps = [
-        "@com_google_protobuf//:protobuf_java",
         "@scala_proto_rules_protoc_bridge"
     ],
 )
