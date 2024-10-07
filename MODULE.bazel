@@ -108,6 +108,7 @@ test_deps = use_extension(
 use_repo(
     test_deps,
     "example_external_workspace",
+    "org_apache_commons_commons_lang_3_5_without_file",
     "proto_cross_repo_boundary",
     "remote_jdk8_linux",
     "remote_jdk8_macos",

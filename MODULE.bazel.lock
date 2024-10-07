@@ -3812,7 +3812,7 @@
     },
     "//scala/private/extensions:test_deps.bzl%test_deps": {
       "general": {
-        "bzlTransitiveDigest": "pmUmwKT4ITUTSLWaFZvpUjf5uYKpzoBBzg4eN6+Ar7s=",
+        "bzlTransitiveDigest": "bHLapT93hLZfSxQnrpBUUzJw2oavP7NPlG0z4L2B9eE=",
         "usagesDigest": "F8zK+h45y+le+4sAkM706g26G45liIqZRSKiGrFEgrQ=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -3878,6 +3878,23 @@
             "ruleClassName": "_toolchain_config",
             "attributes": {
               "build_file": "\nconfig_setting(\n    name = \"prefix_version_setting\",\n    values = {\"java_runtime_version\": \"remotejdk_8\"},\n    visibility = [\"//visibility:private\"],\n)\nconfig_setting(\n    name = \"version_setting\",\n    values = {\"java_runtime_version\": \"8\"},\n    visibility = [\"//visibility:private\"],\n)\nalias(\n    name = \"version_or_prefix_version_setting\",\n    actual = select({\n        \":version_setting\": \":version_setting\",\n        \"//conditions:default\": \":prefix_version_setting\",\n    }),\n    visibility = [\"//visibility:private\"],\n)\ntoolchain(\n    name = \"toolchain\",\n    target_compatible_with = [\"@platforms//os:linux\", \"@platforms//cpu:aarch64\"],\n    target_settings = [\":version_or_prefix_version_setting\"],\n    toolchain_type = \"@bazel_tools//tools/jdk:runtime_toolchain_type\",\n    toolchain = \"@remote_jdk8_linux_aarch64//:jdk\",\n)\ntoolchain(\n    name = \"bootstrap_runtime_toolchain\",\n    # These constraints are not required for correctness, but prevent fetches of remote JDK for\n    # different architectures. As every Java compilation toolchain depends on a bootstrap runtime in\n    # the same configuration, this constraint will not result in toolchain resolution failures.\n    exec_compatible_with = [\"@platforms//os:linux\", \"@platforms//cpu:aarch64\"],\n    target_settings = [\":version_or_prefix_version_setting\"],\n    toolchain_type = \"@rules_java//toolchains:bootstrap_runtime_toolchain_type\",\n    toolchain = \"@remote_jdk8_linux_aarch64//:jdk\",\n)\n"
+            }
+          },
+          "org_apache_commons_commons_lang_3_5_without_file": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "rule_name": "java_import",
+              "generated_linkable_rule_name": "linkable_org_apache_commons_commons_lang_3_5_without_file",
+              "jar_sha256": "8ac96fc686512d777fca85e144f196cd7cfe0c0aec23127229497d1a38ff651c",
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
+              ],
+              "licenses": [
+                "notice"
+              ],
+              "neverlink": true,
+              "testonly_": true
             }
           },
           "remote_jdk8_linux": {
