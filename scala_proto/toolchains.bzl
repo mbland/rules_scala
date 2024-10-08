@@ -1,4 +1,3 @@
-load("//scala_proto/default:default_deps.bzl", "DEFAULT_DEPS_PROVIDERS")
 load(
     "//scala_proto:scala_proto_toolchain.bzl",
     "scala_proto_deps_toolchain",
@@ -14,7 +13,9 @@ def scala_proto_register_enable_all_options_toolchain():
 def setup_scala_proto_toolchains(name, enable_all_options = False):
     scala_proto_deps_toolchain(
         name = "%s_default_deps_toolchain_impl" % name,
-        dep_providers = [":" + p for p in DEFAULT_DEPS_PROVIDERS],
+        dep_providers = [
+            ":scalapb_%s_deps_provider" % p for p in ["compile", "grpc", "worker"]
+        ],
         visibility = ["//visibility:public"],
     )
 

@@ -8,9 +8,16 @@
 
 load("//scala:artifacts.bzl", "versioned_artifact_repos")
 
-DEFAULT_DEPS_PROVIDERS = [
-    "scalapb_%s_deps_provider" % p for p in ["compile", "grpc", "worker"]
-]
+_DEFAULT_DEP_PROVIDER_FORMAT = (
+    "@io_bazel_rules_scala_toolchains//scala_proto:scalapb_%s_deps_provider"
+)
+
+def scala_proto_deps_providers(
+    compile = _DEFAULT_DEP_PROVIDER_FORMAT % "compile",
+    grpc = _DEFAULT_DEP_PROVIDER_FORMAT % "grpc",
+    worker = _DEFAULT_DEP_PROVIDER_FORMAT % "worker",
+):
+    return [ compile, grpc, worker ]
 
 DEFAULT_SCALAPB_COMPILE_DEPS = versioned_artifact_repos([
     "@scala_proto_rules_scalapb_runtime",
@@ -50,8 +57,8 @@ DEFAULT_SCALAPB_GRPC_DEPS = versioned_artifact_repos([
 ])
 
 DEFAULT_SCALAPB_WORKER_DEPS = versioned_artifact_repos([
-        "@scala_proto_rules_protoc_bridge",
-        "@scala_proto_rules_scalapb_plugin",
-    ]) + [
-        "@com_google_protobuf//:protobuf_java",
-    ]
+    "@scala_proto_rules_protoc_bridge",
+    "@scala_proto_rules_scalapb_plugin",
+]) + [
+    "@com_google_protobuf//:protobuf_java",
+]

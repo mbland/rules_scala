@@ -1,10 +1,8 @@
 load("//scala:providers.bzl", _DepsInfo = "DepsInfo")    
-load("//scala:scala_cross_version.bzl", "version_suffix")
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
     "ENABLE_COMPILER_DEPENDENCY_TRACKING",
     "SCALA_MAJOR_VERSION",
-    "SCALA_VERSION",
 )
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
