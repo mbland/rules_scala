@@ -3,10 +3,10 @@ load(
     "expose_toolchain_deps",
 )
 
-_toolchain_type = "@io_bazel_rules_scala//scala:toolchain_type"
+_toolchain_type = Label("//scala:toolchain_type")
 
 def _common_toolchain_deps(ctx):
-    return expose_toolchain_deps(ctx, _toolchain_type)
+    return expose_toolchain_deps(ctx, str(_toolchain_type))
 
 common_toolchain_deps = rule(
     implementation = _common_toolchain_deps,
