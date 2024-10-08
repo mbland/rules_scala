@@ -97,7 +97,7 @@ def setup_scala_toolchain(
     native.toolchain(
         name = name,
         toolchain = ":%s_impl" % name,
-        toolchain_type = Label("//scala:toolchain_type"),
+        toolchain_type = "@io_bazel_rules_scala//scala:toolchain_type",
         target_settings = ["@io_bazel_rules_scala_config//:scala_version" + version_suffix(scala_version)],
         visibility = visibility,
     )

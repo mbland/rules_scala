@@ -131,7 +131,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "z/ze0vnQ+UTaNb4J6hY35s/wVBrJweWK5GseYqUvhBo=",
+        "bzlTransitiveDigest": "sYV5DJAn3lU0VL03yIKIBXL/nwBV6opYLJR+gGhGpY0=",
         "usagesDigest": "uWdCfxsf20xG8WFPkBmSzpumBKNXOIda1oDfwuQ+qc0=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1395,13 +1395,6 @@
               "deps": [],
               "runtime_deps": [],
               "testonly_": false
-            }
-          },
-          "io_bazel_rules_scala_test_toolchains": {
-            "bzlFile": "@@//scala/private/extensions:toolchains.bzl",
-            "ruleClassName": "scala_toolchains_repo",
-            "attributes": {
-              "rules_scala_test": true
             }
           },
           "scala_proto_rules_grpc_context_2_13_14": {

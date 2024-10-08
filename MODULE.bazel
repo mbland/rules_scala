@@ -48,11 +48,7 @@ register_toolchains(
     dev_dependency = True,
 )
 
-use_repo(
-    scala_deps,
-    "io_bazel_rules_scala_toolchains",
-    "io_bazel_rules_scala_test_toolchains",
-)
+use_repo(scala_deps, "io_bazel_rules_scala_toolchains")
 register_toolchains(
     "@io_bazel_rules_scala_toolchains//...:all",
 )
