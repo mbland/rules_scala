@@ -171,11 +171,5 @@ load(
     "setup_rules_scala_test_toolchains",
 )
 
-load(
-    "@io_bazel_rules_scala//test_expect_failure/plus_one_deps:setup_toolchains.bzl",
-    "setup_test_expect_failure_toolchains",
-)
-
 setup_rules_scala_test_toolchains()
-setup_test_expect_failure_toolchains()
 """
