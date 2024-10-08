@@ -12,15 +12,24 @@ _settings = tag_class(
 )
 
 def _get_root_settings(module_ctx):
+    scala_version = DEFAULT_SCALA_VERSION
+    compiler_dep_tracking = False
     root_settings = module_ctx.modules[0].tags.settings
 
-    if len(root_settings) == 0:
-        return DEFAULT_SCALA_VERSION, False
-    root = root_settings[0]
-    return root.scala_version, root.enable_compiler_dependency_tracking
+    if len(root_settings) != 0:
+        root = root_settings[0]
+        scala_version = root.scala_version
+        compiler_dep_tracking = root.enable_compiler_dependency_tracking
 
-def _collect_versions(module_ctx):
-    versions = {}
+    return (
+        module_ctx.os.environ.get("SCALA_VERSION", scala_version),
+        module_ctx.os.environ.get(
+            "ENABLE_COMPILER_DEPENDENCY_TRACKING", compiler_dep_tracking
+        ),
+    )
+
+def _collect_versions(module_ctx, scala_version):
+    versions = {scala_version: None}
 
     for mod in module_ctx.modules:
         for settings in mod.tags.settings:
@@ -33,7 +42,7 @@ def _scala_config_impl(module_ctx):
 
     _scala_config(
         scala_version = version,
-        scala_versions = _collect_versions(module_ctx),
+        scala_versions = _collect_versions(module_ctx, version),
         enable_compiler_dependency_tracking = compiler_dep_tracking,
     )
     return module_ctx.extension_metadata(
@@ -44,4 +53,5 @@ def _scala_config_impl(module_ctx):
 scala_config = module_extension(
     implementation = _scala_config_impl,
     tag_classes = {"settings": _settings},
+    environ = ["SCALA_VERSION", "ENABLE_COMPILER_DEPENDENCY_TRACKING"],
 )
