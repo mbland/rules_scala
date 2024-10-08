@@ -3,6 +3,7 @@ load("//scala:scala_cross_version.bzl", "version_suffix")
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
     "ENABLE_COMPILER_DEPENDENCY_TRACKING",
+    "SCALA_MAJOR_VERSION",
     "SCALA_VERSION",
 )
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
@@ -104,32 +105,27 @@ def _scala_toolchain_impl(ctx):
     )
     return [toolchain]
 
-def _default_dep_provider(provider, scala_version):
-    return (
-        "@io_bazel_rules_scala_toolchains//scala:" +
-        "toolchain" + version_suffix(scala_version) + "_%s_provider" % provider
-    )
-
-DEFAULT_DEP_PROVIDERS = [
-    _default_dep_provider(p, SCALA_VERSION) for p in [
+def _default_dep_providers():
+    dep_providers = [
         "scala_xml",
         "parser_combinators",
         "scala_compile_classpath",
         "scala_library_classpath",
         "scala_macro_classpath",
     ]
-]
-
-DEFAULT_SEMANTICDB_DEP_PROVIDER = _default_dep_provider(
-    "semanticdb_deps", SCALA_VERSION
-)
+    if SCALA_MAJOR_VERSION.startswith("2"):
+        dep_providers.append("semanticdb")
+    return [
+        Label("@io_bazel_rules_scala_toolchains//scala:%s_provider" % p)
+        for p in dep_providers
+    ]
 
 scala_toolchain = rule(
     _scala_toolchain_impl,
     attrs = {
         "scalacopts": attr.string_list(),
         "dep_providers": attr.label_list(
-            default = DEFAULT_DEP_PROVIDERS,
+            default = _default_dep_providers(),
             providers = [_DepsInfo],
         ),
         "dependency_mode": attr.string(

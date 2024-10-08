@@ -131,7 +131,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "9mhC4WmbcINiam+COYG1d3OIU1yfKbOuaNkaJmtYT+s=",
+        "bzlTransitiveDigest": "ry8qo6zORbSFjWqkIcg7rTdgVR9IXTrmpMSexwcU+FY=",
         "usagesDigest": "uWdCfxsf20xG8WFPkBmSzpumBKNXOIda1oDfwuQ+qc0=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -3781,6 +3781,11 @@
             "",
             "io_bazel_rules_scala_config",
             "_main~scala_config~io_bazel_rules_scala_config"
+          ],
+          [
+            "",
+            "io_bazel_rules_scala_toolchains",
+            "_main~scala_deps~io_bazel_rules_scala_toolchains"
           ],
           [
             "",

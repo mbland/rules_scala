@@ -75,10 +75,16 @@ scala_toolchains_repo = repository_rule(
 _SCALA_TOOLCHAIN_BUILD = """
 load(
     "@io_bazel_rules_scala//scala/private:macros/setup_scala_toolchain.bzl",
+    "default_deps",
     "setup_scala_toolchain",
 )
+load("@io_bazel_rules_scala//scala:providers.bzl", "declare_deps_provider")
 load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "version_suffix")
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
+load(
+    "@io_bazel_rules_scala_config//:config.bzl",
+    "SCALA_VERSION",
+    "SCALA_VERSIONS",
+)
 
 [
     setup_scala_toolchain(
@@ -102,6 +108,23 @@ setup_scala_toolchain(
     strict_deps_mode = "error",
     unused_dependency_checker_mode = "error",
 )
+
+[
+    declare_deps_provider(
+        name = deps_id + "_provider",
+        deps_id = deps_id,
+        visibility = ["//visibility:public"],
+        deps = default_deps(deps_id, SCALA_VERSION),
+    )
+    for deps_id in [
+        "scala_compile_classpath",
+        "scala_library_classpath",
+        "scala_macro_classpath",
+        "scala_xml",
+        "parser_combinators",
+        "semanticdb",
+    ]
+]
 """
 
 _TWITTER_SCROOGE_TOOLCHAIN_BUILD = """
