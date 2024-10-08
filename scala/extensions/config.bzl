@@ -45,10 +45,6 @@ def _scala_config_impl(module_ctx):
         scala_versions = _collect_versions(module_ctx, version),
         enable_compiler_dependency_tracking = compiler_dep_tracking,
     )
-    return module_ctx.extension_metadata(
-        root_module_direct_deps="all",
-        root_module_direct_dev_deps=[],
-    )
 
 scala_config = module_extension(
     implementation = _scala_config_impl,
