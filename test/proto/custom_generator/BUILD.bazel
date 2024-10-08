@@ -51,7 +51,7 @@ scala_proto_deps_toolchain(
 toolchain(
     name = "scala_proto_deps_toolchain",
     toolchain = ":scala_proto_deps_toolchain_def",
-    toolchain_type = "@io_bazel_rules_scala//scala_proto:deps_toolchain_type",
+    toolchain_type = "//scala_proto:deps_toolchain_type",
 )
 
 scala_proto_toolchain(
@@ -62,7 +62,7 @@ scala_proto_toolchain(
 toolchain(
     name = "scala_proto_toolchain",
     toolchain = ":scala_proto_toolchain_def",
-    toolchain_type = "@io_bazel_rules_scala//scala_proto:toolchain_type",
+    toolchain_type = "//scala_proto:toolchain_type",
 )
 
 scala_library(
@@ -89,7 +89,7 @@ scala_proto_deps_toolchain(
 toolchain(
     name = "failing_scala_proto_deps_toolchain",
     toolchain = ":failing_scala_proto_deps_toolchain_def",
-    toolchain_type = "@io_bazel_rules_scala//scala_proto:deps_toolchain_type",
+    toolchain_type = "//scala_proto:deps_toolchain_type",
 )
 
 scala_proto_toolchain(
@@ -100,5 +100,5 @@ scala_proto_toolchain(
 toolchain(
     name = "failing_scala_proto_toolchain",
     toolchain = ":failing_scala_proto_toolchain_def",
-    toolchain_type = "@io_bazel_rules_scala//scala_proto:toolchain_type",
+    toolchain_type = "//scala_proto:toolchain_type",
 )

@@ -4,7 +4,7 @@ load(
 )
 
 def _export_scalapb_toolchain_deps(ctx):
-    return expose_toolchain_deps(ctx, Label("//scala_proto:deps_toolchain_type"))
+    return expose_toolchain_deps(ctx, "//scala_proto:deps_toolchain_type")
 
 export_scalapb_toolchain_deps = rule(
     _export_scalapb_toolchain_deps,
@@ -14,5 +14,5 @@ export_scalapb_toolchain_deps = rule(
         ),
     },
     incompatible_use_toolchain_transition = True,
-    toolchains = [Label("//scala_proto:deps_toolchain_type")],
+    toolchains = ["//scala_proto:deps_toolchain_type"],
 )

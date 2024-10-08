@@ -21,9 +21,7 @@ def setup_scala_proto_toolchains(name, enable_all_options = False):
     native.toolchain(
         name = "%s_default_deps_toolchain" % name,
         toolchain = ":%s_default_deps_toolchain_impl" % name,
-        toolchain_type = (
-            "@io_bazel_rules_scala//scala_proto:deps_toolchain_type"
-        ),
+        toolchain_type = Label("//scala_proto:deps_toolchain_type"),
     )
 
     toolchain_name = "%s_default_toolchain" % name
@@ -48,7 +46,7 @@ def setup_scala_proto_toolchains(name, enable_all_options = False):
 
     native.toolchain(
         name = toolchain_name,
-        toolchain = ":%s" % toolchain_impl_name,
-        toolchain_type = "@io_bazel_rules_scala//scala_proto:toolchain_type",
+        toolchain = ":" + toolchain_impl_name,
+        toolchain_type = Label("//scala_proto:toolchain_type"),
         visibility = ["//visibility:public"],
     )

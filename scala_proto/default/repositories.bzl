@@ -48,5 +48,5 @@ def scala_proto_default_repositories(
 
     if register_toolchains:
         native.register_toolchains(
-            "@io_bazel_rules_scala//scala_proto:default_deps_toolchain"
+            Label("//scala_proto:default_deps_toolchain")
         )

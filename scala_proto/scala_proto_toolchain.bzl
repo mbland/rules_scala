@@ -75,7 +75,7 @@ scala_proto_toolchain = rule(
         "code_generator": attr.label(
             executable = True,
             cfg = "exec",
-            default = Label("@io_bazel_rules_scala//src/scala/scripts:scalapb_worker"),
+            default = "//src/scala/scripts:scalapb_worker",
             allow_files = True,
         ),
         "main_generator": attr.string(default = "scalapb.ScalaPbCodeGenerator"),
@@ -86,7 +86,7 @@ scala_proto_toolchain = rule(
         "scalac": attr.label(
             executable = True,
             cfg = "exec",
-            default = Label("@io_bazel_rules_scala//src/java/io/bazel/rulesscala/scalac"),
+            default = "//src/java/io/bazel/rulesscala/scalac",
             allow_files = True,
         ),
         "protoc": attr.label(

@@ -19,5 +19,8 @@ def apparent_repo_name(label_or_name):
     for i in range(len(repo_name) - 1, -1, -1):
         c = repo_name[i]
         if not (c.isalnum() or c in "_-."):
-            return repo_name[i + 1:]
+            # For repos representing top level modules, the canonical name will
+            # end with a delimiter, and `result` will be the empty string.
+            result = repo_name[i + 1:]
+            return result if len(result) != 0 else repo_name[:-1]
     return repo_name
