@@ -47,7 +47,7 @@ def _code_should_be_generated(ctx, toolchain):
     return toolchain.blacklisted_protos.get(target_absolute_label) == None
 
 def _compile_deps(ctx, toolchain):
-    deps_toolchain_type_label = "@io_bazel_rules_scala//scala_proto:deps_toolchain_type"
+    deps_toolchain_type_label = Label("//scala_proto:deps_toolchain_type")
     return [
         dep[JavaInfo]
         for id in toolchain.compile_dep_ids

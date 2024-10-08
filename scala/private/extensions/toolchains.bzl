@@ -143,6 +143,13 @@ setup_jmh_toolchain(name = "jmh_toolchain")
 """
 
 _SCALA_PROTO_TOOLCHAIN_BUILD = """
+load("@io_bazel_rules_scala//scala:providers.bzl", "declare_deps_provider")
+load(
+    "@io_bazel_rules_scala//scala_proto/default:default_deps.bzl",
+    "DEFAULT_SCALAPB_COMPILE_DEPS",
+    "DEFAULT_SCALAPB_GRPC_DEPS",
+    "DEFAULT_SCALAPB_WORKER_DEPS",
+)
 load(
     "@io_bazel_rules_scala//scala_proto:toolchains.bzl",
     "setup_scala_proto_toolchains",
@@ -150,6 +157,27 @@ load(
 
 setup_scala_proto_toolchains(
     name = "scala_proto", enable_all_options = %s
+)
+
+declare_deps_provider(
+    name = "scalapb_compile_deps_provider",
+    deps_id = "scalapb_compile_deps",
+    visibility = ["//visibility:public"],
+    deps = DEFAULT_SCALAPB_COMPILE_DEPS,
+)
+
+declare_deps_provider(
+    name = "scalapb_grpc_deps_provider",
+    deps_id = "scalapb_grpc_deps",
+    visibility = ["//visibility:public"],
+    deps = DEFAULT_SCALAPB_GRPC_DEPS,
+)
+
+declare_deps_provider(
+    name = "scalapb_worker_deps_provider",
+    deps_id = "scalapb_worker_deps",
+    visibility = ["//visibility:public"],
+    deps = DEFAULT_SCALAPB_WORKER_DEPS,
 )
 """
 

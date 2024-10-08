@@ -20,7 +20,7 @@ new_local_repository = use_repo_rule(
 SCALA_VERSION = "2.13.14"
 SCALA_VERSIONS = [
     "2.12.19",
-    SCALA_VERSION
+    "2.13.14",
 ]
 
 bazel_dep(name = "bazel_skylib", version = "1.7.1")

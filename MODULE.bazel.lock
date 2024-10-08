@@ -110,18 +110,17 @@
         "recordedDirentsInputs": {},
         "envVariables": {
           "ENABLE_COMPILER_DEPENDENCY_TRACKING": null,
-          "SCALA_VERSION": "0.0.0"
+          "SCALA_VERSION": null
         },
         "generatedRepoSpecs": {
           "io_bazel_rules_scala_config": {
             "bzlFile": "@@//:scala_config.bzl",
             "ruleClassName": "_config_repository",
             "attributes": {
-              "scala_version": "0.0.0",
+              "scala_version": "2.13.14",
               "scala_versions": [
-                "0.0.0",
-                "2.12.19",
-                "2.13.14"
+                "2.13.14",
+                "2.12.19"
               ],
               "enable_compiler_dependency_tracking": true
             }
@@ -132,7 +131,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "6WLQUTRFX+R7FwmrtEzxz4SrhsLF40gKLc2CiEU8aFE=",
+        "bzlTransitiveDigest": "GuK4Cfg6V7AsNOuJaLNI0eL+0tmWzbevxC3siotkYts=",
         "usagesDigest": "uWdCfxsf20xG8WFPkBmSzpumBKNXOIda1oDfwuQ+qc0=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

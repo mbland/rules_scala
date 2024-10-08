@@ -5,8 +5,12 @@
 # If you are using a resolver (like bazel-deps) that can export compile + runtime jar paths
 # for you, then you should only need much shorter dependency lists. This needs to be the unrolled
 # transitive path to be used without such a facility.
-#
+
 load("//scala:artifacts.bzl", "versioned_artifact_repos")
+
+DEFAULT_DEPS_PROVIDERS = [
+    "scalapb_%s_deps_provider" % p for p in ["compile", "grpc", "worker"]
+]
 
 DEFAULT_SCALAPB_COMPILE_DEPS = versioned_artifact_repos([
     "@scala_proto_rules_scalapb_runtime",
@@ -44,3 +48,10 @@ DEFAULT_SCALAPB_GRPC_DEPS = versioned_artifact_repos([
     "@scala_proto_rules_netty_common",
     "@scala_proto_rules_netty_handler_proxy",
 ])
+
+DEFAULT_SCALAPB_WORKER_DEPS = versioned_artifact_repos([
+        "@scala_proto_rules_protoc_bridge",
+        "@scala_proto_rules_scalapb_plugin",
+    ]) + [
+        "@com_google_protobuf//:protobuf_java",
+    ]
