@@ -109,8 +109,8 @@ artifacts = {
         "sha256": "ca3857a3f95266e0d87e1a1f26c8592c53c12ac7203f911759415f6c8a43df7d",
     },
     "org_scala_lang_modules_scala_collection_compat": {
-        "artifact": "org.scala-lang.modules:scala-collection-compat_2.13:2.11.0",
-        "sha256": "0c1108883b7b97851750e8932f9584346ccb23f1260c197f97295ac2e6c56cec",
+        "artifact": "org.scala-lang.modules:scala-collection-compat_2.13:2.12.0",
+        "sha256": "befff482233cd7f9a7ca1e1f5a36ede421c018e6ce82358978c475d45532755f",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
         ],
@@ -211,8 +211,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_fansi": {
-        "artifact": "com.lihaoyi:fansi_2.13:0.4.0",
-        "sha256": "0eb11a2a905d608033ec1642b0a9f0d8444daa4ad465f684b50bdc7e7a41bf53",
+        "artifact": "com.lihaoyi:fansi_2.13:0.5.0",
+        "sha256": "fcae26580f7d6e72adbd6e5c504bb1715fbe3f5fb814d70e84bc5427a835e42c",
         "deps": [
             "@com_lihaoyi_sourcecode",
         ],
@@ -225,8 +225,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_pprint": {
-        "artifact": "com.lihaoyi:pprint_2.13:0.6.4",
-        "sha256": "618585ee50a3b3939ed8a24d9b165d925e8a926cec9e368bacd1b7feee6b32c2",
+        "artifact": "com.lihaoyi:pprint_2.13:0.9.0",
+        "sha256": "5dd36b65addcd47bccc68d36dd00bee93e2def439f1a36d02a450308e8d9a3d3",
         "deps": [
             "@com_lihaoyi_fansi",
             "@com_lihaoyi_sourcecode",
