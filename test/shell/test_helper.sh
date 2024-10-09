@@ -120,8 +120,7 @@ test_expect_failure_or_warning_on_missing_direct_deps_with_expected_message() {
     exit 1
   fi
 
-  echo ${output} | grep "$expected_message"
-  if [ $? -ne 0 ]; then
+  if [[ ! "$output" =~ $expected_message ]]; then
     echo ${output}
     echo "'bazel build ${test_target}' should have logged \"${expected_message}\"."
         exit 1
