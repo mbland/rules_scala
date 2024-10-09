@@ -1,4 +1,3 @@
-load("//scala:artifacts.bzl", "versioned_artifact_repos")
 load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala:scala.bzl", "scala_library", "scala_test")
 load("//scala_proto:scala_proto.bzl", "scala_proto_library")
@@ -37,15 +36,19 @@ scala_library(
     srcs = ["DummyGenerator.scala"],
     deps = [
         "@com_google_protobuf//:protobuf_java",
-    ] + versioned_artifact_repos([
         "@scala_proto_rules_protoc_bridge"
-    ]),
+    ],
 )
 
 declare_deps_provider(
     name = "scalapb_worker_deps_provider",
     deps_id = "scalapb_worker_deps",
-    deps = [":DummyGenerator"],
+    deps = [
+        ":DummyGenerator",
+        "@com_google_protobuf//:protobuf_java",
+        "@scala_proto_rules_protoc_bridge",
+        "@scala_proto_rules_scalapb_plugin",
+    ],
 )
 
 scala_proto_deps_toolchain(
@@ -75,22 +78,27 @@ toolchain(
 scala_library(
     name = "FailingGenerator",
     srcs = ["FailingGenerator.scala"],
-    deps = versioned_artifact_repos([
-        "@scala_proto_rules_protoc_bridge"
-    ]),
+    deps = [
+        "@scala_proto_rules_protoc_bridge",
+    ],
 )
 
 declare_deps_provider(
     name = "failing_scalapb_worker_deps_provider",
     deps_id = "scalapb_worker_deps",
-    deps = [":FailingGenerator"],
+    deps = [
+        ":FailingGenerator",
+        "@com_google_protobuf//:protobuf_java",
+        "@scala_proto_rules_protoc_bridge",
+        "@scala_proto_rules_scalapb_plugin",
+    ],
 )
 
 scala_proto_deps_toolchain(
     name = "failing_scala_proto_deps_toolchain_def",
-    dep_providers = [
-        ":failing_scalapb_worker_deps_provider",
-    ],
+    dep_providers = scala_proto_deps_providers(
+        worker = ":failing_scalapb_worker_deps_provider"
+    ),
 )
 
 toolchain(

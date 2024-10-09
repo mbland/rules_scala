@@ -92,6 +92,8 @@ use_repo(
     "org_typelevel__cats_core",
     "org_typelevel_kind_projector",
     "scalafmt_default",
+    "scala_proto_rules_protoc_bridge",
+    "scala_proto_rules_scalapb_plugin",
 )
 
 [
@@ -103,7 +105,6 @@ use_repo(
             "io_bazel_rules_scala_scala_library",
             "io_bazel_rules_scala_scala_reflect",
             "scala_compiler_source",
-            "scala_proto_rules_protoc_bridge",
         ]
     ] for scala_version in SCALA_VERSIONS
 ]
