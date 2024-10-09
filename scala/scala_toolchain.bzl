@@ -26,14 +26,31 @@ def _compute_dependency_tracking_method(
             return "ast"
     return input_dependency_tracking_method
 
+_MAIN_REPO_PREFIX = str(Label("@@//:all"))[:4]
+
+def _adjust_main_repo_pattern(pattern):
+    """Normalizes include/exclude patterns to match the main repo Label prefix.
+
+    Necessary because this will be "@//" for Bazel < 7.1.0, and "@@//" for Bazel
+    >= 7.1.0. Rather than requiriing users to update their patterns for now,
+    we'll emit a deprecation warning and convert them automatically.
+
+    This has ramifications for _phase_dependency() and _is_target_included()
+    from private/phases/phase_dependency.bzl, which check whether a target label
+    string starts with any of these patterns.
+    """
+    if pattern.startswith("@/") or pattern.startswith("@//"):
+        return _MAIN_REPO_PREFIX + pattern.lstrip("@/")
+    return pattern
+
 def _partition_patterns(patterns):
     includes = [
-        pattern
+        _adjust_main_repo_pattern(pattern)
         for pattern in patterns
         if not pattern.startswith("-")
     ]
     excludes = [
-        pattern.lstrip("-")
+        _adjust_main_repo_pattern(pattern.lstrip("-"))
         for pattern in patterns
         if pattern.startswith("-")
     ]
