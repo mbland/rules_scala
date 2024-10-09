@@ -48,6 +48,13 @@ use_repo(scala_config, "io_bazel_rules_scala_config")
 scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
 scala_deps.toolchains()
 
+[
+    use_repo(scala_deps, dep + "_" + SCALA_VERSION.replace(".", "_"))
+    for dep in [
+        "io_bazel_rules_scala_guava",
+    ]
+]
+
 # Register some of our testing toolchains first when building our repo.
 register_toolchains(
     "//scala:unused_dependency_checker_error_toolchain",
