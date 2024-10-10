@@ -1,2 +1,2 @@
 build --enable_platform_specific_config
-windows:build --enable_runfiles
+build:windows --enable_runfiles

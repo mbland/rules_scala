@@ -3,6 +3,7 @@ load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 setup_scala_testing_toolchain(
     name = "testing_toolchain",
+    scala_version = SCALA_VERSION,
     junit_classpath = [
         "@io_bazel_rules_scala_junit_junit",
         "@io_bazel_rules_scala_org_hamcrest_hamcrest_core",
