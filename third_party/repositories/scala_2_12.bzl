@@ -169,7 +169,6 @@ artifacts = {
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@org_scalameta_common",
-            "@org_scalameta_fastparse",
         ],
     },
     "org_typelevel_paiges_core": {
@@ -218,14 +217,6 @@ artifacts = {
         "artifact": "com.lihaoyi:fastparse_2.12:2.1.2",
         "sha256": "92a98f89c4f9559715124599ee5ce8f0d36ee326f5c7ef88b51487de39a3602e",
         "deps": [
-            "@com_lihaoyi_sourcecode",
-        ],
-    },
-    "com_lihaoyi_pprint": {
-        "artifact": "com.lihaoyi:pprint_2.13:0.9.0",
-        "sha256": "aa5c426ec33ba8af1193ffca121d8b189013911b03779582e869bf4c622a6749",
-        "deps": [
-            "@com_lihaoyi_fansi",
             "@com_lihaoyi_sourcecode",
         ],
     },
@@ -511,7 +502,7 @@ artifacts = {
         "sha256": "972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480",
     },
     "com_github_bigwheel_util_backports": {
-        "artifact": "com.github.bigwheel:util-backports_2.12",
+        "artifact": "com.github.bigwheel:util-backports_2.12:2.1",
         "sha256": "0d2ae5753bc8ff9f221a52ef39e771d285eccc52b88cdce622212569d3bd0e1b",
     },
     "com_github_jnr_jffi_native": {

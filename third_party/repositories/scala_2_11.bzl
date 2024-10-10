@@ -182,8 +182,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_fansi": {
-        "artifact": "com.lihaoyi:fansi_2.11:0.2.6",
-        "sha256": "63878260e23a1e28ecd8d6987d5feda9d72507b476137b9f642ac2c75035a9c8",
+        "artifact": "com.lihaoyi:fansi_2.11:0.4.0",
+        "sha256": "08f6400ff3e92fa3d215788fb3ef7bb7bf1344c71f4d4d4199fec9b0e6d91432",
         "deps": [
             "@com_lihaoyi_sourcecode",
             "@io_bazel_rules_scala_scala_library",
@@ -197,8 +197,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_pprint": {
-        "artifact": "com.lihaoyi:pprint_2.11:0.5.4",
-        "sha256": "9b31150ee7f07212a825e02fca56e0999789d2b8ec720a84b75ce29ca7e195b5",
+        "artifact": "com.lihaoyi:pprint_2.11:0.8.1",
+        "sha256": "3755b8e5d1423931219ab607e8fd9b6db472740dd5f815f8b0715312e11d06fe",
         "deps": [
             "@com_lihaoyi_fansi",
             "@com_lihaoyi_sourcecode",
@@ -206,8 +206,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_sourcecode": {
-        "artifact": "com.lihaoyi:sourcecode_2.11:0.1.7",
-        "sha256": "33516d7fd9411f74f05acfd5274e1b1889b7841d1993736118803fc727b2d5fc",
+        "artifact": "com.lihaoyi:sourcecode_2.11:0.3.1",
+        "sha256": "52b38f0d291bab3555bd6b4324a1e86d1acbb347ffc763b154f220d7ce54f31b",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
         ],
