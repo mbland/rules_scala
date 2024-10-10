@@ -96,6 +96,11 @@ def repositories(
     default_artifacts = artifacts_by_major_scala_version[major_scala_version]
     artifacts = dict(default_artifacts.items() + overriden_artifacts.items())
     for id in for_artifact_ids:
+        if id not in artifacts:
+            fail("artifact %s not in third_party/repositories/scala_%s.bzl" % (
+                id, major_scala_version.replace(".", "_")
+            ))
+
         generated_rule_name = apparent_repo_name(id) + suffix
         _scala_maven_import_external(
             name = id + suffix,

@@ -21,6 +21,7 @@ SCALA_VERSION = "2.13.14"
 SCALA_VERSIONS = [
     "2.12.19",
     "2.13.14",
+    "3.3.3",
 ]
 
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
