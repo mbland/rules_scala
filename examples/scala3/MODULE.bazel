@@ -1,11 +1,11 @@
 """Bazel module ./test/shell/test_examples.sh tests"""
 
-module(name = "specs2_junit_repositories")
+module(name = "scala3_example")
 
 bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
 local_path_override(
     module_name = "rules_scala",
-    path = "../../.."
+    path = "../.."
 )
 
 scala_deps = use_extension(
@@ -15,8 +15,4 @@ scala_deps = use_extension(
 
 scala_deps.settings(
     fetch_sources = True,
-)
-
-scala_deps.toolchains(
-    specs2 = True,
 )

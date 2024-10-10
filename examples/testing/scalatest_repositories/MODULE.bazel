@@ -9,8 +9,8 @@ local_path_override(
 )
 
 scala_deps = use_extension(
-  "@io_bazel_rules_scala//scala/extensions:deps.bzl",
-  "scala_deps",
+    "@io_bazel_rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
 )
 
 scala_deps.settings(
@@ -18,5 +18,5 @@ scala_deps.settings(
 )
 
 scala_deps.toolchains(
-  scalatest = True,
+    scalatest = True,
 )

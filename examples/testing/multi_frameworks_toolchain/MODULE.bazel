@@ -23,8 +23,8 @@ scala_config.settings(
 use_repo(scala_config, "io_bazel_rules_scala_config")
 
 scala_deps = use_extension(
-  "@io_bazel_rules_scala//scala/extensions:deps.bzl",
-  "scala_deps",
+    "@io_bazel_rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
 )
 
 scala_deps.settings(
@@ -33,8 +33,8 @@ scala_deps.settings(
 
 # Setting `testing = True` would set scalatest, junit, and specs2 to `True`.
 scala_deps.toolchains(
-  scalatest = True,
-  specs2 = True,
+    scalatest = True,
+    specs2 = True,
 )
 
 # Under normal circumstances, the above `scala_deps.toolchains()` registration
