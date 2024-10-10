@@ -268,7 +268,7 @@ artifacts = {
             "@io_bazel_rules_scala_scala_library",
             "@com_geirsson_metaconfig_core",
             "@com_typesafe_config",
-        ]
+        ],
     },
     "io_bazel_rules_scala_org_openjdk_jmh_jmh_core": {
         "artifact": "org.openjdk.jmh:jmh-core:1.36",
