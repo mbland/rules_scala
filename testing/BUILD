@@ -1,5 +1,5 @@
-load("//scala:scala_cross_version.bzl", "repositories", "version_suffix")
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION", "SCALA_VERSIONS")
+load("//scala:scala_cross_version.bzl", "version_suffix")
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION",)
 
 # Aliases for backward compatibility:
 alias(
@@ -14,7 +14,7 @@ alias(
     name = "scalatest_toolchain",
     actual = (
         "@io_bazel_rules_scala_toolchains//scalatest:scalatest_toolchain" +
-        + version_suffix(SCALA_VERSION)
+        version_suffix(SCALA_VERSION)
     ),
 )
 

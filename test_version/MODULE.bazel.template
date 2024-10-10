@@ -1,6 +1,6 @@
-"""Bazel module definition for rules_scala"""
+"""Bazel module template for //:test_version.sh tests"""
 
-module(name = "io_bazel_rules_scala_test")
+module(name = "io_bazel_rules_scala_test_version")
 
 bazel_dep(name = "rules_java", version = "7.11.1")
 bazel_dep(name = "rules_proto", version = "6.0.2")
