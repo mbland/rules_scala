@@ -1,0 +1,40 @@
+"""Bazel module definition for rules_scala"""
+
+module(name = "io_bazel_rules_scala_test")
+
+bazel_dep(name = "rules_java", version = "7.11.1")
+bazel_dep(name = "rules_proto", version = "6.0.2")
+bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
+single_version_override(module_name = "protobuf", version = "21.7")
+
+bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
+local_path_override(
+    module_name = "rules_scala",
+    path = "../.."
+)
+
+scala_config = use_extension(
+    "//scala/extensions:config.bzl",
+    "scala_config",
+)
+
+scala_config.settings(
+    enable_compiler_dependency_tracking = True,
+)
+
+scala_deps = use_extension(
+  "@io_bazel_rules_scala//scala/extensions:deps.bzl",
+  "scala_deps",
+)
+
+scala_deps.settings(
+    fetch_sources = True,
+)
+
+scala_deps.toolchains(
+  scalatest = True,
+  specs2 = True,
+  twitter_scrooge = True,
+  scala_proto = True,
+  # TODO: scala_register_unused_deps_toolchains
+)
