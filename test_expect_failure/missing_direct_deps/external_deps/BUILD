@@ -1,4 +1,3 @@
-load("//scala:artifacts.bzl", "versioned_artifact_repos")
 load("//scala:scala.bzl", "scala_library")
 load("@rules_java//java:defs.bzl", "java_library")
 
@@ -45,7 +44,7 @@ java_library(
     name = "java_lib_with_unused_external_dep",
     testonly = True,
     srcs = ["Empty.java"],
-    deps = versioned_artifact_repos(["@io_bazel_rules_scala_guava"]),
+    deps = ["@io_bazel_rules_scala_guava"],
 )
 
 java_library(
