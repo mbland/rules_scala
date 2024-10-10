@@ -18,11 +18,14 @@ new_local_repository = use_repo_rule(
 )
 
 SCALA_VERSION = "2.13.14"
-SCALA_VERSIONS = [
+SCALA_2_VERSIONS = [
     "2.12.19",
     "2.13.14",
+]
+SCALA_3_VERSIONS = [
     "3.3.3",
 ]
+SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
 
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_cc", version = "0.0.9")
@@ -115,6 +118,15 @@ use_repo(
             "scala_compiler_source",
         ]
     ] for scala_version in SCALA_VERSIONS
+]
+
+[
+    [
+        use_repo(dev_deps, dep + "_" + scala_version.replace(".", "_"))
+        for dep in [
+            "io_bazel_rules_scala_scala_reflect",
+        ]
+    ] for scala_version in SCALA_2_VERSIONS
 ]
 
 test_deps = use_extension(
