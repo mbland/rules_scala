@@ -110,18 +110,18 @@
         "recordedDirentsInputs": {},
         "envVariables": {
           "ENABLE_COMPILER_DEPENDENCY_TRACKING": null,
-          "SCALA_VERSION": "3.3.3"
+          "SCALA_VERSION": null
         },
         "generatedRepoSpecs": {
           "io_bazel_rules_scala_config": {
             "bzlFile": "@@//:scala_config.bzl",
             "ruleClassName": "_config_repository",
             "attributes": {
-              "scala_version": "3.3.3",
+              "scala_version": "2.13.14",
               "scala_versions": [
-                "3.3.3",
+                "2.13.14",
                 "2.12.19",
-                "2.13.14"
+                "3.3.3"
               ],
               "enable_compiler_dependency_tracking": true
             }

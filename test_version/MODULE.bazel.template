@@ -36,5 +36,8 @@ scala_deps.toolchains(
   specs2 = True,
   twitter_scrooge = True,
   scala_proto = True,
-  # TODO: scala_register_unused_deps_toolchains
+)
+
+register_toolchains(
+    "@io_bazel_rules_scala//scala:unused_dependency_checker_error_toolchain",
 )
