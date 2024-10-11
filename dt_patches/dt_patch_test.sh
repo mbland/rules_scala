@@ -65,9 +65,6 @@ test_compiler_srcjar_error() {
   run_in_test_repo "bazel build //... --repo_env=SCALA_VERSION=${SCALA_VERSION} //..." "test_dt_patches_user_srcjar" 2>&1 | grep "$EXPECTED_ERROR"
 }
 
-run_test_local test_compiler_patch 2.12.1
-
-
 #run_test_local test_compiler_patch 2.11.0
 #run_test_local test_compiler_patch 2.11.1
 #run_test_local test_compiler_patch 2.11.2

@@ -99,3 +99,5 @@ use_repo(
     "io_bazel_rules_scala_scala_xml",
     "io_bazel_rules_scala_scala_parser_combinators",
 )
+
+register_toolchains("//:dt_scala_toolchain")

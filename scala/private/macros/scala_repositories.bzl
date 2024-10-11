@@ -73,7 +73,7 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
     if scala_major_version == "2.12":
         if minor_version >= 1 and minor_version <= 7:
             patch = Label(
-                "//dt_patches:dt_compiler_%s.2.patch" % scala_major_version
+                "//dt_patches:dt_compiler_%s.1.patch" % scala_major_version
             )
         elif minor_version <= 11:
             patch = Label(
