@@ -1,0 +1,101 @@
+"""Bazel module ./test/shell/test_examples.sh tests"""
+
+module(name = "scala3_example")
+
+source_repos = use_extension("//:extensions.bzl", "compiler_source_repos")
+
+use_repo(
+    source_repos,
+    "scala_library",
+    "scala_compiler",
+    "scala_compiler_srcjar",
+    "scala_reflect",
+)
+
+bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
+local_path_override(
+    module_name = "rules_scala",
+    path = "../.."
+)
+
+scala_config = use_extension(
+    "@io_bazel_rules_scala//scala/extensions:config.bzl",
+    "scala_config",
+)
+
+scala_config.settings(
+    enable_compiler_dependency_tracking = True,
+)
+
+use_repo(scala_config, "io_bazel_rules_scala_config")
+
+scala_deps = use_extension(
+    "@io_bazel_rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+
+scala_deps.settings(
+    fetch_sources = True,
+    validate_scala_version = False,
+)
+
+# Invalid
+scala_deps.compiler_srcjar(
+    version = "2.12.11",
+)
+
+# Invalid
+scala_deps.compiler_srcjar(
+    version = "2.12.12",
+    label = "foo",
+)
+
+# Invalid
+scala_deps.compiler_srcjar(
+    version = "2.12.13",
+    url = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.13/scala-compiler-2.12.13-sources.jar",
+    label = "foo",
+)
+
+scala_deps.compiler_srcjar(
+    version = "2.12.14",
+    urls = ["https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.14/scala-compiler-2.12.14-sources.jar"],
+    integrity = "sha384-yKJTudaHM2dA+VM//elLxhEfOmyCYRHzbLlQcf5jlrR+G5FEW+fBW/b794mQLMOX",
+)
+
+scala_deps.compiler_srcjar(
+    version = "2.12.15",
+    url = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.15/scala-compiler-2.12.15-sources.jar",
+    sha256 = "65f783f1fbef7de661224f607ac07ca03c5d19acfdb7f2234ff8def1e79b5cd8",
+)
+
+scala_deps.compiler_srcjar(
+    version = "2.12.16",
+    label = "@scala_compiler_srcjar//jar:downloaded.jar",
+)
+
+_SCALA_COMPILER_URL_FORMAT = (
+    "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/" +
+    "{version}/scala-compiler-{version}-sources.jar?foo"
+)
+
+[
+    scala_deps.compiler_srcjar(
+        version = scala_version,
+        url = _SCALA_COMPILER_URL_FORMAT.format(version=scala_version),
+    )
+    for scala_version in [
+        "2.12.17",
+        "2.12.18",
+        "2.12.19",
+        "2.13.11",
+        "2.13.12",
+        "2.13.14",
+    ]
+]
+
+use_repo(
+    scala_deps,
+    "io_bazel_rules_scala_scala_xml",
+    "io_bazel_rules_scala_scala_parser_combinators",
+)

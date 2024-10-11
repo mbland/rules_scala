@@ -46,8 +46,9 @@ _scala_compiler_srcjar_default_url = ("https://repo1.maven.org/maven2/org/" +
     )
 )
 
-_scala_compiler_srcjar = tag_class(
+_compiler_srcjar = tag_class(
     attrs = {
+        "version": attr.string(mandatory = True),
         "url": attr.string(default = _scala_compiler_srcjar_default_url),
         "urls": attr.string_list(),
         "label": attr.string(),
@@ -90,19 +91,21 @@ def _add_if_not_empty(result, name, value):
     if len(value) != 0:
         result[name] = value
 
-def _get_scala_compiler_srcjar(module_ctx):
-    root_srcjar = module_ctx.modules[0].tags.scala_compiler_srcjar
-
-    if len(root_srcjar) == 0:
-        return None
-    srcjar = root_srcjar[0]
-
+def _get_scala_compiler_srcjars(module_ctx):
     result = {}
-    _add_if_not_empty(result, "url", srcjar.url)
-    _add_if_not_empty(result, "urls", srcjar.urls)
-    _add_if_not_empty(result, "label", srcjar.label)
-    _add_if_not_empty(result, "sha256", srcjar.sha256)
-    _add_if_not_empty(result, "integrity", srcjar.integrity)
+
+    for srcjar in module_ctx.modules[0].tags.compiler_srcjar:
+        if srcjar not in result:
+            continue
+
+        info = {}
+        _add_if_not_empty(info, "url", srcjar.url)
+        _add_if_not_empty(info, "urls", srcjar.urls)
+        _add_if_not_empty(info, "label", srcjar.label)
+        _add_if_not_empty(info, "sha256", srcjar.sha256)
+        _add_if_not_empty(info, "integrity", srcjar.integrity)
+        result[srcjar.version] = info
+
     return result
 
 def _get_toolchains(module_ctx):
@@ -146,13 +149,13 @@ def _scala_deps_impl(module_ctx):
         validate_scala_version,
     ) = _get_settings(module_ctx)
     toolchains = _get_toolchains(module_ctx)
-    srcjar = _get_scala_compiler_srcjar(module_ctx)
+    srcjars = _get_scala_compiler_srcjars(module_ctx)
 
     # Replace scala_repositories()
-    for scala_version in SCALA_VERSIONS:
+    for version in SCALA_VERSIONS:
         if load_dep_rules:
             # Replace rules_scala_setup()
-            dt_patched_compiler_setup(scala_version, srcjar)
+            dt_patched_compiler_setup(version, srcjars.get(version))
 
     dt_patched_compiler_source_aliases_repo(
         name = "scala_compiler_sources",
@@ -241,6 +244,6 @@ scala_deps = module_extension(
     tag_classes = {
         "settings": _settings,
         "toolchains": _toolchains,
-        "scala_compiler_srcjar": _scala_compiler_srcjar,
+        "compiler_srcjar": _compiler_srcjar,
     }
 )
