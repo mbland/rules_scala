@@ -25,6 +25,34 @@ dt_patched_compiler = repository_rule(
     implementation = _dt_patched_compiler_impl,
 )
 
+_DT_PATCHED_COMPILER_SOURCE_ALIAS_FORMAT = """alias(
+    name   = "src{scala_version_suffix}",
+    actual = "@scala_compiler_source{scala_version_suffix}//:src",
+    visibility = ["//visibility:public"],
+)
+"""
+
+_PACKAGE_VISIBILITY_PUBLIC = """package(
+    default_visibility = [\"//visibility:public\"],
+)
+"""
+
+def _dt_patched_compiler_source_aliases_repo_impl(rctx):
+    build = "\n".join([_PACKAGE_VISIBILITY_PUBLIC] + [
+        _DT_PATCHED_COMPILER_SOURCE_ALIAS_FORMAT.format(
+            scala_version_suffix = version_suffix(scala_version)
+        )
+        for scala_version in SCALA_VERSIONS
+    ])
+    rctx.file("BUILD", content=build, executable=False)
+
+dt_patched_compiler_source_aliases_repo = repository_rule(
+    implementation = _dt_patched_compiler_source_aliases_repo_impl,
+    attrs = {
+        "scala_versions": attr.string_list(mandatory = True),
+    },
+)
+
 def _validate_scalac_srcjar(srcjar):
     if type(srcjar) != "dict":
         return False
@@ -53,7 +81,8 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
             )
 
     build_file_content = "\n".join([
-        "package(default_visibility = [\"//visibility:public\"])",
+        _PACKAGE_VISIBILITY_PUBLIC,
+        "",
         "filegroup(",
         "    name = \"src\",",
         "    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],",
@@ -126,6 +155,11 @@ def rules_scala_setup(scala_compiler_srcjar = None):
 
     for scala_version in SCALA_VERSIONS:
         dt_patched_compiler_setup(scala_version, scala_compiler_srcjar)
+
+    dt_patched_compiler_source_aliases_repo(
+        name = "scala_compiler_sources",
+        scala_versions = SCALA_VERSIONS,
+    )
 
 def _artifact_ids(scala_version):
     return [

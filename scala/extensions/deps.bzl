@@ -6,6 +6,7 @@ load("//scala/private/extensions:toolchains.bzl", "scala_toolchains_repo")
 load(
     "//scala/private:macros/scala_repositories.bzl",
     "dt_patched_compiler_setup",
+    "dt_patched_compiler_source_aliases_repo",
     "rules_scala_toolchain_deps_repositories",
 )
 load(
@@ -152,6 +153,11 @@ def _scala_deps_impl(module_ctx):
         if load_dep_rules:
             # Replace rules_scala_setup()
             dt_patched_compiler_setup(scala_version, srcjar)
+
+    dt_patched_compiler_source_aliases_repo(
+        name = "scala_compiler_sources",
+        scala_versions = SCALA_VERSIONS,
+    )
 
     if load_jar_deps:
         rules_scala_toolchain_deps_repositories(
