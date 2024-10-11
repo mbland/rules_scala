@@ -36,3 +36,5 @@ scala_deps.settings(
 scala_deps.toolchains(
     scalatest = True,
 )
+
+use_repo(scala_deps, "io_bazel_rules_scala_toolchains")

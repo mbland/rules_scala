@@ -3,12 +3,15 @@ load(
     "@io_bazel_rules_scala//testing/toolchain:toolchain.bzl",
     "scala_testing_toolchain",
 )
-load(
-    "@io_bazel_rules_scala//testing/toolchain:toolchain_deps.bzl",
-    "testing_toolchain_deps",
-)
 load("//scala:scala_cross_version.bzl", "repositories", "version_suffix")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
+
+DEP_PROVIDERS = [
+    "junit_classpath",
+    "scalatest_classpath",
+    "specs2_classpath",
+    "specs2_junit_classpath",
+]
 
 def _declare_deps_provider(macro_name, deps_id, deps, visibility):
     label = "%s_%s_provider" % (macro_name, deps_id)
@@ -29,13 +32,12 @@ def setup_scala_testing_toolchain(
         scalatest_classpath = None,
         visibility = ["//visibility:public"]):
     dep_providers = []
-    suffix = version_suffix(scala_version)
 
     if junit_classpath != None:
         dep_providers.append(
             _declare_deps_provider(
                 name,
-                "junit_classpath" + suffix,
+                "junit_classpath",
                 repositories(scala_version, junit_classpath),
                 visibility,
             ),
@@ -45,7 +47,7 @@ def setup_scala_testing_toolchain(
         dep_providers.append(
             _declare_deps_provider(
                 name,
-                "specs2_junit_classpath" + suffix,
+                "specs2_junit_classpath",
                 repositories(scala_version, specs2_junit_classpath),
                 visibility,
             ),
@@ -55,7 +57,7 @@ def setup_scala_testing_toolchain(
         dep_providers.append(
             _declare_deps_provider(
                 name,
-                "specs2_classpath" + suffix,
+                "specs2_classpath",
                 repositories(scala_version, specs2_classpath),
                 visibility,
             ),
@@ -65,7 +67,7 @@ def setup_scala_testing_toolchain(
         dep_providers.append(
             _declare_deps_provider(
                 name,
-                "scalatest_classpath" + suffix,
+                "scalatest_classpath",
                 repositories(scala_version, scalatest_classpath),
                 visibility,
             ),
@@ -80,11 +82,10 @@ def setup_scala_testing_toolchain(
     native.toolchain(
         name = name,
         toolchain = ":" + name + "_impl",
-        toolchain_type = (
-            "@io_bazel_rules_scala//testing/toolchain:testing_toolchain_type"
-        ),
+        toolchain_type = Label("//testing/toolchain:testing_toolchain_type"),
         target_settings = [
-            "@io_bazel_rules_scala_config//:scala_version" + suffix
+            "@io_bazel_rules_scala_config//:scala_version" +
+            version_suffix(scala_version),
         ],
         visibility = visibility,
     )

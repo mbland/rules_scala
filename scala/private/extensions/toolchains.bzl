@@ -193,9 +193,9 @@ load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 [
     setup_scala_testing_toolchain(
         name = "testing_toolchain" + version_suffix(scala_version),
-        junit_classpath = {junit},
         scala_version = scala_version,
         scalatest_classpath = {scalatest},
+        junit_classpath = {junit},
         specs2_classpath = {specs2},
         specs2_junit_classpath = {specs2_junit},
     )

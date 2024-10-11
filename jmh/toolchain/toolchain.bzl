@@ -25,8 +25,10 @@ jmh_toolchain = rule(
     },
 )
 
+_toolchain_type = "//jmh/toolchain:jmh_toolchain_type"
+
 def _export_toolchain_deps_impl(ctx):
-    return expose_toolchain_deps(ctx, "//jmh/toolchain:jmh_toolchain_type")
+    return expose_toolchain_deps(ctx, _toolchain_type)
 
 export_toolchain_deps = rule(
     _export_toolchain_deps_impl,
@@ -35,7 +37,7 @@ export_toolchain_deps = rule(
             mandatory = True,
         ),
     },
-    toolchains = ["//jmh/toolchain:jmh_toolchain_type"],
+    toolchains = [_toolchain_type],
     incompatible_use_toolchain_transition = True,
 )
 
@@ -49,9 +51,7 @@ def setup_jmh_toolchain(name):
     native.toolchain(
         name = name,
         toolchain = ":%s_impl" % name,
-        toolchain_type = Label(
-            "@io_bazel_rules_scala//jmh/toolchain:jmh_toolchain_type"
-        ),
+        toolchain_type = Label(_toolchain_type),
         visibility = ["//visibility:public"],
     )
 

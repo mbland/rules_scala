@@ -28,11 +28,10 @@ scrooge_toolchain = rule(
     },
 )
 
+_toolchain_type = "//twitter_scrooge/toolchain:scrooge_toolchain_type"
+
 def _export_scrooge_deps_impl(ctx):
-    return expose_toolchain_deps(
-        ctx,
-        "@io_bazel_rules_scala//twitter_scrooge/toolchain:scrooge_toolchain_type",
-    )
+    return expose_toolchain_deps(ctx, _toolchain_type)
 
 export_scrooge_deps = rule(
     _export_scrooge_deps_impl,
@@ -41,7 +40,7 @@ export_scrooge_deps = rule(
             mandatory = True,
         ),
     },
-    toolchains = ["@io_bazel_rules_scala//twitter_scrooge/toolchain:scrooge_toolchain_type"],
+    toolchains = [_toolchain_type],
     incompatible_use_toolchain_transition = True,
 )
 
@@ -55,10 +54,7 @@ def setup_scrooge_toolchain(name):
     native.toolchain(
         name = name,
         toolchain = ":%s_impl" % name,
-        toolchain_type = Label(
-            "@io_bazel_rules_scala" +
-            "//twitter_scrooge/toolchain:scrooge_toolchain_type"
-        ),
+        toolchain_type = Label(_toolchain_type),
         visibility = ["//visibility:public"],
     )
 
