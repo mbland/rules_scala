@@ -3,14 +3,17 @@
 load("//scala:scala_maven_import_external.bzl", "java_import_external")
 load("//test/toolchains:jdk.bzl", "remote_jdk21_repositories")
 load("@rules_java//java:repositories.bzl", "remote_jdk8_repos")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load(
     "@bazel_tools//tools/build_defs/repo:local.bzl",
     "local_repository",
     "new_local_repository",
 )
 
-def _test_deps_impl(_ctx):
-    """Instantiate internal only repos for testing
+_BUILD_TOOLS_RELEASE = "5.1.0"
+
+def _dev_deps_impl(_ctx):
+    """Instantiate internal only repos for development and testing
 
     Mostly just copied from `WORKSPACE`, and adapted slightly. Also currently
     incompatible with Bazel 6, given `new_local_repository` isn't Starlarkified
@@ -61,4 +64,11 @@ filegroup(
         testonly_ = True,
     )
 
-test_deps = module_extension(implementation = _test_deps_impl)
+    http_archive(
+        name = "com_github_bazelbuild_buildtools",
+        sha256 = "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
+        strip_prefix = "buildtools-%s" % _BUILD_TOOLS_RELEASE,
+        url = "https://github.com/bazelbuild/buildtools/archive/%s.tar.gz" % _BUILD_TOOLS_RELEASE,
+    )
+
+dev_deps = module_extension(implementation = _dev_deps_impl)

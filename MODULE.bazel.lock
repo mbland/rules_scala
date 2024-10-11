@@ -92,7 +92,7 @@
   "moduleExtensions": {
     "//scala/extensions:config.bzl%scala_config": {
       "general": {
-        "bzlTransitiveDigest": "yloKxWqLOVqHoLH2OAJByBoLyoSuXNkLJrV1qeBgjT8=",
+        "bzlTransitiveDigest": "DZEdjTaNdxwteucsuK9U7V8PszZm88dweMv9rbZeti0=",
         "usagesDigest": "hzCOjYHxeCaAs1q80sVUMCLv17FwyOEwzGiN5mxs32s=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -120,7 +120,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "zrFSwon7Raoy6i7EBsKkiaEY9g0C0Tmy0HGrpw4Mvjg=",
+        "bzlTransitiveDigest": "lVe8ThdDuJfQNeh51VabPoYU0d7yhp9PM3aSMlM8nFU=",
         "usagesDigest": "96aAqNas/TaP+QRWXKU65Ug7MdHDDDniDMkDHp2yVUA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -8261,10 +8261,10 @@
         ]
       }
     },
-    "//scala/private/extensions:test_deps.bzl%test_deps": {
+    "//scala/private/extensions:dev_deps.bzl%dev_deps": {
       "general": {
-        "bzlTransitiveDigest": "OBHFWcZ1cKIKeb+DJqQfNjPT7R+i785cP19FujwQPlk=",
-        "usagesDigest": "F8zK+h45y+le+4sAkM706g26G45liIqZRSKiGrFEgrQ=",
+        "bzlTransitiveDigest": "UdKWk/rzLHP3LoshudgkMBHcdImSwdV3XvGh1ppBZYU=",
+        "usagesDigest": "LRMbyYG8FQB/66w6ytSPBSprDRUxjUPJxxwQIjwpgE8=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -8329,6 +8329,15 @@
             "ruleClassName": "_toolchain_config",
             "attributes": {
               "build_file": "\nconfig_setting(\n    name = \"prefix_version_setting\",\n    values = {\"java_runtime_version\": \"remotejdk_8\"},\n    visibility = [\"//visibility:private\"],\n)\nconfig_setting(\n    name = \"version_setting\",\n    values = {\"java_runtime_version\": \"8\"},\n    visibility = [\"//visibility:private\"],\n)\nalias(\n    name = \"version_or_prefix_version_setting\",\n    actual = select({\n        \":version_setting\": \":version_setting\",\n        \"//conditions:default\": \":prefix_version_setting\",\n    }),\n    visibility = [\"//visibility:private\"],\n)\ntoolchain(\n    name = \"toolchain\",\n    target_compatible_with = [\"@platforms//os:linux\", \"@platforms//cpu:aarch64\"],\n    target_settings = [\":version_or_prefix_version_setting\"],\n    toolchain_type = \"@bazel_tools//tools/jdk:runtime_toolchain_type\",\n    toolchain = \"@remote_jdk8_linux_aarch64//:jdk\",\n)\ntoolchain(\n    name = \"bootstrap_runtime_toolchain\",\n    # These constraints are not required for correctness, but prevent fetches of remote JDK for\n    # different architectures. As every Java compilation toolchain depends on a bootstrap runtime in\n    # the same configuration, this constraint will not result in toolchain resolution failures.\n    exec_compatible_with = [\"@platforms//os:linux\", \"@platforms//cpu:aarch64\"],\n    target_settings = [\":version_or_prefix_version_setting\"],\n    toolchain_type = \"@rules_java//toolchains:bootstrap_runtime_toolchain_type\",\n    toolchain = \"@remote_jdk8_linux_aarch64//:jdk\",\n)\n"
+            }
+          },
+          "com_github_bazelbuild_buildtools": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "sha256": "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
+              "strip_prefix": "buildtools-5.1.0",
+              "url": "https://github.com/bazelbuild/buildtools/archive/5.1.0.tar.gz"
             }
           },
           "org_apache_commons_commons_lang_3_5_without_file": {

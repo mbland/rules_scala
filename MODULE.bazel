@@ -6,21 +6,6 @@ module(
     repo_name = "io_bazel_rules_scala",
 )
 
-http_archive = use_repo_rule(
-    "@bazel_tools//tools/build_defs/repo:http.bzl",
-    "http_archive",
-)
-
-local_repository = use_repo_rule(
-    "@bazel_tools//tools/build_defs/repo:local.bzl",
-    "local_repository",
-)
-
-new_local_repository = use_repo_rule(
-    "@bazel_tools//tools/build_defs/repo:local.bzl",
-    "new_local_repository",
-)
-
 SCALA_VERSION = "2.13.14"
 
 SCALA_2_VERSIONS = [
@@ -150,13 +135,14 @@ use_repo(
     for scala_version in SCALA_2_VERSIONS
 ]
 
-test_deps = use_extension(
-    "//scala/private/extensions:test_deps.bzl",
-    "test_deps",
+internal_dev_deps = use_extension(
+    "//scala/private/extensions:dev_deps.bzl",
+    "dev_deps",
     dev_dependency = True,
 )
 use_repo(
-    test_deps,
+    internal_dev_deps,
+    "com_github_bazelbuild_buildtools",
     "example_external_workspace",
     "org_apache_commons_commons_lang_3_5_without_file",
     "proto_cross_repo_boundary",
@@ -201,9 +187,14 @@ bazel_dep(name = "gazelle", version = "0.39.1", dev_dependency = True)
 
 go_version = "1.23.1"
 
-go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
+go_deps = use_extension(
+    "@gazelle//:extensions.bzl",
+    "go_deps",
+    dev_dependency = True,
+)
 
-# Copied some of the following from:
+# Copied some of the following from the following to get the
+# com_github_bazelbuild_buildtools repo to work:
 # - https://github.com/bazelbuild/bazel-central-registry/blob/main/modules/gazelle/0.39.1/MODULE.bazel#L31-L57
 #
 # golang.org/x/tools is not a direct dependency of the go code anymore
@@ -219,24 +210,4 @@ use_repo(
     "org_golang_x_tools",
 )
 
-go_sdk = use_extension(
-    "@io_bazel_rules_go//go:extensions.bzl",
-    "go_sdk",
-    dev_dependency = True,
-)
-go_sdk.download(
-    name = "go_sdk",
-    version = go_version,
-)
-use_repo(go_sdk, "go_sdk")
-
 bazel_dep(name = "rules_python", version = "0.35.0", dev_dependency = True)
-
-_build_tools_release = "5.1.0"
-
-http_archive(
-    name = "com_github_bazelbuild_buildtools",
-    sha256 = "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
-    strip_prefix = "buildtools-%s" % _build_tools_release,
-    url = "https://github.com/bazelbuild/buildtools/archive/%s.tar.gz" % _build_tools_release,
-)
