@@ -87,7 +87,7 @@ def make_scala_binary(*extras):
             *[extra["outputs"] for extra in extras if "outputs" in extra]
         ),
         toolchains = [
-            "@io_bazel_rules_scala//scala:toolchain_type",
+            Label("//scala:toolchain_type"),
             "@bazel_tools//tools/jdk:toolchain_type",
         ],
         cfg = scala_version_transition,

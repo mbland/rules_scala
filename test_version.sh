@@ -45,6 +45,7 @@ run_in_test_repo() {
       -e "s%\${twitter_scrooge_repositories}%$TWITTER_SCROOGE_REPOSITORIES%" \
       WORKSPACE.template >> $NEW_TEST_DIR/WORKSPACE
   cp MODULE.bazel.template $NEW_TEST_DIR/MODULE.bazel
+  touch $NEW_TEST_DIR/WORKSPACE.bzlmod
   cp ../.bazelrc $NEW_TEST_DIR/.bazelrc
 
   cd $NEW_TEST_DIR
