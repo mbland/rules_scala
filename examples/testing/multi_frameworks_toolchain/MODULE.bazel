@@ -3,30 +3,28 @@
 module(name = "multi_frameworks_toolchain")
 
 SCALA_VERSION = "2.12.19"
+
 VERSION_SUFFIX = "_" + SCALA_VERSION.replace(".", "_")
 
 bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
 local_path_override(
     module_name = "rules_scala",
-    path = "../../.."
+    path = "../../..",
 )
 
 scala_config = use_extension(
     "@io_bazel_rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
-
 scala_config.settings(
     scala_version = SCALA_VERSION,
 )
-
 use_repo(scala_config, "io_bazel_rules_scala_config")
 
 scala_deps = use_extension(
     "@io_bazel_rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
-
 scala_deps.settings(
     fetch_sources = True,
 )
@@ -43,7 +41,7 @@ scala_deps.toolchains(
 #
 # However, we need to import the repos used by the
 # `setup_scala_testing_toolchain()` example in the `BUILD` file. These repos
-# are versioned by Scala version, so we have to append the `VERSION_SUFFIX`. 
+# are versioned by Scala version, so we have to append the `VERSION_SUFFIX`.
 [
     use_repo(scala_deps, "io_bazel_rules_scala_" + dep + VERSION_SUFFIX)
     for dep in [

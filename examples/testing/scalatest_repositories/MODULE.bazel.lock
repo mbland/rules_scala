@@ -118,7 +118,7 @@
     },
     "@@rules_scala~//scala/extensions:config.bzl%scala_config": {
       "general": {
-        "bzlTransitiveDigest": "yloKxWqLOVqHoLH2OAJByBoLyoSuXNkLJrV1qeBgjT8=",
+        "bzlTransitiveDigest": "DZEdjTaNdxwteucsuK9U7V8PszZm88dweMv9rbZeti0=",
         "usagesDigest": "v8nPM4m57vzDGawcY1OGP08h0B55bChnkg/v/2/HC9A=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -144,7 +144,7 @@
     },
     "@@rules_scala~//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "lNcArX5qGCIMij0im7jkGPFdAB5GsErYushKpr1Kqtk=",
+        "bzlTransitiveDigest": "jDFrO7XmZ9Wo6aAKoY9uJYNEZ+h17e7waKa8aqknODU=",
         "usagesDigest": "wUdsIx5DjILp0sabWn3NziLPlKusNey262z2jMUnjZw=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -219,7 +219,7 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\nfilegroup(\n    name = \"src\",\n    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],\n)",
+              "build_file_content": "package(\n    default_visibility = [\"//visibility:public\"],\n)\n\n\nfilegroup(\n    name = \"src\",\n    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],\n)",
               "patches": [
                 "@@rules_scala~//dt_patches:dt_compiler_2.12.patch"
               ],
@@ -373,6 +373,15 @@
             "ruleClassName": "_alias_repository",
             "attributes": {
               "target": "io_bazel_rules_scala_scala_reflect_2_12_19"
+            }
+          },
+          "scala_compiler_sources": {
+            "bzlFile": "@@rules_scala~//scala/private:macros/scala_repositories.bzl",
+            "ruleClassName": "dt_patched_compiler_source_aliases_repo",
+            "attributes": {
+              "scala_versions": [
+                "2.12.19"
+              ]
             }
           },
           "io_bazel_rules_scala_scala_library": {

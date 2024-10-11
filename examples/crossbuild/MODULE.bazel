@@ -5,14 +5,13 @@ module(name = "cross_build")
 bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
 local_path_override(
     module_name = "rules_scala",
-    path = "../.."
+    path = "../..",
 )
 
 scala_config = use_extension(
     "@io_bazel_rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
-
 scala_config.settings(
     scala_version = "3.3.3",
     scala_versions = [
@@ -21,18 +20,15 @@ scala_config.settings(
         "3.3.3",
     ],
 )
-
 use_repo(scala_config, "io_bazel_rules_scala_config")
 
 scala_deps = use_extension(
     "@io_bazel_rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
-
 scala_deps.settings(
     fetch_sources = True,
 )
-
 scala_deps.toolchains(
     scalatest = True,
 )
