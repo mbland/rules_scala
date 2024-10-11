@@ -1,0 +1,45 @@
+"""Bazel module ./test/shell/test_examples.sh tests"""
+
+module(name = "scala3_example")
+
+source_repos = use_extension("//:extensions.bzl", "compiler_source_repos")
+
+use_repo(
+    source_repos,
+    "scala_library",
+    "scala_compiler",
+    "scala_reflect",
+)
+
+bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
+local_path_override(
+    module_name = "rules_scala",
+    path = "../.."
+)
+
+scala_config = use_extension(
+    "@io_bazel_rules_scala//scala/extensions:config.bzl",
+    "scala_config",
+)
+
+scala_config.settings(
+    enable_compiler_dependency_tracking = True,
+)
+
+use_repo(scala_config, "io_bazel_rules_scala_config")
+
+scala_deps = use_extension(
+    "@io_bazel_rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+
+scala_deps.settings(
+    fetch_sources = True,
+    validate_scala_version = False,
+)
+
+use_repo(
+    scala_deps,
+    "io_bazel_rules_scala_scala_xml",
+    "io_bazel_rules_scala_scala_parser_combinators",
+)
