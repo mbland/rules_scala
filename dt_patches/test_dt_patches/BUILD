@@ -10,9 +10,9 @@ SCALA_LIBS = [
 
 setup_scala_toolchain(
     name = "dt_scala_toolchain",
+    parser_combinators_deps = [],
     scala_compile_classpath = ["@scala_compiler"] + SCALA_LIBS,
     scala_library_classpath = SCALA_LIBS,
     scala_macro_classpath = SCALA_LIBS,
     scala_xml_deps = [],
-    parser_combinators_deps = [],
 )

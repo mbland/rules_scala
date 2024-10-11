@@ -2,8 +2,7 @@ load(
     "//scala/private/toolchain_deps:toolchain_deps.bzl",
     "expose_toolchain_deps",
 )
-load("//scala:providers.bzl", "DepsInfo")
-load("//scala:providers.bzl", "declare_deps_provider")
+load("//scala:providers.bzl", "DepsInfo", "declare_deps_provider")
 load("//scala:artifacts.bzl", "versioned_artifact_repos")
 
 DEP_PROVIDERS = [

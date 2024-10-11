@@ -24,7 +24,8 @@ def _get_root_settings(module_ctx):
     return (
         module_ctx.os.environ.get("SCALA_VERSION", scala_version),
         module_ctx.os.environ.get(
-            "ENABLE_COMPILER_DEPENDENCY_TRACKING", compiler_dep_tracking
+            "ENABLE_COMPILER_DEPENDENCY_TRACKING",
+            compiler_dep_tracking,
         ),
     )
 

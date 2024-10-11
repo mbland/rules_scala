@@ -59,7 +59,7 @@ _toolchains = tag_class(
         "scala_proto_enable_all_options": attr.bool(),
         "testing": attr.bool(),
         "scalafmt": attr.bool(),
-    }
+    },
 )
 
 def _get_settings(module_ctx):
@@ -163,7 +163,8 @@ def _scala_deps_impl(module_ctx):
 
     if "scalatest" in toolchains:
         scalatest_repositories(
-            maven_servers = maven_servers, fetch_sources = fetch_sources,
+            maven_servers = maven_servers,
+            fetch_sources = fetch_sources,
         )
 
     for scala_version in SCALA_VERSIONS:
@@ -235,5 +236,5 @@ scala_deps = module_extension(
         "settings": _settings,
         "toolchains": _toolchains,
         "compiler_srcjar": _compiler_srcjar,
-    }
+    },
 )

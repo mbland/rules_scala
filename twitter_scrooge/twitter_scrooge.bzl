@@ -146,7 +146,7 @@ def twitter_scrooge(
         )
 
     native.register_toolchains(
-        "@io_bazel_rules_scala_toolchains//twitter_scrooge:scrooge_toolchain"
+        "@io_bazel_rules_scala_toolchains//twitter_scrooge:scrooge_toolchain",
     )
 
 def _colon_paths(data):
@@ -459,7 +459,7 @@ common_aspect_providers = [
 common_toolchains = [
     "//scala:toolchain_type",
     "//twitter_scrooge/toolchain:scrooge_toolchain_type",
-    "@bazel_tools//tools/jdk:toolchain_type"
+    "@bazel_tools//tools/jdk:toolchain_type",
 ]
 
 scrooge_scala_aspect = aspect(
@@ -572,7 +572,7 @@ scrooge_scala_import = rule(
     provides = [ThriftInfo, JavaInfo, ScroogeImport],
     toolchains = [
         "//twitter_scrooge/toolchain:scrooge_toolchain_type",
-        "@bazel_tools//tools/jdk:toolchain_type"
+        "@bazel_tools//tools/jdk:toolchain_type",
     ],
     incompatible_use_toolchain_transition = True,
 )

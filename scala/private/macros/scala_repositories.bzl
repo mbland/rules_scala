@@ -40,11 +40,11 @@ _PACKAGE_VISIBILITY_PUBLIC = """package(
 def _dt_patched_compiler_source_aliases_repo_impl(rctx):
     build = "\n".join([_PACKAGE_VISIBILITY_PUBLIC] + [
         _DT_PATCHED_COMPILER_SOURCE_ALIAS_FORMAT.format(
-            scala_version_suffix = version_suffix(scala_version)
+            scala_version_suffix = version_suffix(scala_version),
         )
         for scala_version in SCALA_VERSIONS
     ])
-    rctx.file("BUILD", content=build, executable=False)
+    rctx.file("BUILD", content = build, executable = False)
 
 dt_patched_compiler_source_aliases_repo = repository_rule(
     implementation = _dt_patched_compiler_source_aliases_repo_impl,
@@ -73,11 +73,11 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
     if scala_major_version == "2.12":
         if minor_version >= 1 and minor_version <= 7:
             patch = Label(
-                "//dt_patches:dt_compiler_%s.1.patch" % scala_major_version
+                "//dt_patches:dt_compiler_%s.1.patch" % scala_major_version,
             )
         elif minor_version <= 11:
             patch = Label(
-                "//dt_patches:dt_compiler_%s.8.patch" % scala_major_version
+                "//dt_patches:dt_compiler_%s.8.patch" % scala_major_version,
             )
 
     build_file_content = "\n".join([

@@ -98,7 +98,8 @@ def repositories(
     for id in for_artifact_ids:
         if id not in artifacts:
             fail("artifact %s not in third_party/repositories/scala_%s.bzl" % (
-                id, major_scala_version.replace(".", "_")
+                id,
+                major_scala_version.replace(".", "_"),
             ))
 
         generated_rule_name = apparent_repo_name(id) + suffix
@@ -111,7 +112,8 @@ def repositories(
             server_urls = maven_servers,
             deps = [dep + suffix for dep in artifacts[id].get("deps", [])],
             runtime_deps = [
-                dep + suffix for dep in artifacts[id].get("runtime_deps", [])
+                dep + suffix
+                for dep in artifacts[id].get("runtime_deps", [])
             ],
             testonly_ = artifacts[id].get("testonly", False),
             fetch_sources = fetch_sources,

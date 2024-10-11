@@ -18,6 +18,7 @@ def _test_deps_impl(_ctx):
     by both WORKSPACE and MODULE.bazel. Will probably create proper repos
     instead of using `new_local_repository` as well.
     """
+
     # We need to select based on platform when we use these
     # https://github.com/bazelbuild/bazel/issues/11655
     remote_jdk8_repos()
@@ -36,7 +37,7 @@ def _test_deps_impl(_ctx):
 
     new_local_repository(
         name = "test_new_local_repo",
-        build_file_content ="""
+        build_file_content = """
 filegroup(
     name = "data",
     srcs = glob(["**/*.txt"]),

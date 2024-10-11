@@ -9,7 +9,9 @@ def _lookup_provider_by_id(ctx, toolchain_type_label, dep_providers, deps_id):
             return dep_provider
 
     fail("%s requires mapping of %s provider id on the toolchain %s" % (
-        ctx.label, toolchain_type_label, deps_id
+        ctx.label,
+        toolchain_type_label,
+        deps_id,
     ))
 
 def find_deps_info_on(ctx, toolchain_type_label, deps_id):

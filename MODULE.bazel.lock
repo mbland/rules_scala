@@ -92,8 +92,8 @@
   "moduleExtensions": {
     "//scala/extensions:config.bzl%scala_config": {
       "general": {
-        "bzlTransitiveDigest": "DZEdjTaNdxwteucsuK9U7V8PszZm88dweMv9rbZeti0=",
-        "usagesDigest": "Euwbbd9vYvj45fQeo4xw4m0GhzvynMwM/3BZXZdBa4c=",
+        "bzlTransitiveDigest": "yloKxWqLOVqHoLH2OAJByBoLyoSuXNkLJrV1qeBgjT8=",
+        "usagesDigest": "hzCOjYHxeCaAs1q80sVUMCLv17FwyOEwzGiN5mxs32s=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {
@@ -120,8 +120,8 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "lVe8ThdDuJfQNeh51VabPoYU0d7yhp9PM3aSMlM8nFU=",
-        "usagesDigest": "uWdCfxsf20xG8WFPkBmSzpumBKNXOIda1oDfwuQ+qc0=",
+        "bzlTransitiveDigest": "zrFSwon7Raoy6i7EBsKkiaEY9g0C0Tmy0HGrpw4Mvjg=",
+        "usagesDigest": "96aAqNas/TaP+QRWXKU65Ug7MdHDDDniDMkDHp2yVUA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -8263,7 +8263,7 @@
     },
     "//scala/private/extensions:test_deps.bzl%test_deps": {
       "general": {
-        "bzlTransitiveDigest": "tpgmiqrlVV3yOl5RWxKvQjyyxRcNUfhe2kbeigpN4jI=",
+        "bzlTransitiveDigest": "OBHFWcZ1cKIKeb+DJqQfNjPT7R+i785cP19FujwQPlk=",
         "usagesDigest": "F8zK+h45y+le+4sAkM706g26G45liIqZRSKiGrFEgrQ=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

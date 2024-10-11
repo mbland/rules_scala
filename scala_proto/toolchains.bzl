@@ -14,7 +14,8 @@ def setup_scala_proto_toolchains(name, enable_all_options = False):
     scala_proto_deps_toolchain(
         name = "%s_default_deps_toolchain_impl" % name,
         dep_providers = [
-            ":scalapb_%s_deps_provider" % p for p in ["compile", "grpc", "worker"]
+            ":scalapb_%s_deps_provider" % p
+            for p in ["compile", "grpc", "worker"]
         ],
         visibility = ["//visibility:public"],
     )
@@ -42,7 +43,7 @@ def setup_scala_proto_toolchains(name, enable_all_options = False):
     scala_proto_toolchain(
         name = toolchain_impl_name,
         visibility = ["//visibility:public"],
-        **toolchain_options,
+        **toolchain_options
     )
 
     native.toolchain(

@@ -11,11 +11,10 @@ _DEFAULT_DEP_PROVIDER_FORMAT = (
 )
 
 def scala_proto_deps_providers(
-    compile = _DEFAULT_DEP_PROVIDER_FORMAT % "compile",
-    grpc = _DEFAULT_DEP_PROVIDER_FORMAT % "grpc",
-    worker = _DEFAULT_DEP_PROVIDER_FORMAT % "worker",
-):
-    return [ compile, grpc, worker ]
+        compile = _DEFAULT_DEP_PROVIDER_FORMAT % "compile",
+        grpc = _DEFAULT_DEP_PROVIDER_FORMAT % "grpc",
+        worker = _DEFAULT_DEP_PROVIDER_FORMAT % "worker"):
+    return [compile, grpc, worker]
 
 DEFAULT_SCALAPB_COMPILE_DEPS = [
     Label("//scala/private/toolchain_deps:scala_library_classpath"),

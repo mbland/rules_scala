@@ -178,8 +178,8 @@ rbe_preconfig(
 load("//testing/private:repositories.bzl", "testing_repositories")
 
 testing_repositories(
-    maven_servers = MAVEN_SERVER_URLS,
     fetch_sources = False,
+    maven_servers = MAVEN_SERVER_URLS,
 )
 
 load("//test/toolchains:jdk.bzl", "remote_jdk21_repositories", "remote_jdk21_toolchains")

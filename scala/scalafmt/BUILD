@@ -41,7 +41,7 @@ alias(
     actual = (
         "@io_bazel_rules_scala_toolchains//scalafmt:scalafmt_toolchain" +
         version_suffix(SCALA_VERSION)
-    )
+    ),
 )
 
 export_scalafmt_deps(

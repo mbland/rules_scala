@@ -1,6 +1,6 @@
 load("//scala/private/toolchain_deps:toolchain_deps.bzl", "expose_toolchain_deps")
 load("//scala:artifacts.bzl", "versioned_artifact_repos")
-load("//scala:providers.bzl", _DepsInfo = "DepsInfo", "declare_deps_provider")
+load("//scala:providers.bzl", "declare_deps_provider", _DepsInfo = "DepsInfo")
 
 DEP_PROVIDERS = [
     "jmh_classpath",

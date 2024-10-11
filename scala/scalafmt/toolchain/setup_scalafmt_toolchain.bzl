@@ -43,7 +43,7 @@ def setup_scalafmt_toolchain(
         ],
         toolchain = ":%s_impl" % name,
         toolchain_type = Label(
-            "//scala/scalafmt/toolchain:scalafmt_toolchain_type"
+            "//scala/scalafmt/toolchain:scalafmt_toolchain_type",
         ),
         visibility = visibility,
     )

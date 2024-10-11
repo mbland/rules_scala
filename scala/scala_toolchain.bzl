@@ -1,4 +1,4 @@
-load("//scala:providers.bzl", _DepsInfo = "DepsInfo")    
+load("//scala:providers.bzl", _DepsInfo = "DepsInfo")
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
     "ENABLE_COMPILER_DEPENDENCY_TRACKING",

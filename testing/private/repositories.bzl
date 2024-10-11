@@ -4,9 +4,8 @@ load("//third_party/repositories:repositories.bzl", "repositories")
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 
 def testing_repositories(
-    maven_servers = default_maven_server_urls(),
-    fetch_sources = False,
-):
+        maven_servers = default_maven_server_urls(),
+        fetch_sources = False):
     repositories(
         fetch_sources = fetch_sources,
         for_artifact_ids = [

@@ -7,7 +7,7 @@ def _generate_testing_toolchain_build_file(repo_attr):
         framework_deps = {
             "scalatest": "SCALATEST_DEPS",
             "junit": "JUNIT_DEPS",
-            "specs2": "SPECS2_DEPS"
+            "specs2": "SPECS2_DEPS",
         }
     if repo_attr.scalatest:
         framework_deps["scalatest"] = "SCALATEST_DEPS"
@@ -21,7 +21,7 @@ def _generate_testing_toolchain_build_file(repo_attr):
     if len(framework_deps) == 0:
         return None
     return _TESTING_TOOLCHAIN_BUILD.format(
-        deps_symbols="\",\n    \"".join([s for s in framework_deps.values()]),
+        deps_symbols = "\",\n    \"".join([s for s in framework_deps.values()]),
         scalatest = framework_deps.get("scalatest"),
         junit = framework_deps.get("junit"),
         specs2 = framework_deps.get("specs2"),
@@ -54,7 +54,7 @@ def _scala_toolchains_repo_impl(repository_ctx):
         fail("no toolchains specified")
 
     for pkg, build in toolchains.items():
-        repository_ctx.file(pkg + "/BUILD", content=build, executable=False)
+        repository_ctx.file(pkg + "/BUILD", content = build, executable = False)
 
 scala_toolchains_repo = repository_rule(
     implementation = _scala_toolchains_repo_impl,

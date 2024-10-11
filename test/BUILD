@@ -611,7 +611,7 @@ scala_library(
 )
 
 junit_deps = [
-    "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION)
+    "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION),
 ]
 
 scala_library(
@@ -787,9 +787,9 @@ scala_library(
     srcs = [
         "src/main/scala/scalarules/test/junit/runtime_platform/JunitRuntimePlatformTest.java",
     ],
-    deps = junit_deps,
     # make sure java compilation toolchain matches runtime toolchain ie --target
     java_compile_toolchain = "@bazel_tools//tools/jdk:toolchain_java11",
+    deps = junit_deps,
 )
 
 scala_junit_test(

@@ -27,7 +27,7 @@ def jmh_repositories(
 
     if not bzlmod_enabled:
         native.register_toolchains(
-            "@io_bazel_rules_scala_toolchains//jmh:jmh_toolchain"
+            "@io_bazel_rules_scala_toolchains//jmh:jmh_toolchain",
         )
 
 def _scala_generate_benchmark(ctx):

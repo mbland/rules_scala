@@ -60,9 +60,8 @@ def remote_jdk21_repositories(bzlmod_enabled = False):
     if not bzlmod_enabled:
         for platform in ["linux", "macos", "win"]:
             native.register_toolchains(
-                "@remotejdk21_" + platform + "_toolchain_config_repo//:all"
+                "@remotejdk21_" + platform + "_toolchain_config_repo//:all",
             )
-
 
 def remote_jdk21_toolchains():
     native.register_toolchains("//test/toolchains:java21_toolchain_definition")

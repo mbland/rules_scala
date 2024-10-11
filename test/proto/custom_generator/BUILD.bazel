@@ -36,7 +36,7 @@ scala_library(
     srcs = ["DummyGenerator.scala"],
     deps = [
         "@com_google_protobuf//:protobuf_java",
-        "@scala_proto_rules_protoc_bridge"
+        "@scala_proto_rules_protoc_bridge",
     ],
 )
 
@@ -54,7 +54,7 @@ declare_deps_provider(
 scala_proto_deps_toolchain(
     name = "scala_proto_deps_toolchain_def",
     dep_providers = scala_proto_deps_providers(
-        worker = ":scalapb_worker_deps_provider"
+        worker = ":scalapb_worker_deps_provider",
     ),
 )
 
@@ -97,7 +97,7 @@ declare_deps_provider(
 scala_proto_deps_toolchain(
     name = "failing_scala_proto_deps_toolchain_def",
     dep_providers = scala_proto_deps_providers(
-        worker = ":failing_scalapb_worker_deps_provider"
+        worker = ":failing_scalapb_worker_deps_provider",
     ),
 )
 

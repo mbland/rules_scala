@@ -20,7 +20,8 @@ def import_compiler_source_repos():
         scala_maven_import_external(
             name = "scala_%s" % artifact,
             artifact = "org.scala-lang:scala-%s:%s" % (
-                artifact, SCALA_VERSION,
+                artifact,
+                SCALA_VERSION,
             ),
             licenses = ["notice"],
             server_urls = default_maven_server_urls(),
