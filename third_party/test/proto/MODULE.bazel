@@ -1,4 +1,4 @@
-"""Bazel module ./test/shell/test_examples.sh tests"""
+"""Bazel module ./test/shell/test_scala_proto_library.sh tests"""
 
 module(name = "proto")
 
