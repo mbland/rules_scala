@@ -20,11 +20,7 @@ load("//scalatest:scalatest.bzl", "scalatest_repositories")
 load("//specs2:specs2_junit.bzl", "specs2_junit_repositories")
 load("//testing/private:repositories.bzl", "testing_repositories")
 load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
-load(
-    "@io_bazel_rules_scala_config//:config.bzl",
-    "SCALA_VERSION",
-    "SCALA_VERSIONS",
-)
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 _settings = tag_class(
     attrs = {
@@ -40,16 +36,10 @@ _settings = tag_class(
     },
 )
 
-_scala_compiler_srcjar_default_url = ("https://repo1.maven.org/maven2/org/" +
-    "scala-lang/scala-compiler/%s/scala-compiler-%s-sources.jar" % (
-        SCALA_VERSION, SCALA_VERSION
-    )
-)
-
 _compiler_srcjar = tag_class(
     attrs = {
         "version": attr.string(mandatory = True),
-        "url": attr.string(default = _scala_compiler_srcjar_default_url),
+        "url": attr.string(),
         "urls": attr.string_list(),
         "label": attr.string(),
         "sha256": attr.string(),
@@ -95,7 +85,7 @@ def _get_scala_compiler_srcjars(module_ctx):
     result = {}
 
     for srcjar in module_ctx.modules[0].tags.compiler_srcjar:
-        if srcjar not in result:
+        if srcjar in result:
             continue
 
         info = {}

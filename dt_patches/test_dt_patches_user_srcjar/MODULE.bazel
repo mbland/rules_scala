@@ -39,22 +39,30 @@ scala_deps.settings(
     validate_scala_version = False,
 )
 
+# The `scala_deps.compiler_srcjar()` tag prevents some of the kinds of errors
+# represented in the corresponding `WORKSPACE` file, so we have to force
+# different ones. In particular, we can't use unspecified data types or kwargs,
+# or Bazel itself will error out.
+
 # Invalid
 scala_deps.compiler_srcjar(
     version = "2.12.11",
+    url = "foo",
+    urls = ["bar"],
 )
 
 # Invalid
 scala_deps.compiler_srcjar(
     version = "2.12.12",
-    label = "foo",
+    url = "foo",
+    label = "baz",
 )
 
 # Invalid
 scala_deps.compiler_srcjar(
     version = "2.12.13",
-    url = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.13/scala-compiler-2.12.13-sources.jar",
-    label = "foo",
+    urls = ["bar"],
+    label = "baz",
 )
 
 scala_deps.compiler_srcjar(
