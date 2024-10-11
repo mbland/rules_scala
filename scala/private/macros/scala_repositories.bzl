@@ -38,15 +38,19 @@ def _validate_scalac_srcjar(srcjar):
 def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
     scala_major_version = extract_major_version(scala_version)
     scala_minor_version = extract_minor_version(scala_version)
-    patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.patch" % scala_major_version
+    patch = Label("//dt_patches:dt_compiler_%s.patch" % scala_major_version)
 
     minor_version = int(scala_minor_version)
 
     if scala_major_version == "2.12":
         if minor_version >= 1 and minor_version <= 7:
-            patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.1.patch" % scala_major_version
+            patch = Label(
+                "//dt_patches:dt_compiler_%s.2.patch" % scala_major_version
+            )
         elif minor_version <= 11:
-            patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.8.patch" % scala_major_version
+            patch = Label(
+                "//dt_patches:dt_compiler_%s.8.patch" % scala_major_version
+            )
 
     build_file_content = "\n".join([
         "package(default_visibility = [\"//visibility:public\"])",

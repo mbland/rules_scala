@@ -110,17 +110,17 @@
         "recordedDirentsInputs": {},
         "envVariables": {
           "ENABLE_COMPILER_DEPENDENCY_TRACKING": null,
-          "SCALA_VERSION": null
+          "SCALA_VERSION": "2.12.19"
         },
         "generatedRepoSpecs": {
           "io_bazel_rules_scala_config": {
             "bzlFile": "@@//:scala_config.bzl",
             "ruleClassName": "_config_repository",
             "attributes": {
-              "scala_version": "2.13.14",
+              "scala_version": "2.12.19",
               "scala_versions": [
-                "2.13.14",
                 "2.12.19",
+                "2.13.14",
                 "3.3.3"
               ],
               "enable_compiler_dependency_tracking": true
@@ -132,7 +132,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "vqKVV32zWaQblDl36TUIAyCExUToRPQH/pdpOimD7do=",
+        "bzlTransitiveDigest": "1Cp7f2a0nkxAFpQMvOeQYT0IVzOzvYlgpTnWz+agQLU=",
         "usagesDigest": "uWdCfxsf20xG8WFPkBmSzpumBKNXOIda1oDfwuQ+qc0=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -142,14 +142,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_freespec_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_freespec_2_12_19"
             }
           },
           "io_bazel_rules_scala_guava": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_guava_2_13_14"
+              "target": "io_bazel_rules_scala_guava_2_12_19"
             }
           },
           "scala_proto_rules_scalapb_plugin_2_12_19": {
@@ -173,6 +173,30 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "scala_proto_rules_scalapb_plugin_2_12_19",
               "artifact_sha256": "516ed567e2c3ac28b91a2f350d3febc7a6a396978718145f536853ffe8de40c2",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "io_bazel_rules_scala_javax_annotation_api_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar",
+                "https://jcenter.bintray.com/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "javax.annotation:javax.annotation-api:1.3.2",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_javax_annotation_api_2_12_19",
+              "artifact_sha256": "e04ba5195bcd555dc95650f7cc614d151e4bcd52d29a10b8aa2197f3ab89ab9b",
               "licenses": [
                 "notice"
               ],
@@ -209,7 +233,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_transport_2_13_14"
+              "target": "scala_proto_rules_netty_transport_2_12_19"
             }
           },
           "scala_proto_rules_opencensus_impl_core_2_12_19": {
@@ -270,42 +294,18 @@
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_scopt_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/github/scopt/scopt_2.13/4.0.0-RC2/scopt_2.13-4.0.0-RC2.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/github/scopt/scopt_2.13/4.0.0-RC2/scopt_2.13-4.0.0-RC2.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/scopt/scopt_2.13/4.0.0-RC2/scopt_2.13-4.0.0-RC2.jar",
-                "https://jcenter.bintray.com/com/github/scopt/scopt_2.13/4.0.0-RC2/scopt_2.13-4.0.0-RC2.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "com.github.scopt:scopt_2.13:4.0.0-RC2",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_scopt_2_13_14",
-              "artifact_sha256": "07c1937cba53f7509d2ac62a0fc375943a3e0fef346625414c15d41b5a6cfb34",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "io_bazel_rules_scala_scalatest_flatspec": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_flatspec_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_flatspec_2_12_19"
             }
           },
           "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple_2_13_14"
+              "target": "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_funsuite_2_12_19": {
@@ -560,6 +560,34 @@
               "testonly_": false
             }
           },
+          "io_bazel_rules_scala_scrooge_generator_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/twitter/scrooge-generator_2.12/21.2.0/scrooge-generator_2.12-21.2.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/scrooge-generator_2.12/21.2.0/scrooge-generator_2.12-21.2.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/scrooge-generator_2.12/21.2.0/scrooge-generator_2.12-21.2.0.jar",
+                "https://jcenter.bintray.com/com/twitter/scrooge-generator_2.12/21.2.0/scrooge-generator_2.12-21.2.0.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "com.twitter:scrooge-generator_2.12:21.2.0",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_scrooge_generator_2_12_19",
+              "artifact_sha256": "ac5afecfd742ce07cf127b253df20ebf265d75d02d5f38bd8c683da194780862",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [
+                "@io_bazel_rules_scala_guava_2_12_19",
+                "@io_bazel_rules_scala_mustache_2_12_19",
+                "@io_bazel_rules_scala_scopt_2_12_19"
+              ],
+              "testonly_": false
+            }
+          },
           "scala_proto_rules_guava_2_12_19": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -617,36 +645,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_scalapb_runtime_2_13_14"
-            }
-          },
-          "scala_proto_rules_netty_codec_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final.jar",
-                "https://jcenter.bintray.com/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final.jar"
-              ],
-              "srcjar_urls": [
-                "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final-sources.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final-sources.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final-sources.jar",
-                "https://jcenter.bintray.com/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final-sources.jar"
-              ],
-              "coordinates": "io.netty:netty-codec:4.1.32.Final",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "scala_proto_rules_netty_codec_2_13_14",
-              "artifact_sha256": "dbd6cea7d7bf5a2604e87337cb67c9468730d599be56511ed0979aacb309f879",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
+              "target": "scala_proto_rules_scalapb_runtime_2_12_19"
             }
           },
           "scala_proto_rules_opencensus_impl_2_12_19": {
@@ -670,6 +669,35 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "scala_proto_rules_opencensus_impl_2_12_19",
               "artifact_sha256": "9e8b209da08d1f5db2b355e781b9b969b2e0dab934cc806e33f1ab3baed4f25a",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "scala_proto_rules_netty_codec_2_13_14": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final.jar",
+                "https://jcenter.bintray.com/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final.jar"
+              ],
+              "srcjar_urls": [
+                "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final-sources.jar",
+                "https://jcenter.bintray.com/io/netty/netty-codec/4.1.32.Final/netty-codec-4.1.32.Final-sources.jar"
+              ],
+              "coordinates": "io.netty:netty-codec:4.1.32.Final",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "scala_proto_rules_netty_codec_2_13_14",
+              "artifact_sha256": "dbd6cea7d7bf5a2604e87337cb67c9468730d599be56511ed0979aacb309f879",
               "licenses": [
                 "notice"
               ],
@@ -879,7 +907,38 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_matchers_core_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_matchers_core_2_12_19"
+            }
+          },
+          "com_github_bigwheel_util_backports": {
+            "bzlFile": "@@//third_party/repositories:repositories.bzl",
+            "ruleClassName": "_alias_repository",
+            "attributes": {
+              "target": "com_github_bigwheel_util_backports_2_12_19"
+            }
+          },
+          "libthrift_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/apache/thrift/libthrift/0.10.0/libthrift-0.10.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/apache/thrift/libthrift/0.10.0/libthrift-0.10.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/apache/thrift/libthrift/0.10.0/libthrift-0.10.0.jar",
+                "https://jcenter.bintray.com/org/apache/thrift/libthrift/0.10.0/libthrift-0.10.0.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "org.apache.thrift:libthrift:0.10.0",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "libthrift_2_12_19",
+              "artifact_sha256": "8591718c1884ac8001b4c5ca80f349c0a6deec691de0af720c5e3bc3a581dada",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
             }
           },
           "scala_proto_rules_grpc_protobuf_2_13_14": {
@@ -939,14 +998,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_funsuite_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_funsuite_2_12_19"
             }
           },
           "scala_proto_rules_protoc_bridge": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_protoc_bridge_2_13_14"
+              "target": "scala_proto_rules_protoc_bridge_2_12_19"
             }
           },
           "scala_proto_rules_grpc_netty_2_13_14": {
@@ -970,6 +1029,30 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "scala_proto_rules_grpc_netty_2_13_14",
               "artifact_sha256": "8478333706ba442a354c2ddb8832d80a5aef71016e8a9cf07e7bf6e8c298f042",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
+                "https://jcenter.bintray.com/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "net.sf.jopt-simple:jopt-simple:5.0.4",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple_2_12_19",
+              "artifact_sha256": "df26cc58f235f477db07f753ba5a3ab243ebe5789d9f89ecf68dd62ea9a66c28",
               "licenses": [
                 "notice"
               ],
@@ -1206,7 +1289,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "libthrift_2_13_14"
+              "target": "libthrift_2_12_19"
             }
           },
           "scala_proto_rules_netty_handler_2_13_14": {
@@ -1271,14 +1354,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_google_protobuf_protobuf_java_2_13_14"
-            }
-          },
-          "io_bazel_rules_scala_scala_parallel_collections": {
-            "bzlFile": "@@//third_party/repositories:repositories.bzl",
-            "ruleClassName": "_alias_repository",
-            "attributes": {
-              "target": "io_bazel_rules_scala_scala_parallel_collections_2_13_14"
+              "target": "com_google_protobuf_protobuf_java_2_12_19"
             }
           },
           "scala_proto_rules_netty_codec_2_12_19": {
@@ -1371,7 +1447,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_codec_2_13_14"
+              "target": "scala_proto_rules_netty_codec_2_12_19"
+            }
+          },
+          "scala_proto_rules_disruptor": {
+            "bzlFile": "@@//third_party/repositories:repositories.bzl",
+            "ruleClassName": "_alias_repository",
+            "attributes": {
+              "target": "scala_proto_rules_disruptor_2_12_19"
             }
           },
           "io_bazel_rules_scala_org_hamcrest_hamcrest_core_2_13_14": {
@@ -1396,13 +1479,6 @@
               "deps": [],
               "runtime_deps": [],
               "testonly_": false
-            }
-          },
-          "scala_proto_rules_disruptor": {
-            "bzlFile": "@@//third_party/repositories:repositories.bzl",
-            "ruleClassName": "_alias_repository",
-            "attributes": {
-              "target": "scala_proto_rules_disruptor_2_13_14"
             }
           },
           "scala_proto_rules_scalapb_runtime_2_12_19": {
@@ -1498,6 +1574,35 @@
               "testonly_": false
             }
           },
+          "com_github_bigwheel_util_backports_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1.jar",
+                "https://jcenter.bintray.com/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1.jar"
+              ],
+              "srcjar_urls": [
+                "https://repo.maven.apache.org/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1-sources.jar",
+                "https://jcenter.bintray.com/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1-sources.jar"
+              ],
+              "coordinates": "com.github.bigwheel:util-backports_2.12:2.1",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "com_github_bigwheel_util_backports_2_12_19",
+              "artifact_sha256": "0d2ae5753bc8ff9f221a52ef39e771d285eccc52b88cdce622212569d3bd0e1b",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
           "org_scalameta_trees_2_13_14": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -1526,35 +1631,6 @@
                 "@io_bazel_rules_scala_scala_library_2_13_14",
                 "@org_scalameta_common_2_13_14"
               ],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
-          "com_github_bigwheel_util_backports_2_12_19": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1.jar",
-                "https://jcenter.bintray.com/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1.jar"
-              ],
-              "srcjar_urls": [
-                "https://repo.maven.apache.org/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1-sources.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1-sources.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1-sources.jar",
-                "https://jcenter.bintray.com/com/github/bigwheel/util-backports_2.12/2.1/util-backports_2.12-2.1-sources.jar"
-              ],
-              "coordinates": "com.github.bigwheel:util-backports_2.12:2.1",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "com_github_bigwheel_util_backports_2_12_19",
-              "artifact_sha256": "0d2ae5753bc8ff9f221a52ef39e771d285eccc52b88cdce622212569d3bd0e1b",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -1647,7 +1723,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_guava_2_13_14"
+              "target": "scala_proto_rules_guava_2_12_19"
             }
           },
           "com_lihaoyi_sourcecode_2_13_14": {
@@ -1683,7 +1759,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_typesafe_config_2_13_14"
+              "target": "com_typesafe_config_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_core_2_12_19": {
@@ -1714,7 +1790,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_specs2_specs2_matcher_2_13_14"
+              "target": "io_bazel_rules_scala_org_specs2_specs2_matcher_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_funsuite_2_13_14": {
@@ -1805,21 +1881,45 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_lihaoyi_fastparse_2_13_14"
+              "target": "com_lihaoyi_fastparse_2_12_19"
             }
           },
           "io_bazel_rules_scala_scala_parser_combinators": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scala_parser_combinators_2_13_14"
+              "target": "io_bazel_rules_scala_scala_parser_combinators_2_12_19"
             }
           },
           "org_scalameta_scalameta": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scalameta_scalameta_2_13_14"
+              "target": "org_scalameta_scalameta_2_12_19"
+            }
+          },
+          "io_bazel_rules_scala_org_ows2_asm_asm_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar",
+                "https://jcenter.bintray.com/org/ow2/asm/asm/9.0/asm-9.0.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "org.ow2.asm:asm:9.0",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_org_ows2_asm_asm_2_12_19",
+              "artifact_sha256": "0df97574914aee92fd349d0cb4e00f3345d45b2c239e0bb50f0a90ead47888e0",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
             }
           },
           "scala_proto_rules_netty_handler_proxy_3_3_3": {
@@ -1905,42 +2005,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_core_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_core_2_12_19"
             }
           },
           "io_bazel_rules_scala_util_core": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_util_core_2_13_14"
-            }
-          },
-          "io_bazel_rules_scala_scrooge_generator_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/twitter/scrooge-generator_2.13/21.2.0/scrooge-generator_2.13-21.2.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/scrooge-generator_2.13/21.2.0/scrooge-generator_2.13-21.2.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/scrooge-generator_2.13/21.2.0/scrooge-generator_2.13-21.2.0.jar",
-                "https://jcenter.bintray.com/com/twitter/scrooge-generator_2.13/21.2.0/scrooge-generator_2.13-21.2.0.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "com.twitter:scrooge-generator_2.13:21.2.0",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_scrooge_generator_2_13_14",
-              "artifact_sha256": "1293391da7df25497cad7c56cf8ecaeb672496a548d144d7a2a1cfcf748bed6c",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [
-                "@io_bazel_rules_scala_guava_2_13_14",
-                "@io_bazel_rules_scala_mustache_2_13_14",
-                "@io_bazel_rules_scala_scopt_2_13_14"
-              ],
-              "testonly_": false
+              "target": "io_bazel_rules_scala_util_core_2_12_19"
             }
           },
           "com_twitter__scalding_date": {
@@ -1948,17 +2020,17 @@
             "ruleClassName": "jvm_import_external",
             "attributes": {
               "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/twitter/scalding-date_2.13/0.17.0/scalding-date_2.13-0.17.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/scalding-date_2.13/0.17.0/scalding-date_2.13-0.17.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/scalding-date_2.13/0.17.0/scalding-date_2.13-0.17.0.jar",
-                "https://jcenter.bintray.com/com/twitter/scalding-date_2.13/0.17.0/scalding-date_2.13-0.17.0.jar"
+                "https://repo.maven.apache.org/maven2/com/twitter/scalding-date_2.12/0.17.0/scalding-date_2.12-0.17.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/scalding-date_2.12/0.17.0/scalding-date_2.12-0.17.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/scalding-date_2.12/0.17.0/scalding-date_2.12-0.17.0.jar",
+                "https://jcenter.bintray.com/com/twitter/scalding-date_2.12/0.17.0/scalding-date_2.12-0.17.0.jar"
               ],
               "srcjar_urls": [],
-              "coordinates": "com.twitter:scalding-date_2.13:0.17.0",
+              "coordinates": "com.twitter:scalding-date_2.12:0.17.0",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "com_twitter__scalding_date",
-              "artifact_sha256": "973a7198121cc8dac9eeb3f325c93c497fe3b682f68ba56e34c1b210af7b15b4",
+              "artifact_sha256": "973a7198121cc8dac9eeb3f325c93c497fe3b682f68ba56e34c1b210af7b15b3",
               "licenses": [
                 "notice"
               ],
@@ -2086,35 +2158,11 @@
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_org_openjdk_jmh_jmh_core_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/openjdk/jmh/jmh-core/1.36/jmh-core-1.36.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/openjdk/jmh/jmh-core/1.36/jmh-core-1.36.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/openjdk/jmh/jmh-core/1.36/jmh-core-1.36.jar",
-                "https://jcenter.bintray.com/org/openjdk/jmh/jmh-core/1.36/jmh-core-1.36.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "org.openjdk.jmh:jmh-core:1.36",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_org_openjdk_jmh_jmh_core_2_13_14",
-              "artifact_sha256": "f90974e37d0da8886b5c05e6e3e7e20556900d747c5a41c1023b47c3301ea73c",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "org_scalameta_common": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scalameta_common_2_13_14"
+              "target": "org_scalameta_common_2_12_19"
             }
           },
           "com_thesamet_scalapb_lenses_3_3_3": {
@@ -2179,13 +2227,6 @@
               "testonly_": false
             }
           },
-          "org_scalameta_mdoc_parser": {
-            "bzlFile": "@@//third_party/repositories:repositories.bzl",
-            "ruleClassName": "_alias_repository",
-            "attributes": {
-              "target": "org_scalameta_mdoc_parser_2_13_14"
-            }
-          },
           "com_thesamet_scalapb_scalapb_runtime_2_12_19": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -2220,6 +2261,13 @@
               "testonly_": false
             }
           },
+          "org_scalameta_mdoc_parser": {
+            "bzlFile": "@@//third_party/repositories:repositories.bzl",
+            "ruleClassName": "_alias_repository",
+            "attributes": {
+              "target": "org_scalameta_mdoc_parser_2_12_19"
+            }
+          },
           "io_bazel_rules_scala_scalatest_2_12_19": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -2248,7 +2296,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_handler_2_13_14"
+              "target": "scala_proto_rules_netty_handler_2_12_19"
             }
           },
           "scala_proto_rules_netty_transport_3_3_3": {
@@ -2374,21 +2422,21 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_2_12_19"
             }
           },
           "com_geirsson_metaconfig_core": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_geirsson_metaconfig_core_2_13_14"
+              "target": "com_geirsson_metaconfig_core_2_12_19"
             }
           },
           "org_scalameta_scalafmt_config": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scalameta_scalafmt_config_2_13_14"
+              "target": "org_scalameta_scalafmt_config_2_12_19"
             }
           },
           "scala_proto_rules_netty_transport_2_12_19": {
@@ -2480,11 +2528,35 @@
               "testonly_": false
             }
           },
+          "io_bazel_rules_scala_mustache_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/github/spullara/mustache/java/compiler/0.8.18/compiler-0.8.18.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/github/spullara/mustache/java/compiler/0.8.18/compiler-0.8.18.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/spullara/mustache/java/compiler/0.8.18/compiler-0.8.18.jar",
+                "https://jcenter.bintray.com/com/github/spullara/mustache/java/compiler/0.8.18/compiler-0.8.18.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "com.github.spullara.mustache.java:compiler:0.8.18",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_mustache_2_12_19",
+              "artifact_sha256": "ddabc1ef897fd72319a761d29525fd61be57dc25d04d825f863f83cc89000e66",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
           "io_bazel_rules_scala_scala_reflect": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scala_reflect_2_13_14"
+              "target": "io_bazel_rules_scala_scala_reflect_2_12_19"
             }
           },
           "com_geirsson_metaconfig_core_3_3_3": {
@@ -2551,7 +2623,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_geirsson_metaconfig_pprint_2_13_14"
+              "target": "com_geirsson_metaconfig_pprint_2_12_19"
             }
           },
           "scala_proto_rules_google_instrumentation_2_13_14": {
@@ -2701,43 +2773,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_featurespec_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_featurespec_2_12_19"
             }
           },
           "scala_proto_rules_scalapb_plugin": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_scalapb_plugin_2_13_14"
-            }
-          },
-          "scala_proto_rules_netty_codec_socks_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final.jar",
-                "https://jcenter.bintray.com/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final.jar"
-              ],
-              "srcjar_urls": [
-                "https://repo.maven.apache.org/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final-sources.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final-sources.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final-sources.jar",
-                "https://jcenter.bintray.com/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final-sources.jar"
-              ],
-              "coordinates": "io.netty:netty-codec-socks:4.1.32.Final",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "scala_proto_rules_netty_codec_socks_2_13_14",
-              "artifact_sha256": "fe2f2e97d6c65dc280623dcfd24337d8a5c7377049c120842f2c59fb83d7408a",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
+              "target": "scala_proto_rules_scalapb_plugin_2_12_19"
             }
           },
           "scala_proto_rules_netty_resolver_2_12_19": {
@@ -2761,6 +2804,35 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "scala_proto_rules_netty_resolver_2_12_19",
               "artifact_sha256": "9b4a19982047a95ea4791a7ad7ad385c7a08c2ac75f0a3509cc213cb32a726ae",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "scala_proto_rules_netty_codec_socks_2_13_14": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final.jar",
+                "https://jcenter.bintray.com/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final.jar"
+              ],
+              "srcjar_urls": [
+                "https://repo.maven.apache.org/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final-sources.jar",
+                "https://jcenter.bintray.com/io/netty/netty-codec-socks/4.1.32.Final/netty-codec-socks-4.1.32.Final-sources.jar"
+              ],
+              "coordinates": "io.netty:netty-codec-socks:4.1.32.Final",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "scala_proto_rules_netty_codec_socks_2_13_14",
+              "artifact_sha256": "fe2f2e97d6c65dc280623dcfd24337d8a5c7377049c120842f2c59fb83d7408a",
               "licenses": [
                 "notice"
               ],
@@ -2858,7 +2930,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scalameta_scalafmt_core_2_13_14"
+              "target": "org_scalameta_scalafmt_core_2_12_19"
             }
           },
           "io_bazel_rules_scala_scala_parallel_collections_3_3_3": {
@@ -2926,7 +2998,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_grpc_core_2_13_14"
+              "target": "scala_proto_rules_grpc_core_2_12_19"
             }
           },
           "scala_proto_rules_disruptor_2_12_19": {
@@ -3008,30 +3080,6 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "scala_proto_rules_grpc_api_3_3_3",
               "artifact_sha256": "553978366e04ee8ddba64afde3b3cf2ac021a2f3c2db2831b6491d742b558598",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
-          "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/openjdk/jmh/jmh-generator-asm/1.36/jmh-generator-asm-1.36.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/openjdk/jmh/jmh-generator-asm/1.36/jmh-generator-asm-1.36.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/openjdk/jmh/jmh-generator-asm/1.36/jmh-generator-asm-1.36.jar",
-                "https://jcenter.bintray.com/org/openjdk/jmh/jmh-generator-asm/1.36/jmh-generator-asm-1.36.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "org.openjdk.jmh:jmh-generator-asm:1.36",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm_2_13_14",
-              "artifact_sha256": "7460b11b823dee74b3e19617d35d5911b01245303d6e31c30f83417cfc2f54b5",
               "licenses": [
                 "notice"
               ],
@@ -3207,6 +3255,54 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "scala_proto_rules_grpc_core_3_3_3",
               "artifact_sha256": "8fc900625a9330b1c155b5423844d21be0a5574fe218a63170a16796c6f7880e",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/openjdk/jmh/jmh-generator-asm/1.36/jmh-generator-asm-1.36.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/openjdk/jmh/jmh-generator-asm/1.36/jmh-generator-asm-1.36.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/openjdk/jmh/jmh-generator-asm/1.36/jmh-generator-asm-1.36.jar",
+                "https://jcenter.bintray.com/org/openjdk/jmh/jmh-generator-asm/1.36/jmh-generator-asm-1.36.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "org.openjdk.jmh:jmh-generator-asm:1.36",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm_2_12_19",
+              "artifact_sha256": "7460b11b823dee74b3e19617d35d5911b01245303d6e31c30f83417cfc2f54b5",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "io_bazel_rules_scala_org_apache_commons_commons_math3_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
+                "https://jcenter.bintray.com/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "org.apache.commons:commons-math3:3.6.1",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_org_apache_commons_commons_math3_2_12_19",
+              "artifact_sha256": "1e56d7b058d28b65abd256b8458e3885b674c1d588fa43cd7d1cbb9c7ef2b308",
               "licenses": [
                 "notice"
               ],
@@ -3432,7 +3528,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_codec_http_2_13_14"
+              "target": "scala_proto_rules_netty_codec_http_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_flatspec_2_13_14": {
@@ -3555,31 +3651,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_shouldmatchers_2_13_14"
-            }
-          },
-          "io_bazel_rules_scala_org_ows2_asm_asm_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar",
-                "https://jcenter.bintray.com/org/ow2/asm/asm/9.0/asm-9.0.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "org.ow2.asm:asm:9.0",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_org_ows2_asm_asm_2_13_14",
-              "artifact_sha256": "0df97574914aee92fd349d0cb4e00f3345d45b2c239e0bb50f0a90ead47888e0",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
+              "target": "io_bazel_rules_scala_scalatest_shouldmatchers_2_12_19"
             }
           },
           "io_bazel_rules_scala_scala_library_2_12_19": {
@@ -3663,14 +3735,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_specs2_specs2_fp_2_13_14"
+              "target": "io_bazel_rules_scala_org_specs2_specs2_fp_2_12_19"
             }
           },
           "io_bazel_rules_scala_scopt": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scopt_2_13_14"
+              "target": "io_bazel_rules_scala_scopt_2_12_19"
             }
           },
           "scala_proto_rules_grpc_core_2_12_19": {
@@ -3815,6 +3887,30 @@
               "testonly_": false
             }
           },
+          "io_bazel_rules_scala_scopt_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/github/scopt/scopt_2.12/4.0.0-RC2/scopt_2.12-4.0.0-RC2.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/github/scopt/scopt_2.12/4.0.0-RC2/scopt_2.12-4.0.0-RC2.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/scopt/scopt_2.12/4.0.0-RC2/scopt_2.12-4.0.0-RC2.jar",
+                "https://jcenter.bintray.com/com/github/scopt/scopt_2.12/4.0.0-RC2/scopt_2.12-4.0.0-RC2.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "com.github.scopt:scopt_2.12:4.0.0-RC2",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_scopt_2_12_19",
+              "artifact_sha256": "d19a4e8b8c013a56e03bc57bdf87abe6297c974cf907585d00284eae61c6ac91",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
           "scala_compiler_source_3_3_3": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
@@ -3893,14 +3989,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_apache_commons_commons_math3_2_13_14"
+              "target": "io_bazel_rules_scala_org_apache_commons_commons_math3_2_12_19"
             }
           },
           "scala_proto_rules_scalapb_lenses": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_scalapb_lenses_2_13_14"
+              "target": "scala_proto_rules_scalapb_lenses_2_12_19"
             }
           },
           "org_typelevel__cats_core": {
@@ -3908,17 +4004,17 @@
             "ruleClassName": "jvm_import_external",
             "attributes": {
               "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/typelevel/cats-core_2.13/2.2.0/cats-core_2.13-2.2.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/typelevel/cats-core_2.13/2.2.0/cats-core_2.13-2.2.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/typelevel/cats-core_2.13/2.2.0/cats-core_2.13-2.2.0.jar",
-                "https://jcenter.bintray.com/org/typelevel/cats-core_2.13/2.2.0/cats-core_2.13-2.2.0.jar"
+                "https://repo.maven.apache.org/maven2/org/typelevel/cats-core_2.12/0.9.0/cats-core_2.12-0.9.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/typelevel/cats-core_2.12/0.9.0/cats-core_2.12-0.9.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/typelevel/cats-core_2.12/0.9.0/cats-core_2.12-0.9.0.jar",
+                "https://jcenter.bintray.com/org/typelevel/cats-core_2.12/0.9.0/cats-core_2.12-0.9.0.jar"
               ],
               "srcjar_urls": [],
-              "coordinates": "org.typelevel:cats-core_2.13:2.2.0",
+              "coordinates": "org.typelevel:cats-core_2.12:0.9.0",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "org_typelevel__cats_core",
-              "artifact_sha256": "6058d02418e4eb5f1919a1156d63d2d1b93f2c6190b1a1806ee2b73f8726a92f",
+              "artifact_sha256": "3ca705cba9dc0632e60477d80779006f8c636c0e2e229dda3410a0c314c1ea1d",
               "licenses": [
                 "notice"
               ],
@@ -3931,7 +4027,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_lihaoyi_geny_2_13_14"
+              "target": "com_lihaoyi_geny_2_12_19"
             }
           },
           "org_scalameta_scalafmt_core_3_3_3": {
@@ -3998,17 +4094,17 @@
             "ruleClassName": "jvm_import_external",
             "attributes": {
               "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.14/0.13.3/kind-projector_2.13.14-0.13.3.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/typelevel/kind-projector_2.13.14/0.13.3/kind-projector_2.13.14-0.13.3.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/typelevel/kind-projector_2.13.14/0.13.3/kind-projector_2.13.14-0.13.3.jar",
-                "https://jcenter.bintray.com/org/typelevel/kind-projector_2.13.14/0.13.3/kind-projector_2.13.14-0.13.3.jar"
+                "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.12.19/0.13.3/kind-projector_2.12.19-0.13.3.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/typelevel/kind-projector_2.12.19/0.13.3/kind-projector_2.12.19-0.13.3.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/typelevel/kind-projector_2.12.19/0.13.3/kind-projector_2.12.19-0.13.3.jar",
+                "https://jcenter.bintray.com/org/typelevel/kind-projector_2.12.19/0.13.3/kind-projector_2.12.19-0.13.3.jar"
               ],
               "srcjar_urls": [],
-              "coordinates": "org.typelevel:kind-projector_2.13.14:0.13.3",
+              "coordinates": "org.typelevel:kind-projector_2.12.19:0.13.3",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "org_typelevel_kind_projector",
-              "artifact_sha256": "569fec54deba82cd143f05a6a0456c9e3bf56bff310b0968f0adb5fb3b352d92",
+              "artifact_sha256": "98a53122dedd51f79f23ae03eae3258a2e5dbd51c647eaea4942f98c55b052d1",
               "licenses": [
                 "notice"
               ],
@@ -4041,35 +4137,11 @@
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_mustache_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/github/spullara/mustache/java/compiler/0.8.18/compiler-0.8.18.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/github/spullara/mustache/java/compiler/0.8.18/compiler-0.8.18.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/spullara/mustache/java/compiler/0.8.18/compiler-0.8.18.jar",
-                "https://jcenter.bintray.com/com/github/spullara/mustache/java/compiler/0.8.18/compiler-0.8.18.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "com.github.spullara.mustache.java:compiler:0.8.18",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_mustache_2_13_14",
-              "artifact_sha256": "ddabc1ef897fd72319a761d29525fd61be57dc25d04d825f863f83cc89000e66",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "io_bazel_rules_scala_org_hamcrest_hamcrest_core": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_hamcrest_hamcrest_core_2_13_14"
+              "target": "io_bazel_rules_scala_org_hamcrest_hamcrest_core_2_12_19"
             }
           },
           "io_bazel_rules_scala_org_specs2_specs2_junit_2_13_14": {
@@ -4107,7 +4179,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_grpc_netty_2_13_14"
+              "target": "scala_proto_rules_grpc_netty_2_12_19"
             }
           },
           "scala_proto_rules_disruptor_3_3_3": {
@@ -4143,14 +4215,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_thesamet_scalapb_lenses_2_13_14"
+              "target": "com_thesamet_scalapb_lenses_2_12_19"
             }
           },
           "scala_proto_rules_opencensus_contrib_grpc_metrics": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_opencensus_contrib_grpc_metrics_2_13_14"
+              "target": "scala_proto_rules_opencensus_contrib_grpc_metrics_2_12_19"
             }
           },
           "scala_compiler_source_2_12_19": {
@@ -4373,30 +4445,6 @@
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_util_core_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/twitter/util-core_2.13/21.2.0/util-core_2.13-21.2.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/util-core_2.13/21.2.0/util-core_2.13-21.2.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/util-core_2.13/21.2.0/util-core_2.13-21.2.0.jar",
-                "https://jcenter.bintray.com/com/twitter/util-core_2.13/21.2.0/util-core_2.13-21.2.0.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "com.twitter:util-core_2.13:21.2.0",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_util_core_2_13_14",
-              "artifact_sha256": "da8e149b8f0646316787b29f6e254250da10b4b31d9a96c32e42f613574678cd",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "com_google_guava_guava_21_0_with_file": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -4536,7 +4584,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scala_compiler_2_13_14"
+              "target": "io_bazel_rules_scala_scala_compiler_2_12_19"
             }
           },
           "scala_proto_rules_perfmark_api_3_3_3": {
@@ -4640,11 +4688,35 @@
               "testonly_": false
             }
           },
+          "io_bazel_rules_scala_scrooge_core_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/twitter/scrooge-core_2.12/21.2.0/scrooge-core_2.12-21.2.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/scrooge-core_2.12/21.2.0/scrooge-core_2.12-21.2.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/scrooge-core_2.12/21.2.0/scrooge-core_2.12-21.2.0.jar",
+                "https://jcenter.bintray.com/com/twitter/scrooge-core_2.12/21.2.0/scrooge-core_2.12-21.2.0.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "com.twitter:scrooge-core_2.12:21.2.0",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_scrooge_core_2_12_19",
+              "artifact_sha256": "1178f6cef63c9ad9e787ee7dbb26008d2a8cec9afee7629d0037c534d5b5d575",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
           "org_scalameta_parsers": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scalameta_parsers_2_13_14"
+              "target": "org_scalameta_parsers_2_12_19"
             }
           },
           "scala_proto_rules_netty_codec_socks_3_3_3": {
@@ -4668,6 +4740,30 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "scala_proto_rules_netty_codec_socks_3_3_3",
               "artifact_sha256": "fe2f2e97d6c65dc280623dcfd24337d8a5c7377049c120842f2c59fb83d7408a",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/openjdk/jmh/jmh-generator-reflection/1.36/jmh-generator-reflection-1.36.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/openjdk/jmh/jmh-generator-reflection/1.36/jmh-generator-reflection-1.36.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/openjdk/jmh/jmh-generator-reflection/1.36/jmh-generator-reflection-1.36.jar",
+                "https://jcenter.bintray.com/org/openjdk/jmh/jmh-generator-reflection/1.36/jmh-generator-reflection-1.36.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "org.openjdk.jmh:jmh-generator-reflection:1.36",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection_2_12_19",
+              "artifact_sha256": "a9c72760e12c199e2a2c28f1a126ebf0cc5b51c0b58d46472596fc32f7f92534",
               "licenses": [
                 "notice"
               ],
@@ -4736,6 +4832,30 @@
               "testonly_": false
             }
           },
+          "io_bazel_rules_scala_guava_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/google/guava/guava/21.0/guava-21.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/google/guava/guava/21.0/guava-21.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/google/guava/guava/21.0/guava-21.0.jar",
+                "https://jcenter.bintray.com/com/google/guava/guava/21.0/guava-21.0.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "com.google.guava:guava:21.0",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_guava_2_12_19",
+              "artifact_sha256": "972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
           "scala_proto_rules_netty_transport_2_13_14": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -4761,37 +4881,6 @@
                 "notice"
               ],
               "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
-          "com_lihaoyi_fastparse_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3.jar",
-                "https://jcenter.bintray.com/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3.jar"
-              ],
-              "srcjar_urls": [
-                "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3-sources.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3-sources.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3-sources.jar",
-                "https://jcenter.bintray.com/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3-sources.jar"
-              ],
-              "coordinates": "com.lihaoyi:fastparse_2.13:2.1.3",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "com_lihaoyi_fastparse_2_13_14",
-              "artifact_sha256": "5064d3984aab8c48d2dbd6285787ac5c6d84a6bebfc02c6d431ce153cf91dec1",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [
-                "@com_lihaoyi_sourcecode_2_13_14"
-              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -4825,6 +4914,37 @@
                 "@io_bazel_rules_scala_scala_library_2_12_19",
                 "@io_bazel_rules_scala_scala_reflect_2_12_19",
                 "@com_lihaoyi_fansi_2_12_19"
+              ],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "com_lihaoyi_fastparse_2_13_14": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3.jar",
+                "https://jcenter.bintray.com/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3.jar"
+              ],
+              "srcjar_urls": [
+                "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3-sources.jar",
+                "https://jcenter.bintray.com/com/lihaoyi/fastparse_2.13/2.1.3/fastparse_2.13-2.1.3-sources.jar"
+              ],
+              "coordinates": "com.lihaoyi:fastparse_2.13:2.1.3",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "com_lihaoyi_fastparse_2_13_14",
+              "artifact_sha256": "5064d3984aab8c48d2dbd6285787ac5c6d84a6bebfc02c6d431ce153cf91dec1",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [
+                "@com_lihaoyi_sourcecode_2_13_14"
               ],
               "runtime_deps": [],
               "testonly_": false
@@ -4945,14 +5065,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_codec_http2_2_13_14"
+              "target": "scala_proto_rules_netty_codec_http2_2_12_19"
             }
           },
           "scala_proto_rules_netty_buffer": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_buffer_2_13_14"
+              "target": "scala_proto_rules_netty_buffer_2_12_19"
             }
           },
           "org_springframework_spring_core": {
@@ -4983,7 +5103,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalactic_2_13_14"
+              "target": "io_bazel_rules_scala_scalactic_2_12_19"
             }
           },
           "scala_proto_rules_google_instrumentation_2_12_19": {
@@ -5045,7 +5165,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_mustache_2_13_14"
+              "target": "io_bazel_rules_scala_mustache_2_12_19"
             }
           },
           "scala_proto_rules_netty_codec_http2_2_13_14": {
@@ -5081,7 +5201,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_codec_socks_2_13_14"
+              "target": "scala_proto_rules_netty_codec_socks_2_12_19"
             }
           },
           "com_thesamet_scalapb_lenses_2_12_19": {
@@ -5119,7 +5239,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_common_2_13_14"
+              "target": "scala_proto_rules_netty_common_2_12_19"
             }
           },
           "scala_proto_rules_opencensus_api_2_12_19": {
@@ -5210,45 +5330,21 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_opencensus_impl_2_13_14"
-            }
-          },
-          "io_bazel_rules_scala_scrooge_core_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/twitter/scrooge-core_2.13/21.2.0/scrooge-core_2.13-21.2.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/scrooge-core_2.13/21.2.0/scrooge-core_2.13-21.2.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/scrooge-core_2.13/21.2.0/scrooge-core_2.13-21.2.0.jar",
-                "https://jcenter.bintray.com/com/twitter/scrooge-core_2.13/21.2.0/scrooge-core_2.13-21.2.0.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "com.twitter:scrooge-core_2.13:21.2.0",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_scrooge_core_2_13_14",
-              "artifact_sha256": "a93f179b96e13bd172e5164c587a3645122f45f6d6370304e06d52e2ab0e456f",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
+              "target": "scala_proto_rules_opencensus_impl_2_12_19"
             }
           },
           "io_bazel_rules_scala_org_specs2_specs2_common": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_specs2_specs2_common_2_13_14"
+              "target": "io_bazel_rules_scala_org_specs2_specs2_common_2_12_19"
             }
           },
           "scala_proto_rules_perfmark_api": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_perfmark_api_2_13_14"
+              "target": "scala_proto_rules_perfmark_api_2_12_19"
             }
           },
           "scala_proto_rules_netty_common_2_12_19": {
@@ -5284,7 +5380,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_specs2_specs2_core_2_13_14"
+              "target": "io_bazel_rules_scala_org_specs2_specs2_core_2_12_19"
             }
           },
           "scala_proto_rules_netty_handler_3_3_3": {
@@ -5314,6 +5410,13 @@
               "deps": [],
               "runtime_deps": [],
               "testonly_": false
+            }
+          },
+          "org_scalameta_scalafmt_sysops": {
+            "bzlFile": "@@//third_party/repositories:repositories.bzl",
+            "ruleClassName": "_alias_repository",
+            "attributes": {
+              "target": "org_scalameta_scalafmt_sysops_2_12_19"
             }
           },
           "com_geirsson_metaconfig_typesafe_config_2_13_14": {
@@ -5347,13 +5450,6 @@
               ],
               "runtime_deps": [],
               "testonly_": false
-            }
-          },
-          "org_scalameta_scalafmt_sysops": {
-            "bzlFile": "@@//third_party/repositories:repositories.bzl",
-            "ruleClassName": "_alias_repository",
-            "attributes": {
-              "target": "org_scalameta_scalafmt_sysops_2_13_14"
             }
           },
           "io_bazel_rules_scala_scala_reflect_2_12_19": {
@@ -5495,7 +5591,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_lihaoyi_sourcecode_2_13_14"
+              "target": "com_lihaoyi_sourcecode_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_flatspec_3_3_3": {
@@ -5647,31 +5743,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_handler_proxy_2_13_14"
-            }
-          },
-          "io_bazel_rules_scala_org_apache_commons_commons_math3_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
-                "https://jcenter.bintray.com/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "org.apache.commons:commons-math3:3.6.1",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_org_apache_commons_commons_math3_2_13_14",
-              "artifact_sha256": "1e56d7b058d28b65abd256b8458e3885b674c1d588fa43cd7d1cbb9c7ef2b308",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
+              "target": "scala_proto_rules_netty_handler_proxy_2_12_19"
             }
           },
           "io_bazel_rules_scala_org_specs2_specs2_core_2_12_19": {
@@ -5739,21 +5811,21 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_scalapb_fastparse_2_13_14"
+              "target": "scala_proto_rules_scalapb_fastparse_2_12_19"
             }
           },
           "scala_proto_rules_grpc_protobuf": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_grpc_protobuf_2_13_14"
+              "target": "scala_proto_rules_grpc_protobuf_2_12_19"
             }
           },
           "org_scalameta_trees": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scalameta_trees_2_13_14"
+              "target": "org_scalameta_trees_2_12_19"
             }
           },
           "org_scalameta_parsers_2_12_19": {
@@ -5821,7 +5893,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_google_instrumentation_2_13_14"
+              "target": "scala_proto_rules_google_instrumentation_2_12_19"
             }
           },
           "io_bazel_rules_scala_org_hamcrest_hamcrest_core_3_3_3": {
@@ -5883,28 +5955,52 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_openjdk_jmh_jmh_core_2_13_14"
+              "target": "io_bazel_rules_scala_org_openjdk_jmh_jmh_core_2_12_19"
             }
           },
           "io_bazel_rules_scala_util_logging": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_util_logging_2_13_14"
+              "target": "io_bazel_rules_scala_util_logging_2_12_19"
             }
           },
           "org_scalameta_semanticdb_scalac": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scalameta_semanticdb_scalac_2_13_14"
+              "target": "org_scalameta_semanticdb_scalac_2_12_19"
             }
           },
           "scala_proto_rules_netty_resolver": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_netty_resolver_2_13_14"
+              "target": "scala_proto_rules_netty_resolver_2_12_19"
+            }
+          },
+          "io_bazel_rules_scala_util_core_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/twitter/util-core_2.12/21.2.0/util-core_2.12-21.2.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/util-core_2.12/21.2.0/util-core_2.12-21.2.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/util-core_2.12/21.2.0/util-core_2.12-21.2.0.jar",
+                "https://jcenter.bintray.com/com/twitter/util-core_2.12/21.2.0/util-core_2.12-21.2.0.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "com.twitter:util-core_2.12:21.2.0",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_util_core_2_12_19",
+              "artifact_sha256": "5d4ed75a26a3a2cc7fdc1dbeb29878a70024a8b7864287ed1e182dbca9c775a5",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
             }
           },
           "io_bazel_rules_scala_scala_xml_3_3_3": {
@@ -5984,35 +6080,11 @@
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_guava_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/google/guava/guava/21.0/guava-21.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/google/guava/guava/21.0/guava-21.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/google/guava/guava/21.0/guava-21.0.jar",
-                "https://jcenter.bintray.com/com/google/guava/guava/21.0/guava-21.0.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "com.google.guava:guava:21.0",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_guava_2_13_14",
-              "artifact_sha256": "972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "scala_proto_rules_scalapb_runtime_grpc": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_scalapb_runtime_grpc_2_13_14"
+              "target": "scala_proto_rules_scalapb_runtime_grpc_2_12_19"
             }
           },
           "org_scalameta_trees_2_12_19": {
@@ -6071,30 +6143,6 @@
               "testonly_": false
             }
           },
-          "libthrift_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/apache/thrift/libthrift/0.8.0/libthrift-0.8.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/apache/thrift/libthrift/0.8.0/libthrift-0.8.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/apache/thrift/libthrift/0.8.0/libthrift-0.8.0.jar",
-                "https://jcenter.bintray.com/org/apache/thrift/libthrift/0.8.0/libthrift-0.8.0.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "org.apache.thrift:libthrift:0.8.0",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "libthrift_2_13_14",
-              "artifact_sha256": "adea029247c3f16e55e29c1708b897812fd1fe335ac55fe3903e5d2f428ef4b3",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "io_bazel_rules_scala_scalatest_core_2_13_14": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -6111,30 +6159,6 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "io_bazel_rules_scala_scalatest_core_2_13_14",
               "artifact_sha256": "b238f0e42edd471c8d066d25fa925d4c0cfae33b8db1ea79d14ff42047263e5d",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
-          "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
-                "https://jcenter.bintray.com/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "net.sf.jopt-simple:jopt-simple:5.0.4",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple_2_13_14",
-              "artifact_sha256": "df26cc58f235f477db07f753ba5a3ab243ebe5789d9f89ecf68dd62ea9a66c28",
               "licenses": [
                 "notice"
               ],
@@ -6306,7 +6330,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_lihaoyi_fansi_2_13_14"
+              "target": "com_lihaoyi_fansi_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_compatible_3_3_3": {
@@ -6419,7 +6443,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_thesamet_scalapb_scalapb_runtime_2_13_14"
+              "target": "com_thesamet_scalapb_scalapb_runtime_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_funspec_2_12_19": {
@@ -6446,18 +6470,42 @@
               "testonly_": false
             }
           },
+          "io_bazel_rules_scala_org_openjdk_jmh_jmh_core_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/openjdk/jmh/jmh-core/1.36/jmh-core-1.36.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/openjdk/jmh/jmh-core/1.36/jmh-core-1.36.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/openjdk/jmh/jmh-core/1.36/jmh-core-1.36.jar",
+                "https://jcenter.bintray.com/org/openjdk/jmh/jmh-core/1.36/jmh-core-1.36.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "org.openjdk.jmh:jmh-core:1.36",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_org_openjdk_jmh_jmh_core_2_12_19",
+              "artifact_sha256": "f90974e37d0da8886b5c05e6e3e7e20556900d747c5a41c1023b47c3301ea73c",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
           "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm_2_13_14"
+              "target": "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_compatible": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_compatible_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_compatible_2_12_19"
             }
           },
           "scala_proto_rules_opencensus_impl_2_13_14": {
@@ -6582,7 +6630,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_opencensus_api_2_13_14"
+              "target": "scala_proto_rules_opencensus_api_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalactic_2_13_14": {
@@ -6613,7 +6661,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_typelevel_paiges_core_2_13_14"
+              "target": "org_typelevel_paiges_core_2_12_19"
             }
           },
           "org_scalameta_parsers_3_3_3": {
@@ -6681,7 +6729,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_ows2_asm_asm_2_13_14"
+              "target": "io_bazel_rules_scala_org_ows2_asm_asm_2_12_19"
             }
           },
           "com_lihaoyi_fastparse_3_3_3": {
@@ -6719,7 +6767,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_junit_junit_2_13_14"
+              "target": "io_bazel_rules_scala_junit_junit_2_12_19"
             }
           },
           "scala_compiler_source_2_13_14": {
@@ -6740,7 +6788,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_opencensus_impl_core_2_13_14"
+              "target": "scala_proto_rules_opencensus_impl_core_2_12_19"
             }
           },
           "scala_proto_rules_grpc_stub_3_3_3": {
@@ -6851,30 +6899,6 @@
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_util_logging_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/com/twitter/util-logging_2.13/21.2.0/util-logging_2.13-21.2.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/util-logging_2.13/21.2.0/util-logging_2.13-21.2.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/util-logging_2.13/21.2.0/util-logging_2.13-21.2.0.jar",
-                "https://jcenter.bintray.com/com/twitter/util-logging_2.13/21.2.0/util-logging_2.13-21.2.0.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "com.twitter:util-logging_2.13:21.2.0",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_util_logging_2_13_14",
-              "artifact_sha256": "90bd8318329907dcf7e161287473e27272b38ee6857e9d56ee8a1958608cc49d",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "com_typesafe_config_2_12_19": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -6932,7 +6956,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_grpc_api_2_13_14"
+              "target": "scala_proto_rules_grpc_api_2_12_19"
             }
           },
           "com_geirsson_metaconfig_typesafe_config_2_12_19": {
@@ -6972,14 +6996,14 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scala_xml_2_13_14"
+              "target": "io_bazel_rules_scala_scala_xml_2_12_19"
             }
           },
           "io_bazel_rules_scala_javax_annotation_api": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_javax_annotation_api_2_13_14"
+              "target": "io_bazel_rules_scala_javax_annotation_api_2_12_19"
             }
           },
           "com_google_guava_guava_21_0": {
@@ -7012,21 +7036,21 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_grpc_stub_2_13_14"
+              "target": "scala_proto_rules_grpc_stub_2_12_19"
             }
           },
           "io_bazel_rules_scala_scalatest_funspec": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_funspec_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_funspec_2_12_19"
             }
           },
           "com_geirsson_metaconfig_typesafe_config": {
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "com_geirsson_metaconfig_typesafe_config_2_13_14"
+              "target": "com_geirsson_metaconfig_typesafe_config_2_12_19"
             }
           },
           "io_bazel_rules_scala_scala_tasty_core_3_3_3": {
@@ -7057,31 +7081,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection_2_13_14"
-            }
-          },
-          "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/openjdk/jmh/jmh-generator-reflection/1.36/jmh-generator-reflection-1.36.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/openjdk/jmh/jmh-generator-reflection/1.36/jmh-generator-reflection-1.36.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/openjdk/jmh/jmh-generator-reflection/1.36/jmh-generator-reflection-1.36.jar",
-                "https://jcenter.bintray.com/org/openjdk/jmh/jmh-generator-reflection/1.36/jmh-generator-reflection-1.36.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "org.openjdk.jmh:jmh-generator-reflection:1.36",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection_2_13_14",
-              "artifact_sha256": "a9c72760e12c199e2a2c28f1a126ebf0cc5b51c0b58d46472596fc32f7f92534",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
+              "target": "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection_2_12_19"
             }
           },
           "scala_proto_rules_guava_2_13_14": {
@@ -7165,7 +7165,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scalatest_mustmatchers_2_13_14"
+              "target": "io_bazel_rules_scala_scalatest_mustmatchers_2_12_19"
             }
           },
           "scala_proto_rules_protoc_bridge_3_3_3": {
@@ -7242,6 +7242,30 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "io_bazel_rules_scala_scalatest_matchers_core_2_12_19",
               "artifact_sha256": "44e6bf24fb6fd4fd9419fcaf8d7e64b20c2916659f5d062d33f2de9a48ffdf09",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "io_bazel_rules_scala_util_logging_2_12_19": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/com/twitter/util-logging_2.12/21.2.0/util-logging_2.12-21.2.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/com/twitter/util-logging_2.12/21.2.0/util-logging_2.12-21.2.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/com/twitter/util-logging_2.12/21.2.0/util-logging_2.12-21.2.0.jar",
+                "https://jcenter.bintray.com/com/twitter/util-logging_2.12/21.2.0/util-logging_2.12-21.2.0.jar"
+              ],
+              "srcjar_urls": [],
+              "coordinates": "com.twitter:util-logging_2.12:21.2.0",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "io_bazel_rules_scala_util_logging_2_12_19",
+              "artifact_sha256": "6110ea70a1ea65c477cec72b7a2ce2ec92427e081ff9366272cb7c3bcadf69a9",
               "licenses": [
                 "notice"
               ],
@@ -7421,7 +7445,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scala_library_2_13_14"
+              "target": "io_bazel_rules_scala_scala_library_2_12_19"
             }
           },
           "scala_proto_rules_scalapb_fastparse_3_3_3": {
@@ -7484,30 +7508,6 @@
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_javax_annotation_api_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar",
-                "https://jcenter.bintray.com/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar"
-              ],
-              "srcjar_urls": [],
-              "coordinates": "javax.annotation:javax.annotation-api:1.3.2",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "io_bazel_rules_scala_javax_annotation_api_2_13_14",
-              "artifact_sha256": "e04ba5195bcd555dc95650f7cc614d151e4bcd52d29a10b8aa2197f3ab89ab9b",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "io_bazel_rules_scala_junit_junit_3_3_3": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -7536,7 +7536,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "scala_proto_rules_grpc_context_2_13_14"
+              "target": "scala_proto_rules_grpc_context_2_12_19"
             }
           },
           "scala_proto_rules_opencensus_impl_core_2_13_14": {
@@ -7649,7 +7649,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scrooge_core_2_13_14"
+              "target": "io_bazel_rules_scala_scrooge_core_2_12_19"
             }
           },
           "scala_proto_rules_netty_resolver_3_3_3": {
@@ -7746,7 +7746,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scala_lang_scalap_2_13_14"
+              "target": "org_scala_lang_scalap_2_12_19"
             }
           },
           "scala_proto_rules_scalapb_runtime_2_13_14": {
@@ -7782,7 +7782,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scrooge_generator_2_13_14"
+              "target": "io_bazel_rules_scala_scrooge_generator_2_12_19"
             }
           },
           "io_bazel_rules_scala_org_specs2_specs2_common_3_3_3": {
@@ -7851,35 +7851,6 @@
               "testonly_": false
             }
           },
-          "scala_proto_rules_grpc_api_2_13_14": {
-            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0.jar",
-                "https://jcenter.bintray.com/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0.jar"
-              ],
-              "srcjar_urls": [
-                "https://repo.maven.apache.org/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0-sources.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0-sources.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0-sources.jar",
-                "https://jcenter.bintray.com/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0-sources.jar"
-              ],
-              "coordinates": "io.grpc:grpc-api:1.24.0",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "generated_rule_name": "scala_proto_rules_grpc_api_2_13_14",
-              "artifact_sha256": "553978366e04ee8ddba64afde3b3cf2ac021a2f3c2db2831b6491d742b558598",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
           "io_bazel_rules_scala_org_specs2_specs2_fp_2_12_19": {
             "bzlFile": "@@//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
@@ -7901,6 +7872,35 @@
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "generated_rule_name": "io_bazel_rules_scala_org_specs2_specs2_fp_2_12_19",
               "artifact_sha256": "834a145b28dbf57ba6d96f02a3862522e693b5aeec44d4cb2f305ef5617dc73f",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "scala_proto_rules_grpc_api_2_13_14": {
+            "bzlFile": "@@//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0.jar",
+                "https://jcenter.bintray.com/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0.jar"
+              ],
+              "srcjar_urls": [
+                "https://repo.maven.apache.org/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0-sources.jar",
+                "https://jcenter.bintray.com/io/grpc/grpc-api/1.24.0/grpc-api-1.24.0-sources.jar"
+              ],
+              "coordinates": "io.grpc:grpc-api:1.24.0",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "generated_rule_name": "scala_proto_rules_grpc_api_2_13_14",
+              "artifact_sha256": "553978366e04ee8ddba64afde3b3cf2ac021a2f3c2db2831b6491d742b558598",
               "licenses": [
                 "notice"
               ],
@@ -8161,7 +8161,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "org_scala_lang_modules_scala_collection_compat_2_13_14"
+              "target": "org_scala_lang_modules_scala_collection_compat_2_12_19"
             }
           },
           "org_scalameta_scalafmt_core_2_12_19": {
@@ -8204,7 +8204,7 @@
             "bzlFile": "@@//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_org_specs2_specs2_junit_2_13_14"
+              "target": "io_bazel_rules_scala_org_specs2_specs2_junit_2_12_19"
             }
           }
         },
