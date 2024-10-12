@@ -9,7 +9,15 @@ java_library(
             "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
             "before_2_12_13/ProtoReporter.java",
         ],
-        between_2_12_13_and_2_13_12 = [
+        any_2_13_0 = [
+            "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
+            "before_2_12_13/ProtoReporter.java",
+        ],
+        between_2_12_13_and_2_12_20 = [
+            "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
+            "after_2_12_13_and_before_2_13_12/ProtoReporter.java",
+        ],
+        between_2_13_1_and_2_13_12 = [
             "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
             "after_2_12_13_and_before_2_13_12/ProtoReporter.java",
         ],
