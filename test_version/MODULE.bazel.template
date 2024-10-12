@@ -14,7 +14,7 @@ local_path_override(
 )
 
 scala_config = use_extension(
-    "//scala/extensions:config.bzl",
+    "@io_bazel_rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
 
@@ -36,6 +36,14 @@ scala_deps.toolchains(
   specs2 = True,
   twitter_scrooge = True,
   scala_proto = True,
+)
+
+use_repo(
+    scala_deps,
+    "io_bazel_rules_scala_scrooge_core",
+    "io_bazel_rules_scala_scrooge_generator",
+    "io_bazel_rules_scala_util_core",
+    "io_bazel_rules_scala_util_logging",
 )
 
 register_toolchains(

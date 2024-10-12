@@ -46,7 +46,7 @@ run_in_test_repo() {
       WORKSPACE.template >> $NEW_TEST_DIR/WORKSPACE
   cp MODULE.bazel.template $NEW_TEST_DIR/MODULE.bazel
   touch $NEW_TEST_DIR/WORKSPACE.bzlmod
-  cp ../.bazelrc $NEW_TEST_DIR/.bazelrc
+  cp ../.bazel{rc,version} $NEW_TEST_DIR/
 
   cd $NEW_TEST_DIR
 

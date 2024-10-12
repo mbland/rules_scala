@@ -197,6 +197,7 @@ def _scala_deps_impl(module_ctx):
 
     if "twitter_scrooge" in toolchains:
         twitter_scrooge(bzlmod_enabled = True)
+
     if "jmh" in toolchains:
         jmh_repositories(
             maven_servers = maven_servers,
