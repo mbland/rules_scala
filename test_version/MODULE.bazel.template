@@ -31,21 +31,27 @@ scala_deps.settings(
     fetch_sources = True,
 )
 
-scala_deps.toolchains(
-  scalatest = True,
-  specs2 = True,
-  twitter_scrooge = True,
-  scala_proto = True,
+scrooge_repos = use_extension(
+    "//:scrooge_repositories.bzl",
+    "scrooge_repositories_ext",
 )
-
+${twitter_scrooge_repositories}
 use_repo(
-    scala_deps,
+    scrooge_repos,
     "io_bazel_rules_scala_scrooge_core",
     "io_bazel_rules_scala_scrooge_generator",
     "io_bazel_rules_scala_util_core",
     "io_bazel_rules_scala_util_logging",
+    "test_version_scrooge_toolchain",
+)
+
+scala_deps.toolchains(
+  scala_proto = True,
+  scalatest = True,
+  specs2 = True,
 )
 
 register_toolchains(
     "@io_bazel_rules_scala//scala:unused_dependency_checker_error_toolchain",
+    "@test_version_scrooge_toolchain//...:all",
 )

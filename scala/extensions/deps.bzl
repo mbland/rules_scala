@@ -141,8 +141,8 @@ def _scala_deps_impl(module_ctx):
         fetch_sources,
         validate_scala_version,
     ) = _get_settings(module_ctx)
-    toolchains = _get_toolchains(module_ctx)
     srcjars = _get_scala_compiler_srcjars(module_ctx)
+    toolchains = _get_toolchains(module_ctx)
 
     # Replace scala_repositories()
     for version in SCALA_VERSIONS:
@@ -175,6 +175,7 @@ def _scala_deps_impl(module_ctx):
             junit_repositories(
                 maven_servers = maven_servers,
                 scala_version = scala_version,
+                overriden_artifacts = overridden_artifacts,
                 fetch_sources = fetch_sources,
             )
         if "specs2" in toolchains:
@@ -196,7 +197,11 @@ def _scala_deps_impl(module_ctx):
             )
 
     if "twitter_scrooge" in toolchains:
-        twitter_scrooge(bzlmod_enabled = True)
+        twitter_scrooge(
+            maven_servers = maven_servers,
+            overriden_artifacts = overridden_artifacts,
+            bzlmod_enabled = True,
+        )
 
     if "jmh" in toolchains:
         jmh_repositories(
@@ -238,7 +243,7 @@ scala_deps = module_extension(
     implementation = _scala_deps_impl,
     tag_classes = {
         "settings": _settings,
-        "toolchains": _toolchains,
         "compiler_srcjar": _compiler_srcjar,
+        "toolchains": _toolchains,
     },
 )

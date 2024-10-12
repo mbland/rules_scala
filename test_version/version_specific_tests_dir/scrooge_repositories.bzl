@@ -6,6 +6,14 @@ load(
     "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
     "default_maven_server_urls",
 )
+load(
+    "@io_bazel_rules_scala//scala/private/extensions:toolchains.bzl",
+    "scala_toolchains_repo",
+)
+load(
+    "@io_bazel_rules_scala//twitter_scrooge:twitter_scrooge.bzl",
+    "twitter_scrooge",
+)
 
 def _import_external(id, artifact, sha256, deps = [], runtime_deps = []):
     _scala_maven_import_external(
@@ -74,3 +82,36 @@ def scrooge_repositories(version):
             artifact = "com.twitter:util-logging_2.11:21.2.0",
             sha256 = "f3b62465963fbf0fe9860036e6255337996bb48a1a3f21a29503a2750d34f319",
         )
+
+_settings = tag_class(
+    attrs = {
+        "version": attr.string(mandatory = True),
+    }
+)
+
+def _scrooge_repositories_ext_impl(module_ctx):
+    settings = module_ctx.modules[0].tags.settings
+
+    if len(settings) == 0:
+        twitter_scrooge(bzlmod_enabled=True)
+    else:
+        scrooge_repositories(settings[0].version)
+        twitter_scrooge(
+            scrooge_core = "@io_bazel_rules_scala_scrooge_core",
+            scrooge_generator = "@io_bazel_rules_scala_scrooge_generator",
+            util_core = "@io_bazel_rules_scala_util_core",
+            util_logging = "@io_bazel_rules_scala_util_logging",
+            bzlmod_enabled = True,
+        )
+
+    scala_toolchains_repo(
+        name = "test_version_scrooge_toolchain",
+        twitter_scrooge = True,
+    )
+
+scrooge_repositories_ext = module_extension(
+    implementation = _scrooge_repositories_ext_impl,
+    tag_classes = {
+        "settings": _settings,
+    }
+)

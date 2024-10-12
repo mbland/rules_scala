@@ -40,5 +40,5 @@ def specs2_junit_repositories(
 
 def specs2_junit_dependencies():
     return specs2_dependencies() + [
-        "@io_bazel_rules_scala//testing/toolchain:specs2_junit_classpath",
+        Label("//testing/toolchain:specs2_junit_classpath"),
     ]

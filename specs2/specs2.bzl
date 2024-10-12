@@ -26,4 +26,4 @@ def specs2_repositories(
     )
 
 def specs2_dependencies():
-    return ["@io_bazel_rules_scala//specs2:specs2"]
+    return [Label("//specs2:specs2")]
