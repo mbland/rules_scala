@@ -41,7 +41,7 @@ _compiler_srcjar = tag_class(
         "version": attr.string(mandatory = True),
         "url": attr.string(),
         "urls": attr.string_list(),
-        "label": attr.string(),
+        "label": attr.label(),
         "sha256": attr.string(),
         "integrity": attr.string(),
     },
@@ -91,9 +91,12 @@ def _get_scala_compiler_srcjars(module_ctx):
         info = {}
         _add_if_not_empty(info, "url", srcjar.url)
         _add_if_not_empty(info, "urls", srcjar.urls)
-        _add_if_not_empty(info, "label", srcjar.label)
         _add_if_not_empty(info, "sha256", srcjar.sha256)
         _add_if_not_empty(info, "integrity", srcjar.integrity)
+
+        # Label values don't have a length.
+        if srcjar.label != None:
+            info["label"] = srcjar.label
         result[srcjar.version] = info
 
     return result
