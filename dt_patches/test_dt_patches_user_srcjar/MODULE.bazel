@@ -95,10 +95,4 @@ _SCALA_COMPILER_URL_FORMAT = (
     ]
 ]
 
-use_repo(
-    scala_deps,
-    "io_bazel_rules_scala_scala_parser_combinators",
-    "io_bazel_rules_scala_scala_xml",
-)
-
 register_toolchains("//:dt_scala_toolchain")
