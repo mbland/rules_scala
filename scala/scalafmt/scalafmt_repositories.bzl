@@ -59,7 +59,7 @@ _SCALAFMT_CORE_DEPS = [
     "org_typelevel_paiges_core",
 ]
 
-def _artifact_ids(scala_version):
+def scalafmt_artifact_ids(scala_version):
     major_version = extract_major_version(scala_version)
 
     if major_version == "2.11":
@@ -81,7 +81,7 @@ def scalafmt_repositories(
     for scala_version in SCALA_VERSIONS:
         repositories(
             scala_version = scala_version,
-            for_artifact_ids = _artifact_ids(scala_version),
+            for_artifact_ids = scalafmt_artifact_ids(scala_version),
             maven_servers = maven_servers,
             overriden_artifacts = overriden_artifacts,
         )
