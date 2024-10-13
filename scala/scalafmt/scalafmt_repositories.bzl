@@ -50,7 +50,6 @@ _SCALAFMT_DEPS_2_11 = [
 
 _SCALAFMT_DEPS_2_12 = [
     "com_geirsson_metaconfig_pprint",
-    "com_lihaoyi_geny",
     "org_scalameta_mdoc_parser",
     "org_scalameta_scalafmt_config",
     "org_scalameta_scalafmt_sysops",
