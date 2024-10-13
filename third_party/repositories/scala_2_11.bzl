@@ -197,8 +197,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_pprint": {
-        "artifact": "com.lihaoyi:pprint_2.11:0.8.1",
-        "sha256": "3755b8e5d1423931219ab607e8fd9b6db472740dd5f815f8b0715312e11d06fe",
+        "artifact": "com.lihaoyi:pprint_2.11:0.5.4",
+        "sha256": "9b31150ee7f07212a825e02fca56e0999789d2b8ec720a84b75ce29ca7e195b5",
         "deps": [
             "@com_lihaoyi_fansi",
             "@com_lihaoyi_sourcecode",
