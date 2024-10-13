@@ -257,8 +257,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_fansi": {
-        "artifact": "com.lihaoyi:fansi_2.11:0.2.6",
-        "sha256": "63878260e23a1e28ecd8d6987d5feda9d72507b476137b9f642ac2c75035a9c8",
+        "artifact": "com.lihaoyi:fansi_2.11:0.4.0",
+        "sha256": "08f6400ff3e92fa3d215788fb3ef7bb7bf1344c71f4d4d4199fec9b0e6d91432",
         "deps": [
             "@com_lihaoyi_sourcecode",
             "@io_bazel_rules_scala_scala_library",
@@ -281,15 +281,15 @@ artifacts = {
         ],
     },
     "com_lihaoyi_sourcecode": {
-        "artifact": "com.lihaoyi:sourcecode_2.11:0.2.1",
-        "sha256": "4b45e8b4efee81457b97439e250cd80a67f1ddbe896735cca0f05c88ebead58c",
+        "artifact": "com.lihaoyi:sourcecode_2.11:0.3.1",
+        "sha256": "52b38f0d291bab3555bd6b4324a1e86d1acbb347ffc763b154f220d7ce54f31b",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
         ],
     },
     "com_google_protobuf_protobuf_java": {
-        "artifact": "com.google.protobuf:protobuf-java:3.8.0",
-        "sha256": "94ba90a869ddad07eb49afaa8f39e676c2554b5b1c417ad9e1188257e79be60f",
+        "artifact": "com.google.protobuf:protobuf-java:4.28.2",
+        "sha256": "707bccf406f4fc61b841d4700daa8d3e84db8ab499ef3481a060fa6a0f06e627",
     },
     "com_geirsson_metaconfig_core": {
         "artifact": "com.geirsson:metaconfig-core_2.11:0.9.10",
