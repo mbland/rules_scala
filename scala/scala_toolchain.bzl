@@ -1,3 +1,4 @@
+load("//scala/private:macros/bzlmod.bzl", "adjust_main_repo_prefix")
 load("//scala:providers.bzl", _DepsInfo = "DepsInfo")
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
@@ -26,31 +27,14 @@ def _compute_dependency_tracking_method(
             return "ast"
     return input_dependency_tracking_method
 
-_MAIN_REPO_PREFIX = str(Label("@@//:all"))[:4]
-
-def _adjust_main_repo_pattern(pattern):
-    """Normalizes include/exclude patterns to match the main repo Label prefix.
-
-    Necessary because this will be "@//" for Bazel < 7.1.0, and "@@//" for Bazel
-    >= 7.1.0. Rather than requiriing users to update their patterns for now,
-    we'll emit a deprecation warning and convert them automatically.
-
-    This has ramifications for _phase_dependency() and _is_target_included()
-    from private/phases/phase_dependency.bzl, which check whether a target label
-    string starts with any of these patterns.
-    """
-    if pattern.startswith("@/") or pattern.startswith("@//"):
-        return _MAIN_REPO_PREFIX + pattern.lstrip("@/")
-    return pattern
-
 def _partition_patterns(patterns):
     includes = [
-        _adjust_main_repo_pattern(pattern)
+        adjust_main_repo_prefix(pattern)
         for pattern in patterns
         if not pattern.startswith("-")
     ]
     excludes = [
-        _adjust_main_repo_pattern(pattern.lstrip("-"))
+        adjust_main_repo_prefix(pattern.lstrip("-"))
         for pattern in patterns
         if pattern.startswith("-")
     ]
@@ -128,7 +112,7 @@ def _default_dep_providers():
         "scala_library_classpath",
         "scala_macro_classpath",
     ]
-    if SCALA_MAJOR_VERSION.startswith("2"):
+    if SCALA_MAJOR_VERSION.startswith("2."):
         dep_providers.append("semanticdb")
     return [
         Label("@io_bazel_rules_scala_toolchains//scala:%s_provider" % p)

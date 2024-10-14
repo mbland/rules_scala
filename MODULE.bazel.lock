@@ -98,7 +98,7 @@
         "recordedDirentsInputs": {},
         "envVariables": {
           "ENABLE_COMPILER_DEPENDENCY_TRACKING": null,
-          "SCALA_VERSION": null
+          "SCALA_VERSION": "2.13.14"
         },
         "generatedRepoSpecs": {
           "io_bazel_rules_scala_config": {
@@ -120,7 +120,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "jOIUwlaFr01w1s0VIYXCSZjE75QHzcwOQ0CWSbuCMT8=",
+        "bzlTransitiveDigest": "Tte0xyf3AjSFQy0/zh8yzKGDCQGWavSvfBHAzyBZ154=",
         "usagesDigest": "96aAqNas/TaP+QRWXKU65Ug7MdHDDDniDMkDHp2yVUA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -8228,7 +8228,7 @@
     },
     "//scala/private/extensions:dev_deps.bzl%dev_deps": {
       "general": {
-        "bzlTransitiveDigest": "uAksbTnkQV3WYW7iDE4v93ZimpbVL5kD/TXjavHHv98=",
+        "bzlTransitiveDigest": "bs7bWk8UWjTM1P1ZOgj0v3u2hk6iyBURARCgelY3rqc=",
         "usagesDigest": "LRMbyYG8FQB/66w6ytSPBSprDRUxjUPJxxwQIjwpgE8=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

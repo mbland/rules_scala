@@ -25,19 +25,15 @@ def apparent_repo_name(label_or_name):
     if len(delimiter_indices) == 0:
         # Already an apparent repo name, apparently.
         return repo_name
+
     if len(delimiter_indices) == 1:
         # The name is for a top level module, possibly containing a version ID.
         return repo_name[:delimiter_indices[0]]
+
     return repo_name[delimiter_indices[-1] + 1:]
 
 def apparent_repo_label_string(label):
     """Return a Label string starting with its apparent repo name.
-
-    For top level target labels (starting with "//"), or main repository labels
-    (starting with "@@//" or "@//"), the result will start with:
-
-    - "@@//" for Bazel >= 7.1.0
-    - "@//" for Bazel < 7.1.0
 
     Args:
         label: a Label instance
@@ -48,4 +44,28 @@ def apparent_repo_label_string(label):
     """
     if len(label.repo_name) == 0:
         return str(label)
-    return str(label)[1:].replace(label.repo_name, apparent_repo_name(label))
+
+    label_str = "@" + str(label).lstrip("@")
+    return label_str.replace(label.repo_name, apparent_repo_name(label))
+
+_MAIN_REPO_PREFIX = str(Label("@@//:all")).split(":")[0]
+
+def adjust_main_repo_prefix(target_pattern):
+    """Updates the main repo prefix to match the current Bazel version.
+
+    The main repo prefix will be "@//" for Bazel < 7.1.0, and "@@//" for Bazel
+    >= 7.1.0 under Bzlmod. This macro automatically updates strings representing
+    include/exclude target patterns so that they match actual main repository
+    target Labels correctly.
+
+    Args:
+        target_pattern: a string used to match a BUILD target pattern
+
+    Returns:
+        the string with any main repository prefix updated to match the current
+            Bazel version
+    """
+    if target_pattern.startswith("@//") or target_pattern.startswith("@@//"):
+        return _MAIN_REPO_PREFIX + target_pattern.lstrip("@/")
+
+    return target_pattern
