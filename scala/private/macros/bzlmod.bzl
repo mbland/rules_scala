@@ -12,18 +12,23 @@ def apparent_repo_name(label_or_name):
     Returns:
         The apparent repository name
     """
-    repo_name = getattr(label_or_name, "repo_name", label_or_name)
+    repo_name = getattr(label_or_name, "repo_name", label_or_name).lstrip("@")
+    delimiter_indices = []
 
     # Bazed on this pattern from the Bazel source:
     # com.google.devtools.build.lib.cmdline.RepositoryName.VALID_REPO_NAME
-    for i in range(len(repo_name) - 1, -1, -1):
+    for i in range(len(repo_name)):
         c = repo_name[i]
         if not (c.isalnum() or c in "_-."):
-            # For repos representing top level modules, the canonical name will
-            # end with a delimiter, and `result` will be the empty string.
-            result = repo_name[i + 1:]
-            return result if len(result) != 0 else repo_name[:-1]
-    return repo_name
+            delimiter_indices.append(i)
+
+    if len(delimiter_indices) == 0:
+        # Already an apparent repo name, apparently.
+        return repo_name
+    if len(delimiter_indices) == 1:
+        # The name is for a top level module, possibly containing a version ID.
+        return repo_name[:delimiter_indices[0]]
+    return repo_name[delimiter_indices[-1] + 1:]
 
 def apparent_repo_label_string(label):
     """Return a Label string starting with its apparent repo name.
@@ -43,6 +48,4 @@ def apparent_repo_label_string(label):
     """
     if len(label.repo_name) == 0:
         return str(label)
-
-    apparent_repo = apparent_repo_name(label)
-    return "@" + str(label).lstrip("@").replace(label.repo_name, apparent_repo)
+    return str(label)[1:].replace(label.repo_name, apparent_repo_name(label))

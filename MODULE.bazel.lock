@@ -120,7 +120,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "SHHn3TsPqPw5VYMSH9ZQ7VWoFh3tFii5gb8ALrq55KU=",
+        "bzlTransitiveDigest": "jOIUwlaFr01w1s0VIYXCSZjE75QHzcwOQ0CWSbuCMT8=",
         "usagesDigest": "96aAqNas/TaP+QRWXKU65Ug7MdHDDDniDMkDHp2yVUA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -8228,7 +8228,7 @@
     },
     "//scala/private/extensions:dev_deps.bzl%dev_deps": {
       "general": {
-        "bzlTransitiveDigest": "UdKWk/rzLHP3LoshudgkMBHcdImSwdV3XvGh1ppBZYU=",
+        "bzlTransitiveDigest": "uAksbTnkQV3WYW7iDE4v93ZimpbVL5kD/TXjavHHv98=",
         "usagesDigest": "LRMbyYG8FQB/66w6ytSPBSprDRUxjUPJxxwQIjwpgE8=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

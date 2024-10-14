@@ -86,14 +86,14 @@ def scrooge_repositories(version):
 _settings = tag_class(
     attrs = {
         "version": attr.string(mandatory = True),
-    }
+    },
 )
 
 def _scrooge_repositories_ext_impl(module_ctx):
     settings = module_ctx.modules[0].tags.settings
 
     if len(settings) == 0:
-        twitter_scrooge(bzlmod_enabled=True)
+        twitter_scrooge(bzlmod_enabled = True)
     else:
         scrooge_repositories(settings[0].version)
         twitter_scrooge(
@@ -113,5 +113,5 @@ scrooge_repositories_ext = module_extension(
     implementation = _scrooge_repositories_ext_impl,
     tag_classes = {
         "settings": _settings,
-    }
+    },
 )

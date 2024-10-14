@@ -73,7 +73,7 @@
   "moduleExtensions": {
     "//:extensions.bzl%compiler_source_repos": {
       "general": {
-        "bzlTransitiveDigest": "TEmkWU4vR8S/7DQMKhZq6+ddfZcOqP2PQlAprYLVZ+U=",
+        "bzlTransitiveDigest": "T6Rus3aiMdACr60LI58XQmAsLTagUXKVcQ8tL5ffnbY=",
         "usagesDigest": "Qh1TlYD/7+7DE6PpDTnEC9E/29VWjokBzxwJIseblaM=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -242,7 +242,7 @@
     },
     "@@rules_scala~//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "GCqEegi/K8KFouJQGzy/T+etOcuFQmk7XQ5U3GPo0+8=",
+        "bzlTransitiveDigest": "G1x1HXbifE0Y+zJjzoMMU3b05Wcz9kEyE+u0Xl1U54w=",
         "usagesDigest": "8SSzPRgQS1DZRbnlF7+Ue29ymUL/JpFHBBZhunbaqEQ=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

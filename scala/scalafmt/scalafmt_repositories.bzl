@@ -90,6 +90,6 @@ def _register_scalafmt_toolchains():
         native.register_toolchains(
             Label(
                 "//scala/scalafmt:scalafmt_toolchain" +
-                version_suffix(scala_version)
+                version_suffix(scala_version),
             ),
         )
