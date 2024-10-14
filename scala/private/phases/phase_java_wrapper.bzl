@@ -4,7 +4,7 @@
 # DOCUMENT THIS
 #
 load(
-    "@io_bazel_rules_scala//scala/private:rule_impls.bzl",
+    "//scala/private:rule_impls.bzl",
     _java_bin = "java_bin",
 )
 

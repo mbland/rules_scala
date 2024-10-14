@@ -36,7 +36,7 @@ def _phase_dependency(
         p,
         unused_deps_always_off,
         strict_deps_always_off):
-    toolchain = ctx.toolchains["@io_bazel_rules_scala//scala:toolchain_type"]
+    toolchain = ctx.toolchains[Label("//scala:toolchain_type")]
 
     target_label = apparent_repo_label_string(ctx.label)
 
