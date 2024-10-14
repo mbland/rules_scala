@@ -74,8 +74,8 @@ artifacts = {
         "sha256": "5c285b72e6dc0a98e99ae0a1ceeb4027dab9adfa441844046bd3f19e0efdcb54",
     },
     "org_scalameta_common": {
-        "artifact": "org.scalameta:common_2.13:4.10.2",
-        "sha256": "160e8d902b2b7716e91aed889db741f67ecc564035632616341767ef7dfbf865",
+        "artifact": "org.scalameta:common_2.13:4.9.9",
+        "sha256": "be66ba789863c65abfc9c1e448339ce915f2bc778daf348d884a967e8eb473ee",
         "deps": [
             "@com_lihaoyi_sourcecode",
             "@io_bazel_rules_scala_scala_library",
@@ -109,22 +109,22 @@ artifacts = {
         "sha256": "ca3857a3f95266e0d87e1a1f26c8592c53c12ac7203f911759415f6c8a43df7d",
     },
     "org_scala_lang_modules_scala_collection_compat": {
-        "artifact": "org.scala-lang.modules:scala-collection-compat_2.13:2.12.0",
-        "sha256": "befff482233cd7f9a7ca1e1f5a36ede421c018e6ce82358978c475d45532755f",
+        "artifact": "org.scala-lang.modules:scala-collection-compat_2.13:2.11.0",
+        "sha256": "0c1108883b7b97851750e8932f9584346ccb23f1260c197f97295ac2e6c56cec",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
         ],
     },
     "org_scalameta_mdoc_parser": {
-        "artifact": "org.scalameta:mdoc-parser_2.13:2.6.1",
-        "sha256": "93c4b6628219ccea71cdf190b11967e313daa276f265f0ad1097c62ec4a9fcec",
+        "artifact": "org.scalameta:mdoc-parser_2.13:2.5.4",
+        "sha256": "a36fc6125666047b653f8acb1aad16db4aefaaaffdc3f53d2b9eeec83dc580bf",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
         ],
     },
     "org_scalameta_parsers": {
-        "artifact": "org.scalameta:parsers_2.13:4.10.2",
-        "sha256": "c1f5d5246fbd6b0374be4944a8040f2f2965255949307e6b1a98929e3a16aaaf",
+        "artifact": "org.scalameta:parsers_2.13:4.9.9",
+        "sha256": "ab4198d993b4214d9b98277f96c4ac76a72b87a1fea8df96e9be8e3e98176d7a",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@org_scalameta_trees",
@@ -159,8 +159,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalameta": {
-        "artifact": "org.scalameta:scalameta_2.13:4.10.2",
-        "sha256": "bef0f3898191b4656b27d91350728880aa28f5d5ceb00ff1f6883deff55b1037",
+        "artifact": "org.scalameta:scalameta_2.13:4.9.9",
+        "sha256": "01a3c1130202400dbcf4ea0f42374c8e392b9199716ddf605217f4bf1f61cb1d",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@org_scala_lang_scalap",
@@ -168,23 +168,23 @@ artifacts = {
         ],
     },
     "org_scalameta_trees": {
-        "artifact": "org.scalameta:trees_2.13:4.10.2",
-        "sha256": "e54173e07f8275aea5db7e5887475f77575f1cc5f7c2f12c43b4f1926ee3eb7b",
+        "artifact": "org.scalameta:trees_2.13:4.9.9",
+        "sha256": "d016cde916b19d6c814ac296544a1882b96664ac03e5ef27019a518482c3db49",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@org_scalameta_common",
         ],
     },
     "org_typelevel_paiges_core": {
-        "artifact": "org.typelevel:paiges-core_2.13:0.4.4",
-        "sha256": "ffbd59d3648e71c5b8f4474a54121fb3512707e7901245831669aa9e85f3bbf0",
+        "artifact": "org.typelevel:paiges-core_2.13:0.4.3",
+        "sha256": "4daa8b180b466634b66be040e1097c107981c0ba0b7c605e2f7c0b66ae1b99b5",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
         ],
     },
     "com_typesafe_config": {
-        "artifact": "com.typesafe:config:1.4.3",
-        "sha256": "8ada4c185ce72416712d63e0b5afdc5f009c0cdf405e5f26efecdf156aa5dfb6",
+        "artifact": "com.typesafe:config:1.4.1",
+        "sha256": "4c0aa7e223c75c8840c41fc183d4cd3118140a1ee503e3e08ce66ed2794c948f",
     },
     "org_scala_lang_scalap": {
         "artifact": "org.scala-lang:scalap:2.13.14",
@@ -211,8 +211,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_fansi": {
-        "artifact": "com.lihaoyi:fansi_2.13:0.5.0",
-        "sha256": "fcae26580f7d6e72adbd6e5c504bb1715fbe3f5fb814d70e84bc5427a835e42c",
+        "artifact": "com.lihaoyi:fansi_2.13:0.4.0",
+        "sha256": "0eb11a2a905d608033ec1642b0a9f0d8444daa4ad465f684b50bdc7e7a41bf53",
         "deps": [
             "@com_lihaoyi_sourcecode",
         ],
