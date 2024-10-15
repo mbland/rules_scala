@@ -36,7 +36,7 @@ _expect_failure_with_messages() {
     if [[ -n "$expected_message" && ! "$output" =~ $expected_message ]]; then
       echo ${output}
       echo "'${bazel_cmd}' should have logged \"${expected_message}\"."
-          exit 1
+      exit 1
     fi
   done
 }

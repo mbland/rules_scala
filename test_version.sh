@@ -94,7 +94,7 @@ test_diagnostic_proto_files() {
 }
 
 test_twitter_scrooge_versions() {
-  TWITTER_SCROOGE_VERSION="$1"
+  local TWITTER_SCROOGE_VERSION="$1"
 
   case "$TWITTER_SCROOGE_VERSION" in
   18.6.0|20.9.0)
