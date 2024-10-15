@@ -1,4 +1,3 @@
-load("//scala/private:macros/bzlmod.bzl", "apparent_repo_name")
 load(
     "//third_party/repositories:scala_2_11.bzl",
     _artifacts_2_11 = "artifacts",
@@ -102,7 +101,7 @@ def repositories(
                 major_scala_version.replace(".", "_"),
             ))
 
-        generated_rule_name = apparent_repo_name(id) + suffix
+        generated_rule_name = id + suffix
         _scala_maven_import_external(
             name = id + suffix,
             generated_rule_name = generated_rule_name,
@@ -123,13 +122,13 @@ def repositories(
         # See: https://github.com/bazelbuild/rules_scala/pull/1573
         # Hopefully we can deprecate and remove it one day.
         if suffix and scala_version == SCALA_VERSION:
-            _alias_repository(name = id, target = generated_rule_name)
+            _alias_repository(name = id, id = id, target = generated_rule_name)
 
 def _alias_repository_impl(rctx):
     """ Builds a repository containing just two aliases to the Scala Maven artifacts in the `target` repository. """
 
     format_kwargs = {
-        "name": apparent_repo_name(rctx.name),
+        "name": rctx.attr.id,
         "target": rctx.attr.target,
     }
     rctx.file("BUILD", """alias(
@@ -148,6 +147,7 @@ def _alias_repository_impl(rctx):
 _alias_repository = repository_rule(
     implementation = _alias_repository_impl,
     attrs = {
+        "id": attr.string(mandatory = True),
         "target": attr.string(mandatory = True),
     },
 )
