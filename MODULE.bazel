@@ -185,7 +185,8 @@ bazel_dep(
 )
 bazel_dep(name = "gazelle", version = "0.39.1", dev_dependency = True)
 
-go_version = "1.23.1"
+go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
+go_sdk.download(version = "1.23.2")
 
 go_deps = use_extension(
     "@gazelle//:extensions.bzl",
@@ -193,16 +194,27 @@ go_deps = use_extension(
     dev_dependency = True,
 )
 
-# Copied some of the following from the following to get the
+# The go_deps.module calls are inspired by the following to get the
 # com_github_bazelbuild_buildtools repo to work:
 # - https://github.com/bazelbuild/bazel-central-registry/blob/main/modules/gazelle/0.39.1/MODULE.bazel#L31-L57
 #
-# golang.org/x/tools is not a direct dependency of the go code anymore
-# but bazel buildtools and nogo depend on it.
+# To get the latest version and hashes for each per:
+#
+# - https://go.dev/ref/mod#go-list-m
+# - https://go.dev/ref/mod#checksum-database
+#
+#   go list -m golang.org/x/tools@latest
+#   curl https://sum.golang.org/lookup/golang.org/x/tools@v0.26.0
 go_deps.module(
     path = "golang.org/x/tools",
-    sum = "h1:k8NLag8AGHnn+PHbl7g43CtqZAwG60vZkLqgyZgIHgQ=",
-    version = "v0.18.0",
+    sum = "h1:v/60pFQmzmT9ExmjDv2gGIfi3OqfKoEP6I5+umXlbnQ=",
+    version = "v0.26.0",
+)
+
+go_deps.module(
+    path = "github.com/golang/protobuf",
+    sum = "h1:i7eJL8qZTpSEXOPTxNKhASYpMn+8e5Q6AdndVa1dWek=",
+    version = "v1.5.4",
 )
 use_repo(
     go_deps,
