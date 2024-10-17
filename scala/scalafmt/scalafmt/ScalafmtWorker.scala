@@ -4,7 +4,6 @@ import io.bazel.rulesscala.worker.Worker
 import java.io.File
 import java.nio.file.Files
 import org.scalafmt.Scalafmt
-import org.scalafmt.sysops.FileOps
 import scala.annotation.tailrec
 import scala.io.Codec
 
@@ -18,10 +17,10 @@ object ScalafmtWorker extends Worker.Interface {
     val namespace = argName.zip(argFile).toMap
 
     val sourceFile = namespace.getOrElse("input", new File(""))
-    val source = FileOps.readFile(sourceFile.toPath())(Codec.UTF8)
+    val source = ScalafmtAdapter.readFile(sourceFile)(Codec.UTF8)
 
     val configFile = namespace.getOrElse("config", new File(""))
-    val config = Scalafmt.parseHoconConfigFile(configFile.toPath()).get
+    val config = ScalafmtAdapter.parseConfigFile(configFile)
 
     @tailrec
     def format(code: String): String = {

@@ -185,7 +185,11 @@ bazel_dep(
 )
 bazel_dep(name = "gazelle", version = "0.39.1", dev_dependency = True)
 
-go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
+go_sdk = use_extension(
+    "@io_bazel_rules_go//go:extensions.bzl",
+    "go_sdk",
+    dev_dependency = True,
+)
 go_sdk.download(version = "1.23.2")
 
 go_deps = use_extension(

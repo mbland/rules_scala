@@ -19,9 +19,11 @@ filegroup(
 
 scala_binary(
     name = "scalafmt",
-    srcs = select_for_scala_version(
-        before_2_12_0 = ["scalafmt/ScalafmtWorker-2_11.scala"],
-        since_2_12_0 = ["scalafmt/ScalafmtWorker.scala"],
+    srcs = [
+        "scalafmt/ScalafmtWorker.scala",
+    ] + select_for_scala_version(
+        before_2_12_0 = ["scalafmt/ScalafmtAdapter-2_11.scala"],
+        since_2_12_0 = ["scalafmt/ScalafmtAdapter.scala"],
     ),
     main_class = "io.bazel.rules_scala.scalafmt.ScalafmtWorker",
     visibility = ["//visibility:public"],
