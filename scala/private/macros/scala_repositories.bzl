@@ -38,15 +38,19 @@ def _validate_scalac_srcjar(srcjar):
 def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
     scala_major_version = extract_major_version(scala_version)
     scala_minor_version = extract_minor_version(scala_version)
-    patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.patch" % scala_major_version
+    patch = Label("//dt_patches:dt_compiler_%s.patch" % scala_major_version)
 
     minor_version = int(scala_minor_version)
 
     if scala_major_version == "2.12":
         if minor_version >= 1 and minor_version <= 7:
-            patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.1.patch" % scala_major_version
+            patch = Label(
+                "//dt_patches:dt_compiler_%s.1.patch" % scala_major_version,
+            )
         elif minor_version <= 11:
-            patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.8.patch" % scala_major_version
+            patch = Label(
+                "//dt_patches:dt_compiler_%s.8.patch" % scala_major_version,
+            )
 
     build_file_content = "\n".join([
         "package(default_visibility = [\"//visibility:public\"])",
@@ -132,14 +136,16 @@ def _artifact_ids(scala_version):
         "io_bazel_rules_scala_scala_parser_combinators",
         "org_scalameta_semanticdb_scalac",
     ] if scala_version.startswith("2") else [
-        "io_bazel_rules_scala_scala_library",
-        "io_bazel_rules_scala_scala_compiler",
-        "io_bazel_rules_scala_scala_interfaces",
-        "io_bazel_rules_scala_scala_tasty_core",
         "io_bazel_rules_scala_scala_asm",
-        "io_bazel_rules_scala_scala_xml",
-        "io_bazel_rules_scala_scala_parser_combinators",
+        "io_bazel_rules_scala_scala_compiler",
+        "io_bazel_rules_scala_scala_compiler_2",
+        "io_bazel_rules_scala_scala_interfaces",
+        "io_bazel_rules_scala_scala_library",
         "io_bazel_rules_scala_scala_library_2",
+        "io_bazel_rules_scala_scala_parser_combinators",
+        "io_bazel_rules_scala_scala_reflect_2",
+        "io_bazel_rules_scala_scala_tasty_core",
+        "io_bazel_rules_scala_scala_xml",
         "org_scala_sbt_compiler_interface",
     ]
 
