@@ -5,22 +5,29 @@ load(
     _default_maven_server_urls = "default_maven_server_urls",
 )
 load("//third_party/repositories:repositories.bzl", "repositories")
-load("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
-def scalafmt_default_config(path = ".scalafmt.conf"):
+def _scalafmt_config_impl(repository_ctx):
+    config_path = repository_ctx.attr.path
     build = []
     build.append("filegroup(")
     build.append("    name = \"config\",")
-    build.append("    srcs = [\"{}\"],".format(path))
+    build.append("    srcs = [\"{}\"],".format(config_path.name))
     build.append("    visibility = [\"//visibility:public\"],")
-    build.append(")")
+    build.append(")\n")
 
-    new_local_repository(
-        name = "scalafmt_default",
-        build_file_content = "\n".join(build),
-        path = "",
-    )
+    repository_ctx.file('BUILD', "\n".join(build), executable = False)
+    repository_ctx.symlink(repository_ctx.path(config_path), config_path.name)
+
+scalafmt_config = repository_rule(
+    implementation = _scalafmt_config_impl,
+    attrs = {
+        "path": attr.label(mandatory = True, allow_single_file = True),
+    }
+)
+
+def scalafmt_default_config(path = ".scalafmt.conf", **kwargs):
+    scalafmt_config(name = "scalafmt_default", path = "//:" + path, **kwargs)
 
 _SCALAFMT_DEPS = [
     "com_geirsson_metaconfig_core",
@@ -88,8 +95,6 @@ def scalafmt_repositories(
 def _register_scalafmt_toolchains():
     for scala_version in SCALA_VERSIONS:
         native.register_toolchains(
-            Label(
-                "//scala/scalafmt:scalafmt_toolchain" +
-                version_suffix(scala_version),
-            ),
+            "//scala/scalafmt:scalafmt_toolchain" +
+            version_suffix(scala_version),
         )

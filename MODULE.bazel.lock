@@ -120,7 +120,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "xxAkpqDuRJxrPC7X5BBcow8pObmWdZPFfOcAHfsYVMw=",
+        "bzlTransitiveDigest": "pZIoJZYbr1HgT0z5Kxxxu1e2qI1UXFOdYPS9qWebzpA=",
         "usagesDigest": "96aAqNas/TaP+QRWXKU65Ug7MdHDDDniDMkDHp2yVUA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -2205,11 +2205,10 @@
             }
           },
           "scalafmt_default": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:local.bzl",
-            "ruleClassName": "new_local_repository",
+            "bzlFile": "@@//scala/scalafmt:scalafmt_repositories.bzl",
+            "ruleClassName": "scalafmt_config",
             "attributes": {
-              "build_file_content": "filegroup(\n    name = \"config\",\n    srcs = [\".scalafmt.conf\"],\n    visibility = [\"//visibility:public\"],\n)",
-              "path": ""
+              "path": "@@//:.scalafmt.conf"
             }
           },
           "com_thesamet_scalapb_scalapb_runtime_3_3_3": {
