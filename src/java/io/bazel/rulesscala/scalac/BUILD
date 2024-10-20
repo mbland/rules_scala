@@ -18,10 +18,6 @@ java_binary(
     srcs = [
         ":scalac_files",
     ],
-    javacopts = [
-        "-source 1.8",
-        "-target 1.8",
-    ],
     main_class = "io.bazel.rulesscala.scalac.ScalacWorker",
     visibility = ["//visibility:public"],
     deps = (select_for_scala_version(
@@ -35,10 +31,6 @@ java_binary(
     name = "scalac_bootstrap",
     srcs = [
         ":scalac_files",
-    ],
-    javacopts = [
-        "-source 1.8",
-        "-target 1.8",
     ],
     main_class = "io.bazel.rulesscala.scalac.ScalacWorker",
     visibility = ["//visibility:public"],

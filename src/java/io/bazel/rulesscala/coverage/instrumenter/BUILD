@@ -5,10 +5,6 @@ java_binary(
     srcs = [
         "@io_bazel_rules_scala//src/java/io/bazel/rulesscala/coverage/instrumenter:instrumenter_files",
     ],
-    javacopts = [
-        "-source 1.8",
-        "-target 1.8",
-    ],
     main_class = "io.bazel.rulesscala.coverage.instrumenter.JacocoInstrumenter",
     visibility = ["//visibility:public"],
     deps = [
