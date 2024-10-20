@@ -96,25 +96,25 @@ def rules_scala_setup(scala_compiler_srcjar = None):
     if not native.existing_rule("com_google_absl"):
         http_archive(
             name = "com_google_absl",
-            sha256 = "91ac87d30cc6d79f9ab974c51874a704de9c2647c40f6932597329a282217ba8",
-            strip_prefix = "abseil-cpp-20220623.1",
-            url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.1.tar.gz",
+            sha256 = "f50e5ac311a81382da7fa75b97310e4b9006474f9560ac46f54a9967f07d4ae3",
+            strip_prefix = "abseil-cpp-20240722.0",
+            url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20240722.0.tar.gz",
         )
 
     if not native.existing_rule("com_google_protobuf"):
         http_archive(
             name = "com_google_protobuf",
-            sha256 = "75be42bd736f4df6d702a0e4e4d30de9ee40eac024c4b845d17ae4cc831fe4ae",
-            strip_prefix = "protobuf-21.7",
-            url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.7.tar.gz",
+            sha256 = "b2340aa47faf7ef10a0328190319d3f3bee1b24f426d4ce8f4253b6f27ce16db",
+            strip_prefix = "protobuf-28.2",
+            url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v28.2.tar.gz",
         )
 
     if not native.existing_rule("rules_cc"):
         http_archive(
             name = "rules_cc",
-            urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.6/rules_cc-0.0.6.tar.gz"],
-            sha256 = "3d9e271e2876ba42e114c9b9bc51454e379cbf0ec9ef9d40e2ae4cec61a31b40",
-            strip_prefix = "rules_cc-0.0.6",
+            urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.13/rules_cc-0.0.13.tar.gz"],
+            sha256 = "d9bdd3ec66b6871456ec9c965809f43a0901e692d754885e89293807762d3d80",
+            strip_prefix = "rules_cc-0.0.13",
         )
 
     if not native.existing_rule("rules_java"):
