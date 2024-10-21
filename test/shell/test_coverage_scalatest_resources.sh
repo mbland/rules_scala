@@ -17,6 +17,7 @@ test_coverage_succeeds_resource_call() {
 
 test_coverage_includes_resource_test_targets() {
     bazel coverage \
+        --instrument_test_targets=True \
         //test/coverage_scalatest_resources/consumer:tests
     grep -q "SF:test/coverage_scalatest_resources/consumer/src/test/scala/com/example/consumer/ConsumerSpec.scala" $(bazel info bazel-testlogs)/test/coverage_scalatest_resources/consumer/tests/coverage.dat
 }
