@@ -120,7 +120,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "pZIoJZYbr1HgT0z5Kxxxu1e2qI1UXFOdYPS9qWebzpA=",
+        "bzlTransitiveDigest": "Snd0rm283Oqq5y7Ml7n0zmHy2IXGkojHHEzAeVBHh38=",
         "usagesDigest": "96aAqNas/TaP+QRWXKU65Ug7MdHDDDniDMkDHp2yVUA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -309,7 +309,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_core_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -540,7 +544,10 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -765,7 +772,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_matchers_core_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -844,7 +855,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_matchers_core_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -967,7 +980,19 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_core_2_13_14",
+                "@io_bazel_rules_scala_scalatest_featurespec_2_13_14",
+                "@io_bazel_rules_scala_scalatest_flatspec_2_13_14",
+                "@io_bazel_rules_scala_scalatest_freespec_2_13_14",
+                "@io_bazel_rules_scala_scalatest_funspec_2_13_14",
+                "@io_bazel_rules_scala_scalatest_funsuite_2_13_14",
+                "@io_bazel_rules_scala_scalatest_matchers_core_2_13_14",
+                "@io_bazel_rules_scala_scalatest_mustmatchers_2_13_14",
+                "@io_bazel_rules_scala_scalatest_shouldmatchers_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -990,7 +1015,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_core_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -1529,7 +1558,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_core_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -1652,7 +1685,13 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_xml_2_12_19",
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalactic_2_12_19",
+                "@io_bazel_rules_scala_scalatest_compatible_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -1682,7 +1721,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_core_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -2164,7 +2207,19 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_core_2_12_19",
+                "@io_bazel_rules_scala_scalatest_featurespec_2_12_19",
+                "@io_bazel_rules_scala_scalatest_flatspec_2_12_19",
+                "@io_bazel_rules_scala_scalatest_freespec_2_12_19",
+                "@io_bazel_rules_scala_scalatest_funspec_2_12_19",
+                "@io_bazel_rules_scala_scalatest_funsuite_2_12_19",
+                "@io_bazel_rules_scala_scalatest_matchers_core_2_12_19",
+                "@io_bazel_rules_scala_scalatest_mustmatchers_2_12_19",
+                "@io_bazel_rules_scala_scalatest_shouldmatchers_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -2285,7 +2340,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_core_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -2516,7 +2573,17 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_core_3_3_3",
+                "@io_bazel_rules_scala_scalatest_featurespec_3_3_3",
+                "@io_bazel_rules_scala_scalatest_flatspec_3_3_3",
+                "@io_bazel_rules_scala_scalatest_freespec_3_3_3",
+                "@io_bazel_rules_scala_scalatest_funspec_3_3_3",
+                "@io_bazel_rules_scala_scalatest_funsuite_3_3_3",
+                "@io_bazel_rules_scala_scalatest_matchers_core_3_3_3",
+                "@io_bazel_rules_scala_scalatest_mustmatchers_3_3_3",
+                "@io_bazel_rules_scala_scalatest_shouldmatchers_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -2752,7 +2819,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_xml_2_12_19",
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -3340,7 +3411,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_core_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -3494,16 +3569,16 @@
             "ruleClassName": "jvm_import_external",
             "attributes": {
               "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-asm/9.1.0-scala-1/scala-asm-9.1.0-scala-1.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-asm/9.1.0-scala-1/scala-asm-9.1.0-scala-1.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-asm/9.1.0-scala-1/scala-asm-9.1.0-scala-1.jar",
-                "https://jcenter.bintray.com/org/scala-lang/modules/scala-asm/9.1.0-scala-1/scala-asm-9.1.0-scala-1.jar"
+                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-asm/9.5.0-scala-1/scala-asm-9.5.0-scala-1.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-asm/9.5.0-scala-1/scala-asm-9.5.0-scala-1.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-asm/9.5.0-scala-1/scala-asm-9.5.0-scala-1.jar",
+                "https://jcenter.bintray.com/org/scala-lang/modules/scala-asm/9.5.0-scala-1/scala-asm-9.5.0-scala-1.jar"
               ],
               "srcjar_urls": [],
-              "coordinates": "org.scala-lang.modules:scala-asm:9.1.0-scala-1",
+              "coordinates": "org.scala-lang.modules:scala-asm:9.5.0-scala-1",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "artifact_sha256": "b85af6cbbd6075c4960177c2c3aa03d53b5221fa58b0bc74a31b72f25595e39f",
+              "artifact_sha256": "fa582f7352f5ee5c244d7fe93c2a1d95dada2d281e1af9a535f0b5153c75088c",
               "licenses": [
                 "notice"
               ],
@@ -3825,7 +3900,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -3848,7 +3925,10 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_compiler",
+                "@io_bazel_rules_scala_scala_library"
+              ],
               "runtime_deps": [],
               "testonly_": true
             }
@@ -3871,7 +3951,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_matchers_core_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -4105,7 +4189,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_core_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -4263,7 +4349,10 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -4405,7 +4494,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_core_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -4428,7 +4519,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -4451,7 +4544,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_core_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -4986,20 +5083,22 @@
             "ruleClassName": "jvm_import_external",
             "attributes": {
               "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.2.0/scala-xml_2.12-1.2.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-xml_2.12/1.2.0/scala-xml_2.12-1.2.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.2.0/scala-xml_2.12-1.2.0.jar",
-                "https://jcenter.bintray.com/org/scala-lang/modules/scala-xml_2.12/1.2.0/scala-xml_2.12-1.2.0.jar"
+                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_2.12/2.2.0/scala-xml_2.12-2.2.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-xml_2.12/2.2.0/scala-xml_2.12-2.2.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/2.2.0/scala-xml_2.12-2.2.0.jar",
+                "https://jcenter.bintray.com/org/scala-lang/modules/scala-xml_2.12/2.2.0/scala-xml_2.12-2.2.0.jar"
               ],
               "srcjar_urls": [],
-              "coordinates": "org.scala-lang.modules:scala-xml_2.12:1.2.0",
+              "coordinates": "org.scala-lang.modules:scala-xml_2.12:2.2.0",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "artifact_sha256": "1b48dc206f527b7604ef32492ada8e71706c63a65d999e0cabdafdc5793b4d63",
+              "artifact_sha256": "fd92f78b7acfea72999aceba5b377a000f42f9296d3d98224c9b1c471815582f",
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -5168,7 +5267,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -5191,7 +5292,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_matchers_core_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -5219,7 +5324,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -5305,7 +5412,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_core_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -5689,16 +5798,16 @@
             "ruleClassName": "jvm_import_external",
             "attributes": {
               "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_2.13/1.3.0/scala-xml_2.13-1.3.0.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-xml_2.13/1.3.0/scala-xml_2.13-1.3.0.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.13/1.3.0/scala-xml_2.13-1.3.0.jar",
-                "https://jcenter.bintray.com/org/scala-lang/modules/scala-xml_2.13/1.3.0/scala-xml_2.13-1.3.0.jar"
+                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_3/2.0.0/scala-xml_3-2.0.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-xml_3/2.0.0/scala-xml_3-2.0.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_3/2.0.0/scala-xml_3-2.0.0.jar",
+                "https://jcenter.bintray.com/org/scala-lang/modules/scala-xml_3/2.0.0/scala-xml_3-2.0.0.jar"
               ],
               "srcjar_urls": [],
-              "coordinates": "org.scala-lang.modules:scala-xml_2.13:1.3.0",
+              "coordinates": "org.scala-lang.modules:scala-xml_3:2.0.0",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "artifact_sha256": "6d96d45a7fc6fc7ab69bdbac841b48cf67ab109f048c8db375ae4effae524f39",
+              "artifact_sha256": "98485486ec710ac1851491d318a31bceef372935bc468431c0bc8aff36401ef7",
               "licenses": [
                 "notice"
               ],
@@ -5725,7 +5834,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_core_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -5883,7 +5996,13 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_xml_2_13_14",
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalactic_2_13_14",
+                "@io_bazel_rules_scala_scalatest_compatible_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -6114,7 +6233,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_matchers_core_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -6200,7 +6321,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_core_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -6328,7 +6453,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_core_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -6358,7 +6487,10 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -6570,7 +6702,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_xml_3_3_3",
+                "@io_bazel_rules_scala_scalactic_3_3_3",
+                "@io_bazel_rules_scala_scalatest_compatible_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -6593,7 +6729,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_core_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -6660,7 +6798,7 @@
                 "https://jcenter.bintray.com/org/scalatest/scalatest-compatible/3.2.9/scalatest-compatible-3.2.9.jar"
               ],
               "srcjar_urls": [],
-              "coordinates": "org.scalatest:scalatest-compatible:jar:3.2.9",
+              "coordinates": "org.scalatest:scalatest-compatible:3.2.9",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "artifact_sha256": "7e5f1193af2fd88c432c4b80ce3641e4b1d062f421d8a0fcc43af9a19bb7c2eb",
@@ -6893,7 +7031,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_core_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -6979,7 +7121,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_19",
+                "@io_bazel_rules_scala_scala_reflect_2_12_19",
+                "@io_bazel_rules_scala_scalatest_core_2_12_19"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -7002,7 +7148,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_asm_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -7025,7 +7173,9 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scalatest_core_3_3_3"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -7353,7 +7503,7 @@
                 "https://jcenter.bintray.com/org/scalatest/scalatest-compatible/3.2.9/scalatest-compatible-3.2.9.jar"
               ],
               "srcjar_urls": [],
-              "coordinates": "org.scalatest:scalatest-compatible:jar:3.2.9",
+              "coordinates": "org.scalatest:scalatest-compatible:3.2.9",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
               "artifact_sha256": "7e5f1193af2fd88c432c4b80ce3641e4b1d062f421d8a0fcc43af9a19bb7c2eb",
@@ -7671,7 +7821,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_core_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
@@ -7856,7 +8010,11 @@
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_13_14",
+                "@io_bazel_rules_scala_scala_reflect_2_13_14",
+                "@io_bazel_rules_scala_scalatest_matchers_core_2_13_14"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }

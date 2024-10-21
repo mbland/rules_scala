@@ -19,9 +19,7 @@ filegroup(
 
 scala_binary(
     name = "scalafmt",
-    srcs = [
-        "scalafmt/ScalafmtWorker.scala",
-    ] + select_for_scala_version(
+    srcs = ["scalafmt/ScalafmtWorker.scala"] + select_for_scala_version(
         before_2_12_0 = ["scalafmt/ScalafmtAdapter-2_11.scala"],
         since_2_12_0 = ["scalafmt/ScalafmtAdapter.scala"],
     ),
