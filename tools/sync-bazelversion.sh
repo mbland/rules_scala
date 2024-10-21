@@ -20,6 +20,6 @@ elif [[ ! -r .bazelversion ]]; then
   exit 1
 fi
 
-while IFS="" read rcpath; do
-  cp .bazelversion "${rcpath%/*}"
-done < <(find [a-z]* -name '.bazelrc')
+while IFS="" read module_path; do
+  cp .bazelversion "${module_path%/*}"
+done < <(find [a-z]* -name 'MODULE.bazel')
