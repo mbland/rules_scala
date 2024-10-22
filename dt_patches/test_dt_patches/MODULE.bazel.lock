@@ -204,7 +204,7 @@
     "@@rules_scala~//scala/extensions:config.bzl%scala_config": {
       "general": {
         "bzlTransitiveDigest": "DZEdjTaNdxwteucsuK9U7V8PszZm88dweMv9rbZeti0=",
-        "usagesDigest": "bEQVNMzQuY54N2CsQu5EFS97u65ZfNtP5aGnAXrrxRI=",
+        "usagesDigest": "YnOHpts9DJlneqIG5UApMVn3UuBMesJTZlFdDUd86/o=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {
