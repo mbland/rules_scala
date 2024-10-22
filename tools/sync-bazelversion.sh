@@ -20,6 +20,11 @@ elif [[ ! -r .bazelversion ]]; then
   exit 1
 fi
 
-while IFS="" read module_path; do
-  cp .bazelversion "${module_path%/*}"
-done < <(find [a-z]* -name 'MODULE.bazel')
+while IFS="" read repo_marker_path; do
+  repo_path="${repo_marker_path%/*}"
+
+  # Guard against overwriting top-level WORKSPACE and MODULE.bazel files.
+  if [[ "$repo_path" != "$repo_marker_path" ]]; then
+    cp .bazelversion "$repo_path"
+  fi
+done < <(find [A-Za-z0-9]* \( -name "WORKSPACE*" -or -name "MODULE.bazel" \))
