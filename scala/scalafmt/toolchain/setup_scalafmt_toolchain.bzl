@@ -1,4 +1,3 @@
-load("//scala/scalafmt:scalafmt_repositories.bzl", "scalafmt_artifact_ids")
 load("//scala/scalafmt/toolchain:toolchain.bzl", "scalafmt_toolchain")
 load("//scala/scalafmt:scalafmt_repositories.bzl", "scalafmt_artifact_ids")
 load("//scala:providers.bzl", "declare_deps_provider")

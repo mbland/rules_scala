@@ -120,7 +120,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "Snd0rm283Oqq5y7Ml7n0zmHy2IXGkojHHEzAeVBHh38=",
+        "bzlTransitiveDigest": "lHXZ1lBIdiJFZXKIOzMDUxzJZE6cdBIS6LZ2EqDa+M4=",
         "usagesDigest": "96aAqNas/TaP+QRWXKU65Ug7MdHDDDniDMkDHp2yVUA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
