@@ -1,5 +1,6 @@
 load("//scala/scalafmt:scalafmt_repositories.bzl", "scalafmt_artifact_ids")
 load("//scala/scalafmt/toolchain:toolchain.bzl", "scalafmt_toolchain")
+load("//scala/scalafmt:scalafmt_repositories.bzl", "scalafmt_artifact_ids")
 load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala:scala_cross_version.bzl", "version_suffix")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
