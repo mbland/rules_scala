@@ -103,6 +103,21 @@ _toolchains_attrs = {
     "scalafmt": attr.bool(),
 }
 
+def _get_root_module(module_ctx):
+    """Returns the root bazel_module object from the module extension context.
+
+    Args:
+        module_ctx: the module extension context
+
+    Returns:
+        The root bazel_module object if found, None otherwise
+    """
+    for module in module_ctx.modules:
+        # Only the root module can override the defaults.
+        if module.is_root:
+            return module
+    return None
+
 def _compile_tags(bazel_module_tags, defaults):
     """Compiles tag class values from a list of bazel_module_tags.
 
@@ -142,10 +157,11 @@ def _compile_root_tags(module_ctx, tag_class_name, defaults):
         The values compiled from the root module's tag class instances, or
             `defaults` if the root module didn't define any
     """
-    for mod in module_ctx.modules:
-        # Only the root module can override the defaults.
-        if mod.is_root:
-            return _compile_tags(getattr(mod.tags, tag_class_name), defaults)
+    root = _get_root_module(module_ctx)
+
+    # Only the root module can override the defaults.
+    if root != None:
+        return _compile_tags(getattr(root.tags, tag_class_name), defaults)
     return defaults
 
 def _get_settings(module_ctx):
@@ -176,12 +192,13 @@ def _add_if_not_empty(result, name, value):
         result[name] = value
 
 def _get_scala_compiler_srcjars(module_ctx):
+    root_module = _get_root_module(module_ctx)
+
+    if root_module == None:
+        return {}
+
     result = {}
-
-    for srcjar in module_ctx.modules[0].tags.compiler_srcjar:
-        if srcjar in result:
-            continue
-
+    for srcjar in root_module.tags.compiler_srcjar:
         info = {}
         _add_if_not_empty(info, "url", srcjar.url)
         _add_if_not_empty(info, "urls", srcjar.urls)
@@ -191,6 +208,8 @@ def _get_scala_compiler_srcjars(module_ctx):
         # Label values don't have a length.
         if srcjar.label != None:
             info["label"] = srcjar.label
+
+        # Later instances for the same version overwrite earlier ones.
         result[srcjar.version] = info
 
     return result
