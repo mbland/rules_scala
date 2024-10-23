@@ -92,7 +92,7 @@
   "moduleExtensions": {
     "//scala/extensions:config.bzl%scala_config": {
       "general": {
-        "bzlTransitiveDigest": "DZEdjTaNdxwteucsuK9U7V8PszZm88dweMv9rbZeti0=",
+        "bzlTransitiveDigest": "1/ceNGE+7kbjP3VEh9b6jJ4FNHpdoVPH8wcIStpfBRM=",
         "usagesDigest": "7kCwOhMRHKwx8X8BZoxtbCR7cHlPDABn2tyVmVaNgd8=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -120,7 +120,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "pPBWwo73+Z89JL5djXJPj11nKNHV2rM9PZyY9abgVHk=",
+        "bzlTransitiveDigest": "JjdM5SZ36wncabm5dGtd3jl85BzNgpqei6CthW79APM=",
         "usagesDigest": "X3iIZmBGO2AIMm5xbjwr1hEvufVu0Fa1pseATIsCM3A=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -170,7 +170,7 @@
           },
           "scala_compiler_sources": {
             "bzlFile": "@@//scala/private:macros/scala_repositories.bzl",
-            "ruleClassName": "dt_patched_compiler_source_aliases_repo",
+            "ruleClassName": "compiler_sources_repo",
             "attributes": {
               "scala_versions": [
                 "2.13.14",
@@ -8054,7 +8054,7 @@
           },
           "io_bazel_rules_scala_toolchains": {
             "bzlFile": "@@//scala/private/extensions:toolchains.bzl",
-            "ruleClassName": "scala_toolchains_repo",
+            "ruleClassName": "_scala_toolchains_repo",
             "attributes": {
               "scala": true,
               "scalatest": true,
@@ -8092,11 +8092,6 @@
           ],
           [
             "",
-            "io_bazel_rules_scala_toolchains",
-            "_main~scala_deps~io_bazel_rules_scala_toolchains"
-          ],
-          [
-            "",
             "rules_proto",
             "rules_proto~"
           ],
@@ -8125,7 +8120,7 @@
     },
     "//scala/private/extensions:dev_deps.bzl%dev_deps": {
       "general": {
-        "bzlTransitiveDigest": "9dx3PfSEu0fpN9/j03ipwQTDufyAdXS1zBPFNLf8koQ=",
+        "bzlTransitiveDigest": "5g0u001g8RtEMJ4Ml3QIEedKh+k0QjXPWR3591RmYqA=",
         "usagesDigest": "mlH+nDhOWSrxcVuyaz1gBqkn9fpHQULUT/kfvKwVyvE=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

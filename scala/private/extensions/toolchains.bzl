@@ -65,7 +65,7 @@ def _scala_toolchains_repo_impl(repository_ctx):
             executable = False,
         )
 
-scala_toolchains_repo = repository_rule(
+_scala_toolchains_repo = repository_rule(
     implementation = _scala_toolchains_repo_impl,
     attrs = {
         "scala": attr.bool(),
@@ -80,6 +80,12 @@ scala_toolchains_repo = repository_rule(
         "scalafmt": attr.bool(),
     },
 )
+
+def scala_toolchains_repo(**kwargs):
+    _scala_toolchains_repo(
+        name = "io_bazel_rules_scala_toolchains",
+        **kwargs
+    )
 
 _SCALA_TOOLCHAIN_BUILD = """
 load(
@@ -104,20 +110,6 @@ load(
     for scala_version in SCALA_VERSIONS
 ]
 
-setup_scala_toolchain(
-    name = "unused_dependency_checker_error_toolchain",
-    dependency_tracking_method = "ast-plus",
-    unused_dependency_checker_mode = "error",
-)
-
-setup_scala_toolchain(
-    name = "minimal_direct_source_deps",
-    dependency_mode = "plus-one",
-    dependency_tracking_method = "ast",
-    strict_deps_mode = "error",
-    unused_dependency_checker_mode = "error",
-)
-
 [
     declare_deps_provider(
         name = deps_id + "_provider",
@@ -126,11 +118,11 @@ setup_scala_toolchain(
         deps = default_deps(deps_id, SCALA_VERSION),
     )
     for deps_id in [
+        "scala_xml",
+        "parser_combinators",
         "scala_compile_classpath",
         "scala_library_classpath",
         "scala_macro_classpath",
-        "scala_xml",
-        "parser_combinators",
         "semanticdb",
     ]
 ]

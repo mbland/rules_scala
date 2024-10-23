@@ -117,9 +117,14 @@ run_test_local test_compiler_patch 2.13.14
 run_test_local test_compiler_srcjar_error 2.12.11
 run_test_local test_compiler_srcjar_error 2.12.12
 run_test_local test_compiler_srcjar_error 2.12.13
+
 # These tests are semi-stateful, if two tests are run sequentially with the
 # same Scala version, the DEBUG message about a canonical reproducible form
 # that we grep for will only be outputted the first time (on Bazel >= 6).
+# So we clean the repo first to ensure consistency.
+
+run_in_test_repo "bazel clean --expunge" "test_dt_patches_user_srcjar"
+
 run_test_local test_compiler_srcjar 2.12.14
 run_test_local test_compiler_srcjar 2.12.15
 run_test_local test_compiler_srcjar 2.12.16

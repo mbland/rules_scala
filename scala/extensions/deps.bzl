@@ -5,8 +5,8 @@ load("//junit:junit.bzl", "junit_repositories")
 load("//scala/private/extensions:toolchains.bzl", "scala_toolchains_repo")
 load(
     "//scala/private:macros/scala_repositories.bzl",
+    "compiler_sources_repo",
     "dt_patched_compiler_setup",
-    "dt_patched_compiler_source_aliases_repo",
     "rules_scala_toolchain_deps_repositories",
 )
 load(
@@ -264,7 +264,7 @@ def _scala_deps_impl(module_ctx):
             # Replace rules_scala_setup()
             dt_patched_compiler_setup(version, srcjars.get(version))
 
-    dt_patched_compiler_source_aliases_repo(
+    compiler_sources_repo(
         name = "scala_compiler_sources",
         scala_versions = SCALA_VERSIONS,
     )
@@ -338,7 +338,6 @@ def _scala_deps_impl(module_ctx):
 
     if len(toolchains) != 0:
         scala_toolchains_repo(
-            name = "io_bazel_rules_scala_toolchains",
             scala = "scala" in toolchains,
             scalatest = "scalatest" in toolchains,
             junit = "junit" in toolchains,

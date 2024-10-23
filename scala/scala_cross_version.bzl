@@ -53,6 +53,7 @@ def version_suffix(scala_version):
     return "_" + sanitize_version(scala_version)
 
 def repositories(scala_version, repos):
+    """Adds the Scala version suffix to a list of repository IDs."""
     suffix = version_suffix(scala_version)
     return [repo + suffix for repo in repos]
 

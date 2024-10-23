@@ -23,7 +23,9 @@ fi
 while IFS="" read repo_marker_path; do
   repo_path="${repo_marker_path%/*}"
 
-  # Guard against overwriting top-level WORKSPACE and MODULE.bazel files.
+  # We search for WORKSPACE and MODULE.bazel instead of .bazelversion in case
+  # anyone adds new child repositories. But we need to guard against overwriting
+  # the top-level WORKSPACE and MODULE.bazel files.
   if [[ "$repo_path" != "$repo_marker_path" ]]; then
     cp .bazelversion "$repo_path"
   fi

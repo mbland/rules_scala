@@ -13,7 +13,7 @@ scala_library(
         any_3 = [
             "io/bazel/rulesscala/utils/Scala3CompilerUtils.scala",
         ],
-        since_2_13_9 = [
+        between_2_13_9_and_3 = [
             "scala/tools/cmd/Scala_2_13_9_CommandLineParser.scala",
         ],
     ),

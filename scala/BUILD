@@ -1,4 +1,5 @@
 load("//scala:scala_cross_version.bzl", "version_suffix")
+load("//scala:scala_toolchain.bzl", "scala_toolchain")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 load("@rules_java//java:defs.bzl", "java_import", "java_library")
 
@@ -16,12 +17,28 @@ alias(
     ),
 )
 
+scala_toolchain(
+    name = "unused_dependency_checker_error_toolchain_impl",
+    dependency_tracking_method = "ast-plus",
+    unused_dependency_checker_mode = "error",
+)
+
+scala_toolchain(
+    name = "minimal_direct_source_deps_impl",
+    dependency_mode = "plus-one",
+    dependency_tracking_method = "ast",
+    strict_deps_mode = "error",
+    unused_dependency_checker_mode = "error",
+)
+
 [
-    alias(
-        name = toolchain,
-        actual = "@io_bazel_rules_scala_toolchains//scala:" + toolchain,
+    toolchain(
+        name = tc,
+        toolchain = tc + "_impl",
+        toolchain_type = "//scala:toolchain_type",
+        visibility = ["//visibility:public"],
     )
-    for toolchain in [
+    for tc in [
         "unused_dependency_checker_error_toolchain",
         "minimal_direct_source_deps",
     ]
