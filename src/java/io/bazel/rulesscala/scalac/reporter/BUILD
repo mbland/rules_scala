@@ -5,6 +5,10 @@ load("//scala:scala_cross_version_select.bzl", "select_for_scala_version")
 java_library(
     name = "reporter",
     srcs = select_for_scala_version(
+        any_2_13_0 = [
+            "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
+            "before_2_12_13/ProtoReporter.java",
+        ],
         before_2_12_13 = [
             "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
             "before_2_12_13/ProtoReporter.java",
@@ -13,17 +17,13 @@ java_library(
             "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
             "after_2_12_13_and_before_2_13_12/ProtoReporter.java",
         ],
-        any_2_13_0 = [
+        between_2_13_12_and_3 = [
             "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
-            "before_2_12_13/ProtoReporter.java",
+            "after_2_13_12/ProtoReporter.java",
         ],
         between_2_13_1_and_2_13_12 = [
             "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
             "after_2_12_13_and_before_2_13_12/ProtoReporter.java",
-        ],
-        between_2_13_12_and_3 = [
-            "//src/java/io/bazel/rulesscala/scalac/deps_tracking_reporter",
-            "after_2_13_12/ProtoReporter.java",
         ],
         default = ["PlaceholderForEmptyScala3Lib.java"],
     ),
