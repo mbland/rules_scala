@@ -108,15 +108,18 @@ def _scala_toolchain_impl(ctx):
 
 def _default_dep_providers():
     dep_providers = [
-        "@io_bazel_rules_scala//scala:scala_xml_provider",
-        "@io_bazel_rules_scala//scala:parser_combinators_provider",
-        "@io_bazel_rules_scala//scala:scala_compile_classpath_provider",
-        "@io_bazel_rules_scala//scala:scala_library_classpath_provider",
-        "@io_bazel_rules_scala//scala:scala_macro_classpath_provider",
+        "scala_xml",
+        "parser_combinators",
+        "scala_compile_classpath",
+        "scala_library_classpath",
+        "scala_macro_classpath",
     ]
-    if SCALA_MAJOR_VERSION.startswith("2"):
-        dep_providers.append("@io_bazel_rules_scala//scala:semanticdb_provider")
-    return dep_providers
+    if SCALA_MAJOR_VERSION.startswith("2."):
+        dep_providers.append("semanticdb")
+    return [
+        "@io_bazel_rules_scala_toolchains//scala:%s_provider" % p
+        for p in dep_providers
+    ]
 
 scala_toolchain = rule(
     _scala_toolchain_impl,
