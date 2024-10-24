@@ -104,11 +104,6 @@ def _scrooge_repositories_ext_impl(module_ctx):
             bzlmod_enabled = True,
         )
 
-    scala_toolchains_repo(
-        name = "test_version_scrooge_toolchain",
-        twitter_scrooge = True,
-    )
-
 scrooge_repositories_ext = module_extension(
     implementation = _scrooge_repositories_ext_impl,
     tag_classes = {

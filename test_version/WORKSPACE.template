@@ -67,7 +67,12 @@ load(
 
 scala_repositories(fetch_sources = True)
 
-scala_toolchains_repo()
+scala_toolchains_repo(
+    scala_proto = True,
+    scalatest = True,
+    specs2 = True,
+    twitter_scrooge = True,
+)
 
 load(":scrooge_repositories.bzl", "scrooge_repositories")
 ${twitter_scrooge_repositories}
@@ -77,10 +82,6 @@ twitter_scrooge()
 load("@io_bazel_rules_scala//scala_proto:scala_proto.bzl", "scala_proto_repositories")
 
 scala_proto_repositories()
-
-load("@io_bazel_rules_scala//scala_proto:toolchains.bzl", "scala_proto_register_toolchains")
-
-scala_proto_register_toolchains()
 
 load("@io_bazel_rules_scala//specs2:specs2_junit.bzl", "specs2_junit_repositories")
 
@@ -95,3 +96,5 @@ register_toolchains("@io_bazel_rules_scala//testing:testing_toolchain")
 load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_unused_deps_toolchains")
 
 scala_register_unused_deps_toolchains()
+
+register_toolchains("@io_bazel_rules_scala_toolchains//...:all")

@@ -73,7 +73,7 @@
   "moduleExtensions": {
     "//:extensions.bzl%compiler_source_repos": {
       "general": {
-        "bzlTransitiveDigest": "tr/BFW9Qv+j4HnDZMem9jAeeInpT7k0Js6WOAflLITk=",
+        "bzlTransitiveDigest": "UlZ2VbZh9optoaiu2zTAE+EnEmhzbAOQo+v93Riy5u4=",
         "usagesDigest": "E84kDfEwwDik3ZGD1D/P0PzSpkogWDKjb0u4rlyn6vI=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -203,7 +203,7 @@
     },
     "@@rules_scala~//scala/extensions:config.bzl%scala_config": {
       "general": {
-        "bzlTransitiveDigest": "DZEdjTaNdxwteucsuK9U7V8PszZm88dweMv9rbZeti0=",
+        "bzlTransitiveDigest": "1/ceNGE+7kbjP3VEh9b6jJ4FNHpdoVPH8wcIStpfBRM=",
         "usagesDigest": "YnOHpts9DJlneqIG5UApMVn3UuBMesJTZlFdDUd86/o=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -229,7 +229,7 @@
     },
     "@@rules_scala~//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "06mUk9HbW8rLST58dNBFGH4FfNIBYCgS255rkmRo3a4=",
+        "bzlTransitiveDigest": "4SQfDyuGHfFyhaRWyP9fEn6CiEpk36cDVxRftjcWlWA=",
         "usagesDigest": "ItZHX4tF7fU1VuH+p1PXTRhFDQ6KpZiA7K+rQJPyQZI=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -251,7 +251,7 @@
           },
           "scala_compiler_sources": {
             "bzlFile": "@@rules_scala~//scala/private:macros/scala_repositories.bzl",
-            "ruleClassName": "dt_patched_compiler_source_aliases_repo",
+            "ruleClassName": "compiler_sources_repo",
             "attributes": {
               "scala_versions": [
                 "2.13.14"
@@ -479,7 +479,7 @@
           },
           "io_bazel_rules_scala_toolchains": {
             "bzlFile": "@@rules_scala~//scala/private/extensions:toolchains.bzl",
-            "ruleClassName": "scala_toolchains_repo",
+            "ruleClassName": "_scala_toolchains_repo",
             "attributes": {
               "scala": true,
               "scalatest": false,
@@ -534,11 +534,6 @@
             "rules_scala~",
             "io_bazel_rules_scala_config",
             "rules_scala~~scala_config~io_bazel_rules_scala_config"
-          ],
-          [
-            "rules_scala~",
-            "io_bazel_rules_scala_toolchains",
-            "rules_scala~~scala_deps~io_bazel_rules_scala_toolchains"
           ],
           [
             "rules_scala~",

@@ -118,7 +118,7 @@
     },
     "@@rules_scala~//scala/extensions:config.bzl%scala_config": {
       "general": {
-        "bzlTransitiveDigest": "DZEdjTaNdxwteucsuK9U7V8PszZm88dweMv9rbZeti0=",
+        "bzlTransitiveDigest": "1/ceNGE+7kbjP3VEh9b6jJ4FNHpdoVPH8wcIStpfBRM=",
         "usagesDigest": "nl633jBnfSxGii24HFl7fqNpViQ/QVz1UgnsyXrlrmI=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -149,7 +149,7 @@
     },
     "@@rules_scala~//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "btUiY1O7IBZWN/87XbZuecjmxc62OxWQlLKOrYqqb6A=",
+        "bzlTransitiveDigest": "XxyMD1ij4IGRmhLY97pxWXpQ0bowTZhaFd/+G7uT7JU=",
         "usagesDigest": "Ze6ZY8+ROfnesXWY75CxoyxxBgDrUZvbhpc6jzhkQP8=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -241,7 +241,7 @@
           },
           "scala_compiler_sources": {
             "bzlFile": "@@rules_scala~//scala/private:macros/scala_repositories.bzl",
-            "ruleClassName": "dt_patched_compiler_source_aliases_repo",
+            "ruleClassName": "compiler_sources_repo",
             "attributes": {
               "scala_versions": [
                 "3.1.3",
@@ -8338,7 +8338,7 @@
           },
           "io_bazel_rules_scala_toolchains": {
             "bzlFile": "@@rules_scala~//scala/private/extensions:toolchains.bzl",
-            "ruleClassName": "scala_toolchains_repo",
+            "ruleClassName": "_scala_toolchains_repo",
             "attributes": {
               "scala": true,
               "scalatest": true,
@@ -8393,11 +8393,6 @@
             "rules_scala~",
             "io_bazel_rules_scala_config",
             "rules_scala~~scala_config~io_bazel_rules_scala_config"
-          ],
-          [
-            "rules_scala~",
-            "io_bazel_rules_scala_toolchains",
-            "rules_scala~~scala_deps~io_bazel_rules_scala_toolchains"
           ],
           [
             "rules_scala~",

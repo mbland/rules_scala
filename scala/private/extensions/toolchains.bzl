@@ -22,7 +22,7 @@ def _generate_testing_toolchain_build_file_args(repo_attr):
         return None
     return {
         "deps_symbols": "\",\n    \"".join(
-            [s for s in framework_deps.values()]
+            [s for s in framework_deps.values()],
         ),
         "scalatest": framework_deps.get("scalatest"),
         "junit": framework_deps.get("junit"),
@@ -68,7 +68,7 @@ def _scala_toolchains_repo_impl(repository_ctx):
 _scala_toolchains_repo = repository_rule(
     implementation = _scala_toolchains_repo_impl,
     attrs = {
-        "scala": attr.bool(),
+        "scala": attr.bool(default = True),
         "scalatest": attr.bool(),
         "junit": attr.bool(),
         "specs2": attr.bool(),

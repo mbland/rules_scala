@@ -23,8 +23,8 @@ scala_config.settings(
 )
 
 scala_deps = use_extension(
-  "@io_bazel_rules_scala//scala/extensions:deps.bzl",
-  "scala_deps",
+    "@io_bazel_rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
 )
 
 scala_deps.settings(
@@ -42,16 +42,15 @@ use_repo(
     "io_bazel_rules_scala_scrooge_generator",
     "io_bazel_rules_scala_util_core",
     "io_bazel_rules_scala_util_logging",
-    "test_version_scrooge_toolchain",
 )
 
 scala_deps.toolchains(
-  scala_proto = True,
-  scalatest = True,
-  specs2 = True,
+    scala_proto = True,
+    scalatest = True,
+    specs2 = True,
+    twitter_scrooge = True,
 )
 
 register_toolchains(
     "@io_bazel_rules_scala//scala:unused_dependency_checker_error_toolchain",
-    "@test_version_scrooge_toolchain//...:all",
 )

@@ -41,6 +41,36 @@ load(
     "rules_scala_toolchain_deps_repositories",
     "scala_toolchains_repo",
 )
+load(
+    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
+    "default_maven_server_urls",
+)
+load(
+    "@io_bazel_rules_scala//scala:scala_maven_import_external.bzl",
+    "scala_maven_import_external",
+)
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
+
+scala_maven_import_external(
+    name = "scala_library",
+    artifact = "org.scala-lang:scala-library:%s" % SCALA_VERSION,
+    licenses = ["notice"],
+    server_urls = default_maven_server_urls(),
+)
+
+scala_maven_import_external(
+    name = "scala_compiler",
+    artifact = "org.scala-lang:scala-compiler:%s" % SCALA_VERSION,
+    licenses = ["notice"],
+    server_urls = default_maven_server_urls(),
+)
+
+scala_maven_import_external(
+    name = "scala_reflect",
+    artifact = "org.scala-lang:scala-reflect:%s" % SCALA_VERSION,
+    licenses = ["notice"],
+    server_urls = default_maven_server_urls(),
+)
 
 rules_scala_setup()
 
