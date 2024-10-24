@@ -265,8 +265,8 @@ artifacts = {
         "sha256": "4c0aa7e223c75c8840c41fc183d4cd3118140a1ee503e3e08ce66ed2794c948f",
     },
     "org_scala_lang_scalap": {
-        "artifact": "org.scala-lang:scalap:2.13.15",
-        "sha256": "78991282d73e9d20cbf187bab8549ce2ef940269409d47df2a71faaf9afc4616",
+        "artifact": "org.scala-lang:scalap:2.13.11",
+        "sha256": "ac358699f40002fb4f32ad77531765fce23425d0e83c51854d1635118ab285ea",
         "deps": [
             "@io_bazel_rules_scala_scala_compiler",
         ],
@@ -304,8 +304,8 @@ artifacts = {
         ],
     },
     "com_lihaoyi_pprint": {
-        "artifact": "com.lihaoyi:pprint_2.13:0.9.0",
-        "sha256": "5dd36b65addcd47bccc68d36dd00bee93e2def439f1a36d02a450308e8d9a3d3",
+        "artifact": "com.lihaoyi:pprint_2.13:0.6.4",
+        "sha256": "618585ee50a3b3939ed8a24d9b165d925e8a926cec9e368bacd1b7feee6b32c2",
         "deps": [
             "@com_lihaoyi_fansi",
             "@com_lihaoyi_sourcecode",
