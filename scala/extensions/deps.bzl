@@ -3,12 +3,7 @@
 load("//jmh:jmh.bzl", "jmh_repositories")
 load("//junit:junit.bzl", "junit_repositories")
 load("//scala/private/extensions:toolchains.bzl", "scala_toolchains_repo")
-load(
-    "//scala/private:macros/scala_repositories.bzl",
-    "compiler_sources_repo",
-    "dt_patched_compiler_setup",
-    "rules_scala_toolchain_deps_repositories",
-)
+load("//scala/private:macros/scala_repositories.bzl", "scala_repositories")
 load(
     "//scala/scalafmt:scalafmt_repositories.bzl",
     "scalafmt_default_config",
@@ -46,13 +41,7 @@ _settings = {
             "default": {},
         },
     ),
-    "load_dep_rules": struct(
-        attr = attr.bool,
-        params = {
-            "default": True,
-        },
-    ),
-    "load_jar_deps": struct(
+    "load_toolchain_dependencies": struct(
         attr = attr.bool,
         params = {
             "default": True,
@@ -178,8 +167,7 @@ def _get_settings(module_ctx):
     scalafmt = _compile_root_tags(module_ctx, "scalafmt", _defaults(_scalafmt))
 
     return (
-        settings["load_dep_rules"],
-        settings["load_jar_deps"],
+        settings["load_toolchain_dependencies"],
         settings["maven_servers"],
         settings["overridden_artifacts"],
         settings["fetch_sources"],
@@ -247,36 +235,26 @@ def _get_toolchains(module_ctx):
 
 def _scala_deps_impl(module_ctx):
     (
-        load_dep_rules,
-        load_jar_deps,
+        load_toolchain_dependencies,
         maven_servers,
         overridden_artifacts,
         fetch_sources,
         validate_scala_version,
         scalafmt_default_config_path,
     ) = _get_settings(module_ctx)
-    srcjars = _get_scala_compiler_srcjars(module_ctx)
+    compiler_srcjars = _get_scala_compiler_srcjars(module_ctx)
     toolchains = _get_toolchains(module_ctx)
 
-    # Replace scala_repositories()
-    for version in SCALA_VERSIONS:
-        if load_dep_rules:
-            # Replace rules_scala_setup()
-            dt_patched_compiler_setup(version, srcjars.get(version))
-
-    compiler_sources_repo(
-        name = "scala_compiler_sources",
-        scala_versions = SCALA_VERSIONS,
+    scala_repositories(
+        maven_servers = maven_servers,
+        # Note the internal macro parameter misspells "overriden".
+        overriden_artifacts = overridden_artifacts,
+        load_dep_rules = False,  # MODULE.bazel loads dependencies now.
+        load_jar_deps = load_toolchain_dependencies,
+        fetch_sources = fetch_sources,
+        validate_scala_version = validate_scala_version,
+        scala_compiler_srcjars = compiler_srcjars,
     )
-
-    if load_jar_deps:
-        rules_scala_toolchain_deps_repositories(
-            maven_servers = maven_servers,
-            # Note the internal macro parameters misspell "overriden".
-            overriden_artifacts = overridden_artifacts,
-            fetch_sources = fetch_sources,
-            validate_scala_version = validate_scala_version,
-        )
 
     if "scalatest" in toolchains:
         scalatest_repositories(
