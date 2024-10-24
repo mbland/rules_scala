@@ -23,8 +23,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest": {
-        "artifact": "org.scalatest:scalatest_2.11:3.2.9",
-        "sha256": "45affb34dd5b567fa943a7e155118ae6ab6c4db2fd34ca6a6c62ea129a1675be",
+        "artifact": "org.scalatest:scalatest_2.11:3.2.19",
+        "sha256": "6f01d1f8cc8063e989900c954f3378c7cd18b7ccb5c3e54242e1dec7eea0472b",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -40,12 +40,12 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_compatible": {
-        "artifact": "org.scalatest:scalatest-compatible:3.2.9",
-        "sha256": "7e5f1193af2fd88c432c4b80ce3641e4b1d062f421d8a0fcc43af9a19bb7c2eb",
+        "artifact": "org.scalatest:scalatest-compatible:3.2.19",
+        "sha256": "5dc6b8fa5396fe9e1a7c2b72df174a8eb3e92770cdc3e70636d3eba673cd0da3",
     },
     "io_bazel_rules_scala_scalatest_core": {
-        "artifact": "org.scalatest:scalatest-core_2.11:3.2.9",
-        "sha256": "003cb40f78cbbffaf38203b09c776d06593974edf1883a933c1bbc0293a2f280",
+        "artifact": "org.scalatest:scalatest-core_2.11:3.2.19",
+        "sha256": "763ba4408a4256a1a430b11f15b4d6f1c5f7fcf0be192a6ef4fd1124008330b7",
         "deps": [
             "@io_bazel_rules_scala_scala_xml",
             "@io_bazel_rules_scala_scala_library",
@@ -55,8 +55,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_featurespec": {
-        "artifact": "org.scalatest:scalatest-featurespec_2.11:3.2.9",
-        "sha256": "41567216bbd338625e77cd74ca669c88f59ff2da8adeb362657671bb43c4e462",
+        "artifact": "org.scalatest:scalatest-featurespec_2.11:3.2.19",
+        "sha256": "acc41aa36c8c252a7e0332a3f03b66c09120ff8b7814eab39737ddc11cd9a4d0",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -64,8 +64,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_flatspec": {
-        "artifact": "org.scalatest:scalatest-flatspec_2.11:3.2.9",
-        "sha256": "3e89091214985782ff912559b7eb1ce085f6117db8cff65663e97325dc264b91",
+        "artifact": "org.scalatest:scalatest-flatspec_2.11:3.2.19",
+        "sha256": "1eab3d1d54b8708869c493223db8deee2c0b3b40ce7ae3a79c82f7c2e0451d39",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -73,8 +73,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_freespec": {
-        "artifact": "org.scalatest:scalatest-freespec_2.11:3.2.9",
-        "sha256": "7c3e26ac0fa165263e4dac5dd303518660f581f0f8b0c20ba0b8b4a833ac9b9e",
+        "artifact": "org.scalatest:scalatest-freespec_2.11:3.2.19",
+        "sha256": "499508dad83c33f1347f9a7ef6590ebbdba5275c0dba47df1ce1f048a518d1a5",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -82,8 +82,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_funsuite": {
-        "artifact": "org.scalatest:scalatest-funsuite_2.11:3.2.9",
-        "sha256": "dc2100fe45b577c464f01933d8e605c3364dbac9ba24cd65222a5a4f3000717c",
+        "artifact": "org.scalatest:scalatest-funsuite_2.11:3.2.19",
+        "sha256": "6f7d1679d8d375603b836fab1972d88601d26e1e1322856feb54947b4a534935",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -91,8 +91,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_funspec": {
-        "artifact": "org.scalatest:scalatest-funspec_2.11:3.2.9",
-        "sha256": "6ed2de364aacafcb3390144501ed4e0d24b7ff1431e8b9e6503d3af4bc160196",
+        "artifact": "org.scalatest:scalatest-funspec_2.11:3.2.19",
+        "sha256": "933d154f2f6fc7e86954760cd534e189ab5c8eab790fc66e41fabb9df4da3bb7",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -100,8 +100,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_matchers_core": {
-        "artifact": "org.scalatest:scalatest-matchers-core_2.11:3.2.9",
-        "sha256": "06eb7b5f3a8e8124c3a92e5c597a75ccdfa3fae022bc037770327d8e9c0759b4",
+        "artifact": "org.scalatest:scalatest-matchers-core_2.11:3.2.19",
+        "sha256": "509771ba2bc172882e0db9d4e8437a032753d4d5a66f9dc61e7f453ecc0057fb",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -109,8 +109,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_shouldmatchers": {
-        "artifact": "org.scalatest:scalatest-shouldmatchers_2.11:3.2.9",
-        "sha256": "444545c33a3af8d7a5166ea4766f376a5f2c209854c7eb630786c8cb3f48a706",
+        "artifact": "org.scalatest:scalatest-shouldmatchers_2.11:3.2.19",
+        "sha256": "6537c4948ff42cac2eaa7e3d88dd699bff891c574e252ba65372c7d5ed1cd1f9",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -118,8 +118,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalatest_mustmatchers": {
-        "artifact": "org.scalatest:scalatest-mustmatchers_2.11:3.2.9",
-        "sha256": "b0ba6b9db7a2d1a4f7a3cf45b034b65481e31da8748abc2f2750cf22619d5a45",
+        "artifact": "org.scalatest:scalatest-mustmatchers_2.11:3.2.19",
+        "sha256": "5cd41cc8607163df9d15d26e12985fa88803c98fefa19b77f8ce466e39062795",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -127,8 +127,8 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scalactic": {
-        "artifact": "org.scalactic:scalactic_2.11:3.2.9",
-        "sha256": "97b439fe61d1c655a8b29cdab8182b15b41b2308923786a348fc7b9f8f72b660",
+        "artifact": "org.scalactic:scalactic_2.11:3.2.19",
+        "sha256": "20708ca81baeed428eaf9453f038a37dadba376f5d05e85a3fb882e303040d3d",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",

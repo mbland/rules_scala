@@ -13,8 +13,8 @@ import glob
 import os
 
 root_scala_versions = ["2.11.12", "2.12.20", "2.13.15", "3.1.3", "3.2.2", "3.3.4", "3.4.3", "3.5.2"]
-scala_test_version = "3.2.9"
-scala_fmt_version = "3.0.0"
+scala_test_version = "3.2.19"
+scala_fmt_version = "3.8.3"
 
 @dataclass
 class MavenCoordinates:
