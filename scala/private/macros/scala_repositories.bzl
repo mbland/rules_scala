@@ -1,12 +1,12 @@
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load(
-    "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
+    "//scala:scala_cross_version.bzl",
     "extract_major_version",
     "extract_minor_version",
     "version_suffix",
     _default_maven_server_urls = "default_maven_server_urls",
 )
 load("//third_party/repositories:repositories.bzl", "repositories")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 def _dt_patched_compiler_impl(rctx):
@@ -24,7 +24,6 @@ dt_patched_compiler = repository_rule(
     },
     implementation = _dt_patched_compiler_impl,
 )
-
 _COMPILER_SOURCE_ALIAS_TEMPLATE = """alias(
     name = "src",
     visibility = ["//visibility:public"],
@@ -69,15 +68,19 @@ def _validate_scalac_srcjar(srcjar):
 def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
     scala_major_version = extract_major_version(scala_version)
     scala_minor_version = extract_minor_version(scala_version)
-    patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.patch" % scala_major_version
+    patch = Label("//dt_patches:dt_compiler_%s.patch" % scala_major_version)
 
     minor_version = int(scala_minor_version)
 
     if scala_major_version == "2.12":
         if minor_version >= 1 and minor_version <= 7:
-            patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.1.patch" % scala_major_version
+            patch = Label(
+                "//dt_patches:dt_compiler_%s.1.patch" % scala_major_version,
+            )
         elif minor_version <= 11:
-            patch = "@io_bazel_rules_scala//dt_patches:dt_compiler_%s.8.patch" % scala_major_version
+            patch = Label(
+                "//dt_patches:dt_compiler_%s.8.patch" % scala_major_version,
+            )
 
     build_file_content = "\n".join([
         "package(default_visibility = [\"//visibility:public\"])",
@@ -112,7 +115,9 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
             integrity = srcjar.get("integrity"),
         )
 
-def rules_scala_setup(scala_compiler_srcjar = None):
+def rules_scala_setup(
+        scala_compiler_srcjar = None,
+        setup_compiler_sources = True):
     if not native.existing_rule("bazel_skylib"):
         http_archive(
             name = "bazel_skylib",
@@ -165,8 +170,26 @@ def rules_scala_setup(scala_compiler_srcjar = None):
             url = "https://github.com/bazelbuild/rules_proto/releases/download/6.0.2/rules_proto-6.0.2.tar.gz",
         )
 
+    if setup_compiler_sources:
+        srcs = {version: scala_compiler_srcjar for version in SCALA_VERSIONS}
+        _setup_scala_compiler_sources(srcs)
+
+def _setup_scala_compiler_sources(srcjars = {}):
+    """Generates Scala compiler source repos used internally by rules_scala.
+
+    Args:
+        srcjars: optional dictionary of Scala version string to compiler srcjar
+            metadata dictionaries containing:
+            - exactly one "label", "url", or "urls" key
+            - optional "integrity" or "sha256" keys
+    """
     for scala_version in SCALA_VERSIONS:
-        dt_patched_compiler_setup(scala_version, scala_compiler_srcjar)
+        dt_patched_compiler_setup(scala_version, srcjars.get(scala_version))
+
+    compiler_sources_repo(
+        name = "scala_compiler_sources",
+        scala_versions = SCALA_VERSIONS,
+    )
 
     compiler_sources_repo(
         name = "scala_compiler_sources",
@@ -213,13 +236,19 @@ def scala_repositories(
         overriden_artifacts = {},
         load_dep_rules = True,
         load_jar_deps = True,
-        fetch_sources = False):
+        fetch_sources = False,
+        validate_scala_version = True,
+        scala_compiler_srcjars = {}):
     if load_dep_rules:
-        rules_scala_setup()
+        # When `WORKSPACE` goes away, so can this case.
+        rules_scala_setup(setup_compiler_sources = False)
+
+    _setup_scala_compiler_sources(scala_compiler_srcjars)
 
     if load_jar_deps:
         rules_scala_toolchain_deps_repositories(
             maven_servers,
             overriden_artifacts,
             fetch_sources,
+            validate_scala_version,
         )
