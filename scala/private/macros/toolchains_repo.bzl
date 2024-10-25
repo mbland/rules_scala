@@ -1,4 +1,4 @@
-"""Creates a repo containing Scala toolchain packages"""
+"""Repository rule to instantiate @io_bazel_rules_scala_toolchains"""
 
 def _generate_testing_toolchain_build_file_args(repo_attr):
     framework_deps = {}
@@ -44,7 +44,7 @@ def _scala_toolchains_repo_impl(repository_ctx):
         toolchains["twitter_scrooge"] = _TWITTER_SCROOGE_TOOLCHAIN_BUILD
     if repo_attr.jmh:
         toolchains["jmh"] = _JMH_TOOLCHAIN_BUILD
-    if repo_attr.scala_proto or repo_attr.scala_proto_enable_all_options:
+    if repo_attr.scala_proto:
         toolchains["scala_proto"] = _SCALA_PROTO_TOOLCHAIN_BUILD
 
     testing_build_args = _generate_testing_toolchain_build_file_args(repo_attr)
@@ -67,6 +67,7 @@ def _scala_toolchains_repo_impl(repository_ctx):
 
 _scala_toolchains_repo = repository_rule(
     implementation = _scala_toolchains_repo_impl,
+    doc = "Creates a repo containing Scala toolchain packages",
     attrs = {
         "scala": attr.bool(default = True),
         "scalatest": attr.bool(),

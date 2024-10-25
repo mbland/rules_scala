@@ -120,7 +120,7 @@
     },
     "//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "BRQx3nYLIKnJX+McD2tfaH6aOZljVqJgRPn3NmPu+Gs=",
+        "bzlTransitiveDigest": "D5QY12AR3V5X05d8zssKYcOip8qQ2lcYZX1/0P5e31c=",
         "usagesDigest": "X3iIZmBGO2AIMm5xbjwr1hEvufVu0Fa1pseATIsCM3A=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -130,7 +130,7 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "build_file_content": "package(\n    default_visibility = [\"//visibility:public\"],\n)\n\n\nfilegroup(\n    name = \"src\",\n    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],\n)",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\nfilegroup(\n    name = \"src\",\n    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],\n)",
               "patches": [
                 "@@//dt_patches:dt_compiler_2.13.patch"
               ],
@@ -144,7 +144,7 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "build_file_content": "package(\n    default_visibility = [\"//visibility:public\"],\n)\n\n\nfilegroup(\n    name = \"src\",\n    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],\n)",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\nfilegroup(\n    name = \"src\",\n    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],\n)",
               "patches": [
                 "@@//dt_patches:dt_compiler_2.12.patch"
               ],
@@ -158,7 +158,7 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "build_file_content": "package(\n    default_visibility = [\"//visibility:public\"],\n)\n\n\nfilegroup(\n    name = \"src\",\n    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],\n)",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\nfilegroup(\n    name = \"src\",\n    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],\n)",
               "patches": [
                 "@@//dt_patches:dt_compiler_3.3.patch"
               ],
@@ -8053,7 +8053,7 @@
             }
           },
           "io_bazel_rules_scala_toolchains": {
-            "bzlFile": "@@//scala/private/extensions:toolchains.bzl",
+            "bzlFile": "@@//scala/private:macros/toolchains_repo.bzl",
             "ruleClassName": "_scala_toolchains_repo",
             "attributes": {
               "scala": true,
