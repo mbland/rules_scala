@@ -117,8 +117,8 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
         )
 
 def rules_scala_setup(
-    scala_compiler_srcjar = None,
-    setup_compiler_sources = True):
+        scala_compiler_srcjar = None,
+        setup_compiler_sources = True):
     if not native.existing_rule("bazel_skylib"):
         http_archive(
             name = "bazel_skylib",

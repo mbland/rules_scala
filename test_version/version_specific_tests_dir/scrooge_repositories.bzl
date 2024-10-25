@@ -7,10 +7,6 @@ load(
     "default_maven_server_urls",
 )
 load(
-    "@io_bazel_rules_scala//scala/private/extensions:toolchains.bzl",
-    "scala_toolchains_repo",
-)
-load(
     "@io_bazel_rules_scala//twitter_scrooge:twitter_scrooge.bzl",
     "twitter_scrooge",
 )
