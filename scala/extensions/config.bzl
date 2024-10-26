@@ -1,7 +1,10 @@
 """Exports the @io_bazel_rules_scala_config repo"""
 
-load("//:scala_config.bzl", _scala_config = "scala_config")
-load("//scala/private:default_scala_version.bzl", "DEFAULT_SCALA_VERSION")
+load(
+    "//:scala_config.bzl",
+    "DEFAULT_SCALA_VERSION",
+    _scala_config = "scala_config",
+)
 
 _settings = tag_class(
     attrs = {

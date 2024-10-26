@@ -39,18 +39,23 @@ load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config(enable_compiler_dependency_tracking = True)
 
-load(
-    "//scala:scala.bzl",
-    "rules_scala_setup",
-    "rules_scala_toolchain_deps_repositories",
-    "scala_toolchains_repo",
+load("//scala:scala.bzl", "scala_toolchains")
+
+scala_toolchains(
+    fetch_sources = True,
+    jmh = True,
+    scala_proto = True,
+    scalafmt = True,
+    testing = True,
+    twitter_scrooge = True,
 )
 
-rules_scala_setup()
-
-rules_scala_toolchain_deps_repositories(fetch_sources = True)
-
-scala_toolchains_repo()
+register_toolchains(
+    "//testing:testing_toolchain",
+    "//scala:unused_dependency_checker_error_toolchain",
+    "//test/proto:scalapb_toolchain",
+    "@io_bazel_rules_scala_toolchains//...:all",
+)
 
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
 
@@ -67,37 +72,6 @@ rules_proto_toolchains()
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
-
-load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
-load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
-
-twitter_scrooge()
-
-load("//jmh:jmh.bzl", "jmh_repositories")
-
-jmh_repositories()
-
-load("//scala_proto:scala_proto.bzl", "scala_proto_repositories")
-
-scala_proto_repositories()
-
-load("//scalatest:scalatest.bzl", "scalatest_repositories")
-
-scalatest_repositories()
-
-load("//specs2:specs2_junit.bzl", "specs2_junit_repositories")
-
-specs2_junit_repositories()
-
-register_toolchains("//testing:testing_toolchain")
-
-load("//scala/scalafmt:scalafmt_repositories.bzl", "scalafmt_default_config", "scalafmt_repositories")
-
-scalafmt_default_config()
-
-scalafmt_repositories()
-
-MAVEN_SERVER_URLS = default_maven_server_urls()
 
 # needed for the cross repo proto test
 load("//test/proto_cross_repo_boundary:repo.bzl", "proto_cross_repo_boundary_repository")
@@ -121,12 +95,6 @@ local_repository(
     name = "example_external_workspace",
     path = "third_party/test/example_external_workspace",
 )
-
-load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_unused_deps_toolchains")
-
-scala_register_unused_deps_toolchains()
-
-register_toolchains("@io_bazel_rules_scala//test/proto:scalapb_toolchain")
 
 load("//scala:scala_maven_import_external.bzl", "java_import_external")
 
@@ -191,10 +159,7 @@ rbe_preconfig(
 
 load("//testing/private:repositories.bzl", "testing_repositories")
 
-testing_repositories(
-    fetch_sources = False,
-    maven_servers = MAVEN_SERVER_URLS,
-)
+testing_repositories(fetch_sources = False)
 
 load("//test/toolchains:jdk.bzl", "remote_jdk21_repositories", "remote_jdk21_toolchains")
 

@@ -11,7 +11,7 @@ java_library(
         before_2_12_13 = [
             "before_2_12_13/ProtoReporter.java",
         ],
-        between_2_12_13_and_2_12_20 = [
+        between_2_12_13_and_2_13 = [
             "after_2_12_13_and_before_2_13_12/ProtoReporter.java",
         ],
         between_2_13_12_and_3 = [

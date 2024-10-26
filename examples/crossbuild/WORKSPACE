@@ -30,26 +30,19 @@ local_repository(
 load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config(
-    scala_version = "3.3.3",
+    scala_version = "3.3.4",
     scala_versions = [
         "2.11.12",
-        "2.13.14",
-        "3.3.3",
+        "2.13.15",
+        "3.3.4",
     ],
 )
 
-load(
-    "@io_bazel_rules_scala//scala:scala.bzl",
-    "rules_scala_setup",
-    "rules_scala_toolchain_deps_repositories",
-    "scala_toolchains_repo",
-)
+load("@io_bazel_rules_scala//scala:scala.bzl", "scala_toolchains")
 
-rules_scala_setup()
+scala_toolchains(scalatest = True)
 
-rules_scala_toolchain_deps_repositories()
-
-scala_toolchains_repo()
+register_toolchains("@io_bazel_rules_scala_toolchains//...:all")
 
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
 
@@ -66,13 +59,3 @@ rules_proto_toolchains()
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
-
-load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_toolchains")
-
-scala_register_toolchains()
-
-load("@io_bazel_rules_scala//testing:scalatest.bzl", "scalatest_repositories", "scalatest_toolchain")
-
-scalatest_repositories()
-
-scalatest_toolchain()

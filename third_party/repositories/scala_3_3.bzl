@@ -1,43 +1,44 @@
-scala_version = "3.3.3"
+scala_version = "3.3.4"
 
 artifacts = {
     "io_bazel_rules_scala_scala_library_2": {
-        "artifact": "org.scala-lang:scala-library:2.13.14",
-        "sha256": "43e0ca1583df1966eaf02f0fbddcfb3784b995dd06bfc907209347758ce4b7e3",
+        "artifact": "org.scala-lang:scala-library:2.13.15",
+        "sha256": "8e4dbc3becf70d59c787118f6ad06fab6790136a0699cd6412bc9da3d336944e",
     },
     "io_bazel_rules_scala_scala_library": {
-        "artifact": "org.scala-lang:scala3-library_3:3.3.3",
-        "sha256": "16fe064f1373ed6f098d3d9f812a398ed5075db4bf2721c04e630502cb352816",
+        "artifact": "org.scala-lang:scala3-library_3:3.3.4",
+        "sha256": "d95184acfcd814da2e051378e4962c653f4b468f4086452ab427af030482bd3c",
         "deps": [
             "@io_bazel_rules_scala_scala_library_2",
         ],
     },
     "io_bazel_rules_scala_scala_compiler": {
-        "artifact": "org.scala-lang:scala3-compiler_3:3.3.3",
-        "sha256": "f22bd99272f7634919b926f778be19a447e7d0c1e96e5b8ab460f287cffe1f5c",
+        "artifact": "org.scala-lang:scala3-compiler_3:3.3.4",
+        "sha256": "2cca65fdb92e2cc393786cae61b4f7bcb9032ad4be61f9cebae1dca72997e52f",
         "deps": [
             "@io_bazel_rules_scala_scala_asm",
+            "@org_scala_sbt_compiler_interface",
         ],
     },
     "io_bazel_rules_scala_scala_compiler_2": {
-        "artifact": "org.scala-lang:scala-compiler:2.13.14",
-        "sha256": "17b7e1dd95900420816a3bc2788c8c7358c2a3c42899765a5c463a46bfa569a6",
+        "artifact": "org.scala-lang:scala-compiler:2.13.15",
+        "sha256": "4c200cd193c082bec14a2a2dffe6a1ba5f8130b1b27c79ee54c936dfcafc8ed9",
     },
     "io_bazel_rules_scala_scala_interfaces": {
-        "artifact": "org.scala-lang:scala3-interfaces:3.3.3",
-        "sha256": "9d85768663a1894eb9c7cfb73befe16eca760d536eed441f6660a5b8e8dc0c6a",
+        "artifact": "org.scala-lang:scala3-interfaces:3.3.4",
+        "sha256": "fe056c10a217353e14aa62076d2bbd957ebd82e02fb445ca5546ae8ea9d40caa",
     },
     "io_bazel_rules_scala_scala_tasty_core": {
-        "artifact": "org.scala-lang:tasty-core_3:3.3.3",
-        "sha256": "a126a3a76022beeb9133e7a7400b81a5ce6910f7866cc5e84fa8133ca90784a5",
+        "artifact": "org.scala-lang:tasty-core_3:3.3.4",
+        "sha256": "13d44693d6f2d38e0595954d11234c0373d6d0e689a8151b06878c5b631d57d5",
     },
     "io_bazel_rules_scala_scala_asm": {
-        "artifact": "org.scala-lang.modules:scala-asm:9.5.0-scala-1",
-        "sha256": "fa582f7352f5ee5c244d7fe93c2a1d95dada2d281e1af9a535f0b5153c75088c",
+        "artifact": "org.scala-lang.modules:scala-asm:9.6.0-scala-1",
+        "sha256": "bf16f8b69e89cadab550bce266a052780af7f1eb29dd1c04c3bd014113752c12",
     },
     "io_bazel_rules_scala_scala_reflect_2": {
-        "artifact": "org.scala-lang:scala-reflect:2.13.14",
-        "sha256": "8846baaa8cf43b1b19725ab737abff145ca58d14a4d02e75d71ca8f7ca5f2926",
+        "artifact": "org.scala-lang:scala-reflect:2.13.15",
+        "sha256": "78d0cc350e1ee42d87c6e11cf5b0dc7bf0b70829c00aa38f27bfb019d439dc11",
         "deps": [
             "@io_bazel_rules_scala_scala_library_2",
         ],
@@ -154,8 +155,8 @@ artifacts = {
         ],
     },
     "org_scala_sbt_compiler_interface": {
-        "artifact": "org.scala-sbt:compiler-interface:1.10.1",
-        "sha256": "6f9982aea22fa17fef0315abd6925940dbf57fa7033535ad2176aba240aeaa1d",
+        "artifact": "org.scala-sbt:compiler-interface:1.9.6",
+        "sha256": "b986ad1cfcef14c8abeaa3e788df28be9150acfbf587b5f7aa92c1b043c4fa8d",
     },
     "org_scalameta_fastparse": {
         "artifact": "org.scalameta:fastparse-v2_2.13:2.3.1",
@@ -257,8 +258,8 @@ artifacts = {
         "sha256": "4c0aa7e223c75c8840c41fc183d4cd3118140a1ee503e3e08ce66ed2794c948f",
     },
     "org_scala_lang_scalap": {
-        "artifact": "org.scala-lang:scalap:2.13.14",
-        "sha256": "b92a0f32ae645064f828005f883ce4aeec110fe6971f1b030643ff005a77e7c0",
+        "artifact": "org.scala-lang:scalap:2.13.15",
+        "sha256": "78991282d73e9d20cbf187bab8549ce2ef940269409d47df2a71faaf9afc4616",
         "deps": [
             "@io_bazel_rules_scala_scala_compiler_2",
         ],
