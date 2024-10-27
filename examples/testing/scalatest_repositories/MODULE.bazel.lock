@@ -144,7 +144,7 @@
     },
     "@@rules_scala~//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "3WaArSTgirigdy/V1ETOJm+xhC5gPKg1zcMWvUFU2As=",
+        "bzlTransitiveDigest": "H7gX1KVglVYiDVrjxUogaYtoOGXbxUBkuFaMW3DcQCY=",
         "usagesDigest": "YVcsGs5qFFfR1JL1DUlZblnh0TsE8Fzvz1OtV8uc7tw=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

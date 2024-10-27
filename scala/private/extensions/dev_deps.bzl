@@ -1,7 +1,10 @@
 """Repositories for testing rules_scala itself"""
 
+load("//scala/private:macros/bzlmod.bzl", "get_root_module", "get_tag_values")
+load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//scala:scala_maven_import_external.bzl", "java_import_external")
 load("//test/toolchains:jdk.bzl", "remote_jdk21_repositories")
+load("//testing/private:repositories.bzl", "testing_repositories")
 load("@rules_java//java:repositories.bzl", "remote_jdk8_repos")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load(
@@ -12,7 +15,23 @@ load(
 
 _BUILD_TOOLS_RELEASE = "5.1.0"
 
-def _dev_deps_impl(_ctx):
+_settings_defaults = {
+    "maven_servers": default_maven_server_urls(),
+    "fetch_sources": True,
+}
+
+_settings = tag_class(
+    attrs = {
+        "maven_servers": attr.string_list(
+            default = _settings_defaults["maven_servers"],
+        ),
+        "fetch_sources": attr.bool(
+            default = _settings_defaults["fetch_sources"],
+        ),
+    },
+)
+
+def _dev_deps_impl(module_ctx):
     """Instantiate internal only repos for development and testing
 
     Mostly just copied from `WORKSPACE`, and adapted slightly. Also currently
@@ -21,6 +40,12 @@ def _dev_deps_impl(_ctx):
     by both WORKSPACE and MODULE.bazel. Will probably create proper repos
     instead of using `new_local_repository` as well.
     """
+    settings = _settings_defaults
+    root_module = get_root_module(module_ctx)
+    if root_module != None:
+        settings = get_tag_values(root_module.tags.settings, settings)
+
+    testing_repositories(**settings)
 
     # We need to select based on platform when we use these
     # https://github.com/bazelbuild/bazel/issues/11655
@@ -71,4 +96,9 @@ filegroup(
         url = "https://github.com/bazelbuild/buildtools/archive/%s.tar.gz" % _BUILD_TOOLS_RELEASE,
     )
 
-dev_deps = module_extension(implementation = _dev_deps_impl)
+dev_deps = module_extension(
+    implementation = _dev_deps_impl,
+    tag_classes = {
+        "settings": _settings,
+    },
+)

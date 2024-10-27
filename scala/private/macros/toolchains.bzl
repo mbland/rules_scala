@@ -13,7 +13,6 @@ load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//scala_proto:scala_proto.bzl", "scala_proto_repositories")
 load("//scalatest:scalatest.bzl", "scalatest_repositories")
 load("//specs2:specs2_junit.bzl", "specs2_junit_repositories")
-load("//testing/private:repositories.bzl", "testing_repositories")
 load("//twitter_scrooge:twitter_scrooge.bzl", _scrooge = "twitter_scrooge")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
@@ -155,10 +154,6 @@ def scala_toolchains(
         )
     if testing:
         num_toolchains += 1
-        testing_repositories(
-            maven_servers = maven_servers,
-            fetch_sources = False,
-        )
     if scalafmt:
         num_toolchains += 1
         scalafmt_default_config(scalafmt_default_config_path)
