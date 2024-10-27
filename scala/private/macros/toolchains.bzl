@@ -10,7 +10,10 @@ load(
     "scalafmt_repositories",
 )
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
-load("//scala_proto:scala_proto.bzl", "scala_proto_repositories")
+load(
+    "//scala_proto/default:repositories.bzl",
+    "scala_proto_default_repositories",
+)
 load("//scalatest:scalatest.bzl", "scalatest_repositories")
 load("//specs2:specs2_junit.bzl", "specs2_junit_repositories")
 load("//twitter_scrooge:twitter_scrooge.bzl", _scrooge = "twitter_scrooge")
@@ -131,7 +134,7 @@ def scala_toolchains(
             )
         if scala_proto:
             num_toolchains += 1
-            scala_proto_repositories(
+            scala_proto_default_repositories(
                 maven_servers = maven_servers,
                 scala_version = scala_version,
                 overriden_artifacts = overridden_artifacts,
