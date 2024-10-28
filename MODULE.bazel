@@ -77,8 +77,8 @@ dev_deps = use_extension(
 dev_deps.toolchains(
     jmh = True,
     scala_proto = True,
-    scalafmt = True,
     #scala_proto_enable_all_options = True,
+    scalafmt = True,
     testing = True,
     #scalatest = True,
     #junit = True,

@@ -1,10 +1,11 @@
-load(
-    "@io_bazel_rules_scala//scala:scala_maven_import_external.bzl",
-    _scala_maven_import_external = "scala_maven_import_external",
-)
+load("@io_bazel_rules_scala//scala:scala.bzl", "scala_toolchains_repo")
 load(
     "@io_bazel_rules_scala//scala:scala_cross_version.bzl",
     "default_maven_server_urls",
+)
+load(
+    "@io_bazel_rules_scala//scala:scala_maven_import_external.bzl",
+    _scala_maven_import_external = "scala_maven_import_external",
 )
 load(
     "@io_bazel_rules_scala//twitter_scrooge:twitter_scrooge.bzl",
@@ -24,8 +25,11 @@ def _import_external(id, artifact, sha256, deps = [], runtime_deps = []):
         fetch_sources = False,
     )
 
-def scrooge_repositories(version):
+def scrooge_repositories(version = None):
+    use_labels = False
+
     if version == "18.6.0":
+        use_labels = True
         _import_external(
             id = "io_bazel_rules_scala_scrooge_core",
             artifact = "com.twitter:scrooge-core_2.11:18.6.0",
@@ -53,6 +57,7 @@ def scrooge_repositories(version):
         )
 
     if version == "21.2.0":
+        use_labels = True
         _import_external(
             id = "io_bazel_rules_scala_scrooge_core",
             artifact = "com.twitter:scrooge-core_2.11:21.2.0",
@@ -79,6 +84,22 @@ def scrooge_repositories(version):
             sha256 = "f3b62465963fbf0fe9860036e6255337996bb48a1a3f21a29503a2750d34f319",
         )
 
+    if use_labels:
+        twitter_scrooge(
+            scrooge_core = "@io_bazel_rules_scala_scrooge_core",
+            scrooge_generator = "@io_bazel_rules_scala_scrooge_generator",
+            util_core = "@io_bazel_rules_scala_util_core",
+            util_logging = "@io_bazel_rules_scala_util_logging",
+            bzlmod_enabled = True,
+        )
+    else:
+        twitter_scrooge(bzlmod_enabled = True)
+
+    scala_toolchains_repo(
+        name = "twitter_scrooge_test_toolchain",
+        twitter_scrooge = True,
+    )
+
 _settings = tag_class(
     attrs = {
         "version": attr.string(mandatory = True),
@@ -87,18 +108,7 @@ _settings = tag_class(
 
 def _scrooge_repositories_ext_impl(module_ctx):
     settings = module_ctx.modules[0].tags.settings
-
-    if len(settings) == 0:
-        twitter_scrooge(bzlmod_enabled = True)
-    else:
-        scrooge_repositories(settings[0].version)
-        twitter_scrooge(
-            scrooge_core = "@io_bazel_rules_scala_scrooge_core",
-            scrooge_generator = "@io_bazel_rules_scala_scrooge_generator",
-            util_core = "@io_bazel_rules_scala_util_core",
-            util_logging = "@io_bazel_rules_scala_util_logging",
-            bzlmod_enabled = True,
-        )
+    scrooge_repositories(settings[0].version if len(settings) != 0 else None)
 
 scrooge_repositories_ext = module_extension(
     implementation = _scrooge_repositories_ext_impl,

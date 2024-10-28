@@ -144,7 +144,7 @@
     },
     "@@rules_scala~//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "H7gX1KVglVYiDVrjxUogaYtoOGXbxUBkuFaMW3DcQCY=",
+        "bzlTransitiveDigest": "E6Hng6kK+HOmlWdyT64smEXztreQ2RkKL0B5bu7ObCo=",
         "usagesDigest": "gD6FEoe3ECmaiWDH0AoT7u455bg4B+N24p/LMo2Azxs=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -1139,24 +1139,9 @@
         },
         "recordedRepoMappingEntries": [
           [
-            "bazel_features~",
-            "bazel_features_globals",
-            "bazel_features~~version_extension~bazel_features_globals"
-          ],
-          [
-            "bazel_features~",
-            "bazel_features_version",
-            "bazel_features~~version_extension~bazel_features_version"
-          ],
-          [
             "bazel_tools",
             "rules_java",
             "rules_java~"
-          ],
-          [
-            "rules_proto~",
-            "bazel_features",
-            "bazel_features~"
           ],
           [
             "rules_scala~",
@@ -1177,11 +1162,6 @@
             "rules_scala~",
             "io_bazel_rules_scala_config",
             "rules_scala~~scala_config~io_bazel_rules_scala_config"
-          ],
-          [
-            "rules_scala~",
-            "rules_proto",
-            "rules_proto~"
           ]
         ]
       }
