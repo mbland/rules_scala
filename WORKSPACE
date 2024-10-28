@@ -51,7 +51,6 @@ scala_toolchains(
 )
 
 register_toolchains(
-    "//testing:testing_toolchain",
     "//scala:unused_dependency_checker_error_toolchain",
     "//test/proto:scalapb_toolchain",
     "@io_bazel_rules_scala_toolchains//...:all",

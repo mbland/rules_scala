@@ -8,6 +8,7 @@ def _generate_testing_toolchain_build_file_args(repo_attr):
             "scalatest": "SCALATEST_DEPS",
             "junit": "JUNIT_DEPS",
             "specs2": "SPECS2_DEPS",
+            "specs2_junit": "SPECS2_JUNIT_DEPS",
         }
     if repo_attr.scalatest:
         framework_deps["scalatest"] = "SCALATEST_DEPS"

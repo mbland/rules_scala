@@ -108,6 +108,11 @@ def scala_toolchains(
             scala_compiler_srcjars = scala_compiler_srcjars,
         )
 
+    if testing:
+        scalatest = True
+        junit = True
+        specs2 = True
+
     if scalatest:
         num_toolchains += 1
         scalatest_repositories(

@@ -1,9 +1,6 @@
-load("@io_bazel_rules_scala//scala:providers.bzl", "declare_deps_provider")
-load(
-    "@io_bazel_rules_scala//testing/toolchain:toolchain.bzl",
-    "scala_testing_toolchain",
-)
+load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala:scala_cross_version.bzl", "repositories", "version_suffix")
+load("//testing/toolchain:toolchain.bzl", "scala_testing_toolchain")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 DEP_PROVIDERS = [
