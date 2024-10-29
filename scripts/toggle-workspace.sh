@@ -18,7 +18,7 @@ usage() {
   local lines=()
   while IFS='' read line; do
     if [[ "${line:0:1}" != '#' ]]; then
-      printf '%s\n' "Usage: $0 [ disable | restore ]" "${lines[@]:1}" >&2
+      printf '%s\n' "Usage: $0 [ on | off | restore ]" "${lines[@]:1}" >&2
       exit "$1"
     fi
     lines+=("${line:2}")
@@ -42,7 +42,7 @@ update_bazelrc_files() {
   local enabled_options="$workspace_options"
   local disabled_options="$bzlmod_options"
 
-  if [[ "$mode" == "disable" ]]; then
+  if [[ "$mode" == "off" ]]; then
     enabled_options="$bzlmod_options"
     disabled_options="$workspace_options"
   fi
@@ -115,12 +115,12 @@ get_bazelrc_files_by_status() {
   done < <(git status -s '.bazelrc' '**/.bazelrc')
 }
 
-if [[ "$#" -gt 1 ]]; then
+if [[ "$#" -ne 1 ]]; then
   usage 1
 fi
 
 case "$1" in
-  ""|disable)
+  on|off)
     update_bazelrc_files "$1"
     ;;
   restore)
