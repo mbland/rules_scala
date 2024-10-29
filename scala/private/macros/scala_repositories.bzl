@@ -24,7 +24,6 @@ dt_patched_compiler = repository_rule(
     },
     implementation = _dt_patched_compiler_impl,
 )
-
 _COMPILER_SOURCE_ALIAS_TEMPLATE = """alias(
     name = "src",
     visibility = ["//visibility:public"],
