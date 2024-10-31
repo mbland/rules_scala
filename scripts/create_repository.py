@@ -274,6 +274,9 @@ def map_to_resolved_artifacts(
             resolved.append(ResolvedArtifact(
                 mvn_coords, get_artifact_checksum(coords), deps
             ))
+        else:
+            current.direct_dependencies = deps
+            resolved.append(current)
 
     return resolved
 
