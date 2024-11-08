@@ -138,9 +138,9 @@ def rules_scala_setup(scala_compiler_srcjar = None):
     if not native.existing_rule("com_google_protobuf"):
         http_archive(
             name = "com_google_protobuf",
-            sha256 = "3cf7d5b17c4ff04fe9f038104e9d0cae6da09b8ce271c13e44f8ac69f51e4e0f",
-            strip_prefix = "protobuf-25.5",
-            url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v25.5.tar.gz",
+            sha256 = "7c3ebd7aaedd86fa5dc479a0fda803f602caaf78d8aff7ce83b89e1b8ae7442a",
+            strip_prefix = "protobuf-28.3",
+            url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v28.3.tar.gz",
         )
 
     if not native.existing_rule("rules_cc"):
