@@ -20,6 +20,7 @@ function test_scalafmt() {
   run_formatting scalafmt library3 library3
   run_formatting scalafmt test2 test2
   run_formatting scalafmt test3 test3
+
 }
 
 $runner test_cross_build

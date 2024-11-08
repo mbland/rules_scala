@@ -125,21 +125,22 @@ def rules_scala_setup(scala_compiler_srcjar = None):
             ],
         )
 
-    # Needed by protobuf-21.7 and Bazel 6.5.0, as later versions require C++14.
+    # Protobuf versions after v22 and abseil-cpp versions after 20220623.1
+    # require C++14.
     if not native.existing_rule("com_google_absl"):
         http_archive(
             name = "com_google_absl",
-            sha256 = "91ac87d30cc6d79f9ab974c51874a704de9c2647c40f6932597329a282217ba8",
-            strip_prefix = "abseil-cpp-20220623.1",
-            url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.1.tar.gz",
+            sha256 = "f50e5ac311a81382da7fa75b97310e4b9006474f9560ac46f54a9967f07d4ae3",
+            strip_prefix = "abseil-cpp-20240722.0",
+            url = "https://github.com/abseil/abseil-cpp/releases/download/20240722.0/abseil-cpp-20240722.0.tar.gz",
         )
 
     if not native.existing_rule("com_google_protobuf"):
         http_archive(
             name = "com_google_protobuf",
-            sha256 = "75be42bd736f4df6d702a0e4e4d30de9ee40eac024c4b845d17ae4cc831fe4ae",
-            strip_prefix = "protobuf-21.7",
-            url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.7.tar.gz",
+            sha256 = "3cf7d5b17c4ff04fe9f038104e9d0cae6da09b8ce271c13e44f8ac69f51e4e0f",
+            strip_prefix = "protobuf-25.5",
+            url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v25.5.tar.gz",
         )
 
     if not native.existing_rule("rules_cc"):
