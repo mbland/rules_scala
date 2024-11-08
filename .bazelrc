@@ -1,8 +1,24 @@
 build --enable_platform_specific_config
 
-#Windows needs --worker_quit_after_build due to workers not being shut down when the compiler tools need to be rebuilt (resulting in 'file in use' errors). See Bazel Issue#10498.
+# Needed to build versions of abseil-cpp newer than 20220624.1 under Bazel 6.
+# Can be removed after moving to Bazel 7. Borrowed from:
+# - https://github.com/bazelbuild/bazel/pull/20785
+#
+# At the same time, adding compiler flags like this does seem to make protobuf
+# recompile more often than it should. See:
+# - https://stackoverflow.com/questions/56880771/bazel-recompiles-protobuf-more-than-necessary
+# - https://github.com/bazelbuild/bazel/issues/7095
+build:linux --cxxopt=-std=c++17
+build:linux --host_cxxopt=-std=c++17
+build:macos --cxxopt=-std=c++17
+build:macos --host_cxxopt=-std=c++17
+build:windows --cxxopt=/std=c++17
+build:windows --host_cxxopt=/std=c++17
 
-build:windows --worker_quit_after_build --enable_runfiles 
+# Windows needs --worker_quit_after_build due to workers not being shut down
+# when the compiler tools need to be rebuilt (resulting in 'file in use'
+# errors). See Bazel Issue#10498.
+build:windows --worker_quit_after_build --enable_runfiles
 
 # Remove upon completing Bzlmod compatibility work.
 # - https://github.com/bazelbuild/rules_scala/issues/1482
