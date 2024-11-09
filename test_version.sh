@@ -49,7 +49,17 @@ run_in_test_repo() {
     scrooge_ws="scrooge_repositories($version_param)"
   fi
 
+  # ScalaPB 0.9.8 through 0.11.17 can support at least Protobuf v21.7 up to
+  # Protobuf v25.5. ScalaPB 1.0.0-alpha.1 requires at least Protofuf 28.2.
+  # Protobuf versions v26.x and v27.x aren't supported by any ScalaPB version.
+  local protobuf_version='25.5'
+  local protobuf_sha=(
+    '3cf7d5b17c4ff04fe9f038104e9d0cae6da09b8ce271c13e44f8ac69f51e4e0f'
+  )
+
   sed -e "s%\${twitter_scrooge_repositories}%${scrooge_ws}\n%" \
+      -e "s%\${protobuf_version}%${protobuf_version}%g" \
+      -e "s%\${protobuf_sha}%${protobuf_sha}%g" \
       WORKSPACE.template >> $NEW_TEST_DIR/WORKSPACE
   cp ../.bazel{rc,version} $NEW_TEST_DIR/
 
