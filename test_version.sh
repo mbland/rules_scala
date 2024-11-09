@@ -52,10 +52,19 @@ run_in_test_repo() {
   # ScalaPB 0.9.8 through 0.11.17 can support at least Protobuf v21.7 up to
   # Protobuf v25.5. ScalaPB 1.0.0-alpha.1 requires at least Protofuf 28.2.
   # Protobuf versions v26.x and v27.x aren't supported by any ScalaPB version.
-  local protobuf_version='25.5'
+  local protobuf_version='28.3'
   local protobuf_sha=(
-    '3cf7d5b17c4ff04fe9f038104e9d0cae6da09b8ce271c13e44f8ac69f51e4e0f'
+    '7c3ebd7aaedd86fa5dc479a0fda803f602caaf78d8aff7ce83b89e1b8ae7442a'
   )
+
+  if [[ "$SCALA_VERSION" =~ ^2\.11\. ]]; then
+    # This is the maximum Scala 2.11 can support, since it's constrained to
+    # ScalaPB 0.9.8.
+    protobuf_version='25.5'
+    protobuf_sha=(
+      '3cf7d5b17c4ff04fe9f038104e9d0cae6da09b8ce271c13e44f8ac69f51e4e0f'
+    )
+  fi
 
   sed -e "s%\${twitter_scrooge_repositories}%${scrooge_ws}\n%" \
       -e "s%\${protobuf_version}%${protobuf_version}%g" \
