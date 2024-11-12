@@ -1,23 +1,39 @@
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//third_party/repositories:repositories.bzl", "repositories")
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 def scala_proto_default_repositories(
         maven_servers = default_maven_server_urls(),
-        overriden_artifacts = {}):
+        scala_version = SCALA_VERSION,
+        overriden_artifacts = {},
+        register_toolchains = True):
     repositories(
-        for_artifact_ids = [
+        for_artifact_ids = ([] if SCALA_VERSION.startswith("2.11.") else [
+            "dev_dirs_directories",
+            "scala_proto_rules_scalapb_protoc_gen",
+        ]) + [
+            "com_google_android_annotations",
+            "com_google_code_findbugs_jsr305",
+            "com_google_code_gson_gson",
+            "com_google_errorprone_error_prone_annotations",
+            "com_google_j2objc_j2objc_annotations",
             "com_google_protobuf_protobuf_java",
             "com_lihaoyi_fastparse",
             "com_lihaoyi_sourcecode",
+            "io_bazel_rules_scala_failureaccess",
             "io_bazel_rules_scala_guava",
+            "org_codehaus_mojo_animal_sniffer_annotations",
+            "org_checkerframework_checker_qual",
             "scala_proto_rules_disruptor",
-            "scala_proto_rules_instrumentation_api",
             "scala_proto_rules_grpc_api",
             "scala_proto_rules_grpc_context",
             "scala_proto_rules_grpc_core",
             "scala_proto_rules_grpc_netty",
             "scala_proto_rules_grpc_protobuf",
+            "scala_proto_rules_grpc_protobuf_lite",
             "scala_proto_rules_grpc_stub",
+            "scala_proto_rules_grpc_util",
+            "scala_proto_rules_instrumentation_api",
             "scala_proto_rules_netty_buffer",
             "scala_proto_rules_netty_codec",
             "scala_proto_rules_netty_codec_http",
@@ -28,11 +44,13 @@ def scala_proto_default_repositories(
             "scala_proto_rules_netty_handler_proxy",
             "scala_proto_rules_netty_resolver",
             "scala_proto_rules_netty_transport",
+            "scala_proto_rules_netty_transport_native_unix_common",
             "scala_proto_rules_opencensus_api",
             "scala_proto_rules_opencensus_contrib_grpc_metrics",
             "scala_proto_rules_opencensus_impl",
             "scala_proto_rules_opencensus_impl_core",
             "scala_proto_rules_perfmark_api",
+            "scala_proto_rules_proto_google_common_protos",
             "scala_proto_rules_scalapb_compilerplugin",
             "scala_proto_rules_scalapb_lenses",
             "scala_proto_rules_scalapb_protoc_bridge",
@@ -44,4 +62,7 @@ def scala_proto_default_repositories(
         overriden_artifacts = overriden_artifacts,
     )
 
-    native.register_toolchains("@io_bazel_rules_scala//scala_proto:default_deps_toolchain")
+    if register_toolchains:
+        native.register_toolchains(
+            str(Label("//scala_proto:default_deps_toolchain")),
+        )
