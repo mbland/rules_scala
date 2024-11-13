@@ -2,6 +2,25 @@ load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//third_party/repositories:repositories.bzl", "repositories")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
+# Needed by scalafmt
+SCALAPB_COMPILE_ARTIFACT_IDS = [
+    "com_google_protobuf_protobuf_java",
+    "com_lihaoyi_fastparse",
+    "com_lihaoyi_sourcecode",
+    "scala_proto_rules_scalapb_lenses",
+    "scala_proto_rules_scalapb_runtime",
+]
+
+# Needed by twitter_scrooge
+GUAVA_ARTIFACT_IDS = [
+    "com_google_code_findbugs_jsr305",
+    "com_google_errorprone_error_prone_annotations",
+    "com_google_j2objc_j2objc_annotations",
+    "io_bazel_rules_scala_guava",
+    "io_bazel_rules_scala_failureaccess",
+    "org_checkerframework_checker_qual",
+]
+
 def scala_proto_default_repositories(
         maven_servers = default_maven_server_urls(),
         scala_version = SCALA_VERSION,
@@ -14,17 +33,8 @@ def scala_proto_default_repositories(
             "scala_proto_rules_scalapb_protoc_gen",
         ]) + [
             "com_google_android_annotations",
-            "com_google_code_findbugs_jsr305",
             "com_google_code_gson_gson",
-            "com_google_errorprone_error_prone_annotations",
-            "com_google_j2objc_j2objc_annotations",
-            "com_google_protobuf_protobuf_java",
-            "com_lihaoyi_fastparse",
-            "com_lihaoyi_sourcecode",
-            "io_bazel_rules_scala_failureaccess",
-            "io_bazel_rules_scala_guava",
             "org_codehaus_mojo_animal_sniffer_annotations",
-            "org_checkerframework_checker_qual",
             "scala_proto_rules_disruptor",
             "scala_proto_rules_grpc_api",
             "scala_proto_rules_grpc_context",
@@ -53,11 +63,9 @@ def scala_proto_default_repositories(
             "scala_proto_rules_perfmark_api",
             "scala_proto_rules_proto_google_common_protos",
             "scala_proto_rules_scalapb_compilerplugin",
-            "scala_proto_rules_scalapb_lenses",
             "scala_proto_rules_scalapb_protoc_bridge",
-            "scala_proto_rules_scalapb_runtime",
             "scala_proto_rules_scalapb_runtime_grpc",
-        ],
+        ] + SCALAPB_COMPILE_ARTIFACT_IDS + GUAVA_ARTIFACT_IDS,
         maven_servers = maven_servers,
         fetch_sources = True,
         overriden_artifacts = overriden_artifacts,

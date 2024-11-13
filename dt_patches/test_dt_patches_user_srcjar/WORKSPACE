@@ -31,10 +31,18 @@ load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config(enable_compiler_dependency_tracking = True)
 
-load("//:extensions.bzl", "import_compiler_source_repos")
-load("@io_bazel_rules_scala//scala:scala.bzl", "scala_toolchains")
+local_repository(
+    name = "compiler_sources",
+    path = "../compiler_sources",
+)
+
+load("@compiler_sources//:extensions.bzl", "import_compiler_source_repos")
 
 import_compiler_source_repos()
+
+load("//:extensions.bzl", "import_compiler_user_srcjar_repos")
+
+import_compiler_user_srcjar_repos()
 
 srcjars_by_version = {
     # Invalid
@@ -101,6 +109,8 @@ srcjars_by_version = {
         "url": "https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.5.2/scala3-compiler_3-3.5.2-sources.jar",
     },
 }
+
+load("@io_bazel_rules_scala//scala:scala.bzl", "scala_toolchains")
 
 scala_toolchains(
     fetch_sources = True,

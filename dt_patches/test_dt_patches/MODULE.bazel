@@ -2,14 +2,6 @@
 
 module(name = "scala3_example")
 
-source_repos = use_extension("//:extensions.bzl", "compiler_source_repos")
-use_repo(
-    source_repos,
-    "scala_compiler",
-    "scala_library",
-    "scala_reflect",
-)
-
 bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
 local_path_override(
     module_name = "rules_scala",
@@ -24,6 +16,32 @@ scala_config.settings(
     enable_compiler_dependency_tracking = True,
 )
 use_repo(scala_config, "io_bazel_rules_scala_config")
+
+bazel_dep(name = "compiler_sources")
+local_path_override(
+    module_name = "compiler_sources",
+    path = "../compiler_sources",
+)
+
+source_repos = use_extension(
+    "@compiler_sources//:extensions.bzl",
+    "compiler_source_repos",
+)
+use_repo(
+    source_repos,
+    # Configured for the current Scala version
+    "scala_compiler",
+    "scala_library",
+    # Scala 2 specific
+    "scala_reflect",
+    # Scala 3 specific
+    "scala3_interfaces",
+    "tasty_core",
+    # Hardcoded versions
+    "sbt_compiler_interface",
+    "scala2_library",
+    "scala_asm",
+)
 
 scala_deps = use_extension(
     "@io_bazel_rules_scala//scala/extensions:deps.bzl",

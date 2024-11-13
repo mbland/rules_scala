@@ -4,6 +4,10 @@ load(
     "version_suffix",
     _default_maven_server_urls = "default_maven_server_urls",
 )
+load(
+    "//scala_proto/default:repositories.bzl",
+    "SCALAPB_COMPILE_ARTIFACT_IDS",
+)
 load("//third_party/repositories:repositories.bzl", "repositories")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
@@ -43,14 +47,7 @@ _SCALAFMT_DEPS = [
     "org_typelevel_paiges_core",
 ]
 
-_SCALAFMT_PROTO_DEPS = [
-    "com_google_protobuf_protobuf_java",
-    "com_lihaoyi_fastparse",
-    "com_lihaoyi_sourcecode",
-    "org_scala_lang_modules_scala_collection_compat",
-    "scala_proto_rules_scalapb_lenses",
-    "scala_proto_rules_scalapb_runtime",
-]
+_SCALAFMT_PROTO_DEPS = SCALAPB_COMPILE_ARTIFACT_IDS
 
 _SCALAFMT_DEPS_2_11 = [
     "com_lihaoyi_pprint",
@@ -86,8 +83,7 @@ def scalafmt_repositories(
         maven_servers = _default_maven_server_urls(),
         overriden_artifacts = {},
         bzlmod_enabled = False,
-        **kwargs):
-    scala_proto_instantiated = kwargs.pop("_scala_proto_instantiated", False)
+        scala_proto_instantiated = False):
     for scala_version in SCALA_VERSIONS:
         repositories(
             scala_version = scala_version,

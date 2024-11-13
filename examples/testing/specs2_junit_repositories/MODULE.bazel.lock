@@ -144,7 +144,7 @@
     },
     "@@rules_scala~//scala/extensions:deps.bzl%scala_deps": {
       "general": {
-        "bzlTransitiveDigest": "1vPYq6J5+aEcorUtp42uC+/FbasZkHf0p68+DNwiXVc=",
+        "bzlTransitiveDigest": "0dci+lz7ohd1X8WCmiO6Op0LaYrPweFSv04Khl+N0Hk=",
         "usagesDigest": "DZPZv4CqF5X8xvYb/vCz9b0N4wX3wsZFyyTYSrAj3do=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -171,41 +171,6 @@
               "scala_versions": [
                 "2.12.20"
               ]
-            }
-          },
-          "io_bazel_rules_scala_scala_library_2_12_20": {
-            "bzlFile": "@@rules_scala~//scala:scala_maven_import_external.bzl",
-            "ruleClassName": "jvm_import_external",
-            "attributes": {
-              "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20.jar",
-                "https://jcenter.bintray.com/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20.jar"
-              ],
-              "srcjar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar",
-                "https://jcenter.bintray.com/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar"
-              ],
-              "coordinates": "org.scala-lang:scala-library:2.12.20",
-              "rule_name": "scala_import",
-              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "artifact_sha256": "4d8a8f984cce31a329a24f10b0bf336f042cb62aeb435290a1b20243154cfccb",
-              "licenses": [
-                "notice"
-              ],
-              "deps": [],
-              "runtime_deps": [],
-              "testonly_": false
-            }
-          },
-          "io_bazel_rules_scala_scala_library": {
-            "bzlFile": "@@rules_scala~//third_party/repositories:repositories.bzl",
-            "ruleClassName": "_alias_repository",
-            "attributes": {
-              "target": "io_bazel_rules_scala_scala_library_2_12_20"
             }
           },
           "io_bazel_rules_scala_scala_compiler_2_12_20": {
@@ -247,26 +212,61 @@
               "target": "io_bazel_rules_scala_scala_compiler_2_12_20"
             }
           },
-          "io_bazel_rules_scala_scala_reflect_2_12_20": {
+          "io_bazel_rules_scala_scala_library_2_12_20": {
             "bzlFile": "@@rules_scala~//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
             "attributes": {
               "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20.jar",
-                "https://jcenter.bintray.com/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20.jar"
+                "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20.jar",
+                "https://jcenter.bintray.com/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20.jar"
               ],
               "srcjar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20-sources.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20-sources.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20-sources.jar",
-                "https://jcenter.bintray.com/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20-sources.jar"
+                "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar",
+                "https://jcenter.bintray.com/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar"
               ],
-              "coordinates": "org.scala-lang:scala-reflect:2.12.20",
+              "coordinates": "org.scala-lang:scala-library:2.12.20",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "artifact_sha256": "5f1914cdc7a70580ea6038d929ebb25736ecf2234f677e2d47f8a4b2bc81e1fb",
+              "artifact_sha256": "4d8a8f984cce31a329a24f10b0bf336f042cb62aeb435290a1b20243154cfccb",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "io_bazel_rules_scala_scala_library": {
+            "bzlFile": "@@rules_scala~//third_party/repositories:repositories.bzl",
+            "ruleClassName": "_alias_repository",
+            "attributes": {
+              "target": "io_bazel_rules_scala_scala_library_2_12_20"
+            }
+          },
+          "io_bazel_rules_scala_scala_parser_combinators_2_12_20": {
+            "bzlFile": "@@rules_scala~//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar",
+                "https://jcenter.bintray.com/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar"
+              ],
+              "srcjar_urls": [
+                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar",
+                "https://jcenter.bintray.com/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar"
+              ],
+              "coordinates": "org.scala-lang.modules:scala-parser-combinators_2.12:1.1.2",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "artifact_sha256": "24985eb43e295a9dd77905ada307a850ca25acf819cdb579c093fc6987b0dbc2",
               "licenses": [
                 "notice"
               ],
@@ -277,11 +277,11 @@
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_scala_reflect": {
+          "io_bazel_rules_scala_scala_parser_combinators": {
             "bzlFile": "@@rules_scala~//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scala_reflect_2_12_20"
+              "target": "io_bazel_rules_scala_scala_parser_combinators_2_12_20"
             }
           },
           "io_bazel_rules_scala_scala_xml_2_12_20": {
@@ -321,39 +321,78 @@
               "target": "io_bazel_rules_scala_scala_xml_2_12_20"
             }
           },
-          "io_bazel_rules_scala_scala_parser_combinators_2_12_20": {
+          "org_scala_lang_modules_scala_collection_compat_2_12_20": {
             "bzlFile": "@@rules_scala~//scala:scala_maven_import_external.bzl",
             "ruleClassName": "jvm_import_external",
             "attributes": {
               "jar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar",
-                "https://jcenter.bintray.com/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar"
+                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0.jar",
+                "https://jcenter.bintray.com/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0.jar"
               ],
               "srcjar_urls": [
-                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar",
-                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar",
-                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar",
-                "https://jcenter.bintray.com/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar"
+                "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0-sources.jar",
+                "https://jcenter.bintray.com/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0-sources.jar"
               ],
-              "coordinates": "org.scala-lang.modules:scala-parser-combinators_2.12:1.1.2",
+              "coordinates": "org.scala-lang.modules:scala-collection-compat_2.12:2.12.0",
               "rule_name": "scala_import",
               "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
-              "artifact_sha256": "24985eb43e295a9dd77905ada307a850ca25acf819cdb579c093fc6987b0dbc2",
+              "artifact_sha256": "1619c5e4399e1e4793667970aae232652db0549e795c90abf91e44c55ec37cb3",
               "licenses": [
                 "notice"
               ],
-              "deps": [],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_20"
+              ],
               "runtime_deps": [],
               "testonly_": false
             }
           },
-          "io_bazel_rules_scala_scala_parser_combinators": {
+          "org_scala_lang_modules_scala_collection_compat": {
             "bzlFile": "@@rules_scala~//third_party/repositories:repositories.bzl",
             "ruleClassName": "_alias_repository",
             "attributes": {
-              "target": "io_bazel_rules_scala_scala_parser_combinators_2_12_20"
+              "target": "org_scala_lang_modules_scala_collection_compat_2_12_20"
+            }
+          },
+          "io_bazel_rules_scala_scala_reflect_2_12_20": {
+            "bzlFile": "@@rules_scala~//scala:scala_maven_import_external.bzl",
+            "ruleClassName": "jvm_import_external",
+            "attributes": {
+              "jar_urls": [
+                "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20.jar",
+                "https://jcenter.bintray.com/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20.jar"
+              ],
+              "srcjar_urls": [
+                "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20-sources.jar",
+                "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20-sources.jar",
+                "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20-sources.jar",
+                "https://jcenter.bintray.com/org/scala-lang/scala-reflect/2.12.20/scala-reflect-2.12.20-sources.jar"
+              ],
+              "coordinates": "org.scala-lang:scala-reflect:2.12.20",
+              "rule_name": "scala_import",
+              "rule_load": "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+              "artifact_sha256": "5f1914cdc7a70580ea6038d929ebb25736ecf2234f677e2d47f8a4b2bc81e1fb",
+              "licenses": [
+                "notice"
+              ],
+              "deps": [
+                "@io_bazel_rules_scala_scala_library_2_12_20"
+              ],
+              "runtime_deps": [],
+              "testonly_": false
+            }
+          },
+          "io_bazel_rules_scala_scala_reflect": {
+            "bzlFile": "@@rules_scala~//third_party/repositories:repositories.bzl",
+            "ruleClassName": "_alias_repository",
+            "attributes": {
+              "target": "io_bazel_rules_scala_scala_reflect_2_12_20"
             }
           },
           "org_scalameta_semanticdb_scalac_2_12_20": {
@@ -651,7 +690,6 @@
             "bzlFile": "@@rules_scala~//scala/private:macros/toolchains_repo.bzl",
             "ruleClassName": "_scala_toolchains_repo",
             "attributes": {
-              "scala": true,
               "scalatest": false,
               "junit": true,
               "specs2": true,

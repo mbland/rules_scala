@@ -31,7 +31,12 @@ load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config(enable_compiler_dependency_tracking = True)
 
-load("//:extensions.bzl", "import_compiler_source_repos")
+local_repository(
+    name = "compiler_sources",
+    path = "../compiler_sources",
+)
+
+load("@compiler_sources//:extensions.bzl", "import_compiler_source_repos")
 
 import_compiler_source_repos()
 

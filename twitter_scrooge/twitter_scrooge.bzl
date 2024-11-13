@@ -17,6 +17,7 @@ load(
     "compile_java",
     "compile_scala",
 )
+load("//scala_proto/default:repositories.bzl", "GUAVA_ARTIFACT_IDS")
 load("//thrift:thrift_info.bzl", "ThriftInfo")
 load("//thrift:thrift.bzl", "merge_thrift_infos")
 load("//third_party/repositories:repositories.bzl", "repositories")
@@ -53,7 +54,7 @@ def twitter_scrooge(
         util_core = None,
         util_logging = None,
         bzlmod_enabled = False,
-        **kwargs):
+        scala_proto_instantiated = False):
     _declare_and_bind(
         libthrift,
         "libthrift",
@@ -100,8 +101,8 @@ def twitter_scrooge(
         "io_bazel_rules_scala_scopt",
     ]
 
-    if not kwargs.pop("_scala_proto_instantiated", False):
-        artifact_ids.append("io_bazel_rules_scala_guava")
+    if not scala_proto_instantiated:
+        artifact_ids.extend(GUAVA_ARTIFACT_IDS)
 
     repositories(
         scala_version = SCALA_VERSION,

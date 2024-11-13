@@ -90,6 +90,7 @@ use_repo(
     dev_deps,
     "scala_proto_rules_scalapb_compilerplugin",
     "scala_proto_rules_scalapb_protoc_bridge",
+    "scala_proto_rules_scalapb_protoc_gen",  # For Scala 2.12 and above
     "scalafmt_default",
 )
 
