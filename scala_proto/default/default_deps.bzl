@@ -1,10 +1,13 @@
 # These are the compile/runtime dependencies needed for scalapb compilation
 # and grpc compile/runtime.
 #
-# In a complex environment you may want to update the toolchain to not refer to these anymore
-# If you are using a resolver (like bazel-deps) that can export compile + runtime jar paths
-# for you, then you should only need much shorter dependency lists. This needs to be the unrolled
-# transitive path to be used without such a facility.
+# In a complex environment you may want to update the toolchain to not refer to
+# these anymore If you are using a resolver (like bazel-deps) that can export
+# compile + runtime jar paths for you, then you should only need much shorter
+# dependency lists. This needs to be the unrolled transitive path to be used
+# without such a facility.
+
+load("//scala:scala_cross_version_select.bzl", "select_for_scala_version")
 
 _DEFAULT_DEP_PROVIDER_FORMAT = (
     "@io_bazel_rules_scala_toolchains//scala_proto:scalapb_%s_deps_provider"
@@ -25,15 +28,15 @@ DEFAULT_SCALAPB_COMPILE_DEPS = [
 ]
 
 DEFAULT_SCALAPB_GRPC_DEPS = [
+    "@io_bazel_rules_scala_guava",
     "@scala_proto_rules_disruptor",
-    "@scala_proto_rules_google_instrumentation",
     "@scala_proto_rules_grpc_api",
     "@scala_proto_rules_grpc_context",
     "@scala_proto_rules_grpc_core",
     "@scala_proto_rules_grpc_netty",
     "@scala_proto_rules_grpc_protobuf",
     "@scala_proto_rules_grpc_stub",
-    "@scala_proto_rules_guava",
+    "@scala_proto_rules_instrumentation_api",
     "@scala_proto_rules_netty_buffer",
     "@scala_proto_rules_netty_codec",
     "@scala_proto_rules_netty_codec_http",
@@ -54,6 +57,9 @@ DEFAULT_SCALAPB_GRPC_DEPS = [
 
 DEFAULT_SCALAPB_WORKER_DEPS = [
     "@com_google_protobuf//:protobuf_java",
-    "@scala_proto_rules_protoc_bridge",
-    "@scala_proto_rules_scalapb_plugin",
-]
+    "@scala_proto_rules_scalapb_compilerplugin",
+    "@scala_proto_rules_scalapb_protoc_bridge",
+] + select_for_scala_version(
+    any_2_11 = [],
+    since_2_12 = ["@scala_proto_rules_scalapb_protoc_gen"],
+)

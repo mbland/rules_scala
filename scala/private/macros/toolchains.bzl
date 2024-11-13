@@ -28,7 +28,6 @@ def scala_toolchains(
         validate_scala_version = True,
         scala_compiler_srcjars = {},
         scalafmt_default_config_path = ".scalafmt.conf",
-        scala = True,
         scalatest = False,
         junit = False,
         specs2 = False,
@@ -77,7 +76,6 @@ def scala_toolchains(
             compiler srcjar metadata dictionaries containing:
             - exactly one "label", "url", or "urls" key
             - optional "integrity" or "sha256" keys
-        scala: whether to instantiate the core Scala toolchain
         scalatest: whether to instantiate the Scalatest toolchain
         junit: whether to instantiate the JUnit toolchain
         specs2: whether to instantiate the Specs2 JUnit toolchain
@@ -93,20 +91,16 @@ def scala_toolchains(
         twitter_scrooge: whether to instantiate the twitter_scrooge toolchain
         jmh: whether to instantiate the jmh toolchain
     """
-    num_toolchains = 0
-
-    if scala:
-        num_toolchains += 1
-        scala_repositories(
-            maven_servers = maven_servers,
-            # Note the internal macro parameter misspells "overriden".
-            overriden_artifacts = overridden_artifacts,
-            load_dep_rules = load_rules_scala_dependencies,
-            load_jar_deps = load_scala_toolchain_dependencies,
-            fetch_sources = fetch_sources,
-            validate_scala_version = validate_scala_version,
-            scala_compiler_srcjars = scala_compiler_srcjars,
-        )
+    scala_repositories(
+        maven_servers = maven_servers,
+        # Note the internal macro parameter misspells "overriden".
+        overriden_artifacts = overridden_artifacts,
+        load_dep_rules = load_rules_scala_dependencies,
+        load_jar_deps = load_scala_toolchain_dependencies,
+        fetch_sources = fetch_sources,
+        validate_scala_version = validate_scala_version,
+        scala_compiler_srcjars = scala_compiler_srcjars,
+    )
 
     if testing:
         scalatest = True
@@ -114,7 +108,6 @@ def scala_toolchains(
         specs2 = True
 
     if scalatest:
-        num_toolchains += 1
         scalatest_repositories(
             maven_servers = maven_servers,
             fetch_sources = fetch_sources,
@@ -122,7 +115,6 @@ def scala_toolchains(
 
     for scala_version in SCALA_VERSIONS:
         if junit:
-            num_toolchains += 1
             junit_repositories(
                 maven_servers = maven_servers,
                 scala_version = scala_version,
@@ -130,7 +122,6 @@ def scala_toolchains(
                 fetch_sources = fetch_sources,
             )
         if specs2:
-            num_toolchains += 1
             specs2_junit_repositories(
                 maven_servers = maven_servers,
                 scala_version = scala_version,
@@ -138,7 +129,6 @@ def scala_toolchains(
                 create_junit_repositories = not junit,
             )
         if scala_proto:
-            num_toolchains += 1
             scala_proto_default_repositories(
                 maven_servers = maven_servers,
                 scala_version = scala_version,
@@ -147,23 +137,18 @@ def scala_toolchains(
             )
 
     if twitter_scrooge:
-        num_toolchains += 1
         _scrooge(
             maven_servers = maven_servers,
             overriden_artifacts = overridden_artifacts,
             bzlmod_enabled = True,
         )
     if jmh:
-        num_toolchains += 1
         jmh_repositories(
             maven_servers = maven_servers,
             overriden_artifacts = overridden_artifacts,
             bzlmod_enabled = True,
         )
-    if testing:
-        num_toolchains += 1
     if scalafmt:
-        num_toolchains += 1
         scalafmt_default_config(scalafmt_default_config_path)
         scalafmt_repositories(
             maven_servers = maven_servers,
@@ -171,16 +156,14 @@ def scala_toolchains(
             bzlmod_enabled = True,
         )
 
-    if num_toolchains != 0:
-        scala_toolchains_repo(
-            scala = scala,
-            scalatest = scalatest,
-            junit = junit,
-            specs2 = specs2,
-            twitter_scrooge = twitter_scrooge,
-            jmh = jmh,
-            scala_proto = scala_proto,
-            scala_proto_enable_all_options = scala_proto_enable_all_options,
-            testing = testing,
-            scalafmt = scalafmt,
-        )
+    scala_toolchains_repo(
+        scalatest = scalatest,
+        junit = junit,
+        specs2 = specs2,
+        twitter_scrooge = twitter_scrooge,
+        jmh = jmh,
+        scala_proto = scala_proto,
+        scala_proto_enable_all_options = scala_proto_enable_all_options,
+        testing = testing,
+        scalafmt = scalafmt,
+    )

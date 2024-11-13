@@ -81,16 +81,18 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
             patch = Label(
                 "//dt_patches:dt_compiler_%s.8.patch" % scala_major_version,
             )
+    elif scala_major_version.startswith("3."):
+        patch = Label("//dt_patches:dt_compiler_3.patch")
 
     build_file_content = "\n".join([
         "package(default_visibility = [\"//visibility:public\"])",
         "filegroup(",
         "    name = \"src\",",
-        "    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"],",
+        "    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"]," if scala_major_version.startswith("2.") else "    srcs=[\"dotty/tools/dotc/core/SymbolLoaders.scala\"],",
         ")",
     ])
     default_scalac_srcjar = {
-        "url": "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/%s/scala-compiler-%s-sources.jar" % (scala_version, scala_version),
+        "url": "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/%s/scala-compiler-%s-sources.jar" % (scala_version, scala_version) if scala_major_version.startswith("2.") else "https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/%s/scala3-compiler_3-%s-sources.jar" % (scala_version, scala_version),
     }
     srcjar = scala_compiler_srcjar if scala_compiler_srcjar != None else default_scalac_srcjar
     _validate_scalac_srcjar(srcjar) or fail(
@@ -115,9 +117,7 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
             integrity = srcjar.get("integrity"),
         )
 
-def rules_scala_setup(
-        scala_compiler_srcjar = None,
-        setup_compiler_sources = True):
+def load_rules_dependencies():
     if not native.existing_rule("bazel_skylib"):
         http_archive(
             name = "bazel_skylib",
@@ -170,11 +170,7 @@ def rules_scala_setup(
             url = "https://github.com/bazelbuild/rules_proto/releases/download/6.0.2/rules_proto-6.0.2.tar.gz",
         )
 
-    if setup_compiler_sources:
-        srcs = {version: scala_compiler_srcjar for version in SCALA_VERSIONS}
-        _setup_scala_compiler_sources(srcs)
-
-def _setup_scala_compiler_sources(srcjars = {}):
+def setup_scala_compiler_sources(srcjars = {}):
     """Generates Scala compiler source repos used internally by rules_scala.
 
     Args:
@@ -191,27 +187,53 @@ def _setup_scala_compiler_sources(srcjars = {}):
         scala_versions = SCALA_VERSIONS,
     )
 
+def rules_scala_setup(scala_compiler_srcjar = None):
+    load_rules_dependencies()
+    setup_scala_compiler_sources({
+        version: scala_compiler_srcjar
+        for version in SCALA_VERSIONS
+    })
+
 def _artifact_ids(scala_version):
-    return [
-        "io_bazel_rules_scala_scala_library",
+    result = [
         "io_bazel_rules_scala_scala_compiler",
-        "io_bazel_rules_scala_scala_reflect",
-        "io_bazel_rules_scala_scala_xml",
-        "io_bazel_rules_scala_scala_parser_combinators",
-        "org_scalameta_semanticdb_scalac",
-    ] if scala_version.startswith("2") else [
-        "io_bazel_rules_scala_scala_asm",
-        "io_bazel_rules_scala_scala_compiler",
-        "io_bazel_rules_scala_scala_compiler_2",
-        "io_bazel_rules_scala_scala_interfaces",
         "io_bazel_rules_scala_scala_library",
-        "io_bazel_rules_scala_scala_library_2",
         "io_bazel_rules_scala_scala_parser_combinators",
-        "io_bazel_rules_scala_scala_reflect_2",
-        "io_bazel_rules_scala_scala_tasty_core",
         "io_bazel_rules_scala_scala_xml",
-        "org_scala_sbt_compiler_interface",
+        "org_scala_lang_modules_scala_collection_compat",
     ]
+
+    if scala_version.startswith("2."):
+        result.extend([
+            "io_bazel_rules_scala_scala_reflect",
+            "org_scalameta_semanticdb_scalac",
+        ])
+
+    if scala_version.startswith("2.13.") or scala_version.startswith("3."):
+        # Since the Scala 2.13 compiler is included in Scala 3 deps.
+        result.extend([
+            "io_github_java_diff_utils_java_diff_utils",
+            "net_java_dev_jna_jna",
+            "org_jline_jline",
+        ])
+
+    if scala_version.startswith("3."):
+        result.extend([
+            "io_bazel_rules_scala_scala_asm",
+            "io_bazel_rules_scala_scala_compiler_2",
+            "io_bazel_rules_scala_scala_interfaces",
+            "io_bazel_rules_scala_scala_library_2",
+            "io_bazel_rules_scala_scala_reflect_2",
+            "io_bazel_rules_scala_scala_tasty_core",
+            "org_jline_jline_native",
+            "org_jline_jline_reader",
+            "org_jline_jline_terminal",
+            "org_jline_jline_terminal_jna",
+            "org_scala_sbt_compiler_interface",
+            "org_scala_sbt_util_interface",
+        ])
+
+    return result
 
 def rules_scala_toolchain_deps_repositories(
         maven_servers = _default_maven_server_urls(),
@@ -238,9 +260,9 @@ def scala_repositories(
         scala_compiler_srcjars = {}):
     if load_dep_rules:
         # When `WORKSPACE` goes away, so can this case.
-        rules_scala_setup(setup_compiler_sources = False)
+        load_rules_dependencies()
 
-    _setup_scala_compiler_sources(scala_compiler_srcjars)
+    setup_scala_compiler_sources(scala_compiler_srcjars)
 
     if load_jar_deps:
         rules_scala_toolchain_deps_repositories(

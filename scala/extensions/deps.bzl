@@ -57,7 +57,6 @@ _compiler_srcjar = tag_class(
 )
 
 _toolchains_defaults = {
-    "scala": True,
     "scalatest": False,
     "junit": False,
     "specs2": False,
@@ -128,15 +127,12 @@ def _get_toolchains(module_ctx):
     for mod in module_ctx.modules:
         values = get_tag_values(mod.tags.toolchains, _toolchains_defaults)
         result.update({k: True for k in values if values[k]})
-        if mod.is_root:
-            root_scala_toolchain = values["scala"]
 
     if result["testing"]:
         result["scalatest"] = True
         result["specs2"] = True
     if result["specs2"]:
         result["junit"] = True
-    result["scala"] = root_scala_toolchain
     return result
 
 def _scala_deps_impl(module_ctx):

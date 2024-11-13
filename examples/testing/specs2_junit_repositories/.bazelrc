@@ -1,2 +1,1 @@
-build --enable_platform_specific_config
-build:windows --enable_runfiles
+import ../../../.bazelrc

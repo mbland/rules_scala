@@ -96,8 +96,8 @@ def twitter_scrooge(
     repositories(
         scala_version = SCALA_VERSION,
         for_artifact_ids = [
-            "io_bazel_rules_scala_mustache",  # Mustache is needed to generate java from thrift, and is passed further down.
             "io_bazel_rules_scala_guava",
+            "io_bazel_rules_scala_mustache",  # Mustache is needed to generate java from thrift, and is passed further down.
             "io_bazel_rules_scala_javax_annotation_api",
             "io_bazel_rules_scala_scopt",
         ],

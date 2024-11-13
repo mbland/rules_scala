@@ -8,14 +8,39 @@ load(
 )
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
+SCALA_2_ARTIFACTS = {
+    "scala_library": "org.scala-lang:scala-library:%s",
+    "scala_compiler": "org.scala-lang:scala-compiler:%s",
+    "scala_reflect": "org.scala-lang:scala-reflect:%s",
+}
+
+SCALA_3_ARTIFACTS = {
+    "scala_library": "org.scala-lang:scala3-library_3:%s",
+    "scala_compiler": "org.scala-lang:scala3-compiler_3:%s",
+    "scala3_interfaces": "org.scala-lang:scala3-interfaces:%s",
+    "tasty_core": "org.scala-lang:tasty-core_3:%s",
+}
+
+UNVERSIONED_ARTIFACTS = {
+    "scala2_library": "org.scala-lang:scala-library:2.13.15",
+    "scala_asm": "org.scala-lang.modules:scala-asm:9.7.0-scala-2",
+    "sbt_compiler_interface": "org.scala-sbt:compiler-interface:1.9.6",
+}
+
 def import_compiler_source_repos():
-    for artifact in ["library", "compiler", "reflect"]:
+    versioned_artifact_templates = (
+        SCALA_2_ARTIFACTS
+        if SCALA_VERSION.startswith("2.")
+        else SCALA_3_ARTIFACTS
+    }
+    versioned_artifacts = {
+        k: v % SCALA_VERSION for k, v in versioned_artifact_templates
+    }
+
+    for name, artifact in versioned_artifacts | UNVERSIONED_ARTIFACTS:
         scala_maven_import_external(
-            name = "scala_%s" % artifact,
-            artifact = "org.scala-lang:scala-%s:%s" % (
-                artifact,
-                SCALA_VERSION,
-            ),
+            name = name,
+            artifact = artifact,
             licenses = ["notice"],
             server_urls = default_maven_server_urls(),
         )

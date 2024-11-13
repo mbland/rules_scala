@@ -11,9 +11,12 @@ def _generators(ctx):
     )
 
 def _generators_jars(ctx):
+    generator_deps = ctx.attr.extra_generator_dependencies + [
+        ctx.attr._main_generator_dep,
+    ]
     return depset(transitive = [
         dep[JavaInfo].transitive_runtime_jars
-        for dep in ctx.attr.extra_generator_dependencies
+        for dep in generator_deps
     ])
 
 def _generators_opts(ctx):
@@ -78,10 +81,12 @@ scala_proto_toolchain = rule(
         "code_generator": attr.label(
             executable = True,
             cfg = "exec",
-            default = "//src/scala/scripts:scalapb_worker",
+            default = Label("//src/scala/scripts:scalapb_worker"),
             allow_files = True,
         ),
-        "main_generator": attr.string(default = "scalapb.ScalaPbCodeGenerator"),
+        "main_generator": attr.string(
+            default = "scripts.ScalaPbCodeGenerator",
+        ),
         "named_generators": attr.string_dict(),
         "extra_generator_dependencies": attr.label_list(
             providers = [JavaInfo],
@@ -89,7 +94,7 @@ scala_proto_toolchain = rule(
         "scalac": attr.label(
             executable = True,
             cfg = "exec",
-            default = "//src/java/io/bazel/rulesscala/scalac",
+            default = Label("//src/java/io/bazel/rulesscala/scalac"),
             allow_files = True,
         ),
         "protoc": attr.label(
@@ -108,6 +113,14 @@ scala_proto_toolchain = rule(
             Read about recommended code organization in
             [proto rules documentation](https://docs.bazel.build/versions/master/be/protocol-buffer.html#proto_library)
             """,
+        ),
+        "_main_generator_dep": attr.label(
+            default = Label(
+                "//src/scala/scripts:scalapb_codegenerator_wrapper",
+            ),
+            allow_single_file = True,
+            executable = False,
+            cfg = "exec",
         ),
     },
 )

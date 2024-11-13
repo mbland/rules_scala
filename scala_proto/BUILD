@@ -1,3 +1,11 @@
+load("//scala:providers.bzl", "declare_deps_provider")
+load(
+    "//scala_proto/default:default_deps.bzl",
+    "DEFAULT_SCALAPB_COMPILE_DEPS",
+    "DEFAULT_SCALAPB_GRPC_DEPS",
+    "DEFAULT_SCALAPB_WORKER_DEPS",
+)
+load("//scala_proto/private:toolchain_deps.bzl", "export_scalapb_toolchain_deps")
 load(
     "//scala_proto/private:toolchain_deps.bzl",
     "export_scalapb_toolchain_deps",
