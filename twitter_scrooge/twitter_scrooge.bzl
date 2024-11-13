@@ -52,7 +52,8 @@ def twitter_scrooge(
         scrooge_generator = None,
         util_core = None,
         util_logging = None,
-        bzlmod_enabled = False):
+        bzlmod_enabled = False,
+        **kwargs):
     _declare_and_bind(
         libthrift,
         "libthrift",
@@ -93,14 +94,18 @@ def twitter_scrooge(
         maven_servers,
     )
 
+    artifact_ids = [
+        "io_bazel_rules_scala_mustache",  # Mustache is needed to generate java from thrift, and is passed further down.
+        "io_bazel_rules_scala_javax_annotation_api",
+        "io_bazel_rules_scala_scopt",
+    ]
+
+    if not kwargs.pop("_scala_proto_instantiated", False):
+        artifact_ids.append("io_bazel_rules_scala_guava")
+
     repositories(
         scala_version = SCALA_VERSION,
-        for_artifact_ids = [
-            "io_bazel_rules_scala_guava",
-            "io_bazel_rules_scala_mustache",  # Mustache is needed to generate java from thrift, and is passed further down.
-            "io_bazel_rules_scala_javax_annotation_api",
-            "io_bazel_rules_scala_scopt",
-        ],
+        for_artifact_ids = artifact_ids,
         maven_servers = maven_servers,
         fetch_sources = False,
         overriden_artifacts = overriden_artifacts,

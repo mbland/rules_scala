@@ -141,6 +141,7 @@ def scala_toolchains(
             maven_servers = maven_servers,
             overriden_artifacts = overridden_artifacts,
             bzlmod_enabled = True,
+            _scala_proto_instantiated = scala_proto,
         )
     if jmh:
         jmh_repositories(
@@ -154,6 +155,7 @@ def scala_toolchains(
             maven_servers = maven_servers,
             overriden_artifacts = overridden_artifacts,
             bzlmod_enabled = True,
+            _scala_proto_instantiated = scala_proto,
         )
 
     scala_toolchains_repo(

@@ -28,6 +28,8 @@ UNVERSIONED_ARTIFACTS = {
     "sbt_compiler_interface": "org.scala-sbt:compiler-interface:1.9.6",
 }
 
+IS_SCALA_2 = SCALA_VERSION.startswith("2.")
+
 def import_compiler_source_repos():
     http_jar(
         name = "scala_compiler_srcjar",
@@ -42,12 +44,11 @@ def import_compiler_source_repos():
     )
 
     versioned_artifact_templates = (
-        SCALA_2_ARTIFACTS
-        if SCALA_VERSION.startswith("2.")
-        else SCALA_3_ARTIFACTS
-    }
+        SCALA_2_ARTIFACTS if IS_SCALA_2 else SCALA_3_ARTIFACTS
+    )
     versioned_artifacts = {
-        k: v % SCALA_VERSION for k, v in versioned_artifact_templates
+        k: v % SCALA_VERSION
+        for k, v in versioned_artifact_templates
     }
 
     for name, artifact in versioned_artifacts | UNVERSIONED_ARTIFACTS:

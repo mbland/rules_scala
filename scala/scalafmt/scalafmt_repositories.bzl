@@ -32,12 +32,8 @@ def scalafmt_default_config(path = ".scalafmt.conf", **kwargs):
 _SCALAFMT_DEPS = [
     "com_geirsson_metaconfig_core",
     "com_geirsson_metaconfig_typesafe_config",
-    "com_google_protobuf_protobuf_java",
     "com_lihaoyi_fansi",
-    "com_lihaoyi_fastparse",
-    "com_lihaoyi_sourcecode",
     "com_typesafe_config",
-    "org_scala_lang_modules_scala_collection_compat",
     "org_scala_lang_scalap",
     "org_scalameta_common",
     "org_scalameta_parsers",
@@ -45,6 +41,13 @@ _SCALAFMT_DEPS = [
     "org_scalameta_scalameta",
     "org_scalameta_trees",
     "org_typelevel_paiges_core",
+]
+
+_SCALAFMT_PROTO_DEPS = [
+    "com_google_protobuf_protobuf_java",
+    "com_lihaoyi_fastparse",
+    "com_lihaoyi_sourcecode",
+    "org_scala_lang_modules_scala_collection_compat",
     "scala_proto_rules_scalapb_lenses",
     "scala_proto_rules_scalapb_runtime",
 ]
@@ -62,11 +65,13 @@ _SCALAFMT_DEPS_2_12 = [
     "org_scalameta_scalafmt_sysops",
 ]
 
-def scalafmt_artifact_ids(scala_version):
+def scalafmt_artifact_ids(scala_version, scala_proto_instantiated = False):
     major_version = extract_major_version(scala_version)
 
+    proto_deps = [] if scala_proto_instantiated else _SCALAFMT_PROTO_DEPS
+
     if major_version == "2.11":
-        return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_11
+        return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_11 + proto_deps
 
     extra_deps = []
 
@@ -75,16 +80,21 @@ def scalafmt_artifact_ids(scala_version):
     else:
         extra_deps.append("io_bazel_rules_scala_scala_parallel_collections")
 
-    return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_12 + extra_deps
+    return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_12 + extra_deps + proto_deps
 
 def scalafmt_repositories(
         maven_servers = _default_maven_server_urls(),
         overriden_artifacts = {},
-        bzlmod_enabled = False):
+        bzlmod_enabled = False,
+        **kwargs):
+    scala_proto_instantiated = kwargs.pop("_scala_proto_instantiated", False)
     for scala_version in SCALA_VERSIONS:
         repositories(
             scala_version = scala_version,
-            for_artifact_ids = scalafmt_artifact_ids(scala_version),
+            for_artifact_ids = scalafmt_artifact_ids(
+                scala_version,
+                scala_proto_instantiated,
+            ),
             maven_servers = maven_servers,
             overriden_artifacts = overriden_artifacts,
         )

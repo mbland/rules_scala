@@ -88,8 +88,8 @@ dev_deps.toolchains(
 
 use_repo(
     dev_deps,
-    "scala_proto_rules_protoc_bridge",
-    "scala_proto_rules_scalapb_plugin",
+    "scala_proto_rules_scalapb_compilerplugin",
+    "scala_proto_rules_scalapb_protoc_bridge",
     "scalafmt_default",
 )
 
