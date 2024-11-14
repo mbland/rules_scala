@@ -122,60 +122,64 @@ def scala_toolchains(
     if specs2:
         junit = True
 
-    artifact_ids = []
-    fetch_sources_by_id = {}
+    artifact_ids_to_fetch_sources = {}
 
     if scalatest:
-        scalatest_artifacts = scalatest_artifact_ids()
-        artifact_ids.extend(scalatest_artifacts)
-        fetch_sources_by_id.update({id: True for id in scalatest_artifacts})
+        artifact_ids_to_fetch_sources.update({
+            id: True
+            for id in scalatest_artifact_ids()
+        })
     if junit:
-        junit_artifacts = junit_artifact_ids()
-        artifact_ids.extend(junit_artifacts)
-        fetch_sources_by_id.update({id: True for id in junit_artifacts})
+        artifact_ids_to_fetch_sources.update({
+            id: True
+            for id in junit_artifact_ids()
+        })
     if specs2:
-        specs2_artifacts = specs2_artifact_ids() + specs2_junit_artifact_ids()
-        artifact_ids.extend(specs2_artifacts)
-        fetch_sources_by_id.update({id: True for id in specs2_artifacts})
+        artifact_ids_to_fetch_sources.update({
+            id: True
+            for id in specs2_artifact_ids() + specs2_junit_artifact_ids()
+        })
     if jmh:
-        jmh_artifacts = jmh_artifact_ids()
-        artifact_ids.extend(jmh_artifacts)
-        fetch_sources_by_id.update({id: False for id in jmh_artifacts})
+        artifact_ids_to_fetch_sources.update({
+            id: False
+            for id in jmh_artifact_ids()
+        })
     if twitter_scrooge:
-        scrooge_artifacts = twitter_scrooge_artifact_ids(
-            libthrift = libthrift,
-            scrooge_core = scrooge_core,
-            scrooge_generator = scrooge_generator,
-            util_core = util_core,
-            util_logging = util_logging,
-        )
-        artifact_ids.extend(scrooge_artifacts)
-        fetch_sources_by_id.update({id: False for id in scrooge_artifacts})
+        artifact_ids_to_fetch_sources.update({
+            id: False
+            for id in twitter_scrooge_artifact_ids(
+                libthrift = libthrift,
+                scrooge_core = scrooge_core,
+                scrooge_generator = scrooge_generator,
+                util_core = util_core,
+                util_logging = util_logging,
+            )
+        })
 
     for scala_version in SCALA_VERSIONS:
-        version_specific_artifact_ids = []
+        version_specific_artifact_ids = {}
 
         if scala_proto:
-            scala_proto_artifacts = scala_proto_artifact_ids(scala_version)
-            version_specific_artifact_ids.extend(scala_proto_artifacts)
-            fetch_sources_by_id.update({
+            version_specific_artifact_ids.update({
                 id: True
-                for id in scala_proto_artifacts
+                for id in scala_proto_artifact_ids(scala_version)
             })
         if scalafmt:
-            version_specific_artifact_ids.extend(
-                scalafmt_artifact_ids(scala_version),
-            )
+            version_specific_artifact_ids.update({
+                id: fetch_sources
+                for id in scalafmt_artifact_ids(scala_version)
+            })
+
+        all_artifacts = (
+            artifact_ids_to_fetch_sources | version_specific_artifact_ids
+        )
 
         repositories(
             scala_version = scala_version,
-            for_artifact_ids = {
-                id: True
-                for id in (artifact_ids + version_specific_artifact_ids)
-            }.keys(),
+            for_artifact_ids = all_artifacts.keys(),
             maven_servers = maven_servers,
             fetch_sources = fetch_sources,
-            fetch_sources_by_id = fetch_sources_by_id,
+            fetch_sources_by_id = all_artifacts,
             overriden_artifacts = overridden_artifacts,
             validate_scala_version = validate_scala_version,
         )
