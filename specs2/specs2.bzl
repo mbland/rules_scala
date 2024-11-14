@@ -8,18 +8,21 @@ load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 def specs2_version():
     return "4.4.1"
 
+def specs2_artifact_ids():
+    return [
+        "io_bazel_rules_scala_org_specs2_specs2_common",
+        "io_bazel_rules_scala_org_specs2_specs2_core",
+        "io_bazel_rules_scala_org_specs2_specs2_fp",
+        "io_bazel_rules_scala_org_specs2_specs2_matcher",
+    ]
+
 def specs2_repositories(
         maven_servers = _default_maven_server_urls(),
         scala_version = SCALA_VERSION,
         overriden_artifacts = {}):
     repositories(
         scala_version = scala_version,
-        for_artifact_ids = [
-            "io_bazel_rules_scala_org_specs2_specs2_common",
-            "io_bazel_rules_scala_org_specs2_specs2_core",
-            "io_bazel_rules_scala_org_specs2_specs2_fp",
-            "io_bazel_rules_scala_org_specs2_specs2_matcher",
-        ],
+        for_artifact_ids = specs2_artifact_ids(),
         maven_servers = maven_servers,
         fetch_sources = True,
         overriden_artifacts = overriden_artifacts,

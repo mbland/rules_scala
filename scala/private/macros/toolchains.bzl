@@ -1,22 +1,21 @@
 """Macro to instantiate @io_bazel_rules_scala_toolchains"""
 
 load(":macros/toolchains_repo.bzl", "scala_toolchains_repo")
-load("//jmh:jmh.bzl", "jmh_repositories")
-load("//junit:junit.bzl", "junit_repositories")
+load("//jmh:jmh.bzl", "jmh_artifact_ids")
+load("//junit:junit.bzl", "junit_artifact_ids")
 load("//scala/private:macros/scala_repositories.bzl", "scala_repositories")
 load(
     "//scala/scalafmt:scalafmt_repositories.bzl",
+    "scalafmt_artifact_ids",
     "scalafmt_default_config",
-    "scalafmt_repositories",
 )
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
-load(
-    "//scala_proto/default:repositories.bzl",
-    "scala_proto_default_repositories",
-)
-load("//scalatest:scalatest.bzl", "scalatest_repositories")
-load("//specs2:specs2_junit.bzl", "specs2_junit_repositories")
-load("//twitter_scrooge:twitter_scrooge.bzl", _scrooge = "twitter_scrooge")
+load("//scala_proto/default:repositories.bzl", "scala_proto_artifact_ids")
+load("//scalatest:scalatest.bzl", "scalatest_artifact_ids")
+load("//specs2:specs2.bzl", "specs2_artifact_ids")
+load("//specs2:specs2_junit.bzl", "specs2_junit_artifact_ids")
+load("//third_party/repositories:repositories.bzl", "repositories")
+load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge_artifact_ids")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 def scala_toolchains(
@@ -27,16 +26,21 @@ def scala_toolchains(
         fetch_sources = False,
         validate_scala_version = True,
         scala_compiler_srcjars = {},
-        scalafmt_default_config_path = ".scalafmt.conf",
         scalatest = False,
         junit = False,
         specs2 = False,
+        testing = False,
+        scalafmt = False,
+        scalafmt_default_config_path = ".scalafmt.conf",
         scala_proto = False,
         scala_proto_enable_all_options = False,
-        twitter_scrooge = False,
         jmh = False,
-        testing = False,
-        scalafmt = False):
+        twitter_scrooge = False,
+        libthrift = None,
+        scrooge_core = None,
+        scrooge_generator = None,
+        util_core = None,
+        util_logging = None):
     """Instantiates @io_bazel_rules_scala_toolchains and all its dependencies.
 
     Provides a unified interface to configuring rules_scala both directly in a
@@ -88,8 +92,14 @@ def scala_toolchains(
         scala_proto_enable_all_options: whether to instantiate the scala_proto
             toolchain with all options enabled; `scala_proto` must also be
             `True` for this to take effect
-        twitter_scrooge: whether to instantiate the twitter_scrooge toolchain
         jmh: whether to instantiate the jmh toolchain
+        twitter_scrooge: whether to instantiate the twitter_scrooge toolchain
+        libthrift: label to a libthrift artifact for twitter_scrooge
+        scrooge_core: label to a scrooge_core artifact for twitter_scrooge
+        scrooge_generator: label to a scrooge_generator artifact for
+            twitter_scrooge
+        util_core: label to a util_core artifact for twitter_scrooge
+        util_logging: label to a util_logging artifact for twitter_scrooge
     """
     scala_repositories(
         maven_servers = maven_servers,
@@ -102,60 +112,72 @@ def scala_toolchains(
         scala_compiler_srcjars = scala_compiler_srcjars,
     )
 
+    if scalafmt:
+        scalafmt_default_config(scalafmt_default_config_path)
+
     if testing:
         scalatest = True
         junit = True
         specs2 = True
+    if specs2:
+        junit = True
+
+    artifact_ids = []
+    fetch_sources_by_id = {}
 
     if scalatest:
-        scalatest_repositories(
-            maven_servers = maven_servers,
-            fetch_sources = fetch_sources,
+        scalatest_artifacts = scalatest_artifact_ids()
+        artifact_ids.extend(scalatest_artifacts)
+        fetch_sources_by_id.update({id: True for id in scalatest_artifacts})
+    if junit:
+        junit_artifacts = junit_artifact_ids()
+        artifact_ids.extend(junit_artifacts)
+        fetch_sources_by_id.update({id: True for id in junit_artifacts})
+    if specs2:
+        specs2_artifacts = specs2_artifact_ids() + specs2_junit_artifact_ids()
+        artifact_ids.extend(specs2_artifacts)
+        fetch_sources_by_id.update({id: True for id in specs2_artifacts})
+    if jmh:
+        jmh_artifacts = jmh_artifact_ids()
+        artifact_ids.extend(jmh_artifacts)
+        fetch_sources_by_id.update({id: False for id in jmh_artifacts})
+    if twitter_scrooge:
+        scrooge_artifacts = twitter_scrooge_artifact_ids(
+            libthrift = libthrift,
+            scrooge_core = scrooge_core,
+            scrooge_generator = scrooge_generator,
+            util_core = util_core,
+            util_logging = util_logging,
         )
+        artifact_ids.extend(scrooge_artifacts)
+        fetch_sources_by_id.update({id: False for id in scrooge_artifacts})
 
     for scala_version in SCALA_VERSIONS:
-        if junit:
-            junit_repositories(
-                maven_servers = maven_servers,
-                scala_version = scala_version,
-                overriden_artifacts = overridden_artifacts,
-                fetch_sources = fetch_sources,
-            )
-        if specs2:
-            specs2_junit_repositories(
-                maven_servers = maven_servers,
-                scala_version = scala_version,
-                overriden_artifacts = overridden_artifacts,
-                create_junit_repositories = not junit,
-            )
+        version_specific_artifact_ids = []
+
         if scala_proto:
-            scala_proto_default_repositories(
-                maven_servers = maven_servers,
-                scala_version = scala_version,
-                overriden_artifacts = overridden_artifacts,
-                register_toolchains = False,
+            scala_proto_artifacts = scala_proto_artifact_ids(scala_version)
+            version_specific_artifact_ids.extend(scala_proto_artifacts)
+            fetch_sources_by_id.update({
+                id: True
+                for id in scala_proto_artifacts
+            })
+        if scalafmt:
+            version_specific_artifact_ids.extend(
+                scalafmt_artifact_ids(scala_version),
             )
 
-    if twitter_scrooge:
-        _scrooge(
+        repositories(
+            scala_version = scala_version,
+            for_artifact_ids = {
+                id: True
+                for id in (artifact_ids + version_specific_artifact_ids)
+            }.keys(),
             maven_servers = maven_servers,
+            fetch_sources = fetch_sources,
+            fetch_sources_by_id = fetch_sources_by_id,
             overriden_artifacts = overridden_artifacts,
-            bzlmod_enabled = True,
-            scala_proto_instantiated = scala_proto,
-        )
-    if jmh:
-        jmh_repositories(
-            maven_servers = maven_servers,
-            overriden_artifacts = overridden_artifacts,
-            bzlmod_enabled = True,
-        )
-    if scalafmt:
-        scalafmt_default_config(scalafmt_default_config_path)
-        scalafmt_repositories(
-            maven_servers = maven_servers,
-            overriden_artifacts = overridden_artifacts,
-            bzlmod_enabled = True,
-            scala_proto_instantiated = scala_proto,
+            validate_scala_version = validate_scala_version,
         )
 
     scala_toolchains_repo(

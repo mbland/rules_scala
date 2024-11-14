@@ -56,7 +56,7 @@ def scrooge_repositories(version = None):
             sha256 = "73ddd61cedabd4dab82b30e6c52c1be6c692b063b8ba310d716ead9e3b4e9267",
         )
 
-    if version == "21.2.0":
+    elif version == "21.2.0":
         use_labels = True
         _import_external(
             id = "io_bazel_rules_scala_scrooge_core",
@@ -90,10 +90,10 @@ def scrooge_repositories(version = None):
             scrooge_generator = "@io_bazel_rules_scala_scrooge_generator",
             util_core = "@io_bazel_rules_scala_util_core",
             util_logging = "@io_bazel_rules_scala_util_logging",
-            bzlmod_enabled = True,
+            register_toolchains = False,
         )
     else:
-        twitter_scrooge(bzlmod_enabled = True)
+        twitter_scrooge(register_toolchains = False)
 
     scala_toolchains_repo(
         name = "twitter_scrooge_test_toolchain",

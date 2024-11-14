@@ -3,7 +3,8 @@ load(
     "expose_toolchain_deps",
 )
 load("//scala:providers.bzl", "DepsInfo", "declare_deps_provider")
-load("//scala:artifacts.bzl", "versioned_artifact_repos")
+load("//scala:scala_cross_version.bzl", "repositories")
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 DEP_PROVIDERS = [
     "compile_classpath",
@@ -61,7 +62,7 @@ def setup_scrooge_toolchain(name):
         name = "aspect_compile_classpath_provider",
         deps_id = "aspect_compile_classpath",
         visibility = ["//visibility:public"],
-        deps = versioned_artifact_repos([
+        deps = repositories(SCALA_VERSION, [
             "@io_bazel_rules_scala_javax_annotation_api",
             "@libthrift",
             "@io_bazel_rules_scala_scrooge_core",
@@ -75,7 +76,7 @@ def setup_scrooge_toolchain(name):
         name = "compile_classpath_provider",
         deps_id = "compile_classpath",
         visibility = ["//visibility:public"],
-        deps = versioned_artifact_repos([
+        deps = repositories(SCALA_VERSION, [
             "@libthrift",
             "@io_bazel_rules_scala_scrooge_core",
         ]) + [
@@ -87,7 +88,7 @@ def setup_scrooge_toolchain(name):
         name = "scrooge_generator_classpath_provider",
         deps_id = "scrooge_generator_classpath",
         visibility = ["//visibility:public"],
-        deps = versioned_artifact_repos([
+        deps = repositories(SCALA_VERSION, [
             "@io_bazel_rules_scala_scrooge_generator",
         ]),
     )
@@ -96,7 +97,7 @@ def setup_scrooge_toolchain(name):
         name = "compiler_classpath_provider",
         deps_id = "compiler_classpath",
         visibility = ["//visibility:public"],
-        deps = versioned_artifact_repos([
+        deps = repositories(SCALA_VERSION, [
             "@io_bazel_rules_scala_mustache",
             "@io_bazel_rules_scala_scopt",
             "@io_bazel_rules_scala_scrooge_generator",

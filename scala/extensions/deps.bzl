@@ -75,6 +75,16 @@ _toolchains = tag_class(
     },
 )
 
+_twitter_scrooge = tag_class(
+    attrs = {
+        "libthrift": attr.string(),
+        "scrooge_core": attr.string(),
+        "scrooge_generator": attr.string(),
+        "util_core": attr.string(),
+        "util_logging": attr.string(),
+    },
+)
+
 def _get_settings(root_module):
     """Compiles the `settings` and `scalafmt` tag values from the root module.
 
@@ -135,12 +145,32 @@ def _get_toolchains(module_ctx):
         result["junit"] = True
     return result
 
+def _get_twitter_scrooge(module_ctx):
+    result = {}
+
+    for mod in module_ctx.modules:
+        if not mod.is_root:
+            continue
+
+        for tag in mod.tags.twitter_scrooge:
+            _add_if_not_empty(result, "libthrift", tag.libthrift)
+            _add_if_not_empty(result, "scrooge_core", tag.scrooge_core)
+            _add_if_not_empty(result, "scrooge_generator", tag.scrooge_generator)
+            _add_if_not_empty(result, "util_core", tag.util_core)
+            _add_if_not_empty(result, "util_logging", tag.util_logging)
+
+    return result
+
 def _scala_deps_impl(module_ctx):
     root_module = get_root_module(module_ctx)
     scala_toolchains(
         load_rules_scala_dependencies = False,  # MODULE.bazel loads these now.
         scala_compiler_srcjars = _get_scala_compiler_srcjars(root_module),
-        **(_get_settings(root_module) | _get_toolchains(module_ctx))
+        **(
+            _get_settings(root_module) |
+            _get_toolchains(module_ctx) |
+            _get_twitter_scrooge(module_ctx)
+        )
     )
 
 scala_deps = module_extension(
@@ -150,5 +180,6 @@ scala_deps = module_extension(
         "scalafmt": _scalafmt,
         "compiler_srcjar": _compiler_srcjar,
         "toolchains": _toolchains,
+        "twitter_scrooge": _twitter_scrooge,
     },
 )

@@ -17,7 +17,7 @@ _BUILD_TOOLS_RELEASE = "5.1.0"
 
 _settings_defaults = {
     "maven_servers": default_maven_server_urls(),
-    "fetch_sources": True,
+    "fetch_sources": False,
 }
 
 _settings = tag_class(

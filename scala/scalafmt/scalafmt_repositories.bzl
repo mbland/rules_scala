@@ -62,10 +62,9 @@ _SCALAFMT_DEPS_2_12 = [
     "org_scalameta_scalafmt_sysops",
 ]
 
-def scalafmt_artifact_ids(scala_version, scala_proto_instantiated = False):
+def scalafmt_artifact_ids(scala_version):
     major_version = extract_major_version(scala_version)
-
-    proto_deps = [] if scala_proto_instantiated else _SCALAFMT_PROTO_DEPS
+    proto_deps = _SCALAFMT_PROTO_DEPS
 
     if major_version == "2.11":
         return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_11 + proto_deps
@@ -82,7 +81,6 @@ def scalafmt_artifact_ids(scala_version, scala_proto_instantiated = False):
 def scalafmt_repositories(
         maven_servers = _default_maven_server_urls(),
         overriden_artifacts = {},
-        bzlmod_enabled = False,
         scala_proto_instantiated = False):
     for scala_version in SCALA_VERSIONS:
         repositories(
@@ -95,11 +93,6 @@ def scalafmt_repositories(
             overriden_artifacts = overriden_artifacts,
         )
 
-    if not bzlmod_enabled:
-        _register_scalafmt_toolchains()
-
-def _register_scalafmt_toolchains():
-    for scala_version in SCALA_VERSIONS:
         native.register_toolchains(str(Label(
             "//scala/scalafmt:scalafmt_toolchain" +
             version_suffix(scala_version),

@@ -7,27 +7,27 @@ load(
 load("//third_party/repositories:repositories.bzl", "repositories")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
+def jmh_artifact_ids():
+    return [
+        "io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
+        "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
+        "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection",
+        "io_bazel_rules_scala_org_ow2_asm_asm",
+        "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
+        "io_bazel_rules_scala_org_apache_commons_commons_math3",
+    ]
+
 def jmh_repositories(
         maven_servers = default_maven_server_urls(),
-        overriden_artifacts = {},
-        bzlmod_enabled = False):
+        overriden_artifacts = {}):
     repositories(
         scala_version = SCALA_VERSION,
-        for_artifact_ids = [
-            "io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
-            "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
-            "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection",
-            "io_bazel_rules_scala_org_ow2_asm_asm",
-            "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
-            "io_bazel_rules_scala_org_apache_commons_commons_math3",
-        ],
+        for_artifact_ids = jmh_artifact_ids(),
         fetch_sources = False,
         maven_servers = maven_servers,
         overriden_artifacts = overriden_artifacts,
     )
-
-    if not bzlmod_enabled:
-        native.register_toolchains("@io_bazel_rules_scala_toolchains//jmh:all")
+    native.register_toolchains("@io_bazel_rules_scala_toolchains//jmh:all")
 
 def _scala_generate_benchmark(ctx):
     # we use required providers to ensure JavaInfo exists
