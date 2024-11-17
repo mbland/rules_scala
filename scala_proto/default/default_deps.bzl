@@ -9,8 +9,18 @@
 
 load("//scala:scala_cross_version_select.bzl", "select_for_scala_version")
 
+_DEFAULT_DEP_PROVIDER_FORMAT = (
+    "@io_bazel_rules_scala_toolchains//scala_proto:scalapb_%s_deps_provider"
+)
+
+def scala_proto_deps_providers(
+        compile = _DEFAULT_DEP_PROVIDER_FORMAT % "compile",
+        grpc = _DEFAULT_DEP_PROVIDER_FORMAT % "grpc",
+        worker = _DEFAULT_DEP_PROVIDER_FORMAT % "worker"):
+    return [compile, grpc, worker]
+
 DEFAULT_SCALAPB_COMPILE_DEPS = [
-    "//scala/private/toolchain_deps:scala_library_classpath",
+    Label("//scala/private/toolchain_deps:scala_library_classpath"),
     "@com_google_protobuf//:protobuf_java",
     "@com_lihaoyi_fastparse",
     "@scala_proto_rules_scalapb_lenses",
