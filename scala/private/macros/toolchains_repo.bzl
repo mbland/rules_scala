@@ -21,6 +21,10 @@ def _generate_testing_toolchain_build_file_args(repo_attr):
 
     if len(framework_deps) == 0:
         return None
+
+    # The _TESTING_TOOLCHAIN_BUILD template expects that all framework keys are
+    # present in the dictionary, so it can set unset framework classpath
+    # parameters to `None`.
     return {
         "deps_symbols": "\",\n    \"".join(
             [s for s in framework_deps.values()],
@@ -41,12 +45,12 @@ def _scala_toolchains_repo_impl(repository_ctx):
 
     if repo_attr.scala:
         toolchains["scala"] = _SCALA_TOOLCHAIN_BUILD
-    if repo_attr.twitter_scrooge:
-        toolchains["twitter_scrooge"] = _TWITTER_SCROOGE_TOOLCHAIN_BUILD
-    if repo_attr.jmh:
-        toolchains["jmh"] = _JMH_TOOLCHAIN_BUILD
     if repo_attr.scala_proto:
         toolchains["scala_proto"] = _SCALA_PROTO_TOOLCHAIN_BUILD
+    if repo_attr.jmh:
+        toolchains["jmh"] = _JMH_TOOLCHAIN_BUILD
+    if repo_attr.twitter_scrooge:
+        toolchains["twitter_scrooge"] = _TWITTER_SCROOGE_TOOLCHAIN_BUILD
 
     testing_build_args = _generate_testing_toolchain_build_file_args(repo_attr)
     if testing_build_args != None:
@@ -74,12 +78,12 @@ _scala_toolchains_repo = repository_rule(
         "scalatest": attr.bool(),
         "junit": attr.bool(),
         "specs2": attr.bool(),
-        "twitter_scrooge": attr.bool(),
-        "jmh": attr.bool(),
-        "scala_proto": attr.bool(),
-        "scala_proto_enable_all_options": attr.bool(),
         "testing": attr.bool(),
         "scalafmt": attr.bool(),
+        "scala_proto": attr.bool(),
+        "scala_proto_enable_all_options": attr.bool(),
+        "jmh": attr.bool(),
+        "twitter_scrooge": attr.bool(),
     },
 )
 
@@ -130,19 +134,35 @@ load(
 ]
 """
 
-_TWITTER_SCROOGE_TOOLCHAIN_BUILD = """
+_TESTING_TOOLCHAIN_BUILD = """
+load("@@{rules_scala_repo}//scala:scala.bzl", "setup_scala_testing_toolchain")
+load("@@{rules_scala_repo}//scala:scala_cross_version.bzl", "version_suffix")
 load(
-    "@@{rules_scala_repo}//twitter_scrooge/toolchain:toolchain.bzl",
-    "setup_scrooge_toolchain",
+    "@@{rules_scala_repo}//testing:deps.bzl",
+    "{deps_symbols}",
 )
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
-setup_scrooge_toolchain(name = "scrooge_toolchain")
+[
+    setup_scala_testing_toolchain(
+        name = "testing_toolchain" + version_suffix(scala_version),
+        scala_version = scala_version,
+        scalatest_classpath = {scalatest},
+        junit_classpath = {junit},
+        specs2_classpath = {specs2},
+        specs2_junit_classpath = {specs2_junit},
+    )
+    for scala_version in SCALA_VERSIONS
+]
 """
 
-_JMH_TOOLCHAIN_BUILD = """
-load("@@{rules_scala_repo}//jmh/toolchain:toolchain.bzl", "setup_jmh_toolchain")
+_SCALAFMT_TOOLCHAIN_BUILD = """
+load(
+    "@@{rules_scala_repo}//scala/scalafmt/toolchain:setup_scalafmt_toolchain.bzl",
+    "setup_scalafmt_toolchains",
+)
 
-setup_jmh_toolchain(name = "jmh_toolchain")
+setup_scalafmt_toolchains()
 """
 
 _SCALA_PROTO_TOOLCHAIN_BUILD = """
@@ -184,33 +204,17 @@ declare_deps_provider(
 )
 """
 
-_TESTING_TOOLCHAIN_BUILD = """
-load("@@{rules_scala_repo}//scala:scala.bzl", "setup_scala_testing_toolchain")
-load("@@{rules_scala_repo}//scala:scala_cross_version.bzl", "version_suffix")
-load(
-    "@@{rules_scala_repo}//testing:deps.bzl",
-    "{deps_symbols}",
-)
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
+_JMH_TOOLCHAIN_BUILD = """
+load("@@{rules_scala_repo}//jmh/toolchain:toolchain.bzl", "setup_jmh_toolchain")
 
-[
-    setup_scala_testing_toolchain(
-        name = "testing_toolchain" + version_suffix(scala_version),
-        scala_version = scala_version,
-        scalatest_classpath = {scalatest},
-        junit_classpath = {junit},
-        specs2_classpath = {specs2},
-        specs2_junit_classpath = {specs2_junit},
-    )
-    for scala_version in SCALA_VERSIONS
-]
+setup_jmh_toolchain(name = "jmh_toolchain")
 """
 
-_SCALAFMT_TOOLCHAIN_BUILD = """
+_TWITTER_SCROOGE_TOOLCHAIN_BUILD = """
 load(
-    "@@{rules_scala_repo}//scala/scalafmt/toolchain:setup_scalafmt_toolchain.bzl",
-    "setup_scalafmt_toolchains",
+    "@@{rules_scala_repo}//twitter_scrooge/toolchain:toolchain.bzl",
+    "setup_scrooge_toolchain",
 )
 
-setup_scalafmt_toolchains()
+setup_scrooge_toolchain(name = "scrooge_toolchain")
 """

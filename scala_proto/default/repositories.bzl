@@ -64,17 +64,15 @@ def scala_proto_artifact_ids(scala_version):
 def scala_proto_default_repositories(
         maven_servers = default_maven_server_urls(),
         scala_version = SCALA_VERSION,
-        overriden_artifacts = {},
-        register_toolchains = True):
+        overriden_artifacts = {}):
     repositories(
         scala_version = scala_version,
-        for_artifact_ids = scala_proto_artifact_ids(),
+        for_artifact_ids = scala_proto_artifact_ids(scala_version),
         maven_servers = maven_servers,
         fetch_sources = True,
         overriden_artifacts = overriden_artifacts,
     )
 
-    if register_toolchains:
-        native.register_toolchains(
-            str(Label("//scala_proto:default_deps_toolchain")),
-        )
+    native.register_toolchains(
+        str(Label("//scala_proto:default_deps_toolchain")),
+    )
