@@ -22,6 +22,7 @@ load("//thrift:thrift_info.bzl", "ThriftInfo")
 load("//thrift:thrift.bzl", "merge_thrift_infos")
 load("//third_party/repositories:repositories.bzl", "repositories")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
+load("@rules_java//java/common:java_info.bzl", "JavaInfo")
 
 _jar_extension = ".jar"
 

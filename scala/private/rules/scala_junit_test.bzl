@@ -31,6 +31,8 @@ load(
     "phase_write_manifest",
     "run_phases",
 )
+load("@rules_java//java/common:java_common.bzl", "java_common")
+load("@rules_java//java/common:java_info.bzl", "JavaInfo")
 
 def _scala_junit_test_impl(ctx):
     if (not (ctx.attr.prefixes) and not (ctx.attr.suffixes)):

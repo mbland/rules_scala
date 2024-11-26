@@ -31,6 +31,7 @@ load(
     "phase_write_manifest",
     "run_phases",
 )
+load("@rules_java//java/common:java_info.bzl", "JavaInfo")
 
 def _scala_test_impl(ctx):
     return run_phases(

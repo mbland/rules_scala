@@ -29,6 +29,8 @@ load(
     "phase_write_manifest",
     "run_phases",
 )
+load("@rules_java//java/common:java_common.bzl", "java_common")
+load("@rules_java//java/common:java_info.bzl", "JavaInfo")
 
 def _scala_binary_impl(ctx):
     return run_phases(

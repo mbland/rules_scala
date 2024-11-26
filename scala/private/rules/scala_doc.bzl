@@ -1,6 +1,7 @@
 """Scaladoc support"""
 
 load("@io_bazel_rules_scala//scala/private:common.bzl", "collect_plugin_paths")
+load("@rules_java//java/common:java_info.bzl", "JavaInfo")
 
 ScaladocAspectInfo = provider(fields = [
     "src_files",  #depset[File]

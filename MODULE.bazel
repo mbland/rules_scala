@@ -20,17 +20,17 @@ SCALA_3_VERSIONS = [
 SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
 
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "rules_cc", version = "0.0.9")
-bazel_dep(name = "rules_java", version = "7.11.1")
-bazel_dep(name = "rules_proto", version = "6.0.2")
+bazel_dep(name = "rules_cc", version = "0.1.0")
+bazel_dep(name = "rules_java", version = "8.5.1")
+bazel_dep(name = "rules_proto", version = "7.0.2")
 
 # For now, users are revlocked to protobuf-21.7 or protobuf-25.5 (which doesn't
 # build under Bazel 6).
-bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
-single_version_override(
-    module_name = "protobuf",
-    version = "21.7",
-)
+bazel_dep(name = "protobuf", version = "29.0-rc2", repo_name = "com_google_protobuf")
+#single_version_override(
+#    module_name = "protobuf",
+#    version = "21.7",
+#)
 
 scala_config = use_extension(
     "//scala/extensions:config.bzl",
@@ -233,4 +233,4 @@ use_repo(
     "org_golang_x_tools",
 )
 
-bazel_dep(name = "rules_python", version = "0.36.0", dev_dependency = True)
+bazel_dep(name = "rules_python", version = "0.40.0", dev_dependency = True)
