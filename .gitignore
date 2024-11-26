@@ -16,3 +16,6 @@ test/semanticdb/tempsrc
 
 # From scripts/create_repository.py
 repository-artifacts.json
+
+# Until it settles down
+**/MODULE.bazel.lock
