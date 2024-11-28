@@ -47,6 +47,7 @@ scala_toolchains(
     scala_proto = True,
     scalafmt = True,
     testing = True,
+    twitter_scrooge = True,
 )
 
 register_toolchains(
@@ -72,9 +73,6 @@ load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 protobuf_deps()
 
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
-load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
-
-twitter_scrooge()
 
 MAVEN_SERVER_URLS = default_maven_server_urls()
 

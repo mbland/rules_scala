@@ -61,6 +61,10 @@ load("@io_bazel_rules_scala//scala:scala_cross_version.bzl", "extract_major_vers
 
 load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_toolchains")
 
+load(":scrooge_repositories.bzl", "scrooge_repositories")
+
+scrooge_repositories(${twitter_scrooge_repositories})
+
 scala_toolchains(
     fetch_sources = True,
     scala_proto = True,
@@ -70,11 +74,6 @@ scala_toolchains(
 
 register_toolchains(
     "@io_bazel_rules_scala//scala:unused_dependency_checker_error_toolchain",
-    "@io_bazel_rules_scala//testing:testing_toolchain",
+    "@twitter_scrooge_test_toolchain//...:all",
     "@io_bazel_rules_scala_toolchains//...:all",
 )
-
-load(":scrooge_repositories.bzl", "scrooge_repositories")
-${twitter_scrooge_repositories}
-load("@io_bazel_rules_scala//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
-twitter_scrooge()
