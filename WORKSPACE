@@ -43,6 +43,7 @@ load("//scala:toolchains.bzl", "scala_toolchains")
 
 scala_toolchains(
     fetch_sources = True,
+    jmh = True,
     scala_proto = True,
     scalafmt = True,
     testing = True,
@@ -74,10 +75,6 @@ load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
 
 twitter_scrooge()
-
-load("//jmh:jmh.bzl", "jmh_repositories")
-
-jmh_repositories()
 
 MAVEN_SERVER_URLS = default_maven_server_urls()
 
