@@ -38,6 +38,7 @@ scala_toolchains(
     scala_proto = True,
     scalafmt = True,
     testing = True,
+    twitter_scrooge = True,
 )
 
 register_toolchains(
@@ -61,10 +62,6 @@ rules_proto_toolchains()
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
-
-load("//twitter_scrooge:twitter_scrooge.bzl", "twitter_scrooge")
-
-twitter_scrooge()
 
 # needed for the cross repo proto test
 local_repository(
