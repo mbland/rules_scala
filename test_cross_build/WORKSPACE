@@ -11,9 +11,19 @@ load("@io_bazel_rules_scala//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
-load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
 rules_java_dependencies()
+
+# buildifier: disable=bzl-visibility
+load(
+    "@com_google_protobuf//bazel/private:proto_bazel_features.bzl",
+    "proto_bazel_features",
+)
+
+proto_bazel_features(name = "proto_bazel_features")
+
+load("@rules_java//java:repositories.bzl", "rules_java_toolchains")
 
 rules_java_toolchains()
 

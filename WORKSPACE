@@ -5,15 +5,31 @@ load("//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
+load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
+
+rules_java_dependencies()
+
+# buildifier: disable=bzl-visibility
+load(
+    "@com_google_protobuf//bazel/private:proto_bazel_features.bzl",
+    "proto_bazel_features",
+)
+
+proto_bazel_features(name = "proto_bazel_features")
+
+load("@rules_java//java:repositories.bzl", "rules_java_toolchains")
+
+rules_java_toolchains()
+
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
 http_archive(
     name = "rules_python",
-    sha256 = "ca2671529884e3ecb5b79d6a5608c7373a82078c3553b1fa53206e6b9dddab34",
-    strip_prefix = "rules_python-0.38.0",
-    url = "https://github.com/bazelbuild/rules_python/releases/download/0.38.0/rules_python-0.38.0.tar.gz",
+    sha256 = "690e0141724abb568267e003c7b6d9a54925df40c275a870a4d934161dc9dd53",
+    strip_prefix = "rules_python-0.40.0",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/0.40.0/rules_python-0.40.0.tar.gz",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
@@ -43,16 +59,6 @@ scala_config(enable_compiler_dependency_tracking = True)
 load("//scala:scala.bzl", "scala_toolchains")
 
 scala_toolchains(fetch_sources = True)
-
-load(
-    "@rules_java//java:repositories.bzl",
-    "rules_java_dependencies",
-    "rules_java_toolchains",
-)
-
-rules_java_dependencies()
-
-rules_java_toolchains()
 
 register_toolchains(
     "//testing:testing_toolchain",
