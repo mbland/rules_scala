@@ -3,7 +3,7 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 
-def load_rules_dependencies():
+def rules_scala_dependencies():
     """Instantiates repos needed by rules provided by `rules_scala`."""
     maybe(
         http_archive,
