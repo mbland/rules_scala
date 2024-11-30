@@ -5,6 +5,12 @@ load("//scala:deps.bzl", "load_rules_dependencies")
 
 load_rules_dependencies()
 
+load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+
+rules_java_dependencies()
+
+rules_java_toolchains()
+
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
@@ -109,17 +115,3 @@ rbe_preconfig(
 load("//scala/private/extensions:dev_deps.bzl", "dev_deps_repositories")
 
 dev_deps_repositories()
-
-# Copied from bazel_tools/tools/jdk/remote_java_repository.bzl.
-[
-    register_toolchains(
-        "@remotejdk21_" + platform + "_toolchain_config_repo//:all",
-    )
-    for platform in [
-        "linux",
-        "macos",
-        "win",
-    ]
-]
-
-register_toolchains("//test/toolchains:java21_toolchain_definition")
