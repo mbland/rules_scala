@@ -205,10 +205,12 @@ def _scala_proto_aspect_impl(target, ctx):
 def make_scala_proto_aspect(*extras):
     attrs = {
         "_java_toolchain": attr.label(
-            default = "@bazel_tools//tools/jdk:current_java_toolchain",
+            default = Label("@rules_java//toolchains:current_java_toolchain"),
         ),
         "_java_host_runtime": attr.label(
-            default = "@bazel_tools//tools/jdk:current_host_java_runtime",
+            default = Label(
+                "@rules_java//toolchains:current_host_java_runtime",
+            ),
         ),
     }
     return aspect(
