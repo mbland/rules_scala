@@ -1,4 +1,4 @@
-load("//scala:deps.bzl", "load_rules_dependencies")
+load("//scala:deps.bzl", "rules_scala_dependencies")
 load(
     "//scala:scala_cross_version.bzl",
     "extract_major_version",
@@ -136,7 +136,7 @@ def setup_scala_compiler_sources(srcjars = {}):
     )
 
 def rules_scala_setup(scala_compiler_srcjar = None):
-    load_rules_dependencies()
+    rules_scala_dependencies()
     setup_scala_compiler_sources({
         version: scala_compiler_srcjar
         for version in SCALA_VERSIONS
@@ -208,7 +208,7 @@ def scala_repositories(
         scala_compiler_srcjars = {}):
     if load_dep_rules:
         # When `WORKSPACE` goes away, so can this case.
-        load_rules_dependencies()
+        rules_scala_dependencies()
 
     setup_scala_compiler_sources(scala_compiler_srcjars)
 

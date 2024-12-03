@@ -1,9 +1,9 @@
 workspace(name = "io_bazel_rules_scala")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("//scala:deps.bzl", "load_rules_dependencies")
+load("//scala:deps.bzl", "rules_scala_dependencies")
 
-load_rules_dependencies()
+rules_scala_dependencies()
 
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
