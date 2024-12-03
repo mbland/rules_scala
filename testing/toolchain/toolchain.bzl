@@ -14,19 +14,3 @@ scala_testing_toolchain = rule(
         ),
     },
 )
-
-def register_testing_toolchains(name = None):
-    """DO NOT USE: Registers all testing toolchains for WORKSPACE builds.
-
-    This exists solely for backwards compatibility with existing
-    `{scalatest,junit,specs2_junit}_toolchain` users. New users should prefer to
-    use the following in their `WORKSPACE` files:
-
-    ```starlark
-    register_toolchains("@io_bazel_rules_scala_toolchains//...:all")
-    ```
-
-    Bzlmod users need not do this; the rules_scala `MODULE.bazel` does this
-    automatically.
-    """
-    native.register_toolchains("@io_bazel_rules_scala_toolchains//testing:all")
