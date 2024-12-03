@@ -7,9 +7,9 @@ local_repository(
     path = "../..",
 )
 
-load("@io_bazel_rules_scala//scala:deps.bzl", "load_rules_dependencies")
+load("@io_bazel_rules_scala//scala:deps.bzl", "rules_scala_dependencies")
 
-load_rules_dependencies()
+rules_scala_dependencies()
 
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
