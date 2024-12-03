@@ -40,13 +40,13 @@ _SCALA_3_ARTIFACTS = {
     "tasty_core": "org.scala-lang:tasty-core_3:",
 }
 
-def versioned_artifacts(scala_version, artifacts):
+def _versioned_artifacts(scala_version, artifacts):
     return {k: v + scala_version for k, v in artifacts.items()}
 
 COMPILER_SOURCES_ARTIFACTS = (
-    versioned_artifacts(SCALA_VERSION, _SCALA_VERSION_ARTIFACTS) |
-    versioned_artifacts(_SCALA_2_VERSION, _SCALA_2_ARTIFACTS) |
-    versioned_artifacts(_SCALA_3_VERSION, _SCALA_3_ARTIFACTS) |
+    _versioned_artifacts(SCALA_VERSION, _SCALA_VERSION_ARTIFACTS) |
+    _versioned_artifacts(_SCALA_2_VERSION, _SCALA_2_ARTIFACTS) |
+    _versioned_artifacts(_SCALA_3_VERSION, _SCALA_3_ARTIFACTS) |
     {
         "sbt_compiler_interface": "org.scala-sbt:compiler-interface:1.9.6",
         "scala_asm": "org.scala-lang.modules:scala-asm:9.7.0-scala-2",

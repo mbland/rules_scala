@@ -1,15 +1,15 @@
 workspace(name = "io_bazel_rules_scala")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("//scala:deps.bzl", "load_rules_dependencies")
 
-http_archive(
-    name = "bazel_skylib",
-    sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
-        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
-    ],
-)
+load_rules_dependencies()
+
+load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+
+rules_java_dependencies()
+
+rules_java_toolchains()
 
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
@@ -17,29 +17,36 @@ bazel_skylib_workspace()
 
 http_archive(
     name = "rules_python",
-    sha256 = "ca77768989a7f311186a29747e3e95c936a41dffac779aff6b443db22290d913",
-    strip_prefix = "rules_python-0.36.0",
-    url = "https://github.com/bazelbuild/rules_python/releases/download/0.36.0/rules_python-0.36.0.tar.gz",
+    sha256 = "ca2671529884e3ecb5b79d6a5608c7373a82078c3553b1fa53206e6b9dddab34",
+    strip_prefix = "rules_python-0.38.0",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/0.38.0/rules_python-0.38.0.tar.gz",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
 
 py_repositories()
 
-_build_tools_release = "5.1.0"
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
-http_archive(
-    name = "com_github_bazelbuild_buildtools",
-    sha256 = "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
-    strip_prefix = "buildtools-%s" % _build_tools_release,
-    url = "https://github.com/bazelbuild/buildtools/archive/%s.tar.gz" % _build_tools_release,
-)
+protobuf_deps()
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
+
+rules_proto_dependencies()
+
+load("@rules_proto//proto:setup.bzl", "rules_proto_setup")
+
+rules_proto_setup()
+
+load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
+
+rules_proto_toolchains()
 
 load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config(enable_compiler_dependency_tracking = True)
 
-load("//scala:scala.bzl", "scala_toolchains")
+load("//scala:toolchains.bzl", "scala_toolchains")
 
 scala_toolchains(
     fetch_sources = True,
@@ -56,37 +63,14 @@ register_toolchains(
     "@io_bazel_rules_scala_toolchains//...:all",
 )
 
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
-
-rules_proto_dependencies()
-
-load("@rules_proto//proto:setup.bzl", "rules_proto_setup")
-
-rules_proto_setup()
-
-load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
-
-rules_proto_toolchains()
-
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-
-protobuf_deps()
-
 # needed for the cross repo proto test
-load("//test/proto_cross_repo_boundary:repo.bzl", "proto_cross_repo_boundary_repository")
-
-proto_cross_repo_boundary_repository()
-
-new_local_repository(
-    name = "test_new_local_repo",
-    build_file_content =
-        """
-filegroup(
-    name = "data",
-    srcs = glob(["**/*.txt"]),
-    visibility = ["//visibility:public"],
+local_repository(
+    name = "proto_cross_repo_boundary",
+    path = "test/proto_cross_repo_boundary/repo",
 )
-""",
+
+local_repository(
+    name = "test_new_local_repo",
     path = "third_party/test/new_local_repo",
 )
 
@@ -95,34 +79,12 @@ local_repository(
     path = "third_party/test/example_external_workspace",
 )
 
-load("//scala:scala_maven_import_external.bzl", "java_import_external")
-
-# bazel's java_import_external has been altered in rules_scala to be a macro based on jvm_import_external
-# in order to allow for other jvm-language imports (e.g. scala_import)
-# the 3rd-party dependency below is using the java_import_external macro
-# in order to make sure no regression with the original java_import_external
-java_import_external(
-    name = "org_apache_commons_commons_lang_3_5_without_file",
-    generated_linkable_rule_name = "linkable_org_apache_commons_commons_lang_3_5_without_file",
-    jar_sha256 = "8ac96fc686512d777fca85e144f196cd7cfe0c0aec23127229497d1a38ff651c",
-    jar_urls = ["https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"],
-    licenses = ["notice"],  # Apache 2.0
-    neverlink = True,
-    testonly_ = True,
-)
-
-## Linting
-
-load("//private:format.bzl", "format_repositories")
-
-format_repositories()
-
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "6dc2da7ab4cf5d7bfc7c949776b1b7c733f05e56edc4bcd9022bb249d2e2a996",
+    sha256 = "f4a9314518ca6acfa16cc4ab43b0b8ce1e4ea64b81c38d8a3772883f153346b8",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.39.1/rules_go-v0.39.1.zip",
-        "https://github.com/bazelbuild/rules_go/releases/download/v0.39.1/rules_go-v0.39.1.zip",
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.50.1/rules_go-v0.50.1.zip",
+        "https://github.com/bazelbuild/rules_go/releases/download/v0.50.1/rules_go-v0.50.1.zip",
     ],
 )
 
@@ -134,13 +96,7 @@ load(
 
 go_rules_dependencies()
 
-go_register_toolchains(version = "1.19.5")
-
-load("@rules_java//java:repositories.bzl", "remote_jdk8_repos")
-
-# We need to select based on platform when we use these
-# https://github.com/bazelbuild/bazel/issues/11655
-remote_jdk8_repos()
+go_register_toolchains(version = "1.23.0")
 
 http_archive(
     name = "bazelci_rules",
@@ -156,12 +112,6 @@ rbe_preconfig(
     toolchain = "ubuntu2004-bazel-java11",
 )
 
-load("//testing/private:repositories.bzl", "testing_repositories")
+load("//scala/private/extensions:dev_deps.bzl", "dev_deps_repositories")
 
-testing_repositories(fetch_sources = False)
-
-load("//test/toolchains:jdk.bzl", "remote_jdk21_repositories", "remote_jdk21_toolchains")
-
-remote_jdk21_repositories()
-
-remote_jdk21_toolchains()
+dev_deps_repositories()

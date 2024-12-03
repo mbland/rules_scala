@@ -9,7 +9,6 @@ load(
     _default_maven_server_urls = "default_maven_server_urls",
 )
 load("//third_party/repositories:repositories.bzl", "repositories")
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 def specs2_junit_artifact_ids():
     return [
@@ -18,23 +17,11 @@ def specs2_junit_artifact_ids():
 
 def specs2_junit_repositories(
         maven_servers = _default_maven_server_urls(),
-        scala_version = SCALA_VERSION,
-        overriden_artifacts = {},
-        create_junit_repositories = True):
-    specs2_repositories(
-        maven_servers = maven_servers,
-        scala_version = scala_version,
-        overriden_artifacts = overriden_artifacts,
-    )
-    if create_junit_repositories:
-        junit_repositories(
-            maven_servers = maven_servers,
-            scala_version = scala_version,
-            overriden_artifacts = overriden_artifacts,
-        )
+        overriden_artifacts = {}):
+    specs2_repositories(maven_servers)
+    junit_repositories()
 
     repositories(
-        scala_version = scala_version,
         for_artifact_ids = specs2_junit_artifact_ids(),
         maven_servers = maven_servers,
         fetch_sources = True,

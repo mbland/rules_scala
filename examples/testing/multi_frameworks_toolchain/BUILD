@@ -1,5 +1,7 @@
-load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
+load(
+    "@io_bazel_rules_scala//testing:testing.bzl",
+    "setup_scala_testing_toolchain",
+)
 
 setup_scala_testing_toolchain(
     name = "testing_toolchain",
@@ -7,7 +9,6 @@ setup_scala_testing_toolchain(
         "@io_bazel_rules_scala_junit_junit",
         "@io_bazel_rules_scala_org_hamcrest_hamcrest_core",
     ],
-    scala_version = SCALA_VERSION,
     scalatest_classpath = [
         "@io_bazel_rules_scala_scalactic",
         "@io_bazel_rules_scala_scalatest",

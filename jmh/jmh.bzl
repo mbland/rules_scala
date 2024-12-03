@@ -1,33 +1,5 @@
 load("//scala/private:rules/scala_binary.bzl", "scala_binary")
 load("//scala/private:rules/scala_library.bzl", "scala_library")
-load(
-    "//scala:scala_cross_version.bzl",
-    "default_maven_server_urls",
-)
-load("//third_party/repositories:repositories.bzl", "repositories")
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
-
-def jmh_artifact_ids():
-    return [
-        "io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
-        "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
-        "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection",
-        "io_bazel_rules_scala_org_ow2_asm_asm",
-        "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
-        "io_bazel_rules_scala_org_apache_commons_commons_math3",
-    ]
-
-def jmh_repositories(
-        maven_servers = default_maven_server_urls(),
-        overriden_artifacts = {}):
-    repositories(
-        scala_version = SCALA_VERSION,
-        for_artifact_ids = jmh_artifact_ids(),
-        fetch_sources = False,
-        maven_servers = maven_servers,
-        overriden_artifacts = overriden_artifacts,
-    )
-    native.register_toolchains("@io_bazel_rules_scala_toolchains//jmh:all")
 
 def _scala_generate_benchmark(ctx):
     # we use required providers to ensure JavaInfo exists
@@ -72,7 +44,7 @@ scala_generate_benchmark = rule(
             ),
         ),
         "runtime_jdk": attr.label(
-            default = Label("@bazel_tools//tools/jdk:current_java_runtime"),
+            default = Label("@rules_java//toolchains:current_java_runtime"),
             providers = [java_common.JavaRuntimeInfo],
         ),
     },
@@ -93,7 +65,10 @@ def scala_benchmark_jmh(**kw):
     testonly = kw.get("testonly", False)
     scalacopts = kw.get("scalacopts", [])
     main_class = kw.get("main_class", "org.openjdk.jmh.Main")
-    runtime_jdk = kw.get("runtime_jdk", "@bazel_tools//tools/jdk:current_java_runtime")
+    runtime_jdk = kw.get(
+        "runtime_jdk",
+        "@rules_java//toolchains:current_java_runtime",
+    )
 
     scala_library(
         name = lib,

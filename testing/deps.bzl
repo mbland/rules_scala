@@ -1,30 +1,15 @@
-SPECS2_DEPS = [
-    "@io_bazel_rules_scala_org_specs2_specs2_common",
-    "@io_bazel_rules_scala_org_specs2_specs2_core",
-    "@io_bazel_rules_scala_org_specs2_specs2_fp",
-    "@io_bazel_rules_scala_org_specs2_specs2_matcher",
-]
+load("//junit:junit.bzl", "junit_artifact_ids")
+load("//scalatest:scalatest.bzl", "scalatest_artifact_ids")
+load("//specs2:specs2.bzl", "specs2_artifact_ids")
+load("//specs2:specs2_junit.bzl", "specs2_junit_artifact_ids")
 
-SPECS2_JUNIT_DEPS = [
-    "@io_bazel_rules_scala_org_specs2_specs2_junit",
-]
+def _repoize(ids):
+    return ["@" + id for id in ids]
 
-JUNIT_DEPS = [
-    "@io_bazel_rules_scala_junit_junit",
-    "@io_bazel_rules_scala_org_hamcrest_hamcrest_core",
-]
+JUNIT_DEPS = _repoize(junit_artifact_ids())
 
-SCALATEST_DEPS = [
-    "@io_bazel_rules_scala_scalactic",
-    "@io_bazel_rules_scala_scalatest",
-    "@io_bazel_rules_scala_scalatest_compatible",
-    "@io_bazel_rules_scala_scalatest_core",
-    "@io_bazel_rules_scala_scalatest_featurespec",
-    "@io_bazel_rules_scala_scalatest_flatspec",
-    "@io_bazel_rules_scala_scalatest_freespec",
-    "@io_bazel_rules_scala_scalatest_funspec",
-    "@io_bazel_rules_scala_scalatest_funsuite",
-    "@io_bazel_rules_scala_scalatest_matchers_core",
-    "@io_bazel_rules_scala_scalatest_mustmatchers",
-    "@io_bazel_rules_scala_scalatest_shouldmatchers",
-]
+SCALATEST_DEPS = _repoize(scalatest_artifact_ids())
+
+SPECS2_DEPS = _repoize(specs2_artifact_ids())
+
+SPECS2_JUNIT_DEPS = _repoize(specs2_junit_artifact_ids())

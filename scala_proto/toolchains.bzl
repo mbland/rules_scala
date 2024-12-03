@@ -5,12 +5,24 @@ load(
 )
 
 def scala_proto_register_toolchains():
-    native.register_toolchains("@io_bazel_rules_scala//scala_proto:default_toolchain")
+    native.register_toolchains(str(Label("//scala_proto:default_toolchain")))
 
 def scala_proto_register_enable_all_options_toolchain():
-    native.register_toolchains("@io_bazel_rules_scala//scala_proto:enable_all_options_toolchain")
+    native.register_toolchains(
+        str(Label("//scala_proto:enable_all_options_toolchain")),
+    )
 
 def setup_scala_proto_toolchains(name, enable_all_options = False):
+    """Used by @io_bazel_rules_scala_toolchains//scala_proto/BUILD.
+
+    See //scala/private:macros/toolchains_repo.bzl for details, especially the
+    _SCALA_PROTO_TOOLCHAIN_BUILD string template.
+
+    Args:
+      name: prefix for all generate toolchains
+      enable_all_options: set to True to enable the `with_flat_package` and
+        `with_single_line_to_string` attributes of `scala_proto_toolchain`
+    """
     scala_proto_deps_toolchain(
         name = "%s_default_deps_toolchain_impl" % name,
         dep_providers = [

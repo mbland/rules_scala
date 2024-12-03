@@ -135,11 +135,14 @@ load(
 """
 
 _TESTING_TOOLCHAIN_BUILD = """
-load("@@{rules_scala_repo}//scala:scala.bzl", "setup_scala_testing_toolchain")
 load("@@{rules_scala_repo}//scala:scala_cross_version.bzl", "version_suffix")
 load(
     "@@{rules_scala_repo}//testing:deps.bzl",
     "{deps_symbols}",
+)
+load(
+    "@@{rules_scala_repo}//testing:testing.bzl",
+    "setup_scala_testing_toolchain",
 )
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
@@ -179,7 +182,8 @@ load(
 )
 
 setup_scala_proto_toolchains(
-    name = "scala_proto", enable_all_options = {proto_enable_all_options}
+    name = "scala_proto",
+    enable_all_options = {proto_enable_all_options},
 )
 
 declare_deps_provider(

@@ -1,8 +1,8 @@
 """Exports repos used by @io_bazel_rules_scala rules"""
 
 load("//scala/private:macros/bzlmod.bzl", "get_root_module", "get_tag_values")
-load("//scala/private:macros/toolchains.bzl", "scala_toolchains")
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
+load("//scala:toolchains.bzl", "scala_toolchains")
 
 _settings_defaults = {
     "maven_servers": default_maven_server_urls(),

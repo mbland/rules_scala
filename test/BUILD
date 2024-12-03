@@ -1,7 +1,3 @@
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
-load("@rules_python//python:defs.bzl", "py_binary")
-load("@rules_java//java:defs.bzl", "java_binary", "java_library")
-load("//scala:scala_cross_version.bzl", "version_suffix")
 load(
     "//scala:scala.bzl",
     "scala_binary",
@@ -15,9 +11,20 @@ load(
     "scala_test",
     "scala_test_suite",
 )
+load("//scala:scala_cross_version.bzl", "repositories")
 load(":check_statsfile.bzl", "check_statsfile")
+load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
+load("@rules_java//java:defs.bzl", "java_binary", "java_library")
+load("@rules_python//python:defs.bzl", "py_binary")
 
 package(default_testonly = 1)
+
+_JUNIT_DEPS = repositories(
+    SCALA_VERSION,
+    [
+        "@io_bazel_rules_scala_junit_junit",
+    ],
+)
 
 # The examples below show how to combine Scala and Java rules.
 # ScalaBinary is the Scala equivalent of JavaBinary.
@@ -481,7 +488,7 @@ scala_binary(
     name = "scala_binary_jdk_11",
     srcs = ["ScalaBinaryJdk11.scala"],
     main_class = "scalarules.test.ScalaBinaryJdk11",
-    runtime_jdk = "@bazel_tools//tools/jdk:remote_jdk11",
+    runtime_jdk = "@rules_java//toolchains:remote_jdk11",
 )
 
 # Make sure scala_library respects java_compile_toolchain during builds
@@ -610,14 +617,10 @@ scala_library(
     ],
 )
 
-junit_deps = [
-    "@io_bazel_rules_scala_junit_junit" + version_suffix(SCALA_VERSION),
-]
-
 scala_library(
     name = "customJunitRunner",
     srcs = ["src/main/scala/scalarules/test/junit/JunitCustomRunner.java"],
-    deps = junit_deps,
+    deps = _JUNIT_DEPS,
 )
 
 # make sure making a fat jar strips signatures
@@ -704,7 +707,7 @@ check_statsfile("ScalaLibBinary")
 scala_library(
     name = "JunitSeparateTarget",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitSeparateTargetTest.scala"],
-    deps = junit_deps,
+    deps = _JUNIT_DEPS,
 )
 
 scala_junit_test(
@@ -718,7 +721,7 @@ scala_junit_test(
 java_library(
     name = "JunitJavaSeparateTarget",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitJavaSeparateTargetTest.java"],
-    deps = junit_deps,
+    deps = _JUNIT_DEPS,
 )
 
 scala_junit_test(
@@ -732,14 +735,14 @@ scala_junit_test(
 scala_library(
     name = "TargetWithTestThatShouldNotRun",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/FailingTest.scala"],
-    deps = junit_deps,
+    deps = _JUNIT_DEPS,
 )
 
 scala_library(
     name = "JunitSeparateTargetWithDependencyOnTest",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitSeparateTargetTest.scala"],
     runtime_deps = [":TargetWithTestThatShouldNotRun"],
-    deps = junit_deps,
+    deps = _JUNIT_DEPS,
 )
 
 scala_junit_test(
@@ -754,7 +757,7 @@ java_library(
     name = "JunitSeparateJavaTargetWithDependencyOnTest",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitJavaSeparateTargetTest.java"],
     runtime_deps = [":TargetWithTestThatShouldNotRun"],
-    deps = junit_deps,
+    deps = _JUNIT_DEPS,
 )
 
 scala_junit_test(
@@ -771,7 +774,7 @@ scala_library(
         "src/main/scala/scalarules/test/junit/separate_target/JunitJavaSeparateTargetTest.java",
         "src/main/scala/scalarules/test/junit/separate_target/SomeScalaClass.scala",
     ],
-    deps = junit_deps,
+    deps = _JUNIT_DEPS,
 )
 
 scala_junit_test(
@@ -788,14 +791,14 @@ scala_library(
         "src/main/scala/scalarules/test/junit/runtime_platform/JunitRuntimePlatformTest.java",
     ],
     # make sure java compilation toolchain matches runtime toolchain ie --target
-    java_compile_toolchain = "@bazel_tools//tools/jdk:toolchain_java11",
-    deps = junit_deps,
+    java_compile_toolchain = "@rules_java//toolchains:toolchain_java11",
+    deps = _JUNIT_DEPS,
 )
 
 scala_junit_test(
     name = "JunitRuntimePlatform_test_runner",
     size = "small",
-    runtime_jdk = "@bazel_tools//tools/jdk:remote_jdk11",
+    runtime_jdk = "@rules_java//toolchains:remote_jdk11",
     suffixes = ["Test"],
     tests_from = [":JunitRuntimePlatform"],
     runtime_deps = [":JunitRuntimePlatform"],

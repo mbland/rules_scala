@@ -8,13 +8,14 @@ load(
     _scala_maven_import_external = "scala_maven_import_external",
 )
 load(
-    "@io_bazel_rules_scala//twitter_scrooge:twitter_scrooge.bzl",
+    "@io_bazel_rules_scala//twitter_scrooge/toolchain:toolchain.bzl",
     "twitter_scrooge",
 )
 
 def _import_external(id, artifact, sha256, deps = [], runtime_deps = []):
     _scala_maven_import_external(
         name = id,
+        generated_rule_name = id,
         artifact = artifact,
         artifact_sha256 = sha256,
         licenses = ["notice"],

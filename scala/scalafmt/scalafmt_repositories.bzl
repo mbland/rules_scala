@@ -45,9 +45,7 @@ _SCALAFMT_DEPS = [
     "org_scalameta_scalameta",
     "org_scalameta_trees",
     "org_typelevel_paiges_core",
-]
-
-_SCALAFMT_PROTO_DEPS = SCALAPB_COMPILE_ARTIFACT_IDS
+] + SCALAPB_COMPILE_ARTIFACT_IDS
 
 _SCALAFMT_DEPS_2_11 = [
     "com_lihaoyi_pprint",
@@ -64,10 +62,9 @@ _SCALAFMT_DEPS_2_12 = [
 
 def scalafmt_artifact_ids(scala_version):
     major_version = extract_major_version(scala_version)
-    proto_deps = _SCALAFMT_PROTO_DEPS
 
     if major_version == "2.11":
-        return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_11 + proto_deps
+        return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_11
 
     extra_deps = []
 
@@ -76,19 +73,15 @@ def scalafmt_artifact_ids(scala_version):
     else:
         extra_deps.append("io_bazel_rules_scala_scala_parallel_collections")
 
-    return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_12 + extra_deps + proto_deps
+    return _SCALAFMT_DEPS + _SCALAFMT_DEPS_2_12 + extra_deps
 
 def scalafmt_repositories(
         maven_servers = _default_maven_server_urls(),
-        overriden_artifacts = {},
-        scala_proto_instantiated = False):
+        overriden_artifacts = {}):
     for scala_version in SCALA_VERSIONS:
         repositories(
             scala_version = scala_version,
-            for_artifact_ids = scalafmt_artifact_ids(
-                scala_version,
-                scala_proto_instantiated,
-            ),
+            for_artifact_ids = scalafmt_artifact_ids(scala_version),
             maven_servers = maven_servers,
             overriden_artifacts = overriden_artifacts,
         )

@@ -1,6 +1,11 @@
 load("//scala/private/toolchain_deps:toolchain_deps.bzl", "expose_toolchain_deps")
 load("//scala:providers.bzl", "declare_deps_provider", _DepsInfo = "DepsInfo")
-load("//scala:scala_cross_version.bzl", "repositories")
+load(
+    "//scala:scala_cross_version.bzl",
+    "default_maven_server_urls",
+    _versioned_repositories = "repositories",
+)
+load("//third_party/repositories:repositories.bzl", "repositories")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 DEP_PROVIDERS = [
@@ -9,6 +14,28 @@ DEP_PROVIDERS = [
     "benchmark_generator",
     "benchmark_generator_runtime",
 ]
+
+def jmh_artifact_ids():
+    return [
+        "io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
+        "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
+        "io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection",
+        "io_bazel_rules_scala_org_ow2_asm_asm",
+        "io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
+        "io_bazel_rules_scala_org_apache_commons_commons_math3",
+    ]
+
+def jmh_repositories(
+        maven_servers = default_maven_server_urls(),
+        overriden_artifacts = {}):
+    repositories(
+        scala_version = SCALA_VERSION,
+        for_artifact_ids = jmh_artifact_ids(),
+        fetch_sources = False,
+        maven_servers = maven_servers,
+        overriden_artifacts = overriden_artifacts,
+    )
+    native.register_toolchains("@io_bazel_rules_scala_toolchains//jmh:all")
 
 def _jmh_toolchain_impl(ctx):
     toolchain = platform_common.ToolchainInfo(
@@ -60,7 +87,7 @@ def setup_jmh_toolchain(name):
         name = "jmh_core_provider",
         deps_id = "jmh_core",
         visibility = ["//visibility:public"],
-        deps = repositories(SCALA_VERSION, [
+        deps = _versioned_repositories(SCALA_VERSION, [
             "@io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
         ]),
     )
@@ -69,7 +96,7 @@ def setup_jmh_toolchain(name):
         name = "jmh_classpath_provider",
         deps_id = "jmh_classpath",
         visibility = ["//visibility:public"],
-        deps = repositories(SCALA_VERSION, [
+        deps = _versioned_repositories(SCALA_VERSION, [
             "@io_bazel_rules_scala_net_sf_jopt_simple_jopt_simple",
             "@io_bazel_rules_scala_org_apache_commons_commons_math3",
         ]),
@@ -81,7 +108,7 @@ def setup_jmh_toolchain(name):
         visibility = ["//visibility:public"],
         deps = [
             "@io_bazel_rules_scala//src/java/io/bazel/rulesscala/jar",
-        ] + repositories(SCALA_VERSION, [
+        ] + _versioned_repositories(SCALA_VERSION, [
             "@io_bazel_rules_scala_org_openjdk_jmh_jmh_core",
             "@io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
             "@io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_reflection",
@@ -92,7 +119,7 @@ def setup_jmh_toolchain(name):
         name = "benchmark_generator_runtime_provider",
         deps_id = "benchmark_generator_runtime",
         visibility = ["//visibility:public"],
-        deps = repositories(SCALA_VERSION, [
+        deps = _versioned_repositories(SCALA_VERSION, [
             "@io_bazel_rules_scala_org_openjdk_jmh_jmh_generator_asm",
         ]),
     )

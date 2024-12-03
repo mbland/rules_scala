@@ -1,5 +1,6 @@
 """Exports the @io_bazel_rules_scala_config repo"""
 
+load("//scala/private:macros/bzlmod.bzl", "get_root_module")
 load(
     "//:scala_config.bzl",
     "DEFAULT_SCALA_VERSION",
@@ -17,9 +18,11 @@ _settings = tag_class(
 def _get_root_settings(module_ctx):
     scala_version = DEFAULT_SCALA_VERSION
     compiler_dep_tracking = False
-    root_settings = module_ctx.modules[0].tags.settings
+    root_module = get_root_module(module_ctx)
+    root_settings = root_module.tags.settings if root_module != None else []
 
     if len(root_settings) != 0:
+        # The first settings tag in the root module wins.
         root = root_settings[0]
         scala_version = root.scala_version
         compiler_dep_tracking = root.enable_compiler_dependency_tracking
