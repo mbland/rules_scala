@@ -3,10 +3,7 @@
 #
 # DOCUMENT THIS
 #
-load(
-    "//scala/private:rule_impls.bzl",
-    "is_windows",
-)
+load("//scala/private:rule_impls.bzl", "is_windows")
 
 def phase_declare_executable(ctx, p):
     if (is_windows(ctx)):
