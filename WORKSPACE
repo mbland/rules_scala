@@ -1,4 +1,4 @@
-workspace(name = "io_bazel_rules_scala")
+workspace(name = "rules_scala")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("//scala:deps.bzl", "rules_scala_dependencies")
@@ -52,7 +52,7 @@ load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 
-load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
+load("@rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config(enable_compiler_dependency_tracking = True)
 
@@ -70,7 +70,7 @@ scala_toolchains(
 register_toolchains(
     "//scala:unused_dependency_checker_error_toolchain",
     "//test/proto:scalapb_toolchain",
-    "@io_bazel_rules_scala_toolchains//...:all",
+    "@rules_scala_toolchains//...:all",
 )
 
 # needed for the cross repo proto test

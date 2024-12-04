@@ -1,13 +1,13 @@
-workspace(name = "io_bazel_rules_scala_test")
+workspace(name = "rules_scala_test")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 local_repository(
-    name = "io_bazel_rules_scala",
+    name = "rules_scala",
     path = "../../"
 )
 
-load("@io_bazel_rules_scala//scala:deps.bzl", "rules_scala_dependencies")
+load("@rules_scala//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
@@ -58,11 +58,11 @@ load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 
-load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
+load("@rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config(enable_compiler_dependency_tracking = True)
 
-load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_toolchains")
+load("@rules_scala//scala:toolchains.bzl", "scala_toolchains")
 
 load(":scrooge_repositories.bzl", "scrooge_repositories")
 
@@ -76,7 +76,7 @@ scala_toolchains(
 )
 
 register_toolchains(
-    "@io_bazel_rules_scala//scala:unused_dependency_checker_error_toolchain",
+    "@rules_scala//scala:unused_dependency_checker_error_toolchain",
     "@twitter_scrooge_test_toolchain//...:all",
-    "@io_bazel_rules_scala_toolchains//...:all",
+    "@rules_scala_toolchains//...:all",
 )
