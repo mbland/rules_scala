@@ -90,13 +90,13 @@ implicit_deps = {
     "_scalac": attr.label(
         executable = True,
         cfg = "exec",
-        default = Label("@io_bazel_rules_scala//src/java/io/bazel/rulesscala/scalac"),
+        default = Label("//src/java/io/bazel/rulesscala/scalac"),
         allow_files = True,
     ),
     "_exe": attr.label(
         executable = True,
         cfg = "exec",
-        default = Label("@io_bazel_rules_scala//src/java/io/bazel/rulesscala/exe:exe"),
+        default = Label("//src/java/io/bazel/rulesscala/exe:exe"),
     ),
 }
 
@@ -110,9 +110,7 @@ launcher_template = {
 resolve_deps = {
     "_scala_toolchain": attr.label_list(
         default = [
-            Label(
-                "@io_bazel_rules_scala//scala/private/toolchain_deps:scala_library_classpath",
-            ),
+            Label("//scala/private/toolchain_deps:scala_library_classpath"),
         ],
         allow_files = False,
     ),

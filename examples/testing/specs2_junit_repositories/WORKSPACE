@@ -65,4 +65,3 @@ load("@io_bazel_rules_scala//testing:specs2_junit.bzl", "specs2_junit_repositori
 specs2_junit_repositories()
 
 specs2_junit_toolchain()
-
