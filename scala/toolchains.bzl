@@ -1,4 +1,4 @@
-"""Macros to instantiate and register @io_bazel_rules_scala_toolchains"""
+"""Macros to instantiate and register @rules_scala_toolchains"""
 
 load("//jmh/toolchain:toolchain.bzl", "jmh_artifact_ids")
 load("//junit:junit.bzl", "junit_artifact_ids")
@@ -44,17 +44,17 @@ def scala_toolchains(
         scrooge_generator = None,
         util_core = None,
         util_logging = None):
-    """Instantiates @io_bazel_rules_scala_toolchains and all its dependencies.
+    """Instantiates @rules_scala_toolchains and all its dependencies.
 
     Provides a unified interface to configuring rules_scala both directly in a
     `WORKSPACE` file and in a Bazel module extension.
 
-    Instantiates the `@io_bazel_rules_scala_toolchains` repository. Under
+    Instantiates the `@rules_scala_toolchains` repository. Under
     `WORKSPACE`, you will need to call `register_toolchains` at some point.
     Under Bzlmod, rules_scala does this automatically.
 
     ```starlark
-    register_toolchains("@io_bazel_rules_scala_toolchains//...:all")
+    register_toolchains("@rules_scala_toolchains//...:all")
     ```
 
     All arguments are optional.
@@ -200,7 +200,7 @@ def scala_toolchains(
     )
 
 def scala_register_toolchains():
-    native.register_toolchains("@io_bazel_rules_scala_toolchains//...:all")
+    native.register_toolchains("@rules_scala_toolchains//...:all")
 
 def scala_register_unused_deps_toolchains():
     native.register_toolchains(

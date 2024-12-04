@@ -72,7 +72,7 @@ def twitter_scrooge(
 
     if register_toolchains:
         native.register_toolchains(
-            "@io_bazel_rules_scala_toolchains//twitter_scrooge:all",
+            "@rules_scala_toolchains//twitter_scrooge:all",
         )
 
 def _scrooge_toolchain_impl(ctx):

@@ -1,5 +1,5 @@
-load("@io_bazel_rules_scala//scala:jars_to_labels.bzl", "JarsToLabelsInfo")
-load("@io_bazel_rules_scala//scala:plusone.bzl", "PlusOneDeps")
+load("//scala:jars_to_labels.bzl", "JarsToLabelsInfo")
+load("//scala:plusone.bzl", "PlusOneDeps")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 
 def write_manifest_file(actions, output_file, main_class):
