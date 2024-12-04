@@ -1,20 +1,27 @@
 """Bazel module template for //:test_version.sh tests"""
 
-module(name = "io_bazel_rules_scala_test_version")
+module(name = "rules_scala_test_version")
 
-bazel_dep(name = "rules_java", version = "7.11.1")
+bazel_dep(name = "rules_java", version = "7.12.2")
 bazel_dep(name = "rules_proto", version = "6.0.2")
-bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
-single_version_override(module_name = "protobuf", version = "21.7")
+bazel_dep(
+    name = "protobuf",
+    version = "21.7",
+    repo_name = "com_google_protobuf",
+)
+single_version_override(
+    module_name = "protobuf",
+    version = "21.7",
+)
 
-bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
+bazel_dep(name = "rules_scala")
 local_path_override(
     module_name = "rules_scala",
     path = "../.."
 )
 
 scala_config = use_extension(
-    "@io_bazel_rules_scala//scala/extensions:config.bzl",
+    "@rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
 
@@ -25,7 +32,7 @@ scala_config.settings(
 use_repo(scala_config, "io_bazel_rules_scala_config")
 
 scala_deps = use_extension(
-    "@io_bazel_rules_scala//scala/extensions:deps.bzl",
+    "@rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
 
@@ -54,6 +61,6 @@ scala_deps.toolchains(
 )
 
 register_toolchains(
-    "@io_bazel_rules_scala//scala:unused_dependency_checker_error_toolchain",
+    "@rules_scala//scala:unused_dependency_checker_error_toolchain",
     "@twitter_scrooge_test_toolchain//...:all",
 )

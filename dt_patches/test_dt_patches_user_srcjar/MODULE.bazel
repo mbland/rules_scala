@@ -2,14 +2,14 @@
 
 module(name = "scala3_example")
 
-bazel_dep(name = "rules_scala", repo_name = "io_bazel_rules_scala")
+bazel_dep(name = "rules_scala")
 local_path_override(
     module_name = "rules_scala",
     path = "../..",
 )
 
 scala_config = use_extension(
-    "@io_bazel_rules_scala//scala/extensions:config.bzl",
+    "@rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
 scala_config.settings(
@@ -54,7 +54,7 @@ use_repo(
 )
 
 scala_deps = use_extension(
-    "@io_bazel_rules_scala//scala/extensions:deps.bzl",
+    "@rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
 scala_deps.settings(

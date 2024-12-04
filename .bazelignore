@@ -3,3 +3,4 @@
 #   in child directory breaks the build #22208
 #   https://github.com/bazelbuild/bazel/issues/22208
 third_party/test/example_external_workspace
+third_party/test/proto
