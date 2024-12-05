@@ -782,7 +782,7 @@ scala_library(
         "src/main/scala/scalarules/test/junit/runtime_platform/JunitRuntimePlatformTest.java",
     ],
     # make sure java compilation toolchain matches runtime toolchain ie --target
-    java_compile_toolchain = "@bazel_tools//tools/jdk:toolchain_java11",
+    java_compile_toolchain = "@rules_java//toolchains:toolchain_java11",
     deps = ["@io_bazel_rules_scala_junit_junit"],
 )
 
