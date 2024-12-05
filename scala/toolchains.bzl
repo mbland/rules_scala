@@ -3,7 +3,7 @@
 load("//jmh/toolchain:toolchain.bzl", "jmh_artifact_ids")
 load("//junit:junit.bzl", "junit_artifact_ids")
 load("//scala/private:macros/scala_repositories.bzl", "scala_repositories")
-load("//scala/private:macros/toolchains_repo.bzl", "scala_toolchains_repo")
+load("//scala:toolchains_repo.bzl", "scala_toolchains_repo")
 load(
     "//scala/scalafmt:scalafmt_repositories.bzl",
     "scalafmt_artifact_ids",

@@ -1,4 +1,4 @@
-load("@rules_scala//scala:scala.bzl", "scala_toolchains_repo")
+load("@rules_scala//scala:toolchains_repo.bzl", "scala_toolchains_repo")
 load(
     "@rules_scala//scala:scala_cross_version.bzl",
     "default_maven_server_urls",
