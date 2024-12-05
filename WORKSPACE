@@ -43,6 +43,14 @@ load("//scala:scala.bzl", "scala_toolchains")
 
 scala_toolchains(fetch_sources = True)
 
+load(
+    "@rules_java//java:repositories.bzl",
+    "rules_java_dependencies",
+    "rules_java_toolchains",
+)
+rules_java_dependencies()
+rules_java_toolchains()
+
 register_toolchains(
     "//testing:testing_toolchain",
     "//scala:unused_dependency_checker_error_toolchain",
