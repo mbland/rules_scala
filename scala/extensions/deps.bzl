@@ -100,8 +100,8 @@ def _get_settings(root_module):
 
     if root_module != None:
         tags = root_module.tags
-        settings = get_tag_values(tags.settings, _settings_defaults)
-        scalafmt = get_tag_values(tags.scalafmt, _scalafmt_defaults)
+        settings = get_tag_values(tags.settings, settings)
+        scalafmt = get_tag_values(tags.scalafmt, scalafmt)
 
     return settings | {"scalafmt_%s" % k: v for k, v in scalafmt.items()}
 
@@ -132,7 +132,6 @@ def _get_scala_compiler_srcjars(root_module):
 
 def _get_toolchains(module_ctx):
     result = dict(_toolchains_defaults)
-    root_scala_toolchain = True
 
     for mod in module_ctx.modules:
         values = get_tag_values(mod.tags.toolchains, _toolchains_defaults)
