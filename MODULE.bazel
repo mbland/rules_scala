@@ -3,6 +3,8 @@
 module(
     name = "rules_scala",
     version = "8.0.0",
+    compatibility_level = 8,
+    bazel_compatibility = [">=7.4.1"],
 )
 
 SCALA_VERSION = "2.13.15"

@@ -12,77 +12,41 @@ _settings_defaults = {
     "validate_scala_version": True,
 }
 
+_settings_attrs = {
+    "maven_servers": attr.string_list(
+        default = _settings_defaults["maven_servers"],
+    ),
+    # Correct spelling of "overridden"
+    "overridden_artifacts": attr.string_dict(
+        default = _settings_defaults["overridden_artifacts"],
+    ),
+    "load_scala_toolchain_dependencies": attr.bool(
+        default = _settings_defaults["load_scala_toolchain_dependencies"],
+    ),
+    "fetch_sources": attr.bool(
+        default = _settings_defaults["fetch_sources"],
+    ),
+    "validate_scala_version": attr.bool(
+        default = _settings_defaults["validate_scala_version"],
+    ),
+}
+
 _settings = tag_class(
-    attrs = {
-        "maven_servers": attr.string_list(
-            default = _settings_defaults["maven_servers"],
-        ),
-        # Correct spelling of "overridden"
-        "overridden_artifacts": attr.string_dict(
-            default = _settings_defaults["overridden_artifacts"],
-        ),
-        "load_scala_toolchain_dependencies": attr.bool(
-            default = _settings_defaults["load_scala_toolchain_dependencies"],
-        ),
-        "fetch_sources": attr.bool(
-            default = _settings_defaults["fetch_sources"],
-        ),
-        "validate_scala_version": attr.bool(
-            default = _settings_defaults["validate_scala_version"],
-        ),
-    },
+    attrs = _settings_attrs,
 )
 
 _scalafmt_defaults = {
     "default_config_path": ".scalafmt.conf",
 }
 
-_scalafmt = tag_class(
-    attrs = {
-        "default_config_path": attr.string(
-            default = _scalafmt_defaults["default_config_path"],
-        ),
-    },
-)
-
-_compiler_srcjar = tag_class(
-    attrs = {
-        "version": attr.string(mandatory = True),
-        "url": attr.string(),
-        "urls": attr.string_list(),
-        "label": attr.label(),
-        "sha256": attr.string(),
-        "integrity": attr.string(),
-    },
-)
-
-_toolchains_defaults = {
-    "scalatest": False,
-    "junit": False,
-    "specs2": False,
-    "testing": False,
-    "scalafmt": False,
-    "scala_proto": False,
-    "scala_proto_enable_all_options": False,
-    "twitter_scrooge": False,
-    "jmh": False,
+_scalafmt_attrs = {
+    "default_config_path": attr.string(
+        default = _scalafmt_defaults["default_config_path"],
+    ),
 }
 
-_toolchains = tag_class(
-    attrs = {
-        k: attr.bool(default = v)
-        for k, v in _toolchains_defaults.items()
-    },
-)
-
-_twitter_scrooge = tag_class(
-    attrs = {
-        "libthrift": attr.string(),
-        "scrooge_core": attr.string(),
-        "scrooge_generator": attr.string(),
-        "util_core": attr.string(),
-        "util_logging": attr.string(),
-    },
+_scalafmt = tag_class(
+    attrs = _scalafmt_attrs,
 )
 
 def _get_settings(root_module):
@@ -100,42 +64,66 @@ def _get_settings(root_module):
 
     if root_module != None:
         tags = root_module.tags
-        settings = get_tag_values(tags.settings, _settings_defaults)
-        scalafmt = get_tag_values(tags.scalafmt, _scalafmt_defaults)
+        settings = get_tag_values(tags.settings, settings)
+        scalafmt = get_tag_values(tags.scalafmt, scalafmt)
 
     return settings | {"scalafmt_%s" % k: v for k, v in scalafmt.items()}
 
-def _add_if_not_empty(result, name, value):
-    if len(value) != 0:
-        result[name] = value
+_compiler_srcjar_attrs = {
+    "version": attr.string(mandatory = True),
+    "url": attr.string(),
+    "urls": attr.string_list(),
+    "label": attr.label(),
+    "sha256": attr.string(),
+    "integrity": attr.string(),
+}
+
+_compiler_srcjar = tag_class(
+    attrs = _compiler_srcjar_attrs,
+)
 
 def _get_scala_compiler_srcjars(root_module):
     if root_module == None:
         return {}
 
     result = {}
-    for srcjar in root_module.tags.compiler_srcjar:
-        info = {}
-        _add_if_not_empty(info, "url", srcjar.url)
-        _add_if_not_empty(info, "urls", srcjar.urls)
-        _add_if_not_empty(info, "sha256", srcjar.sha256)
-        _add_if_not_empty(info, "integrity", srcjar.integrity)
 
-        # Label values don't have a length.
-        if srcjar.label != None:
-            info["label"] = srcjar.label
+    for srcjar in root_module.tags.compiler_srcjar:
+        values = {k: getattr(srcjar, k) for k in _compiler_srcjar_attrs}
 
         # Later instances for the same version overwrite earlier ones.
-        result[srcjar.version] = info
+        result[srcjar.version] = {k: v for k, v in values.items() if v}
 
     return result
 
+_toolchains_defaults = {
+    "scalatest": False,
+    "junit": False,
+    "specs2": False,
+    "testing": False,
+    "scalafmt": False,
+    "scala_proto": False,
+    "scala_proto_enable_all_options": False,
+    "twitter_scrooge": False,
+    "jmh": False,
+}
+
+_toolchains_attrs = {
+    k: attr.bool(default = v)
+    for k, v in _toolchains_defaults.items()
+}
+
+_toolchains = tag_class(
+    attrs = _toolchains_attrs,
+)
+
 def _get_toolchains(module_ctx):
     result = dict(_toolchains_defaults)
-    root_scala_toolchain = True
 
     for mod in module_ctx.modules:
         values = get_tag_values(mod.tags.toolchains, _toolchains_defaults)
+
+        # Don't overwrite `True` values from one tag with `False` from another.
         result.update({k: True for k in values if values[k]})
 
     if result["testing"]:
@@ -145,21 +133,25 @@ def _get_toolchains(module_ctx):
         result["junit"] = True
     return result
 
-def _get_twitter_scrooge(module_ctx):
-    result = {}
+_twitter_scrooge_attrs = {
+    "libthrift": attr.string(),
+    "scrooge_core": attr.string(),
+    "scrooge_generator": attr.string(),
+    "util_core": attr.string(),
+    "util_logging": attr.string(),
+}
 
-    for mod in module_ctx.modules:
-        if not mod.is_root:
-            continue
+_twitter_scrooge = tag_class(
+    attrs = _twitter_scrooge_attrs,
+)
 
-        for tag in mod.tags.twitter_scrooge:
-            _add_if_not_empty(result, "libthrift", tag.libthrift)
-            _add_if_not_empty(result, "scrooge_core", tag.scrooge_core)
-            _add_if_not_empty(result, "scrooge_generator", tag.scrooge_generator)
-            _add_if_not_empty(result, "util_core", tag.util_core)
-            _add_if_not_empty(result, "util_logging", tag.util_logging)
+def _get_twitter_scrooge(root_module):
+    if root_module == None or len(root_module.tags.twitter_scrooge) == 0:
+        return {}
 
-    return result
+    tag = root_module.tags.twitter_scrooge[-1]
+    tag_values = {k: getattr(tag, k) for k in _twitter_scrooge_attrs}
+    return {k: v for k, v in tag_values.items() if len(v) != 0}
 
 def _scala_deps_impl(module_ctx):
     root_module = get_root_module(module_ctx)
@@ -169,7 +161,7 @@ def _scala_deps_impl(module_ctx):
         **(
             _get_settings(root_module) |
             _get_toolchains(module_ctx) |
-            _get_twitter_scrooge(module_ctx)
+            _get_twitter_scrooge(root_module)
         )
     )
 
