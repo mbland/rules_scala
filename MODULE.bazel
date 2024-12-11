@@ -25,7 +25,7 @@ SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
 
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_cc", version = "0.0.10")
-bazel_dep(name = "rules_java", version = "7.12.2")
+bazel_dep(name = "rules_java", version = "7.12.3")
 bazel_dep(name = "rules_proto", version = "6.0.2")
 
 # For now, users are revlocked to protobuf-21.7 or protobuf-25.5 (which doesn't
@@ -64,6 +64,7 @@ scala_deps.toolchains()
 register_toolchains(
     "//scala:unused_dependency_checker_error_toolchain",
     "//test/proto:scalapb_toolchain",
+    "//test/toolchains:java21_toolchain_definition",
     dev_dependency = True,
 )
 
@@ -180,7 +181,11 @@ java_toolchains = use_extension(
 
 use_repo(
     java_toolchains,
-    # Needed by //test/jmh:test_jmh_jdk8
+    # //test/toolchains:java21_toolchain
+    "remotejdk21_linux",
+    "remotejdk21_macos",
+    "remotejdk21_win",
+    # //test/jmh:test_jmh_jdk8
     "remote_jdk8_linux",
     "remote_jdk8_macos",
     "remote_jdk8_windows",
@@ -231,7 +236,7 @@ go_sdk = use_extension(
     "go_sdk",
     dev_dependency = True,
 )
-go_sdk.download(version = "1.23.2")
+go_sdk.download(version = "1.23.4")
 
 go_deps = use_extension(
     "@gazelle//:extensions.bzl",
@@ -267,4 +272,4 @@ use_repo(
     "org_golang_x_tools",
 )
 
-bazel_dep(name = "rules_python", version = "0.36.0", dev_dependency = True)
+bazel_dep(name = "rules_python", version = "0.38.0", dev_dependency = True)

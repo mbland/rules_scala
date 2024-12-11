@@ -9,8 +9,6 @@ load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_jav
 
 rules_java_dependencies()
 
-rules_java_toolchains()
-
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
@@ -29,6 +27,8 @@ py_repositories()
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
+
+rules_java_toolchains()
 
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
 
@@ -96,7 +96,7 @@ load(
 
 go_rules_dependencies()
 
-go_register_toolchains(version = "1.23.0")
+go_register_toolchains(version = "1.23.4")
 
 http_archive(
     name = "bazelci_rules",
@@ -115,3 +115,5 @@ rbe_preconfig(
 load("//scala/private/extensions:dev_deps.bzl", "dev_deps_repositories")
 
 dev_deps_repositories()
+
+register_toolchains("//test/toolchains:java21_toolchain_definition")

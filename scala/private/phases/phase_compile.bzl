@@ -102,7 +102,8 @@ def phase_compile_common(ctx, p):
     return _phase_compile_default(ctx, p)
 
 def _phase_compile_default(ctx, p, _args = struct()):
-    buildijar_default_value = True if ctx.toolchains[Label("//scala:toolchain_type")].scala_version.startswith("2.") else False
+    toolchain = ctx.toolchains[Label("//scala:toolchain_type")]
+    buildijar_default_value = toolchain.scala_version.startswith("2.")
 
     return _phase_compile(
         ctx,

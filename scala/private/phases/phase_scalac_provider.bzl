@@ -3,14 +3,8 @@
 #
 # DOCUMENT THIS
 #
-load(
-    "//scala:providers.bzl",
-    _ScalacProvider = "ScalacProvider",
-)
-load(
-    "//scala/private/toolchain_deps:toolchain_deps.bzl",
-    "find_deps_info_on",
-)
+load("//scala/private/toolchain_deps:toolchain_deps.bzl", "find_deps_info_on")
+load("//scala:providers.bzl", _ScalacProvider = "ScalacProvider")
 
 def phase_scalac_provider(ctx, p):
     toolchain_type_label = Label("//scala:toolchain_type")

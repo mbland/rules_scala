@@ -3,13 +3,13 @@
 load("//jmh/toolchain:toolchain.bzl", "jmh_artifact_ids")
 load("//junit:junit.bzl", "junit_artifact_ids")
 load("//scala/private:macros/scala_repositories.bzl", "scala_repositories")
-load("//scala:toolchains_repo.bzl", "scala_toolchains_repo")
 load(
     "//scala/scalafmt:scalafmt_repositories.bzl",
     "scalafmt_artifact_ids",
     "scalafmt_default_config",
 )
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
+load("//scala:toolchains_repo.bzl", "scala_toolchains_repo")
 load("//scala_proto/default:repositories.bzl", "scala_proto_artifact_ids")
 load("//scalatest:scalatest.bzl", "scalatest_artifact_ids")
 load("//specs2:specs2.bzl", "specs2_artifact_ids")

@@ -2,7 +2,7 @@
 
 module(name = "rules_scala_test_version")
 
-bazel_dep(name = "rules_java", version = "7.12.2")
+bazel_dep(name = "rules_java", version = "7.12.3")
 bazel_dep(name = "rules_proto", version = "6.0.2")
 bazel_dep(
     name = "protobuf",
