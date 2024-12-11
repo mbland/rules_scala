@@ -13,15 +13,17 @@ _settings_defaults = {
     "fetch_sources": False,
 }
 
+_settings_attrs = {
+    "maven_servers": attr.string_list(
+        default = _settings_defaults["maven_servers"],
+    ),
+    "fetch_sources": attr.bool(
+        default = _settings_defaults["fetch_sources"],
+    ),
+}
+
 _settings = tag_class(
-    attrs = {
-        "maven_servers": attr.string_list(
-            default = _settings_defaults["maven_servers"],
-        ),
-        "fetch_sources": attr.bool(
-            default = _settings_defaults["fetch_sources"],
-        ),
-    },
+    attrs = _settings_attrs,
 )
 
 def dev_deps_repositories(
