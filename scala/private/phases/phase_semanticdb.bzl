@@ -1,7 +1,4 @@
-load(
-    "//scala/private/toolchain_deps:toolchain_deps.bzl",
-    "find_deps_info_on",
-)
+load("//scala/private/toolchain_deps:toolchain_deps.bzl", "find_deps_info_on")
 load("//scala:semanticdb_provider.bzl", "SemanticdbInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 

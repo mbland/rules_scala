@@ -25,7 +25,7 @@ SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
 
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_cc", version = "0.1.0")
-bazel_dep(name = "rules_java", version = "8.6.1")
+bazel_dep(name = "rules_java", version = "8.6.2")
 bazel_dep(name = "rules_proto", version = "7.0.2")
 
 bazel_dep(
@@ -58,6 +58,7 @@ scala_deps.toolchains()
 register_toolchains(
     "//scala:unused_dependency_checker_error_toolchain",
     "//test/proto:scalapb_toolchain",
+    "//test/toolchains:java21_toolchain_definition",
     dev_dependency = True,
 )
 
@@ -174,7 +175,11 @@ java_toolchains = use_extension(
 
 use_repo(
     java_toolchains,
-    # Needed by //test/jmh:test_jmh_jdk8
+    # //test/toolchains:java21_toolchain
+    "remotejdk21_linux",
+    "remotejdk21_macos",
+    "remotejdk21_win",
+    # //test/jmh:test_jmh_jdk8
     "remote_jdk8_linux",
     "remote_jdk8_macos",
     "remote_jdk8_windows",
@@ -225,7 +230,7 @@ go_sdk = use_extension(
     "go_sdk",
     dev_dependency = True,
 )
-go_sdk.download(version = "1.23.2")
+go_sdk.download(version = "1.23.4")
 
 go_deps = use_extension(
     "@gazelle//:extensions.bzl",
