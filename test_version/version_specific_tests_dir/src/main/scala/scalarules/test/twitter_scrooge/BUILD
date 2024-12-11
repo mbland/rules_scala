@@ -212,7 +212,7 @@ sh_test(
     srcs = ["grep.sh"],
     args = [
         "libthrift2_a",
-        "$(location :justscrooges)",
+        "$(execpath :justscrooges)",
     ],
     data = [":justscrooges"],
 )
@@ -222,7 +222,7 @@ sh_test(
     srcs = ["grep.sh"],
     args = [
         "_java.jar",
-        "$(location :justscrooges)",
+        "$(execpath :justscrooges)",
     ],
     data = [":justscrooges"],
 )

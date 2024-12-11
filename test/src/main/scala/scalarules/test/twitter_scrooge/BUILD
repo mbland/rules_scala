@@ -324,7 +324,7 @@ sh_test(
     args = [
         "false",
         "libthrift2_a",
-        "$(location :justscrooges)",
+        "$(execpath :justscrooges)",
     ],
     data = [":justscrooges"],
 )
@@ -335,7 +335,7 @@ sh_test(
     args = [
         "false",
         "_java.jar",
-        "$(location :justscrooges)",
+        "$(execpath :justscrooges)",
     ],
     data = [":justscrooges"],
 )
@@ -346,7 +346,7 @@ sh_test(
     args = [
         "true",
         "_java.jar",
-        "$(location :justscrooges_java)",
+        "$(execpath :justscrooges_java)",
     ],
     data = [":justscrooges_java"],
 )
@@ -358,7 +358,7 @@ sh_test(
         "true",
         "thrift/thrift_with_compiler_args/thrift5_scrooge_java.jar",
         "thrift999",
-        "$(locations :justscrooges_java)",
+        "$(execpath :justscrooges_java)",
     ],
     data = [":justscrooges_java"],
 )
@@ -370,7 +370,7 @@ sh_test(
         "false",
         "thrift/thrift_with_compiler_args/thrift5_scrooge_java.jar",
         "thrift5",
-        "$(locations :justscrooges_java)",
+        "$(execpath :justscrooges_java)",
     ],
     data = [":justscrooges_java"],
 )

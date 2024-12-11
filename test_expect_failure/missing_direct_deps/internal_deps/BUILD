@@ -101,7 +101,7 @@ genrule(
     name = "transitive_dependency_jar_without_manifest",
     srcs = ["transitive_dependency.jar"],
     outs = ["transitive_dependency_without_manifest.jar"],
-    cmd = "zip -d $(location transitive_dependency.jar) META-INF/MANIFEST.MF --out $@",
+    cmd = "zip -d $(execpath transitive_dependency.jar) META-INF/MANIFEST.MF --out $@",
 )
 
 custom_jvm(

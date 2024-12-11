@@ -121,7 +121,7 @@ scala_test_suite(
     size = "small",  # Not a macro, can pass test-specific attributes.
     srcs = ["ScalaTestData.scala"],
     data = ["//test/data:foo.txt"],
-    jvm_flags = ["-Dtext=$(location //test/data:foo.txt)"],
+    jvm_flags = ["-Dtext=$(execpath //test/data:foo.txt)"],
     scalac_jvm_flags = [
         "-Xms1G",
         "-Xmx4G",
@@ -299,14 +299,14 @@ scala_library(
 genrule(
     name = "MixJavaScalaLibTestOutputs",
     outs = ["mix_java_scala_lib_test_rule_outputs.txt"],
-    cmd = "echo $(locations MixJavaScalaLib) > $@",
+    cmd = "echo $(execpath :MixJavaScalaLib) > $@",
     tools = [":MixJavaScalaLib"],
 )
 
 sh_test(
     name = "MixJavaScalaLibTest",
     srcs = ["test_scala_library_outputs_mixed_java_scala_jars.sh"],
-    args = ["$(location MixJavaScalaLibTestOutputs) MixJavaScalaLib"],
+    args = ["$(execpath MixJavaScalaLibTestOutputs) MixJavaScalaLib"],
     data = ["MixJavaScalaLibTestOutputs"],
 )
 
@@ -461,7 +461,7 @@ scala_specs2_junit_test(
 [sh_test(
     name = "Run" + "".join([binary[idx] if binary[idx].isalnum() else "_" for idx in range(len(binary))]),
     srcs = ["test_binary.sh"],
-    args = ["$(location %s)" % binary],
+    args = ["$(execpath %s)" % binary],
     data = [binary if (":" in binary) else (":%s" % binary)],
 ) for binary in [
     "JavaBinary",
@@ -518,14 +518,14 @@ genrule(
 sh_test(
     name = "ScalaBinaryRootpaths",
     srcs = ["rootpaths_binary.sh"],
-    args = ["$(location :rootpath-script.out)"],
+    args = ["$(execpath :rootpath-script.out)"],
     data = [":rootpath-script.out"],
 )
 
 sh_test(
     name = "test_binary_run_with_large_classpath",
     srcs = ["test_binary_run_with_large_classpath.sh"],
-    args = ["$(location //test/src/main/scala/scalarules/test/large_classpath:largeClasspath)"],
+    args = ["$(execpath //test/src/main/scala/scalarules/test/large_classpath:largeClasspath)"],
     data = ["//test/src/main/scala/scalarules/test/large_classpath:largeClasspath"],
 )
 
@@ -533,14 +533,14 @@ sh_test(
 genrule(
     name = "ScalaBinaryInGenrule",
     outs = ["scala_binary_out.txt"],
-    cmd = "$(location :ScalaBinary) > $@",
+    cmd = "$(execpath :ScalaBinary) > $@",
     tools = [":ScalaBinary"],
 )
 
 sh_test(
     name = "TestScalaBinaryInGenrule",
     srcs = ["test_binary.sh"],
-    args = ["cat $(location :ScalaBinaryInGenrule)"],
+    args = ["cat $(execpath :ScalaBinaryInGenrule)"],
     data = [":ScalaBinaryInGenrule"],
 )
 
@@ -549,7 +549,7 @@ scala_specs2_junit_test(
     size = "small",
     srcs = ["src/main/scala/scalarules/test/location_expansion/LocationExpansionTest.scala"],
     data = ["@bazel_tools//src/main/protobuf:worker_protocol_java_proto"],
-    jvm_flags = ["-Dlocation.expanded='$(locations @bazel_tools//src/main/protobuf:worker_protocol_java_proto)'"],
+    jvm_flags = ["-Dlocation.expanded='$(execpath @bazel_tools//src/main/protobuf:worker_protocol_java_proto)'"],
     suffixes = ["Test"],
 )
 
@@ -654,8 +654,8 @@ sh_test(
     name = "no_sig",
     srcs = ["no_sigs.sh"],
     args = [
-        "$(location //test:jar_lister)",
-        "$(location //test:ScalaBinary_with_fake_deploy.jar)",
+        "$(execpath //test:jar_lister)",
+        "$(execpath //test:ScalaBinary_with_fake_deploy.jar)",
     ],
     data = [
         ":ScalaBinary_with_fake_deploy.jar",

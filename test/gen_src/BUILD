@@ -13,7 +13,7 @@ genrule(
     name = "foo",
     srcs = [],
     outs = ["foo.scala"],
-    cmd = "./$(location src_generator) hello foo > \"$@\"",
+    cmd = "./$(execpath src_generator) hello foo > \"$@\"",
     tools = ["src_generator"],
 )
 

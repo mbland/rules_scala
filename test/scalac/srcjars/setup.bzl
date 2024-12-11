@@ -12,7 +12,7 @@ def single_scala_file_srcjar(content):
         testonly = True,
         srcs = [":single_scala"],
         outs = ["single.srcjar"],
-        cmd = "$(location @bazel_tools//tools/zip:zipper) cf $@ $<",
+        cmd = "$(execpath @bazel_tools//tools/zip:zipper) cf $@ $<",
         tools = ["@bazel_tools//tools/zip:zipper"],
         visibility = ["//test/scalac/srcjars:__pkg__"],
     )

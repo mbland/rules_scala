@@ -69,7 +69,7 @@ scala_benchmark_jmh(
 [sh_test(
     name = "Run" + "".join([binary[idx] if binary[idx].isalnum() else "_" for idx in range(len(binary))]),
     srcs = ["test_binary.sh"],
-    args = ["$(location %s)" % binary],
+    args = ["$(execpath %s)" % binary],
     data = [binary if (":" in binary) else (":%s" % binary)],
 ) for binary in [
     "//test/jmh:test_jmh_jdk8",

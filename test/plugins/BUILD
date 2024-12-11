@@ -7,7 +7,7 @@ scala_library(
         ":check_expand_location_plugin_deploy.jar",
     ],
     scalacopts = [
-        "-P:diablerie:location=$(location :check_expand_location_plugin_deploy.jar)",
+        "-P:diablerie:location=$(execpath :check_expand_location_plugin_deploy.jar)",
     ],
 )
 

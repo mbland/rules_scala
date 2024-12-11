@@ -15,8 +15,8 @@ if [ """ + predicate + """ -z "$$TIME_MS" ]; then
 fi
 """
     cmd = cmd.format(
-        statsfile = "$(location %s)" % statsfile,
-        outfile = "$(location %s)" % outfile,
+        statsfile = "$(execpath %s)" % statsfile,
+        outfile = "$(execpath %s)" % outfile,
     )
 
     native.genrule(
