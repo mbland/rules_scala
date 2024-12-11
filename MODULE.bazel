@@ -31,7 +31,7 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 # - 0.1.0 should work, but requires `stardoc` 0.7.0, which requires Bazel 7
 #   (though it's a `dev_dependency`, it still gets pulled in during analysis,
 #   breaking the build)
-bazel_dep(name = "rules_cc")
+bazel_dep(name = "rules_cc", version = "0.0.9")
 single_version_override(
     module_name = "rules_cc",
     version = "0.0.9",
