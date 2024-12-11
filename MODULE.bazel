@@ -24,7 +24,19 @@ SCALA_3_VERSIONS = [
 SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
 
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "rules_cc", version = "0.0.10")
+
+# Bazel 6 breaks with any higher version of `rules_cc`, because:
+# - 0.0.10 requires Bazel 7 to define `CcSharedLibraryHintInfo`
+# - 0.0.13 and up don't support `protobuf` v21.7, requiring at least v27.0
+# - 0.1.0 should work, but requires `stardoc` 0.7.0, which requires Bazel 7
+#   (though it's a `dev_dependency`, it still gets pulled in during analysis,
+#   breaking the build)
+bazel_dep(name = "rules_cc")
+single_version_override(
+    module_name = "rules_cc",
+    version = "0.0.9",
+)
+
 bazel_dep(name = "rules_java", version = "7.12.3")
 bazel_dep(name = "rules_proto", version = "6.0.2")
 
