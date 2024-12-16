@@ -161,6 +161,10 @@ scala_deps.compiler_srcjar(
     url = "https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.5.2/scala3-compiler_3-3.5.2-sources.jar",
     version = "3.5.2",
 )
+scala_deps.compiler_srcjar(
+    url = "https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.6.2/scala3-compiler_3-3.6.2-sources.jar",
+    version = "3.6.2",
+)
 
 _SCALA_COMPILER_URL_FORMAT = (
     "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/" +
