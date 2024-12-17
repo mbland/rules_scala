@@ -815,8 +815,8 @@ artifacts = {
         ],
     },
     "scala_proto_rules_scalapb_protoc_bridge": {
-        "artifact": "com.thesamet.scalapb:protoc-bridge_2.12:0.9.7",
-        "sha256": "6d039a28d29253ac78aec0e3102f6423d269e65203c114a17f0d52a91d4876f4",
+        "artifact": "com.thesamet.scalapb:protoc-bridge_2.12:0.9.8",
+        "sha256": "4af997be5176753aa480ce40cbe9aab89ba659740a1ca6dae660afffb7bb343a",
         "deps": [
             "@dev_dirs_directories",
             "@io_bazel_rules_scala_scala_library",

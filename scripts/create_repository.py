@@ -34,7 +34,7 @@ KIND_PROJECTOR_VERSION = "0.13.3"
 PROTOBUF_JAVA_VERSION = "4.29.0"
 JLINE_VERSION = '3.27.1'
 SCALAPB_VERSION = '0.11.17'
-PROTOC_BRIDGE_VERSION = '0.9.7'
+PROTOC_BRIDGE_VERSION = '0.9.8'
 GRPC_VERSION = '1.68.1'
 GRPC_COMMON_PROTOS_VERSION = '2.48.0'
 GRPC_LIBS = ['netty', 'protobuf', 'stub']
@@ -73,15 +73,18 @@ def select_root_artifacts(scala_version, scala_major, is_scala_3) -> List[str]:
         v for v in ROOT_SCALA_VERSIONS if v.startswith('2.')
     )
     max_scala_2_major = '.'.join(max_scala_2_version.split('.')[:2])
+    minor_version = int(scala_version.split('.')[1])
 
     scala_2_version = scala_version
     scala_2_major = scala_major
     scalatest_major = scala_major
+    protoc_bridge_major = scala_2_major
 
     if is_scala_3:
         scala_2_version = max_scala_2_version
         scala_2_major = max_scala_2_major
         scalatest_major = '3'
+        protoc_bridge_major = max_scala_2_major if minor_version < 3 else '3'
 
     scalafmt_version = SCALAFMT_VERSION
     scalapb_version = SCALAPB_VERSION
@@ -99,7 +102,7 @@ def select_root_artifacts(scala_version, scala_major, is_scala_3) -> List[str]:
         f'com.google.protobuf:protobuf-java:{PROTOBUF_JAVA_VERSION}',
         f'com.thesamet.scalapb:compilerplugin_{scala_2_major}:' +
             scalapb_version,
-        f'com.thesamet.scalapb:protoc-bridge_{scala_2_major}:' +
+        f'com.thesamet.scalapb:protoc-bridge_{protoc_bridge_major}:' +
             protoc_bridge_version,
         f'com.thesamet.scalapb:scalapb-runtime_{scala_2_major}:' +
             scalapb_version,
