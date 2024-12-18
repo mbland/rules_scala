@@ -889,18 +889,18 @@ artifacts = {
         ],
     },
     "scala_proto_rules_scalapb_protoc_bridge": {
-        "artifact": "com.thesamet.scalapb:protoc-bridge_2.13:0.9.7",
-        "sha256": "403f0e7223c8fd052cff0fbf977f3696c387a696a3a12d7b031d95660c7552f5",
+        "artifact": "com.thesamet.scalapb:protoc-bridge_3:0.9.8",
+        "sha256": "6e1e38e34f3aaa14c6d46defb66b819f03edbdc4d69965011955da2a4781df9c",
         "deps": [
             "@dev_dirs_directories",
-            "@io_bazel_rules_scala_scala_library_2",
+            "@io_bazel_rules_scala_scala_library",
         ],
     },
     "scala_proto_rules_scalapb_protoc_gen": {
-        "artifact": "com.thesamet.scalapb:protoc-gen_2.13:0.9.7",
-        "sha256": "f9943ce49261aad80a063c2ce55b01fb62cfd9487ffa2d36a2eade467bc16b23",
+        "artifact": "com.thesamet.scalapb:protoc-gen_3:0.9.8",
+        "sha256": "9e5eebe35ca68a884adf3c6cade094055192d3243d29a26d32ae6b5396b39e08",
         "deps": [
-            "@io_bazel_rules_scala_scala_library_2",
+            "@io_bazel_rules_scala_scala_library",
             "@scala_proto_rules_scalapb_protoc_bridge",
         ],
     },

@@ -40,6 +40,8 @@ GRPC_COMMON_PROTOS_VERSION = '2.48.0'
 GRPC_LIBS = ['netty', 'protobuf', 'stub']
 GUAVA_VERSION = '33.3.1-jre'
 
+# This should include values corresponding to `MavenCoordinates.artifact_name`,
+# i.e., group:artifact after stripping any Scala version suffix from artifact.
 EXCLUDED_ARTIFACTS = set(["com.google.guava:listenablefuture"])
 
 THIS_FILE = Path(__file__)
@@ -77,14 +79,13 @@ def select_root_artifacts(scala_version, scala_major, is_scala_3) -> List[str]:
 
     scala_2_version = scala_version
     scala_2_major = scala_major
-    scalatest_major = scala_major
     scalapb_major = scala_2_major
 
     if is_scala_3:
         scala_2_version = max_scala_2_version
         scala_2_major = max_scala_2_major
-        scalatest_major = '3'
-        scalapb_major = max_scala_2_major if minor_version < 3 else '3'
+        scala_major = '3'
+        scalapb_major = max_scala_2_major if minor_version < 3 else scala_major
 
     scalafmt_version = SCALAFMT_VERSION
     scalapb_version = SCALAPB_VERSION
@@ -115,10 +116,16 @@ def select_root_artifacts(scala_version, scala_major, is_scala_3) -> List[str]:
         f'org.scala-lang:scala-reflect:{scala_2_version}',
         f'org.scala-lang:scalap:{scala_2_version}',
         f'org.scalameta:scalafmt-core_{scala_2_major}:{scalafmt_version}',
-        f'org.scalatest:scalatest_{scalatest_major}:{SCALATEST_VERSION}',
+        f'org.scalatest:scalatest_{scala_major}:{SCALATEST_VERSION}',
         f'org.typelevel:kind-projector_{scala_2_version}:' +
             KIND_PROJECTOR_VERSION,
     ] + [f'io.grpc:grpc-{lib}:{GRPC_VERSION}' for lib in GRPC_LIBS]
+
+    if scala_major != '2.11':
+        root_artifacts.append(
+            f'com.thesamet.scalapb:protoc-gen_{scalapb_major}:' +
+            protoc_bridge_version,
+        )
 
     if scala_version == max_scala_2_version or is_scala_3:
         # Since the Scala 2.13 compiler is included in Scala 3 deps.
@@ -158,18 +165,51 @@ class MavenCoordinates:
     version: str
     coordinate: str
 
+    # The `artifact` with the Scala version suffix stripped
+    unversioned_artifact: str
+
+    # Canonical name for comparing new and existing artifacts
+    artifact_name: str
+
     @staticmethod
-    def new(artifact) -> Self:
+    def new(coords) -> Self:
         """Creates a new MavenCoordinates from a Maven coordinate string."""
         # There are Maven artifacts that contain extra components like `:jar` in
         # their coordinates. However, the groupId and artifactId are always the
         # first two components, and the version is the last.
-        parts = artifact.split(':')
-        return MavenCoordinates(parts[0], parts[1], parts[-1], artifact)
+        parts = coords.split(':')
+        group, artifact, vers = parts[0], parts[1], parts[-1]
 
-    def artifact_name(self):
-        """Returns the name to use as a hash key for existing artifacts."""
-        return f'{self.group}:{self.artifact}'
+        # Remove any Scala version suffix from what will become the
+        # `artifact_name`. This is to avoid consecutive runs of the script
+        # flipping between the `_2.x` and `_3` versions of some artifacts.
+        #
+        # Specifically, there are ScalaPB root artifacts specified by this
+        # script that end in `_3` yet still transitively depend on artifacts
+        # ending in `_2.13`. However, some of these transitive dependencies are
+        # also specified as root artifacts ending in `_3`.
+        #
+        # Without trimming the version suffix, the script would see the `_3`
+        # root artifacts and the `_2.13` transitive dependency artifacts as
+        # entirely different. However, their computed repository labels would be
+        # the same, causing one version to replace the other on consecutive
+        # runs.
+        artifact_parts = artifact.rsplit('_', 1)
+
+        if len(artifact_parts) != 1:
+            version_suffix = artifact_parts[-1]
+
+            # "Why does `'2.13'.isdecimal()` return `False`, sir?"
+            # "Nobody knows."
+            # See: https://youtu.be/JYqfVE-fykk (couldn't resist!)
+            if version_suffix.split('.')[0].isdigit():
+                del artifact_parts[-1]
+
+        unversioned_artifact = '_'.join(artifact_parts)
+        artifact_name = f'{group}:{unversioned_artifact}'
+        return MavenCoordinates(
+            group, artifact, vers, coords, unversioned_artifact, artifact_name
+        )
 
     def is_newer_than(self, other):
         """Determines if this artifact is newer than the other.
@@ -188,7 +228,7 @@ class MavenCoordinates:
             CreateRepositoryError if other doesn't match self.group and
                 self.artifact
         """
-        if (self.group != other.group) or (self.artifact != other.artifact):
+        if self.artifact_name != other.artifact_name:
             raise CreateRepositoryError(
                 f'Expected {self.group}:{self.artifact}, ' +
                 f'got {other.group}:{other.artifact}'
@@ -234,8 +274,7 @@ class ArtifactLabelMaker:
     def _get_label_impl(self, coordinates) -> str:
         group = coordinates.group
         group_label = self._labelize(group)
-        artifact = self._remove_scala_version_suffix(coordinates.artifact)
-        artifact_label = self._labelize(artifact)
+        artifact_label = self._labelize(coordinates.unversioned_artifact)
 
         if group in self._SCALA_LANG_GROUPS:
             return self._get_scala_lang_label(artifact_label, coordinates)
@@ -246,7 +285,7 @@ class ArtifactLabelMaker:
         if group in self._SCALA_PROTO_RULES_GROUPS:
             return self._get_scala_proto_label(artifact_label, coordinates)
 
-        artifact_name = f'{group}:{artifact}'
+        artifact_name = coordinates.artifact_name
 
         if artifact_name in self._SPECIAL_CASE_ARTIFACT_LABELS:
             return self._SPECIAL_CASE_ARTIFACT_LABELS[artifact_name]
@@ -255,14 +294,6 @@ class ArtifactLabelMaker:
     @staticmethod
     def _labelize(s):
         return s.replace('.', '_').replace('-', '_')
-
-    @staticmethod
-    def _remove_scala_version_suffix(artifact):
-        """Removes the Scala version suffix from artifact, e.g., scopt_2.13."""
-        parts = artifact.split('_')
-        if len(parts) != 1 and parts[-1][0].isdigit():
-            return '_'.join(parts[:-1])
-        return artifact
 
     _ARTIFACT_LABEL_ONLY_GROUPS = set([
         "com.google.guava",
@@ -361,9 +392,9 @@ class ArtifactResolver:
 
         for artifact in artifacts_data['dependencies']:
             coords = MavenCoordinates.new(artifact['coord'])
-            current = current_artifacts_map.get(coords.artifact_name())
+            current = current_artifacts_map.get(coords.artifact_name)
 
-            if coords.artifact_name() in EXCLUDED_ARTIFACTS:
+            if coords.artifact_name in EXCLUDED_ARTIFACTS:
                 continue
 
             if current is None or coords.is_newer_than(current.coordinates):
@@ -395,7 +426,7 @@ class ArtifactResolver:
 
         for metadata in original_artifacts.values():
             coordinates = MavenCoordinates.new(metadata['artifact'])
-            name = coordinates.artifact_name()
+            name = coordinates.artifact_name
 
             if name not in result and metadata.get('testonly') is not True:
                 result[name] = ResolvedArtifact(
@@ -412,7 +443,7 @@ class ArtifactResolver:
                 MavenCoordinates.new(d) for d in artifact['directDependencies']
             ]
             metadata['deps'] = [
-                d for d in deps if d.artifact_name() not in EXCLUDED_ARTIFACTS
+                d for d in deps if d.artifact_name not in EXCLUDED_ARTIFACTS
             ]
             with open(artifact['file'], 'rb') as f:
                 metadata['checksum'] = hashlib.sha256(f.read()).hexdigest()
@@ -533,7 +564,7 @@ class ArtifactUpdater:
         for existing_label, metadata in artifacts.items():
             coords = MavenCoordinates.new(metadata['artifact'])
 
-            if coords.artifact_name() in EXCLUDED_ARTIFACTS:
+            if coords.artifact_name in EXCLUDED_ARTIFACTS:
                 continue
 
             label = (
