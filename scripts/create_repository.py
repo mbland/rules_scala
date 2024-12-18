@@ -168,6 +168,9 @@ class MavenCoordinates:
     # The `artifact` with the Scala version suffix stripped
     unversioned_artifact: str
 
+    # The Scala version suffix stripped from `unversioned_artifact`
+    scala_version: str
+
     # Canonical name for comparing new and existing artifacts
     artifact_name: str
 
@@ -195,6 +198,7 @@ class MavenCoordinates:
         # the same, causing one version to replace the other on consecutive
         # runs.
         artifact_parts = artifact.rsplit('_', 1)
+        scala_version = ''
 
         if len(artifact_parts) != 1:
             version_suffix = artifact_parts[-1]
@@ -203,12 +207,19 @@ class MavenCoordinates:
             # "Nobody knows."
             # See: https://youtu.be/JYqfVE-fykk (couldn't resist!)
             if version_suffix.split('.')[0].isdigit():
+                scala_version = version_suffix
                 del artifact_parts[-1]
 
         unversioned_artifact = '_'.join(artifact_parts)
         artifact_name = f'{group}:{unversioned_artifact}'
         return MavenCoordinates(
-            group, artifact, vers, coords, unversioned_artifact, artifact_name
+            group,
+            artifact,
+            vers,
+            coords,
+            unversioned_artifact,
+            scala_version,
+            artifact_name,
         )
 
     def is_newer_than(self, other):
@@ -233,18 +244,23 @@ class MavenCoordinates:
                 f'Expected {self.group}:{self.artifact}, ' +
                 f'got {other.group}:{other.artifact}'
             )
+        return (
+            self.__compare_versions(other.scala_version, self.scala_version) or
+            self.__compare_versions(other.version, self.version)
+        )
 
-        lhs_parts = self.version.split(".")
-        rhs_parts = other.version.split(".")
+    def __compare_versions(self, lhs, rhs):
+        lhs_parts = lhs.split('.')
+        rhs_parts = rhs.split('.')
 
         for lhs_part, rhs_part in zip(lhs_parts, rhs_parts):
             if lhs_part == rhs_part:
                 continue
             if lhs_part.isdecimal() and rhs_part.isdecimal():
-                return int(rhs_part) < int(lhs_part)
-            return rhs_part < lhs_part
+                return int(lhs_part) < int(rhs_part)
+            return lhs_part < rhs_part
 
-        return len(rhs_parts) < len(lhs_parts)
+        return len(lhs_parts) < len(rhs_parts)
 
 
 @dataclass
