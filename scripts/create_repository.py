@@ -85,7 +85,15 @@ def select_root_artifacts(scala_version, scala_major, is_scala_3) -> List[str]:
         scala_2_version = max_scala_2_version
         scala_2_major = max_scala_2_major
         scala_major = '3'
-        scalapb_major = max_scala_2_major if minor_version < 3 else scala_major
+        scalapb_major = scala_2_major if minor_version < 3 else scala_major
+
+    # For some reason, com.thesamet.scalapb:compilerplugin_3:0.11.17 depends on
+    # com.thesamet.scalapb:protoc-gen_2.13:0.9.7. Trying to use
+    # com.thesamet.scalapb:protoc-gen_3:0.9.8 causes a crash, saying:
+    # `java.lang.NoClassDefFoundError: Could not initialize class
+    # scalapb.ScalaPbCodeGenerator$`, even though that class is definitely in
+    # that jar. So we stick with protoc-gen_2.13 for now.
+    protoc_bridge_major = scala_2_major
 
     scalafmt_version = SCALAFMT_VERSION
     scalapb_version = SCALAPB_VERSION
@@ -103,7 +111,7 @@ def select_root_artifacts(scala_version, scala_major, is_scala_3) -> List[str]:
         f'com.google.protobuf:protobuf-java:{PROTOBUF_JAVA_VERSION}',
         f'com.thesamet.scalapb:compilerplugin_{scalapb_major}:' +
             scalapb_version,
-        f'com.thesamet.scalapb:protoc-bridge_{scalapb_major}:' +
+        f'com.thesamet.scalapb:protoc-bridge_{protoc_bridge_major}:' +
             protoc_bridge_version,
         f'com.thesamet.scalapb:scalapb-runtime_{scalapb_major}:' +
             scalapb_version,
@@ -123,7 +131,7 @@ def select_root_artifacts(scala_version, scala_major, is_scala_3) -> List[str]:
 
     if scala_major != '2.11':
         root_artifacts.append(
-            f'com.thesamet.scalapb:protoc-gen_{scalapb_major}:' +
+            f'com.thesamet.scalapb:protoc-gen_{protoc_bridge_major}:' +
             protoc_bridge_version,
         )
 
