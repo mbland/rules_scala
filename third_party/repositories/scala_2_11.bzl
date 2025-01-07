@@ -46,8 +46,8 @@ artifacts = {
         ],
     },
     "com_google_errorprone_error_prone_annotations": {
-        "artifact": "com.google.errorprone:error_prone_annotations:2.28.0",
-        "sha256": "f3fc8a3a0a4020706a373b00e7f57c2512dd26d1f83d28c7d38768f8682b231e",
+        "artifact": "com.google.errorprone:error_prone_annotations:2.36.0",
+        "sha256": "77440e270b0bc9a249903c5a076c36a722c4886ca4f42675f2903a1c53ed61a5",
     },
     "com_google_guava_guava_21_0": {
         "testonly": True,
@@ -67,8 +67,8 @@ artifacts = {
         "sha256": "88241573467ddca44ffd4d74aa04c2bbfd11bf7c17e0c342c94c9de7a70a7c64",
     },
     "com_google_protobuf_protobuf_java": {
-        "artifact": "com.google.protobuf:protobuf-java:4.29.0",
-        "sha256": "16901851ebe5e89fe88aaad3c26866373695bc2e30627bb8932847e2f5fc2e76",
+        "artifact": "com.google.protobuf:protobuf-java:4.29.2",
+        "sha256": "7441a6394dca477b3f8b7c86f17bef035f705a8aaa11f53065d380300158177c",
     },
     "com_lihaoyi_fansi": {
         "artifact": "com.lihaoyi:fansi_2.11:0.2.6",
@@ -115,8 +115,8 @@ artifacts = {
         "sha256": "8a8f81cf9b359e3f6dfa691a1e776985c061ef2f223c9b2c80753e1b458e8064",
     },
     "io_bazel_rules_scala_guava": {
-        "artifact": "com.google.guava:guava:33.3.1-jre",
-        "sha256": "4bf0e2c5af8e4525c96e8fde17a4f7307f97f8478f11c4c8e35a0e3298ae4e90",
+        "artifact": "com.google.guava:guava:33.4.0-jre",
+        "sha256": "b918c98a7e44dbe94ebd9fe3e40cddaadb5a93e6a78eb6008b42df237241e538",
         "deps": [
             "@com_google_code_findbugs_jsr305",
             "@com_google_errorprone_error_prone_annotations",
@@ -566,8 +566,8 @@ artifacts = {
         "sha256": "f412ecbb235c2460b45e63584109723dea8d94b819c78c9bfc38f50cba8546c0",
     },
     "scala_proto_rules_grpc_api": {
-        "artifact": "io.grpc:grpc-api:1.68.1",
-        "sha256": "d88d815e07fe58a7572dda5d2823485b61706564f289a1e74281705d50ac2d5b",
+        "artifact": "io.grpc:grpc-api:1.69.0",
+        "sha256": "ffa9af0f76fb08b4dbcade9dba9805af6b216980cafa0756b4d97b6029077506",
         "deps": [
             "@com_google_code_findbugs_jsr305",
             "@com_google_errorprone_error_prone_annotations",
@@ -575,15 +575,15 @@ artifacts = {
         ],
     },
     "scala_proto_rules_grpc_context": {
-        "artifact": "io.grpc:grpc-context:1.68.1",
-        "sha256": "1df4f0310a7e7836bc2948afa95105f5ee27b5d468488aded74e7ff620359076",
+        "artifact": "io.grpc:grpc-context:1.69.0",
+        "sha256": "e682d036496d4429442955b615b931ee65486bd318d0ab13d9937d11cb36ffd5",
         "deps": [
             "@scala_proto_rules_grpc_api",
         ],
     },
     "scala_proto_rules_grpc_core": {
-        "artifact": "io.grpc:grpc-core:1.68.1",
-        "sha256": "e1eddfe433aa850783cb6af9ad6da1ad3dfe2fb9b4c385b9a98d7a596e4d382a",
+        "artifact": "io.grpc:grpc-core:1.69.0",
+        "sha256": "817fbb87f8119c40f2b276f49340effd880e7e574095d3a8fb798a94e3f66652",
         "deps": [
             "@com_google_android_annotations",
             "@com_google_code_gson_gson",
@@ -596,8 +596,8 @@ artifacts = {
         ],
     },
     "scala_proto_rules_grpc_netty": {
-        "artifact": "io.grpc:grpc-netty:1.68.1",
-        "sha256": "1bf33f36496c4fffa7b83cab9215ab2967f00e483270d87f1c17b23e5722a13f",
+        "artifact": "io.grpc:grpc-netty:1.69.0",
+        "sha256": "355c0b87155a765bf9c59b4412c13a2890bde28c4ee85a3c6ca9b0d885652c95",
         "deps": [
             "@com_google_errorprone_error_prone_annotations",
             "@io_bazel_rules_scala_guava",
@@ -611,8 +611,8 @@ artifacts = {
         ],
     },
     "scala_proto_rules_grpc_protobuf": {
-        "artifact": "io.grpc:grpc-protobuf:1.68.1",
-        "sha256": "75329d9aa328a0b1feef6803d59b93b527bceed9c97ceaaa0f8bd2d78ce98d14",
+        "artifact": "io.grpc:grpc-protobuf:1.69.0",
+        "sha256": "999fa3b9baf4b5e361c91641dcca7594fefcef01bff65d4fe505fa8285dc3600",
         "deps": [
             "@com_google_code_findbugs_jsr305",
             "@com_google_protobuf_protobuf_java",
@@ -623,8 +623,8 @@ artifacts = {
         ],
     },
     "scala_proto_rules_grpc_protobuf_lite": {
-        "artifact": "io.grpc:grpc-protobuf-lite:1.68.1",
-        "sha256": "f039759f64d365e7495a05bebee938713c85720236b91f628c21a7c3bc7f98de",
+        "artifact": "io.grpc:grpc-protobuf-lite:1.69.0",
+        "sha256": "5d0ded291edbb4820209a78786b39646c9c6ca3a89f169e92382bbe5d29d43df",
         "deps": [
             "@com_google_code_findbugs_jsr305",
             "@io_bazel_rules_scala_guava",
@@ -632,8 +632,8 @@ artifacts = {
         ],
     },
     "scala_proto_rules_grpc_stub": {
-        "artifact": "io.grpc:grpc-stub:1.68.1",
-        "sha256": "3d0260ba925cdeb63930b672daac815245f1c76d67ec111dd82e4dac6c9abd47",
+        "artifact": "io.grpc:grpc-stub:1.69.0",
+        "sha256": "d515b3680ddc5dd7a25b0db3a72ced719a9a6006dca7810afe354069cc5908fe",
         "deps": [
             "@com_google_errorprone_error_prone_annotations",
             "@io_bazel_rules_scala_guava",
@@ -641,8 +641,8 @@ artifacts = {
         ],
     },
     "scala_proto_rules_grpc_util": {
-        "artifact": "io.grpc:grpc-util:1.68.1",
-        "sha256": "d489e40de9209981272fb9e7b0f61a5f0e5c1ce230195a5f23fb1078cd1baade",
+        "artifact": "io.grpc:grpc-util:1.69.0",
+        "sha256": "22b47e755dc271c1738327162366599c4faf25ae1d1356455d6191d472841b94",
         "deps": [
             "@io_bazel_rules_scala_guava",
             "@org_codehaus_mojo_animal_sniffer_annotations",
@@ -777,8 +777,8 @@ artifacts = {
         "sha256": "c7b478503ec524e55df19b424d46d27c8a68aeb801664fadd4f069b71f52d0f6",
     },
     "scala_proto_rules_proto_google_common_protos": {
-        "artifact": "com.google.api.grpc:proto-google-common-protos:2.48.0",
-        "sha256": "43ec7807459aaa4012e838a1be4ef2d590cf233305da60af5b54f08ec8cf2302",
+        "artifact": "com.google.api.grpc:proto-google-common-protos:2.50.0",
+        "sha256": "d209ac9c1d875e82b716ced2714b082ccc2149be412ef67384cd8a5c9eeb6dd0",
         "deps": [
             "@com_google_protobuf_protobuf_java",
         ],
