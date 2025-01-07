@@ -2,12 +2,12 @@
 
 module(name = "rules_scala_test_version")
 
-bazel_dep(name = "rules_java", version = "8.6.2")
-bazel_dep(name = "rules_proto", version = "7.0.2")
+bazel_dep(name = "rules_java", version = "8.6.3")
+bazel_dep(name = "rules_proto", version = "7.1.0")
 
 bazel_dep(
     name = "protobuf",
-    version = "29.1",
+    version = "29.2",
     repo_name = "com_google_protobuf",
 )
 
