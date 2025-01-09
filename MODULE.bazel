@@ -242,6 +242,11 @@ bazel_dep(
     name = "rules_go",
     version = "0.50.1",
     dev_dependency = True,
+
+    # This is required by the old, nonbzlmodified
+    # com_github_bazelbuild_buildtools repo imported below. If it's ever
+    # updated, we can remove this `repo_name` parameter and change all
+    # `io_bazel_rules_go` instances to `rules_go`.
     repo_name = "io_bazel_rules_go",
 )
 bazel_dep(name = "gazelle", version = "0.40.0", dev_dependency = True)
@@ -288,3 +293,6 @@ use_repo(
 )
 
 bazel_dep(name = "rules_python", version = "0.38.0", dev_dependency = True)
+
+bazel_dep(name = "engflow_platforms", version = "0.0.0", dev_dependency = True)
+local_path_override(module_name = "engflow_platforms", path = "./platform")

@@ -72,3 +72,8 @@ register_toolchains(
     ":dt_scala_toolchain",
     "@rules_scala_toolchains//...:all",
 )
+
+local_repository(
+    name = "engflow_platforms",
+    path = "../../platform",
+)

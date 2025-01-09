@@ -1,1 +1,6 @@
 workspace(name = "compiler_sources")
+
+local_repository(
+    name = "engflow_platforms",
+    path = "../../platform",
+)

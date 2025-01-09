@@ -70,3 +70,6 @@ register_toolchains(
     "@rules_scala//scala:unused_dependency_checker_error_toolchain",
     "@twitter_scrooge_test_toolchain//...:all",
 )
+
+bazel_dep(name = "engflow_platforms", version = "0.0.0", dev_dependency = True)
+local_path_override(module_name = "engflow_platforms", path = "../../platform")

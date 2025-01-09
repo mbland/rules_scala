@@ -70,3 +70,5 @@ register_toolchains(
     "@twitter_scrooge_test_toolchain//...:all",
     "@rules_scala_toolchains//...:all",
 )
+
+local_repository(name = "engflow_platforms", path = "../../platform")

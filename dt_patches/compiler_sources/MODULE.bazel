@@ -13,3 +13,6 @@ scala_config = use_extension(
     "scala_config",
 )
 use_repo(scala_config, "io_bazel_rules_scala_config")
+
+bazel_dep(name = "engflow_platforms", version = "0.0.0", dev_dependency = True)
+local_path_override(module_name = "engflow_platforms", path = "../../platform")

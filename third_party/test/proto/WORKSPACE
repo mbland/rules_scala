@@ -60,3 +60,8 @@ register_toolchains(
     "@rules_scala//scala:unused_dependency_checker_error_toolchain",
     "@rules_scala_toolchains//...:all",
 )
+
+local_repository(
+    name = "engflow_platforms",
+    path = "../../../platform",
+)

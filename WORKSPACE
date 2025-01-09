@@ -117,3 +117,8 @@ load("//scala/private/extensions:dev_deps.bzl", "dev_deps_repositories")
 dev_deps_repositories()
 
 register_toolchains("//test/toolchains:java21_toolchain_definition")
+
+local_repository(
+    name = "engflow_platforms",
+    path = "./platform",
+)

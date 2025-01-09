@@ -15,3 +15,9 @@ scala_deps = use_extension(
 scala_deps.toolchains(
     scala_proto = True,
 )
+
+bazel_dep(name = "engflow_platforms", version = "0.0.0", dev_dependency = True)
+local_path_override(
+    module_name = "engflow_platforms",
+    path = "../../../platform",
+)

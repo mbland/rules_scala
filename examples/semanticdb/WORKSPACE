@@ -61,3 +61,8 @@ register_toolchains(
     "//:semanticdb_toolchain",
     "@rules_scala_toolchains//...:all",
 )
+
+local_repository(
+    name = "engflow_platforms",
+    path = "../../platform",
+)
