@@ -1,2 +1,4 @@
 # Remove after moving to Bazel 7.
 import ../.bazelrc
+try-import ../.bazelrc.remote
+try-import ../.bazelrc.user

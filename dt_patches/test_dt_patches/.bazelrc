@@ -1,1 +1,3 @@
 import ../../.bazelrc
+try-import ../../.bazelrc.remote
+try-import ../../.bazelrc.user
