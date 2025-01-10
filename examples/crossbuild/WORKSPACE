@@ -69,3 +69,7 @@ local_repository(
     name = "engflow_platforms",
     path = "../../platform",
 )
+
+load("@engflow_platforms//:deps.bzl", "engflow_platforms_dependencies")
+
+engflow_platforms_dependencies()
