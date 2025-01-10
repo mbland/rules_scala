@@ -2,16 +2,14 @@
 dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 . "${dir}"/test_runner.sh
 . "${dir}"/test_helper.sh
+. "${dir}"/test_coverage_helper.sh
 runner=$(get_test_runner "${1:-local}")
 
-# Default to 2.12.20 for `diff` tests because other versions change the output.
-SCALA_VERSION="${SCALA_VERSION:-2.12.20}"
+TEST_PKG="test/coverage_filename_encoding"
+TARGET="name-with-equals"
 
 test_coverage_target_name_contains_equals_sign() {
-    bazel coverage \
-      --repo_env="SCALA_VERSION=${SCALA_VERSION}" \
-      //test/coverage_filename_encoding:name-with-equals
-    diff test/coverage_filename_encoding/expected-coverage.dat $(bazel info bazel-testlogs)/test/coverage_filename_encoding/name-with-equals/coverage.dat
+    do_test_coverage_on
 }
 
 $runner test_coverage_target_name_contains_equals_sign
