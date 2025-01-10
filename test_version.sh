@@ -56,7 +56,7 @@ run_in_test_repo() {
   sed -e "s%\${twitter_scrooge_repositories}%${scrooge_mod}\n%" \
       MODULE.bazel.template >> $NEW_TEST_DIR/MODULE.bazel
   touch $NEW_TEST_DIR/WORKSPACE.bzlmod
-  cp ../.bazel{rc,version} $NEW_TEST_DIR/
+  cp ../.bazel{rc,version} ../.bazelrc.* $NEW_TEST_DIR/
 
   cd $NEW_TEST_DIR
 
@@ -88,10 +88,17 @@ test_reporter() {
 test_diagnostic_proto_files() {
   local SCALA_VERSION="$1"
   local SCALA_TOOLCHAIN="$2"
+  local test_pkg="test_expect_failure/diagnostics_reporter"
 
-  compilation_should_fail build --build_event_publish_all_actions -k --repo_env=SCALA_VERSION=${SCALA_VERSION} --extra_toolchains=${SCALA_TOOLCHAIN} //test_expect_failure/diagnostics_reporter:all
-  diagnostics_output="$(bazel info bazel-bin)/test_expect_failure/diagnostics_reporter"
-  bazel run --repo_env=SCALA_VERSION=${SCALA_VERSION} //test/diagnostics_reporter:diagnostics_reporter_test "$diagnostics_output"
+  compilation_should_fail build --build_event_publish_all_actions -k \
+    --repo_env=SCALA_VERSION=${SCALA_VERSION} \
+    --extra_toolchains=${SCALA_TOOLCHAIN} \
+    "--remote_download_regex=.*/$test_pkg/.*\.diagnosticsproto$" \
+    "//$test_pkg:all"
+  diagnostics_output="$(bazel info bazel-bin)/$test_pkg"
+  bazel run --repo_env=SCALA_VERSION=${SCALA_VERSION} \
+    --platforms=@bazel_tools//tools:host_platform \
+    //test/diagnostics_reporter:diagnostics_reporter_test "$diagnostics_output"
 }
 
 test_twitter_scrooge_versions() {

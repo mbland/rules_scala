@@ -34,7 +34,9 @@ test_produces_semanticdb(){
   fi
 
 
-  bazel build //test/semanticdb:semantic_provider_vars_all  ${toolchain}  ${version_opt}
+  bazel build //test/semanticdb:semantic_provider_vars_all \
+    ${toolchain} ${version_opt} \
+    "--remote_download_regex=.*/test/semanticdb/.*\.scala.semanticdb$"
 
   #semantic_provider_vars.sh contains the SemanticdbInfo data
   . $(bazel info bazel-bin)/test/semanticdb/semantic_provider_vars_all.sh

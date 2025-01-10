@@ -22,7 +22,9 @@ run_formatting() {
 
   #on windows scalafmt targets need to be run using bash. 
   #TODO: improve the scalafmt funcitonality so we don't need to use the run_under mechanism
-  local bazel_run=('bazel' 'run')
+  local bazel_run=(
+    'bazel' 'run' "--remote_download_regex=.*/$PACKAGE_DIR/.*\.fmt\.output$"
+  )
   if is_windows; then
     bazel_run+=('--run_under=bash')
   fi
