@@ -9,7 +9,7 @@ PERSISTENT_WORKER_FLAGS=(
   # Explicitly disable remote execution and enable C++ toolchain detection in
   # case .bazelrc configures remote execution.
   "--remote_executor="
-  "--extra_execution_platforms=@bazel_tools//tools:host_platform"
+  "--extra_execution_platforms=@platforms//host"
   "--action_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN="
   "--host_action_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN="
   "--strategy=Scalac=worker" 

@@ -21,7 +21,7 @@ do_test_diagnostics_reporter() {
   # the target platform. .bazelrc may configure a different execution platform,
   # such as when building and testing with remote execution. In that case,
   # `bazel run` will fail without setting `--platforms` to match the host.
-  bazel run --platforms=@bazel_tools//tools:host_platform \
+  bazel run --platforms=@platforms//host \
     //test/diagnostics_reporter:diagnostics_reporter_test "$diagnostics_output"
 }
 

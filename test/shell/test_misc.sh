@@ -55,8 +55,7 @@ test_repl() {
   # Explicitly specify the host platform so the generated scripts contain the
   # correct toolchain. Otherwise, if .bazelrc is configured for remote execution
   # on a different platform, running them will fail.
-  bazel build --platforms=@bazel_tools//tools:host_platform \
-    "${query_results[@]}"
+  bazel build --platforms=@platforms//host "${query_results[@]}"
   echo "import scalarules.test._; HelloLib.printMessage(\"foo\")" | bazel-bin/test/HelloLibRepl -Xnojline | grep "foo java" &&
   echo "import scalarules.test._; TestUtil.foo" | bazel-bin/test/HelloLibTestRepl -Xnojline | grep "bar" &&
   echo "import scalarules.test._; ScalaLibBinary.main(Array())" | bazel-bin/test/ScalaLibBinaryRepl -Xnojline | grep "A hui hou" &&
@@ -65,7 +64,7 @@ test_repl() {
 }
 
 test_benchmark_jmh() {
-  RES=$(bazel run --platforms=@bazel_tools//tools:host_platform -- \
+  RES=$(bazel run --platforms=@platforms//host-- \
     test/jmh:test_benchmark -i1 -f1 -wi 1)
   if [ $? -ne 0 ]; then
     exit 1
@@ -127,7 +126,7 @@ test_multi_service_manifest() {
 test_override_javabin() {
   # set the JAVABIN to nonsense
   JAVABIN=/etc/basdf action_should_fail run \
-    --platforms=@bazel_tools//tools:host_platform test:ScalaBinary
+    --platforms=@platforms//host test:ScalaBinary
 }
 
 xmllint_test() {

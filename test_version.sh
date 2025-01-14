@@ -97,7 +97,7 @@ test_diagnostic_proto_files() {
     "//$test_pkg:all"
   diagnostics_output="$(bazel info bazel-bin)/$test_pkg"
   bazel run --repo_env=SCALA_VERSION=${SCALA_VERSION} \
-    --platforms=@bazel_tools//tools:host_platform \
+    --platforms=@platforms//host \
     //test/diagnostics_reporter:diagnostics_reporter_test "$diagnostics_output"
 }
 
