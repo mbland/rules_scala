@@ -35,9 +35,9 @@ def rules_scala_dependencies():
         http_archive,
         name = "rules_java",
         urls = [
-            "https://github.com/bazelbuild/rules_java/releases/download/8.6.3/rules_java-8.6.3.tar.gz",
+            "https://github.com/bazelbuild/rules_java/releases/download/8.7.1/rules_java-8.7.1.tar.gz",
         ],
-        sha256 = "6d8c6d5cd86fed031ee48424f238fa35f33abc9921fd97dd4ae1119a29fc807f",
+        sha256 = "52e7c1f297bb0c5bcbc79743922682071f6968738e73a2a039b92bad9278a469",
     )
 
     maybe(
