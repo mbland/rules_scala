@@ -78,8 +78,8 @@ artifacts = {
         "sha256": "88241573467ddca44ffd4d74aa04c2bbfd11bf7c17e0c342c94c9de7a70a7c64",
     },
     "com_google_protobuf_protobuf_java": {
-        "artifact": "com.google.protobuf:protobuf-java:4.29.0",
-        "sha256": "16901851ebe5e89fe88aaad3c26866373695bc2e30627bb8932847e2f5fc2e76",
+        "artifact": "com.google.protobuf:protobuf-java:4.29.3",
+        "sha256": "442db5991a11974d72127353be7d7e7abdf8d943d83b16668cb2e336d7392f54",
     },
     "com_lihaoyi_fansi": {
         "artifact": "com.lihaoyi:fansi_2.13:0.4.0",
@@ -466,38 +466,38 @@ artifacts = {
         "sha256": "c720e6e5bcbe6b2f48ded75a47bccdb763eede79d14330102e0d352e3d89ed92",
     },
     "org_jline_jline": {
-        "artifact": "org.jline:jline:3.27.1",
-        "sha256": "72fcbc58da05092067739ded62ed6b1ba9075ecd0fee1caa634c2cbf1a16fe7a",
+        "artifact": "org.jline:jline:3.28.0",
+        "sha256": "0639b0ddfc5bde4190bfe6d005f937338904714fce322503bbfd42d22950d560",
     },
     "org_jline_jline_native": {
-        "artifact": "org.jline:jline-native:3.27.1",
-        "sha256": "636646da40413e74963b3f4b40c9c5dcfb42f3d0ecf1b93d6ddf5c895effe422",
+        "artifact": "org.jline:jline-native:3.28.0",
+        "sha256": "de0997840bbdc576dad302998b9256c6f81cafb64c75c362ed05080d6a3fc686",
     },
     "org_jline_jline_reader": {
-        "artifact": "org.jline:jline-reader:3.27.1",
-        "sha256": "feddb180aabd05bfa04e013379f6938cf8f9faf1e5a342991762b8fcd3334578",
+        "artifact": "org.jline:jline-reader:3.28.0",
+        "sha256": "a98f3bfd1ba6fb05373766774656f00abb0b82498adc7dab378d1fdedc932560",
         "deps": [
             "@org_jline_jline_terminal",
         ],
     },
     "org_jline_jline_terminal": {
-        "artifact": "org.jline:jline-terminal:3.27.1",
-        "sha256": "42b7b756506bca98b505938426a35c99082f7819c333ed25bd4114bfb0e3b5f2",
+        "artifact": "org.jline:jline-terminal:3.28.0",
+        "sha256": "964a04e37a32aa27d0372e55c716bdc04e8758d2c0cd1d204f10e4d4f53964ff",
         "deps": [
             "@org_jline_jline_native",
         ],
     },
     "org_jline_jline_terminal_jna": {
-        "artifact": "org.jline:jline-terminal-jna:3.27.1",
-        "sha256": "df2a8f9ba545353dfd48cee3e0f908bd201b87317279700cdddc6a260f4f1c97",
+        "artifact": "org.jline:jline-terminal-jna:3.28.0",
+        "sha256": "d176d966e34c6bffe4f9987299c9cdffc17b94726ca676570ff7b0a16b76ec6b",
         "deps": [
             "@net_java_dev_jna_jna",
             "@org_jline_jline_terminal",
         ],
     },
     "org_jline_jline_terminal_jni": {
-        "artifact": "org.jline:jline-terminal-jni:3.27.1",
-        "sha256": "e4bc64f1e68e9fb25d80517338e76abca1e0145b82e389b5c2b2c7d71d150f82",
+        "artifact": "org.jline:jline-terminal-jni:3.28.0",
+        "sha256": "30758a4236bc1f3db6ecc39e78940ae7f4fd2f982b48f7bb12dabfebb9de075d",
         "deps": [
             "@org_jline_jline_native",
             "@org_jline_jline_terminal",
