@@ -18,34 +18,34 @@ def rules_scala_dependencies():
     maybe(
         http_archive,
         name = "rules_cc",
-        urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.1.0/rules_cc-0.1.0.tar.gz"],
-        sha256 = "4b12149a041ddfb8306a8fd0e904e39d673552ce82e4296e96fac9cbf0780e59",
-        strip_prefix = "rules_cc-0.1.0",
+        urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.17/rules_cc-0.0.17.tar.gz"],
+        sha256 = "abc605dd850f813bb37004b77db20106a19311a96b2da1c92b789da529d28fe1",
+        strip_prefix = "rules_cc-0.0.17",
     )
 
     maybe(
         http_archive,
         name = "com_google_absl",
-        sha256 = "f50e5ac311a81382da7fa75b97310e4b9006474f9560ac46f54a9967f07d4ae3",
-        strip_prefix = "abseil-cpp-20240722.0",
-        url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20240722.0.tar.gz",
+        sha256 = "40cee67604060a7c8794d931538cb55f4d444073e556980c88b6c49bb9b19bb7",
+        strip_prefix = "abseil-cpp-20240722.1",
+        url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20240722.1.tar.gz",
     )
 
     maybe(
         http_archive,
         name = "rules_java",
         urls = [
-            "https://github.com/bazelbuild/rules_java/releases/download/8.6.3/rules_java-8.6.3.tar.gz",
+            "https://github.com/bazelbuild/rules_java/releases/download/8.7.2/rules_java-8.7.2.tar.gz",
         ],
-        sha256 = "6d8c6d5cd86fed031ee48424f238fa35f33abc9921fd97dd4ae1119a29fc807f",
+        sha256 = "b0b8b7b2cfbf575112acf716ec788847929f322efa5c34195eb12a43d1df7e5c",
     )
 
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "63150aba23f7a90fd7d87bdf514e459dd5fe7023fdde01b56ac53335df64d4bd",
-        strip_prefix = "protobuf-29.2",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v29.2.tar.gz",
+        sha256 = "008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e",
+        strip_prefix = "protobuf-29.3",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v29.3.tar.gz",
     )
 
     maybe(
