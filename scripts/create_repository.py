@@ -23,20 +23,20 @@ ROOT_SCALA_VERSIONS = [
     "3.3.4",
     "3.4.3",
     "3.5.2",
-    "3.6.2"
+    "3.6.3"
 ]
 PARSER_COMBINATORS_VERSION = '1.1.2'
 SBT_COMPILER_INTERFACE_VERSION = '1.10.7'
 SBT_UTIL_INTERFACE_VERSION = '1.10.7'
 SCALATEST_VERSION = "3.2.19"
-SCALAFMT_VERSION = "3.8.3"
+SCALAFMT_VERSION = "3.8.6"
 KIND_PROJECTOR_VERSION = "0.13.3"
-PROTOBUF_JAVA_VERSION = "4.29.2"
+PROTOBUF_JAVA_VERSION = "4.29.3"
 JLINE_VERSION = '3.28.0'
 SCALAPB_VERSION = '0.11.17'
 PROTOC_BRIDGE_VERSION = '0.9.8'
-GRPC_VERSION = '1.69.0'
-GRPC_COMMON_PROTOS_VERSION = '2.50.0'
+GRPC_VERSION = '1.70.0'
+GRPC_COMMON_PROTOS_VERSION = '2.50.1'
 GRPC_LIBS = ['netty', 'protobuf', 'stub']
 GUAVA_VERSION = '33.4.0-jre'
 
@@ -151,6 +151,7 @@ def select_root_artifacts(scala_version, scala_major, is_scala_3) -> List[str]:
             f'org.jline:jline-reader:{JLINE_VERSION}',
             f'org.jline:jline-terminal:{JLINE_VERSION}',
             f'org.jline:jline-terminal-jna:{JLINE_VERSION}',
+            f'org.jline:jline-terminal-jni:{JLINE_VERSION}',
         ])
 
     else:
