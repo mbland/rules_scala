@@ -244,7 +244,7 @@ bazel_dep(
     dev_dependency = True,
     repo_name = "io_bazel_rules_go",
 )
-bazel_dep(name = "gazelle", version = "0.41.0", dev_dependency = True)
+bazel_dep(name = "gazelle", version = "0.42.0", dev_dependency = True)
 
 go_sdk = use_extension(
     "@io_bazel_rules_go//go:extensions.bzl",
