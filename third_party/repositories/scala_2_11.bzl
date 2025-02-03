@@ -779,8 +779,8 @@ artifacts = {
         "sha256": "c7b478503ec524e55df19b424d46d27c8a68aeb801664fadd4f069b71f52d0f6",
     },
     "scala_proto_rules_proto_google_common_protos": {
-        "artifact": "com.google.api.grpc:proto-google-common-protos:2.50.1",
-        "sha256": "0e8e38d64b20c7a5eaa0d99dad297c8d3720b7742f6f3e11db2b2d16cc2a34d9",
+        "artifact": "com.google.api.grpc:proto-google-common-protos:2.51.0",
+        "sha256": "0b27938f3d28ccd6884945d7e4f75f4e26a677bbf3cd39bbcb694f130f782aa9",
         "deps": [
             "@com_google_protobuf_protobuf_java",
         ],
