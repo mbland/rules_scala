@@ -3,7 +3,7 @@
 Mostly generated and updated by scripts/create_repository.py.
 """
 
-scala_version = "3.3.4"
+scala_version = "3.3.5"
 
 artifacts = {
     "com_github_jnr_jffi_native": {
@@ -187,14 +187,20 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scala_asm": {
-        "artifact": "org.scala-lang.modules:scala-asm:9.6.0-scala-1",
-        "sha256": "bf16f8b69e89cadab550bce266a052780af7f1eb29dd1c04c3bd014113752c12",
+        "artifact": "org.scala-lang.modules:scala-asm:9.7.0-scala-2",
+        "sha256": "823cd3a46e289c69e37994e03aee3864e1e059aacb3e0bf34f536b3669b61772",
     },
     "io_bazel_rules_scala_scala_compiler": {
-        "artifact": "org.scala-lang:scala3-compiler_3:3.3.4",
-        "sha256": "2cca65fdb92e2cc393786cae61b4f7bcb9032ad4be61f9cebae1dca72997e52f",
+        "artifact": "org.scala-lang:scala3-compiler_3:3.3.5",
+        "sha256": "f067da9a52ec450efa5d1cc1a3325b7f9882874a059b11728969460d170ed424",
         "deps": [
             "@io_bazel_rules_scala_scala_asm",
+            "@io_bazel_rules_scala_scala_interfaces",
+            "@io_bazel_rules_scala_scala_library",
+            "@io_bazel_rules_scala_scala_tasty_core",
+            "@org_jline_jline_reader",
+            "@org_jline_jline_terminal",
+            "@org_jline_jline_terminal_jni",
             "@org_scala_sbt_compiler_interface",
         ],
     },
@@ -203,12 +209,12 @@ artifacts = {
         "sha256": "4c200cd193c082bec14a2a2dffe6a1ba5f8130b1b27c79ee54c936dfcafc8ed9",
     },
     "io_bazel_rules_scala_scala_interfaces": {
-        "artifact": "org.scala-lang:scala3-interfaces:3.3.4",
-        "sha256": "fe056c10a217353e14aa62076d2bbd957ebd82e02fb445ca5546ae8ea9d40caa",
+        "artifact": "org.scala-lang:scala3-interfaces:3.3.5",
+        "sha256": "b44fcdf2d4aef100ab2a24f88b5432b3f487de91ab38f54c8e0b96cb35913c93",
     },
     "io_bazel_rules_scala_scala_library": {
-        "artifact": "org.scala-lang:scala3-library_3:3.3.4",
-        "sha256": "d95184acfcd814da2e051378e4962c653f4b468f4086452ab427af030482bd3c",
+        "artifact": "org.scala-lang:scala3-library_3:3.3.5",
+        "sha256": "26163f54674adb4c3e2151155f7f6f17095a0be10ebfb884ee8cdca98adca248",
         "deps": [
             "@io_bazel_rules_scala_scala_library_2",
         ],
@@ -239,8 +245,11 @@ artifacts = {
         ],
     },
     "io_bazel_rules_scala_scala_tasty_core": {
-        "artifact": "org.scala-lang:tasty-core_3:3.3.4",
-        "sha256": "13d44693d6f2d38e0595954d11234c0373d6d0e689a8151b06878c5b631d57d5",
+        "artifact": "org.scala-lang:tasty-core_3:3.3.5",
+        "sha256": "7e14a81eaebe0c23ac5350e5421691d46206a46ce88493450ec625ef47498922",
+        "deps": [
+            "@io_bazel_rules_scala_scala_library",
+        ],
     },
     "io_bazel_rules_scala_scala_xml": {
         "artifact": "org.scala-lang.modules:scala-xml_3:2.1.0",
@@ -420,8 +429,8 @@ artifacts = {
         "sha256": "adea029247c3f16e55e29c1708b897812fd1fe335ac55fe3903e5d2f428ef4b3",
     },
     "net_java_dev_jna_jna": {
-        "artifact": "net.java.dev.jna:jna:5.15.0",
-        "sha256": "a564158d28ab5127fc6a958028ed54279fe0999662c46425b6a3b09a2a52094d",
+        "artifact": "net.java.dev.jna:jna:5.16.0",
+        "sha256": "3f5233589a799eb66dc2969afa3433fb56859d3d787c58b9bc7dd9e86f0a250c",
     },
     "org_apache_commons_commons_lang_3_5": {
         "testonly": True,
@@ -437,38 +446,38 @@ artifacts = {
         "sha256": "c720e6e5bcbe6b2f48ded75a47bccdb763eede79d14330102e0d352e3d89ed92",
     },
     "org_jline_jline": {
-        "artifact": "org.jline:jline:3.28.0",
-        "sha256": "0639b0ddfc5bde4190bfe6d005f937338904714fce322503bbfd42d22950d560",
+        "artifact": "org.jline:jline:3.29.0",
+        "sha256": "99c22a966838ba4291e69a5dd5689afd049500eb9362b23baace731f9c9c97dd",
     },
     "org_jline_jline_native": {
-        "artifact": "org.jline:jline-native:3.28.0",
-        "sha256": "de0997840bbdc576dad302998b9256c6f81cafb64c75c362ed05080d6a3fc686",
+        "artifact": "org.jline:jline-native:3.29.0",
+        "sha256": "19cfcc9d3c78a1c6cfe4c6c9599f16a657e4bf8da43940fc4b875373236dc258",
     },
     "org_jline_jline_reader": {
-        "artifact": "org.jline:jline-reader:3.28.0",
-        "sha256": "a98f3bfd1ba6fb05373766774656f00abb0b82498adc7dab378d1fdedc932560",
+        "artifact": "org.jline:jline-reader:3.29.0",
+        "sha256": "a4cb0a5fde9289f2f1b614e04f94b202f6ff5c9c96476425837b1184c92ef81d",
         "deps": [
             "@org_jline_jline_terminal",
         ],
     },
     "org_jline_jline_terminal": {
-        "artifact": "org.jline:jline-terminal:3.28.0",
-        "sha256": "964a04e37a32aa27d0372e55c716bdc04e8758d2c0cd1d204f10e4d4f53964ff",
+        "artifact": "org.jline:jline-terminal:3.29.0",
+        "sha256": "fd68a98b32b1132035c62102e5df0b0fdc358e7c87a9f876ce7071450b4d10da",
         "deps": [
             "@org_jline_jline_native",
         ],
     },
     "org_jline_jline_terminal_jna": {
-        "artifact": "org.jline:jline-terminal-jna:3.28.0",
-        "sha256": "d176d966e34c6bffe4f9987299c9cdffc17b94726ca676570ff7b0a16b76ec6b",
+        "artifact": "org.jline:jline-terminal-jna:3.29.0",
+        "sha256": "2ec6081192dfa07bf0237acedad8648c168d75c51106e773ea091f8885bda65b",
         "deps": [
             "@net_java_dev_jna_jna",
             "@org_jline_jline_terminal",
         ],
     },
     "org_jline_jline_terminal_jni": {
-        "artifact": "org.jline:jline-terminal-jni:3.28.0",
-        "sha256": "30758a4236bc1f3db6ecc39e78940ae7f4fd2f982b48f7bb12dabfebb9de075d",
+        "artifact": "org.jline:jline-terminal-jni:3.29.0",
+        "sha256": "13fef8bcc0e4788c8e192dc76c33758683c6bfdbaef6f67b41445eb8986773ad",
         "deps": [
             "@org_jline_jline_native",
             "@org_jline_jline_terminal",
@@ -872,8 +881,8 @@ artifacts = {
         "sha256": "c7b478503ec524e55df19b424d46d27c8a68aeb801664fadd4f069b71f52d0f6",
     },
     "scala_proto_rules_proto_google_common_protos": {
-        "artifact": "com.google.api.grpc:proto-google-common-protos:2.50.1",
-        "sha256": "0e8e38d64b20c7a5eaa0d99dad297c8d3720b7742f6f3e11db2b2d16cc2a34d9",
+        "artifact": "com.google.api.grpc:proto-google-common-protos:2.51.0",
+        "sha256": "0b27938f3d28ccd6884945d7e4f75f4e26a677bbf3cd39bbcb694f130f782aa9",
         "deps": [
             "@com_google_protobuf_protobuf_java",
         ],
