@@ -28,13 +28,20 @@ load(
     _phase_collect_jars_scalatest = "phase_collect_jars_scalatest",
 )
 load(
+    "//scala/private:phases/phase_collect_exports_jars.bzl",
+    _phase_collect_exports_jars = "phase_collect_exports_jars",
+)
+load(
+    "//scala/private:phases/phase_collect_srcjars.bzl",
+    _phase_collect_srcjars = "phase_collect_srcjars",
+)
+load(
     "//scala/private:phases/phase_compile.bzl",
     _phase_compile_binary = "phase_compile_binary",
     _phase_compile_common = "phase_compile_common",
     _phase_compile_junit_test = "phase_compile_junit_test",
     _phase_compile_library = "phase_compile_library",
     _phase_compile_library_for_plugin_bootstrapping = "phase_compile_library_for_plugin_bootstrapping",
-    _phase_compile_macro_library = "phase_compile_macro_library",
     _phase_compile_repl = "phase_compile_repl",
     _phase_compile_scalatest = "phase_compile_scalatest",
 )
@@ -52,12 +59,15 @@ load(
 load("//scala/private:phases/phase_default_info.bzl", _phase_default_info = "phase_default_info")
 load("//scala/private:phases/phase_scalac_provider.bzl", _phase_scalac_provider = "phase_scalac_provider")
 load("//scala/private:phases/phase_write_manifest.bzl", _phase_write_manifest = "phase_write_manifest")
-load("//scala/private:phases/phase_collect_srcjars.bzl", _phase_collect_srcjars = "phase_collect_srcjars")
-load("//scala/private:phases/phase_collect_exports_jars.bzl", _phase_collect_exports_jars = "phase_collect_exports_jars")
 load(
     "//scala/private:phases/phase_dependency.bzl",
     _phase_dependency_common = "phase_dependency_common",
     _phase_dependency_library_for_plugin_bootstrapping = "phase_dependency_library_for_plugin_bootstrapping",
+)
+load(
+    "//scala/private:phases/phase_scalainfo_provider.bzl",
+    _phase_scalainfo_provider_macro = "phase_scalainfo_provider_macro",
+    _phase_scalainfo_provider_non_macro = "phase_scalainfo_provider_non_macro",
 )
 load("//scala/private:phases/phase_declare_executable.bzl", _phase_declare_executable = "phase_declare_executable")
 load("//scala/private:phases/phase_merge_jars.bzl", _phase_merge_jars = "phase_merge_jars")
@@ -74,6 +84,10 @@ extras_phases = _extras_phases
 
 # scalac_provider
 phase_scalac_provider = _phase_scalac_provider
+
+# scalainfo_provider
+phase_scalainfo_provider_macro = _phase_scalainfo_provider_macro
+phase_scalainfo_provider_non_macro = _phase_scalainfo_provider_non_macro
 
 # collect_srcjars
 phase_collect_srcjars = _phase_collect_srcjars
@@ -128,7 +142,6 @@ phase_collect_jars_common = _phase_collect_jars_common
 phase_compile_binary = _phase_compile_binary
 phase_compile_library = _phase_compile_library
 phase_compile_library_for_plugin_bootstrapping = _phase_compile_library_for_plugin_bootstrapping
-phase_compile_macro_library = _phase_compile_macro_library
 phase_compile_junit_test = _phase_compile_junit_test
 phase_compile_repl = _phase_compile_repl
 phase_compile_scalatest = _phase_compile_scalatest
