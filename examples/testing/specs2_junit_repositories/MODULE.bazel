@@ -1,0 +1,38 @@
+"""Bazel module ./test/shell/test_examples.sh tests"""
+
+module(name = "specs2_junit_repositories")
+
+bazel_dep(name = "rules_scala")
+local_path_override(
+    module_name = "rules_scala",
+    path = "../../..",
+)
+
+scala_deps = use_extension(
+    "@rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+scala_deps.settings(
+    fetch_sources = True,
+)
+scala_deps.toolchains(
+    specs2 = True,
+)
+
+# This is optional, but still safe to include even when not using
+# `--incompatible_enable_proto_toolchain_resolution`.
+register_toolchains("@rules_scala//protoc:all")
+
+# Temporarily required for `protoc` toolchainization until resolution of
+# protocolbuffers/protobuf#19679.
+bazel_dep(
+    name = "protobuf",
+    version = "30.0",
+    repo_name = "com_google_protobuf",
+)
+single_version_override(
+    module_name = "protobuf",
+    patch_strip = 1,
+    patches = ["//:protobuf.patch"],
+    version = "30.0",
+)
