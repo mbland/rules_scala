@@ -1,5 +1,4 @@
-build --strategy=Scalac=worker --strategy=ScroogeRule=worker --worker_max_instances=3
+# Remove once Bazel 7.5.0 becomes the default supported version.
+common --enable_bzlmod
 
-# Remove upon completing Bzlmod compatibility work.
-# - https://github.com/bazelbuild/rules_scala/issues/1482
-build --noenable_bzlmod
+build --strategy=Scalac=worker --strategy=ScroogeRule=worker --worker_max_instances=3

@@ -1,0 +1,17 @@
+"""Bazel example module for several top level tests"""
+
+module(name = "example_external_workspace")
+
+bazel_dep(name = "rules_scala")
+local_path_override(
+    module_name = "rules_scala",
+    path = "../../..",
+)
+
+scala_deps = use_extension(
+    "@rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+scala_deps.toolchains(
+    scalatest = True,
+)
