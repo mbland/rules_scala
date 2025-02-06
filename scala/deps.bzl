@@ -25,10 +25,10 @@ def rules_scala_dependencies():
 
     maybe(
         http_archive,
-        name = "com_google_absl",
-        sha256 = "40cee67604060a7c8794d931538cb55f4d444073e556980c88b6c49bb9b19bb7",
-        strip_prefix = "abseil-cpp-20240722.1",
-        url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20240722.1.tar.gz",
+        name = "abseil-cpp",
+        sha256 = "16242f394245627e508ec6bb296b433c90f8d914f73b9c026fddb905e27276e8",
+        strip_prefix = "abseil-cpp-20250127.0",
+        url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20250127.0.tar.gz",
     )
 
     maybe(
@@ -46,6 +46,7 @@ def rules_scala_dependencies():
         sha256 = "008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e",
         strip_prefix = "protobuf-29.3",
         url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v29.3.tar.gz",
+        repo_mapping = {"@com_google_absl": "@abseil-cpp"},
     )
 
     maybe(
