@@ -43,14 +43,19 @@ run_in_test_repo() {
   cp -r $test_target $NEW_TEST_DIR
 
   local scrooge_ws=""
+  local scrooge_mod=""
 
   if [[ -n "$TWITTER_SCROOGE_VERSION" ]]; then
     local version_param="version = \"$TWITTER_SCROOGE_VERSION\""
     scrooge_ws="$version_param"
+    scrooge_mod="scrooge_repos.settings($version_param)"
   fi
 
   sed -e "s%\${twitter_scrooge_repositories}%${scrooge_ws}\n%" \
       WORKSPACE.template >> $NEW_TEST_DIR/WORKSPACE
+  sed -e "s%\${twitter_scrooge_repositories}%${scrooge_mod}\n%" \
+      MODULE.bazel.template >> $NEW_TEST_DIR/MODULE.bazel
+  touch $NEW_TEST_DIR/WORKSPACE.bzlmod
   cp ../.bazel{rc,version} $NEW_TEST_DIR/
 
   cd $NEW_TEST_DIR
