@@ -57,15 +57,22 @@ run_in_test_repo() {
   cp -r $test_target $NEW_TEST_DIR
 
   local scrooge_ws=""
+  local scrooge_mod=""
 
   if [[ -n "$TWITTER_SCROOGE_VERSION" ]]; then
     local version_param="version = \"$TWITTER_SCROOGE_VERSION\""
     scrooge_ws="$version_param\\n"
+    scrooge_mod="scrooge_repos.settings($version_param)\\n"
   fi
 
   sed -e "s%\${twitter_scrooge_repositories}%${scrooge_ws}%" \
       WORKSPACE.template >> $NEW_TEST_DIR/WORKSPACE
+  sed -e "s%\${twitter_scrooge_repositories}%${scrooge_mod}%" \
+      MODULE.bazel.template >> $NEW_TEST_DIR/MODULE.bazel
+  touch $NEW_TEST_DIR/WORKSPACE.bzlmod
   cp ../.bazel{rc,version} scrooge_repositories.bzl $NEW_TEST_DIR/
+  cp ../protoc/0001-protobuf-19679-rm-protoc-dep.patch \
+      $NEW_TEST_DIR/protobuf.patch
 
   cd $NEW_TEST_DIR
 
@@ -79,6 +86,18 @@ run_in_test_repo() {
   rm -rf $NEW_TEST_DIR
 
   exit $RESPONSE_CODE
+}
+
+check_module_bazel_template() {
+  cp MODULE.bazel MODULE.orig \
+    && bazel mod --enable_bzlmod tidy \
+    && diff -u MODULE.orig MODULE.bazel
+}
+
+test_check_module_bazel_template() {
+  run_in_test_repo "check_module_bazel_template" \
+    "bzlmod_tidy" \
+    "version_specific_tests_dir/"
 }
 
 test_scala_version() {
@@ -131,6 +150,7 @@ dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 runner=$(get_test_runner "${1:-local}")
 export USE_BAZEL_VERSION=${USE_BAZEL_VERSION:-$(cat $dir/.bazelversion)}
 
+TEST_TIMEOUT=15 $runner test_check_module_bazel_template
 TEST_TIMEOUT=15 $runner test_scala_version "${scala_2_12_version}"
 TEST_TIMEOUT=15 $runner test_scala_version "${scala_2_13_version}"
 
