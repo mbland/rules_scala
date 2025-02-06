@@ -1,0 +1,17 @@
+"""Bazel module ./test/shell/test_scala_proto_library.sh tests"""
+
+module(name = "proto")
+
+bazel_dep(name = "rules_scala")
+local_path_override(
+    module_name = "rules_scala",
+    path = "../../..",
+)
+
+scala_deps = use_extension(
+    "@rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+scala_deps.toolchains(
+    scala_proto = True,
+)
