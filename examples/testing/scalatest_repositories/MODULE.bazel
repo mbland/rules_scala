@@ -1,0 +1,26 @@
+"""Bazel module ./test/shell/test_examples.sh tests"""
+
+module(name = "scalatest_repositories")
+
+bazel_dep(name = "rules_scala")
+local_path_override(
+    module_name = "rules_scala",
+    path = "../../..",
+)
+
+bazel_dep(name = "rules_cc", version = "0.0.9")
+single_version_override(
+    module_name = "rules_cc",
+    version = "0.0.9",
+)
+
+scala_deps = use_extension(
+    "@rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+scala_deps.settings(
+    fetch_sources = True,
+)
+scala_deps.toolchains(
+    scalatest = True,
+)
