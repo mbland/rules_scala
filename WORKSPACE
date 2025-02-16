@@ -44,11 +44,11 @@ load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 
-load("@rules_scala//:scala_config.bzl", "scala_config")
+load("//:scala_config.bzl", "scala_config")
 
 scala_config(enable_compiler_dependency_tracking = True)
 
-load("//scala:toolchains.bzl", "scala_toolchains")
+load("//scala:toolchains.bzl", "scala_register_toolchains", "scala_toolchains")
 
 scala_toolchains(
     fetch_sources = True,
@@ -62,8 +62,9 @@ scala_toolchains(
 register_toolchains(
     "//scala:unused_dependency_checker_error_toolchain",
     "//test/proto:scalapb_toolchain",
-    "@rules_scala_toolchains//...:all",
 )
+
+scala_register_toolchains()
 
 # needed for the cross repo proto test
 local_repository(
@@ -83,10 +84,10 @@ local_repository(
 
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "90fe8fb402dee957a375f3eb8511455bd738c7ed562695f4dd117ac7d2d833b1",
+    sha256 = "b78f77458e77162f45b4564d6b20b6f92f56431ed59eaaab09e7819d1d850313",
     urls = [
-        "https://mirror.bazel.build/github.com/bazel-contrib/rules_go/releases/download/v0.52.0/rules_go-v0.52.0.zip",
-        "https://github.com/bazel-contrib/rules_go/releases/download/v0.52.0/rules_go-v0.52.0.zip",
+        "https://mirror.bazel.build/github.com/bazel-contrib/rules_go/releases/download/v0.53.0/rules_go-v0.53.0.zip",
+        "https://github.com/bazel-contrib/rules_go/releases/download/v0.53.0/rules_go-v0.53.0.zip",
     ],
 )
 
@@ -98,7 +99,7 @@ load(
 
 go_rules_dependencies()
 
-go_register_toolchains(version = "1.23.6")
+go_register_toolchains(version = "1.24.0")
 
 http_archive(
     name = "bazelci_rules",

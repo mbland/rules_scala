@@ -1,6 +1,10 @@
 """Exports repos used by @rules_scala rules"""
 
-load("//scala/private:macros/bzlmod.bzl", "get_root_module", "get_tag_values")
+load(
+    "//scala/private:macros/bzlmod.bzl",
+    "root_module_tags",
+    "single_tag_values",
+)
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//scala:toolchains.bzl", "scala_toolchains")
 
@@ -31,10 +35,6 @@ _settings_attrs = {
     ),
 }
 
-_settings = tag_class(
-    attrs = _settings_attrs,
-)
-
 _scalafmt_defaults = {
     "default_config_path": ".scalafmt.conf",
 }
@@ -45,29 +45,19 @@ _scalafmt_attrs = {
     ),
 }
 
-_scalafmt = tag_class(
-    attrs = _scalafmt_attrs,
-)
-
-def _get_settings(root_module):
-    """Compiles the `settings` and `scalafmt` tag values from the root module.
+def _scalafmt(mctx, root_tags):
+    """Compiles the `scalafmt` tag values from the root module.
 
     Args:
-        root_module: the root module from the main repository
+        mctx: the module extension context
+        root_tags: tags from the root module
 
     Returns:
-        A tuple of values compiled from the root module's `settings` and
-            `scalafmt` tags, or the default values for each
+        A tuple of values compiled from the root module's `scalafmt` tags, or
+        the default values for each
     """
-    settings = _settings_defaults
-    scalafmt = _scalafmt_defaults
-
-    if root_module != None:
-        tags = root_module.tags
-        settings = get_tag_values(tags.settings, settings)
-        scalafmt = get_tag_values(tags.scalafmt, scalafmt)
-
-    return settings | {"scalafmt_%s" % k: v for k, v in scalafmt.items()}
+    scalafmt = single_tag_values(mctx, root_tags.scalafmt, _scalafmt_defaults)
+    return {"scalafmt_%s" % k: v for k, v in scalafmt.items()}
 
 _compiler_srcjar_attrs = {
     "version": attr.string(mandatory = True),
@@ -78,20 +68,15 @@ _compiler_srcjar_attrs = {
     "integrity": attr.string(),
 }
 
-_compiler_srcjar = tag_class(
-    attrs = _compiler_srcjar_attrs,
-)
-
-def _get_scala_compiler_srcjars(root_module):
-    if root_module == None:
-        return {}
-
+def _compiler_srcjars(root_tags):
     result = {}
 
-    for srcjar in root_module.tags.compiler_srcjar:
+    for srcjar in root_tags.compiler_srcjar:
         values = {k: getattr(srcjar, k) for k in _compiler_srcjar_attrs}
 
-        # Later instances for the same version overwrite earlier ones.
+        if srcjar.version in result:
+            fail("multiple compiler srcjar entries for", srcjar.version)
+
         result[srcjar.version] = {k: v for k, v in values.items() if v}
 
     return result
@@ -113,65 +98,56 @@ _toolchains_attrs = {
     for k, v in _toolchains_defaults.items()
 }
 
-_toolchains = tag_class(
-    attrs = _toolchains_attrs,
-)
-
-def _get_toolchains(module_ctx):
+def _toolchains(mctx):
     result = dict(_toolchains_defaults)
 
-    for mod in module_ctx.modules:
-        values = get_tag_values(mod.tags.toolchains, _toolchains_defaults)
+    for mod in mctx.modules:
+        toolchains_tags = mod.tags.toolchains
+        values = single_tag_values(mctx, toolchains_tags, _toolchains_defaults)
 
         # Don't overwrite `True` values from one tag with `False` from another.
         result.update({k: True for k in values if values[k]})
 
-    if result["testing"]:
-        result["scalatest"] = True
-        result["specs2"] = True
-    if result["specs2"]:
-        result["junit"] = True
     return result
 
-_twitter_scrooge_attrs = {
-    "libthrift": attr.string(),
-    "scrooge_core": attr.string(),
-    "scrooge_generator": attr.string(),
-    "util_core": attr.string(),
-    "util_logging": attr.string(),
+_twitter_scrooge_defaults = {
+    "libthrift": None,
+    "scrooge_core": None,
+    "scrooge_generator": None,
+    "util_core": None,
+    "util_logging": None,
 }
 
-_twitter_scrooge = tag_class(
-    attrs = _twitter_scrooge_attrs,
-)
+_twitter_scrooge_attrs = {k: attr.label() for k in _twitter_scrooge_defaults}
 
-def _get_twitter_scrooge(root_module):
-    if root_module == None or len(root_module.tags.twitter_scrooge) == 0:
-        return {}
+def _twitter_scrooge(mctx, root_tags):
+    tags = root_tags.twitter_scrooge
+    values = single_tag_values(mctx, tags, _twitter_scrooge_defaults)
+    return {k: v for k, v in values.items() if v != None}
 
-    tag = root_module.tags.twitter_scrooge[-1]
-    tag_values = {k: getattr(tag, k) for k in _twitter_scrooge_attrs}
-    return {k: v for k, v in tag_values.items() if len(v) != 0}
+_tag_classes = {
+    "settings": tag_class(attrs = _settings_attrs),
+    "scalafmt": tag_class(attrs = _scalafmt_attrs),
+    "compiler_srcjar": tag_class(attrs = _compiler_srcjar_attrs),
+    "toolchains": tag_class(attrs = _toolchains_attrs),
+    "twitter_scrooge": tag_class(attrs = _twitter_scrooge_attrs),
+}
 
 def _scala_deps_impl(module_ctx):
-    root_module = get_root_module(module_ctx)
+    tags = root_module_tags(module_ctx, _tag_classes.keys())
+
     scala_toolchains(
         load_rules_scala_dependencies = False,  # MODULE.bazel loads these now.
-        scala_compiler_srcjars = _get_scala_compiler_srcjars(root_module),
+        scala_compiler_srcjars = _compiler_srcjars(tags),
+        twitter_scrooge_deps = _twitter_scrooge(module_ctx, tags),
         **(
-            _get_settings(root_module) |
-            _get_toolchains(module_ctx) |
-            _get_twitter_scrooge(root_module)
+            single_tag_values(module_ctx, tags.settings, _settings_defaults) |
+            _scalafmt(module_ctx, tags) |
+            _toolchains(module_ctx)
         )
     )
 
 scala_deps = module_extension(
     implementation = _scala_deps_impl,
-    tag_classes = {
-        "settings": _settings,
-        "scalafmt": _scalafmt,
-        "compiler_srcjar": _compiler_srcjar,
-        "toolchains": _toolchains,
-        "twitter_scrooge": _twitter_scrooge,
-    },
+    tag_classes = _tag_classes,
 )

@@ -322,8 +322,8 @@ common_aspect_providers = [
 ]
 
 common_toolchains = [
-    "//scala:toolchain_type",
-    "//twitter_scrooge/toolchain:scrooge_toolchain_type",
+    Label("//scala:toolchain_type"),
+    Label("//twitter_scrooge/toolchain:scrooge_toolchain_type"),
     "@bazel_tools//tools/jdk:toolchain_type",
 ]
 
@@ -434,7 +434,7 @@ scrooge_scala_import = rule(
     },
     provides = [ThriftInfo, JavaInfo, ScroogeImport],
     toolchains = [
-        "//twitter_scrooge/toolchain:scrooge_toolchain_type",
+        Label("//twitter_scrooge/toolchain:scrooge_toolchain_type"),
         "@bazel_tools//tools/jdk:toolchain_type",
     ],
     incompatible_use_toolchain_transition = True,

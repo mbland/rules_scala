@@ -164,24 +164,4 @@ scala_deps.compiler_srcjar(
     version = "3.6.3",
 )
 
-_SCALA_COMPILER_URL_FORMAT = (
-    "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/" +
-    "{version}/scala-compiler-{version}-sources.jar?foo"
-)
-
-[
-    scala_deps.compiler_srcjar(
-        url = _SCALA_COMPILER_URL_FORMAT.format(version = scala_version),
-        version = scala_version,
-    )
-    for scala_version in [
-        "2.12.17",
-        "2.12.18",
-        "2.12.19",
-        "2.13.11",
-        "2.13.12",
-        "2.13.14",
-    ]
-]
-
 register_toolchains("//:dt_scala_toolchain")

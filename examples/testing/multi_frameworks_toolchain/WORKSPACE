@@ -54,14 +54,17 @@ load("@rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config()
 
-load("@rules_scala//scala:toolchains.bzl", "scala_toolchains")
+load(
+    "@rules_scala//scala:toolchains.bzl",
+    "scala_register_toolchains",
+    "scala_toolchains",
+)
 
 scala_toolchains(
     fetch_sources = True,
     testing = True,
 )
 
-register_toolchains(
-    ":testing_toolchain",
-    "@rules_scala_toolchains//...:all",
-)
+register_toolchains(":testing_toolchain")
+
+scala_register_toolchains()

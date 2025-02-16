@@ -54,8 +54,12 @@ load("@rules_scala//:scala_config.bzl", "scala_config")
 
 scala_config(scala_version = "3.6.3")
 
-load("@rules_scala//scala:toolchains.bzl", "scala_toolchains")
+load(
+    "@rules_scala//scala:toolchains.bzl",
+    "scala_register_toolchains",
+    "scala_toolchains",
+)
 
 scala_toolchains(fetch_sources = True)
 
-register_toolchains("@rules_scala_toolchains//...:all")
+scala_register_toolchains()

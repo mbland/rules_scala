@@ -1,5 +1,5 @@
 load(
-    ":scalafmt_rules.bzl",
+    "scalafmt_rules.bzl",
     "scalafmt_scala_binary",
     "scalafmt_scala_library",
     "scalafmt_scala_test",

@@ -11,7 +11,7 @@ toolchain(
     name = "diagnostics_reporter_toolchain",
     toolchain = "diagnostics_reporter_toolchain_impl",
     toolchain_type = "@rules_scala//scala:toolchain_type",
-    visibility = ["//vipublic"],
+    visibility = ["//visibility:public"],
 )
 
 scala_toolchain(
@@ -25,7 +25,7 @@ toolchain(
     name = "diagnostics_reporter_and_semanticdb_toolchain",
     toolchain = "diagnostics_reporter_and_semanticdb_toolchain_impl",
     toolchain_type = "@rules_scala//scala:toolchain_type",
-    visibility = ["//vipublic"],
+    visibility = ["//visibility:public"],
 )
 
 scala_toolchain(
@@ -37,7 +37,7 @@ toolchain(
     name = "no_diagnostics_reporter_toolchain",
     toolchain = "no_diagnostics_reporter_toolchain_impl",
     toolchain_type = "@rules_scala//scala:toolchain_type",
-    visibility = ["//vipublic"],
+    visibility = ["//visibility:public"],
 )
 
 scala_library(
