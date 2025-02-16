@@ -53,7 +53,7 @@ jmh_toolchain = rule(
     },
 )
 
-_toolchain_type = "//jmh/toolchain:jmh_toolchain_type"
+_toolchain_type = Label("//jmh/toolchain:jmh_toolchain_type")
 
 def _export_toolchain_deps_impl(ctx):
     return expose_toolchain_deps(ctx, _toolchain_type)
@@ -79,7 +79,7 @@ def setup_jmh_toolchain(name):
     native.toolchain(
         name = name,
         toolchain = ":%s_impl" % name,
-        toolchain_type = Label(_toolchain_type),
+        toolchain_type = _toolchain_type,
         visibility = ["//visibility:public"],
     )
 

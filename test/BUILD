@@ -703,7 +703,6 @@ check_statsfile("ScalaBinary")
 check_statsfile("ScalaLibBinary")
 
 #discovering tests from a separate target
-
 scala_library(
     name = "JunitSeparateTarget",
     srcs = ["src/main/scala/scalarules/test/junit/separate_target/JunitSeparateTargetTest.scala"],

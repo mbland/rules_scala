@@ -61,14 +61,17 @@ load("@compiler_sources//:extensions.bzl", "import_compiler_source_repos")
 
 import_compiler_source_repos()
 
-load("@rules_scala//scala:toolchains.bzl", "scala_toolchains")
+load(
+    "@rules_scala//scala:toolchains.bzl",
+    "scala_register_toolchains",
+    "scala_toolchains",
+)
 
 scala_toolchains(
     fetch_sources = True,
     validate_scala_version = False,
 )
 
-register_toolchains(
-    ":dt_scala_toolchain",
-    "@rules_scala_toolchains//...:all",
-)
+register_toolchains(":dt_scala_toolchain")
+
+scala_register_toolchains()
