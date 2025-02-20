@@ -100,4 +100,5 @@ def _dev_deps_impl(module_ctx):
 dev_deps = module_extension(
     implementation = _dev_deps_impl,
     tag_classes = _tag_classes,
+    doc = "Configures repositories used only for internal testing",
 )
