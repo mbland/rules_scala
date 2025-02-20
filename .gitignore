@@ -19,3 +19,6 @@ repository-artifacts.json
 
 # Until it settles down
 **/MODULE.bazel.lock
+
+# Used by some tests, but can also be used for local experimentation.
+tmp/

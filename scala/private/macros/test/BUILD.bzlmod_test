@@ -1,0 +1,14 @@
+"""Used by test/shell/test_bzlmod_helpers.sh to test bzlmod.bzl"""
+
+load("@test_tag_values//:results.bzl", "FIRST", "SECOND", "THIRD")
+
+sh_binary(
+    name = "print-test-tag-values",
+    srcs = [":test-tag-values"],
+)
+
+genrule(
+    name = "test-tag-values",
+    outs = ["test-tag-values.sh"],
+    cmd = "echo 'echo %s %s %s' >$@" % (FIRST, SECOND, THIRD),
+)
