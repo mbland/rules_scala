@@ -24,6 +24,10 @@ teardown_suite() {
 }
 trap 'teardown_suite' EXIT
 
+if [[ "$(bazel --version)" =~ ^bazel\ 6\. ]]; then
+  exit
+fi
+
 test_srcs_dir="${dir}/scala/private/macros/test"
 cp "${dir}"/.bazel{rc,version} "${test_srcs_dir}/bzlmod_test_ext.bzl" .
 cp "${test_srcs_dir}/BUILD.bzlmod_test" 'BUILD'
