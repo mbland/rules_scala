@@ -23,132 +23,69 @@ default_java_toolchain(
 )
 
 scala_toolchain(
-    name = "ast_plus_one_deps_unused_deps_warn_impl",
+    name = "ast_plus_one_deps_unused_deps_warn",
     dependency_mode = "plus-one",
     dependency_tracking_method = "ast",
     unused_dependency_checker_mode = "warn",
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "ast_plus_one_deps_unused_deps_warn",
-    toolchain = "ast_plus_one_deps_unused_deps_warn_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "ast_plus_one_deps_unused_deps_error_impl",
+    name = "ast_plus_one_deps_unused_deps_error",
     dependency_mode = "plus-one",
     dependency_tracking_method = "ast",
     unused_dependency_checker_mode = "error",
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "ast_plus_one_deps_unused_deps_error",
-    toolchain = "ast_plus_one_deps_unused_deps_error_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "ast_plus_one_deps_strict_deps_warn_impl",
-    dependency_mode = "plus-one",
-    dependency_tracking_method = "ast",
-    strict_deps_mode = "warn",
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
     name = "ast_plus_one_deps_strict_deps_warn",
-    toolchain = "ast_plus_one_deps_strict_deps_warn_impl",
-    toolchain_type = "//scala:toolchain_type",
+    dependency_mode = "plus-one",
+    dependency_tracking_method = "ast",
+    strict_deps_mode = "warn",
     visibility = ["//visibility:public"],
 )
 
 scala_toolchain(
-    name = "ast_plus_one_deps_strict_deps_error_impl",
+    name = "ast_plus_one_deps_strict_deps_error",
     dependency_mode = "plus-one",
     dependency_tracking_method = "ast",
     strict_deps_mode = "error",
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "ast_plus_one_deps_strict_deps_error",
-    toolchain = "ast_plus_one_deps_strict_deps_error_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "high_level_transitive_deps_strict_deps_warn_impl",
+    name = "high_level_transitive_deps_strict_deps_warn",
     dependency_mode = "transitive",
     dependency_tracking_method = "high-level",
     strict_deps_mode = "warn",
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "high_level_transitive_deps_strict_deps_warn",
-    toolchain = "high_level_transitive_deps_strict_deps_warn_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "high_level_transitive_deps_strict_deps_error_impl",
+    name = "high_level_transitive_deps_strict_deps_error",
     dependency_mode = "transitive",
     dependency_tracking_method = "high-level",
     strict_deps_mode = "error",
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "high_level_transitive_deps_strict_deps_error",
-    toolchain = "high_level_transitive_deps_strict_deps_error_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "high_level_direct_deps_impl",
+    name = "high_level_direct_deps",
     dependency_mode = "direct",
     dependency_tracking_method = "high-level",
     strict_deps_mode = "off",
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "high_level_direct_deps",
-    toolchain = "high_level_direct_deps_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "enable_stats_file_disabled_toolchain_impl",
+    name = "enable_stats_file_disabled_toolchain",
     enable_stats_file = False,
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "enable_stats_file_disabled_toolchain",
-    toolchain = "enable_stats_file_disabled_toolchain_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "use_argument_file_in_runner_impl",
-    use_argument_file_in_runner = True,
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
     name = "use_argument_file_in_runner",
-    toolchain = "use_argument_file_in_runner_impl",
-    toolchain_type = "//scala:toolchain_type",
+    use_argument_file_in_runner = True,
     visibility = ["//visibility:public"],
 )

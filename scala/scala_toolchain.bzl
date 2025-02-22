@@ -1,10 +1,11 @@
 load("//scala:providers.bzl", _DepsInfo = "DepsInfo")
+load("//scala:scala_cross_version.bzl", "version_suffix")
+load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 load(
     "@io_bazel_rules_scala_config//:config.bzl",
     "ENABLE_COMPILER_DEPENDENCY_TRACKING",
-    "SCALA_MAJOR_VERSION",
+    "SCALA_VERSION",
 )
-load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
 def _compute_strict_deps_mode(input_strict_deps_mode, dependency_mode):
     if dependency_mode == "direct":
@@ -111,7 +112,7 @@ def _default_dep_providers():
         "scala_library_classpath",
         "scala_macro_classpath",
     ]
-    if SCALA_MAJOR_VERSION.startswith("2."):
+    if SCALA_VERSION.startswith("2."):
         dep_providers.append("semanticdb")
     return [
         "@rules_scala_toolchains//scala:%s_provider" % p
@@ -198,12 +199,32 @@ def _expand_patterns(patterns):
 
     return result
 
-def scala_toolchain(**kwargs):
-    """Creates a Scala toolchain target."""
+def scala_toolchain(name, visibility = ["//visibility:public"], **kwargs):
+    """Creates Scala toolchain implementation and `toolchain` targets.
+
+    Use this instead of `setup_scala_toolchain()` when setting custom compiler
+    attributes, but still using the builtin toolchain dependency artifacts.
+
+    See `docs/scala_toolchain.md` for example usage and documentation on the
+    available attributes.
+    """
+    impl_name = "%s_impl" % name
     strict = kwargs.pop("dependency_tracking_strict_deps_patterns", [""])
     unused = kwargs.pop("dependency_tracking_unused_deps_patterns", [""])
     _scala_toolchain(
+        name = impl_name,
         dependency_tracking_strict_deps_patterns = _expand_patterns(strict),
         dependency_tracking_unused_deps_patterns = _expand_patterns(unused),
         **kwargs
+    )
+
+    native.toolchain(
+        name = name,
+        toolchain = ":" + impl_name,
+        toolchain_type = Label("//scala:toolchain_type"),
+        target_settings = [
+            "@io_bazel_rules_scala_config//:scala_version" +
+            version_suffix(SCALA_VERSION),
+        ],
+        visibility = visibility,
     )

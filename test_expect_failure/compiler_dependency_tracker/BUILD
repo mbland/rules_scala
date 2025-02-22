@@ -2,7 +2,7 @@ load("//scala:scala.bzl", "scala_library")
 load("//scala:scala_toolchain.bzl", "scala_toolchain")
 
 scala_toolchain(
-    name = "ast_plus_error_impl",
+    name = "ast_plus_error",
     compiler_deps_mode = "error",
     dependency_mode = "plus-one",
     dependency_tracking_method = "ast-plus",
@@ -11,27 +11,13 @@ scala_toolchain(
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "ast_plus_error",
-    toolchain = ":ast_plus_error_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "ast_plus_warn_impl",
+    name = "ast_plus_warn",
     compiler_deps_mode = "warn",
     dependency_mode = "plus-one",
     dependency_tracking_method = "ast-plus",
     strict_deps_mode = "warn",
     unused_dependency_checker_mode = "warn",
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
-    name = "ast_plus_warn",
-    toolchain = ":ast_plus_warn_impl",
-    toolchain_type = "//scala:toolchain_type",
     visibility = ["//visibility:public"],
 )
 

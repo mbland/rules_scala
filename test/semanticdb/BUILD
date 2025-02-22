@@ -3,30 +3,16 @@ load("//scala:scala.bzl", "scala_library")
 load("//test/semanticdb:rules.bzl", "semanticdb_vars_script")
 
 scala_toolchain(
-    name = "semanticdb_bundle_toolchain_impl",
+    name = "semanticdb_bundle_toolchain",
     enable_semanticdb = True,
     semanticdb_bundle_in_jar = True,
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "semanticdb_bundle_toolchain",
-    toolchain = "semanticdb_bundle_toolchain_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "semanticdb_nobundle_toolchain_impl",
+    name = "semanticdb_nobundle_toolchain",
     enable_semanticdb = True,
     semanticdb_bundle_in_jar = False,
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
-    name = "semanticdb_nobundle_toolchain",
-    toolchain = "semanticdb_nobundle_toolchain_impl",
-    toolchain_type = "//scala:toolchain_type",
     visibility = ["//visibility:public"],
 )
 

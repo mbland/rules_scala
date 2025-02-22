@@ -4,30 +4,16 @@ load("//scala:scala.bzl", "scala_library")
 load("//scala_proto:scala_proto.bzl", "scala_proto_library")
 
 scala_toolchain(
-    name = "failing_toolchain_impl",
+    name = "failing_scala_toolchain",
     # This will fail because 1M isn't enough
     scalac_jvm_flags = ["-Xmx1M"],
     visibility = ["//visibility:public"],
 )
 
-toolchain(
-    name = "failing_scala_toolchain",
-    toolchain = "failing_toolchain_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "passing_toolchain_impl",
+    name = "passing_scala_toolchain",
     # This will pass because 1G is enough
     scalac_jvm_flags = ["-Xmx1G"],
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
-    name = "passing_scala_toolchain",
-    toolchain = "passing_toolchain_impl",
-    toolchain_type = "//scala:toolchain_type",
     visibility = ["//visibility:public"],
 )
 

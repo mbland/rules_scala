@@ -3,29 +3,15 @@ load("//scala:scala_toolchain.bzl", "scala_toolchain")
 load("//scala:scala_cross_version_select.bzl", "select_for_scala_version")
 
 scala_toolchain(
-    name = "diagnostics_reporter_toolchain_impl",
-    enable_diagnostics_report = True,
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
     name = "diagnostics_reporter_toolchain",
-    toolchain = "diagnostics_reporter_toolchain_impl",
-    toolchain_type = "//scala:toolchain_type",
+    enable_diagnostics_report = True,
     visibility = ["//visibility:public"],
 )
 
 scala_toolchain(
-    name = "diagnostics_reporter_and_semanticdb_toolchain_impl",
+    name = "diagnostics_reporter_and_semanticdb_toolchain",
     enable_diagnostics_report = True,
     enable_semanticdb = True,
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
-    name = "diagnostics_reporter_and_semanticdb_toolchain",
-    toolchain = "diagnostics_reporter_and_semanticdb_toolchain_impl",
-    toolchain_type = "//scala:toolchain_type",
     visibility = ["//visibility:public"],
 )
 

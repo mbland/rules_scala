@@ -1,15 +1,8 @@
 load("//scala:scala.bzl", "scala_library")
 load("//scala:scala_toolchain.bzl", "scala_toolchain")
 
-toolchain(
-    name = "plus_one_unused_deps_filter",
-    toolchain = ":plus_one_unused_deps_filter_a_impl",
-    toolchain_type = "//scala:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 scala_toolchain(
-    name = "plus_one_unused_deps_filter_a_impl",
+    name = "plus_one_unused_deps_filter",
     dependency_mode = "plus-one",
     dependency_tracking_method = "ast",
     dependency_tracking_unused_deps_patterns = [

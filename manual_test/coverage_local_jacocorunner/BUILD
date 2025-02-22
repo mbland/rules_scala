@@ -1,15 +1,8 @@
 load("//scala:scala_toolchain.bzl", "scala_toolchain")
 
 scala_toolchain(
-    name = "local_jacocorunner_toolchain_impl",
+    name = "local_jacocorunner_toolchain",
     jacocorunner = ":local_jacocorunner",
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
-    name = "local_jacocorunner_scala_toolchain",
-    toolchain = "local_jacocorunner_toolchain_impl",
-    toolchain_type = "//scala:toolchain_type",
     visibility = ["//visibility:public"],
 )
 

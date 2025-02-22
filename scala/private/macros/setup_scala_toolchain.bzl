@@ -1,6 +1,6 @@
 load("//scala:scala_toolchain.bzl", "scala_toolchain")
 load("//scala:providers.bzl", "declare_deps_provider")
-load("//scala:scala_cross_version.bzl", "repositories", "version_suffix")
+load("//scala:scala_cross_version.bzl", "repositories")
 load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSION")
 
 def setup_scala_toolchain(
@@ -15,6 +15,15 @@ def setup_scala_toolchain(
         enable_semanticdb = False,
         visibility = ["//visibility:public"],
         **kwargs):
+    """Creates custom Scala toolchain implementation and `toolchain` targets.
+
+    Use this instead of `scala_toolchain` when specifying toolchain dependency
+    artifacts instead of relying on the builtin artifacts. Any unspecified
+    custom dependency providers will default to the builtin providers.
+
+    See `docs/scala_toolchain.md` for example usage and documentation on the
+    available attributes.
+    """
     scala_xml_provider = "%s_scala_xml_provider" % name
     parser_combinators_provider = "%s_parser_combinators_provider" % name
     scala_compile_classpath_provider = "%s_scala_compile_classpath_provider" % name
@@ -87,19 +96,11 @@ def setup_scala_toolchain(
         dep_providers.append(semanticdb_deps_provider)
 
     scala_toolchain(
-        name = "%s_impl" % name,
+        name = name,
         dep_providers = dep_providers,
         enable_semanticdb = enable_semanticdb,
         visibility = visibility,
         **kwargs
-    )
-
-    native.toolchain(
-        name = name,
-        toolchain = ":%s_impl" % name,
-        toolchain_type = Label("//scala:toolchain_type"),
-        target_settings = ["@io_bazel_rules_scala_config//:scala_version" + version_suffix(scala_version)],
-        visibility = visibility,
     )
 
 _DEFAULT_DEPS = {
