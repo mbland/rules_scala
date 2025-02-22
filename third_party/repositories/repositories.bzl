@@ -141,12 +141,8 @@ def repositories(
 def _alias_repository_impl(rctx):
     """ Builds a repository containing just two aliases to the Scala Maven artifacts in the `target` repository. """
     format_kwargs = {
-        # Replace with rctx.original_name once all supported Bazels have it.
-        # Remove `or rctx.name` after Bazel fixes bazelbuild/bazel#25286.
-        "name": (
-            getattr(rctx, "original_name", rctx.attr.default_target_name) or
-            rctx.name
-        ),
+        # Replace with rctx.original_name once all supported Bazels have it
+        "name": getattr(rctx, "original_name", rctx.attr.default_target_name),
         "target": rctx.attr.target,
     }
     rctx.file("BUILD", """alias(
