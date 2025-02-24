@@ -1,4 +1,4 @@
-"""Used by test/shell/test_bzlmod_helpers.sh to test bzlmod.bzl"""
+"""Used by test/shell/test_bzlmod_helpers.sh to test bzlmod.bzl."""
 
 module(name = "test_module", version = "0.0.0")
 
