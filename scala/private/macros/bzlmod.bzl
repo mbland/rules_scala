@@ -1,7 +1,7 @@
 """Utilities for working with Bazel modules
 
-The `root_module_tags` and `single_tag_values` utilities facilitate the pattern
-of defining defaults, attrs, and tag class dictionaries, as employed by:
+These utilities facilitate the pattern of defining defaults, attrs, and tag
+class dictionaries, as employed by:
 
 - //scala/extensions:config.bzl
 - //scala/extensions:deps.bzl
@@ -12,14 +12,17 @@ This pattern overcomes the restriction that tag class attrs are not iterable,
 which would otherwise yield lots of initialization logic with duplicated default
 values.
 
-These functions facilitate writing module extensions that need to implement two
-common cases:
+These functions facilitate writing module extensions that need to implement
+three common cases:
 
 - `root_module_tags`: for abiding the root module configuration only, returning
   an empty struct if the root module doesn't specify any tags
 
 - `single_tag_values`: for enforcing that a tag appears at most once per module
   as a regular and/or dev dependency, returning default values if unspecified
+
+- `repeated_tag_values`: for collecting unique tag instance values into a dict
+  of dicts, keyed by a particular tag `attr`
 
 For example:
 
@@ -48,27 +51,39 @@ _mixed_tag_attrs = {
     "sixth": attr.string_dict(default = _mixed_tag_defaults["sixth"]),
 }
 
+_repeated_tag_attrs = {
+    "key": attr.string(mandatory = True),
+    "required_value": attr.string(mandatory = True),
+    "optional_value": attr.string(),
+}
+
 _tag_classes = {
     "string_tag": tag_class(attrs = _string_tag_attrs),
     "mixed_tag": tag_class(attrs = _mixed_tag_attrs),
+    "repeated_tag": tag_class(attrs = _repeated_tag_attrs),
 }
 
 def _example_ext_impl(module_ctx):
     root_tags = root_module_tags(module_ctx, _tag_classes.keys())
-    string_values = single_tag_values(
+    string_values_dict = single_tag_values(
         module_ctx,
         root_tags.string_tag,
         _string_tag_defaults,
     )
-    mixed_values = single_tag_values(
+    mixed_values_dict = single_tag_values(
         module_ctx,
         root_tags.mixed_tag,
         _mixed_tag_defaults,
     )
+    repeated_values_dict = repeated_tag_values(
+        root_tags.repeated_tag,
+        _repeated_tag_attrs,
+    )
 
     some_macro_or_repo_rule_that_uses_these_tag_values(
         name = "example_repo",
-        **(string_values | mixed_values),
+        repeated = repeated_values_dict,
+        **(string_values_dict | mixed_values_dict),
     )
 
 example_ext = module_extension(
@@ -94,7 +109,7 @@ def root_module_tags(module_ctx, tag_class_names):
     Returns:
         The bazel_module_tags from the root bazel_module object if
             `module_ctx.modules` contains the root module,
-            or a struct mapping the specified tag class fields to the empty list
+        or a struct mapping the specified tag class fields to the empty list
             otherwise
     """
     for module in module_ctx.modules:
@@ -118,7 +133,7 @@ def single_tag_values(module_ctx, tags, tag_defaults):
 
     Args:
         module_ctx: the module extension context
-        tags: a list of tag class values from a bazel_module_tags object
+        tags: a list of tag class values from a `bazel_module_tags` object
         tag_defaults: a dictionary of tag attr names to default values
 
     Returns:
@@ -155,5 +170,42 @@ def single_tag_values(module_ctx, tags, tag_defaults):
             for k, v in dev_dep_values.items()
             if v != tag_defaults[k]
         })
+
+    return result
+
+def repeated_tag_values(tags, attr_dict):
+    """Compiles repeated tag instances into a dict of dicts.
+
+    The first key from `attr_dict` identifies the tag field used as the dict
+    key. Fails if more than one tag instance has the same key value, regardless
+    of `dev_dependency` status.
+
+    Args:
+        tags: a list of tag class values from a `bazel_module_tags` object
+        attr_dict: a dict from `attr` name to `attr` instance
+
+    Returns:
+        a dict of dicts representing unique `tag_name` instance values, using
+            the first key from `attr_dict` as the key value
+
+    Raises:
+        if more than one tag instance contains the same key value (i.e., the
+            same value for the first `attr` in `attr_dict`)
+    """
+    attr_names = attr_dict.keys()
+    key_name = attr_names[0]
+    instances = {}
+    result = {}
+
+    for instance in tags:
+        values = {field: getattr(instance, field) for field in attr_names}
+        key = values.pop(key_name)
+
+        if key in instances:
+            msg = "multiple tags with same %s:" % key_name
+            fail(msg, instances[key], instance)
+
+        instances[key] = instance
+        result[key] = {k: v for k, v in values.items()}
 
     return result

@@ -4,16 +4,21 @@ Provides the `scala_deps` module extension with the following tag classes:
 
 - `settings`
 - `scalafmt`
+- `overridden_artifact`
 - `compiler_srcjar`
 - `toolchains`
 - `twitter_scrooge`
 
 For documentation, see the `_tag_classes` dict, and the `_<TAG>_attrs` dict
 corresponding to each `<TAG>` listed above.
+
+See the `scala/private/macros/bzlmod.bzl` docstring for a description of
+the defaults, attrs, and tag class dictionaries pattern employed here.
 """
 
 load(
     "//scala/private:macros/bzlmod.bzl",
+    "repeated_tag_values",
     "root_module_tags",
     "single_tag_values",
 )
@@ -22,7 +27,6 @@ load("//scala:toolchains.bzl", "scala_toolchains")
 
 _settings_defaults = {
     "maven_servers": default_maven_server_urls(),
-    "overridden_artifacts": {},
     "fetch_sources": True,
     "validate_scala_version": True,
 }
@@ -31,24 +35,6 @@ _settings_attrs = {
     "maven_servers": attr.string_list(
         default = _settings_defaults["maven_servers"],
         doc = "Maven servers used to fetch dependency jar files",
-    ),
-    # Correct spelling of "overridden"
-    "overridden_artifacts": attr.string_dict(
-        default = _settings_defaults["overridden_artifacts"],
-        doc = """
-Specific dependency jar files to use instead of those from `maven_servers`, in
-the format:
-
-```starlark
-"repo_name": {
-    "artifact": "<maven coordinates>",
-    "sha256": "<checksum>",
-    "deps": [
-        "repository_names_of_dependencies",
-    ],
-}
-```
-""",
     ),
     "fetch_sources": attr.bool(
         default = _settings_defaults["fetch_sources"],
@@ -77,19 +63,29 @@ _scalafmt_attrs = {
     ),
 }
 
-def _scalafmt(mctx, root_tags):
-    """Compiles the `scalafmt` tag values from the root module.
-
-    Args:
-        mctx: the module extension context
-        root_tags: tags from the root module
-
-    Returns:
-        A tuple of values compiled from the root module's `scalafmt` tags, or
-        the default values for each
-    """
-    scalafmt = single_tag_values(mctx, root_tags.scalafmt, _scalafmt_defaults)
-    return {"scalafmt_%s" % k: v for k, v in scalafmt.items()}
+_overridden_artifact_attrs = {
+    "name": attr.string(
+        doc = (
+            "Repository name of artifact to override from " +
+            "`third_party/repositories/scala_*.bzl`"
+        ),
+        mandatory = True,
+    ),
+    "artifact": attr.string(
+        doc = "Maven coordinates of the overriding artifact",
+        mandatory = True,
+    ),
+    "sha256": attr.string(
+        doc = "SHA256 checksum of the `artifact`",
+        mandatory = True,
+    ),
+    "deps": attr.string_list(
+        doc = (
+            "Repository names of artifact dependencies (with leading `@`), " +
+            "if required"
+        ),
+    ),
+}
 
 _compiler_srcjar_attrs = {
     "version": attr.string(mandatory = True),
@@ -99,19 +95,6 @@ _compiler_srcjar_attrs = {
     "sha256": attr.string(),
     "integrity": attr.string(),
 }
-
-def _compiler_srcjars(root_tags):
-    result = {}
-
-    for srcjar in root_tags.compiler_srcjar:
-        values = {k: getattr(srcjar, k) for k in _compiler_srcjar_attrs}
-
-        if srcjar.version in result:
-            fail("multiple compiler srcjar entries for", srcjar.version)
-
-        result[srcjar.version] = {k: v for k, v in values.items() if v}
-
-    return result
 
 _toolchains_defaults = {
     "scalatest": False,
@@ -184,7 +167,7 @@ def _toolchains(mctx):
         values = single_tag_values(mctx, toolchains_tags, _toolchains_defaults)
 
         # Don't overwrite `True` values from one tag with `False` from another.
-        result.update({k: True for k in values if values[k]})
+        result.update({k: v for k, v in values.items() if v})
 
     return result
 
@@ -201,11 +184,6 @@ _twitter_scrooge_attrs = {
     for k, v in _twitter_scrooge_defaults.items()
 }
 
-def _twitter_scrooge(mctx, root_tags):
-    tags = root_tags.twitter_scrooge
-    values = single_tag_values(mctx, tags, _twitter_scrooge_defaults)
-    return {k: v for k, v in values.items() if v != None}
-
 _tag_classes = {
     "settings": tag_class(
         attrs = _settings_attrs,
@@ -215,15 +193,25 @@ _tag_classes = {
         attrs = _scalafmt_attrs,
         doc = "Options for the Scalafmt toolchain",
     ),
+    "overridden_artifact": tag_class(
+        attrs = _overridden_artifact_attrs,
+        doc = """
+Artifacts overriding the defaults for the configured Scala version.
+
+Can be specified multiple times, but each `name` must be unique. The default
+artifacts are defined by the `third_party/repositories/scala_*.bzl` file
+matching the Scala version.
+""",
+    ),
     "compiler_srcjar": tag_class(
         attrs = _compiler_srcjar_attrs,
         doc = """
 Metadata for locating compiler source jars. Can be specified multiple times,
-containing:
+but each `version` must be unique. Each instance must contain:
 
     - `version`
     - exactly one of `label`, `url`, or `urls`
-    - optional `integrity` or `sha256`
+    - `integrity` or `sha256` are optional, but highly recommended
 """,
     ),
     "toolchains": tag_class(
@@ -244,16 +232,30 @@ containing:
 
 def _scala_deps_impl(module_ctx):
     tags = root_module_tags(module_ctx, _tag_classes.keys())
-    kwargs = (
-        single_tag_values(module_ctx, tags.settings, _settings_defaults) |
-        _scalafmt(module_ctx, tags) |
-        _toolchains(module_ctx)
+    scalafmt = single_tag_values(module_ctx, tags.scalafmt, _scalafmt_defaults)
+    scrooge_deps = single_tag_values(
+        module_ctx,
+        tags.twitter_scrooge,
+        _twitter_scrooge_defaults,
     )
 
     scala_toolchains(
-        scala_compiler_srcjars = _compiler_srcjars(tags),
-        twitter_scrooge_deps = _twitter_scrooge(module_ctx, tags),
-        **kwargs
+        overridden_artifacts = repeated_tag_values(
+            tags.overridden_artifact,
+            _overridden_artifact_attrs,
+        ),
+        scala_compiler_srcjars = repeated_tag_values(
+            tags.compiler_srcjar,
+            _compiler_srcjar_attrs,
+        ),
+        # attr.string_keyed_label_dict isn't available in Bazel 6, and `None`
+        # breaks attr.string_dict. We can switch after enabling Bazel 8 in #1652.
+        twitter_scrooge_deps = {k: v for k, v in scrooge_deps.items() if v},
+        **(
+            single_tag_values(module_ctx, tags.settings, _settings_defaults) |
+            {"scalafmt_%s" % k: v for k, v in scalafmt.items()} |
+            _toolchains(module_ctx)
+        )
     )
 
 scala_deps = module_extension(
