@@ -248,8 +248,7 @@ def _scala_deps_impl(module_ctx):
             tags.compiler_srcjar,
             _compiler_srcjar_attrs,
         ),
-        # attr.string_keyed_label_dict isn't available in Bazel 6, and `None`
-        # breaks attr.string_dict. We can switch after enabling Bazel 8 in #1652.
+        # `None` breaks the `attr.string_dict` in `scala_toolchains_repo`.
         twitter_scrooge_deps = {k: v for k, v in scrooge_deps.items() if v},
         **(
             single_tag_values(module_ctx, tags.settings, _settings_defaults) |

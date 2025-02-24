@@ -102,8 +102,6 @@ _scala_toolchains_repo = repository_rule(
         "scala_proto_enable_all_options": attr.bool(),
         "jmh": attr.bool(),
         "twitter_scrooge": attr.bool(),
-        # attr.string_keyed_label_dict isn't available in Bazel 6.
-        # We can switch to it after enabling Bazel 8 in #1652.
         "twitter_scrooge_deps": attr.string_dict(),
     },
 )
