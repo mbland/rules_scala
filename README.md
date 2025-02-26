@@ -495,6 +495,80 @@ extension. However, you must register explicitly in your `MODULE.bazel` file any
 toolchains that you want to take precedence over the toolchains configured by
 `scala_deps`.
 
+### `@io_bazel_rules_scala_config` is now `@rules_scala_config`
+
+Since `@io_bazel_rules_scala` is no longer hardcoded in `rules_scala` internals,
+we've shortened `@io_bazel_rules_scala_config` to `@rules_scala_config`. This
+shouldn't affect most users, but it may break some builds using
+`@io_bazel_rules_scala_config` to define custom [cross-compilation targets](
+./docs/cross-compilation.md).
+
+If you can't fix uses of `@io_bazel_rules_scala_config` in your own project
+immediately, you can remap `@rules_scala_config` via [`use_repo()`]:
+
+[`use_repo()`]: https://bazel.build/rules/lib/globals/module#use_repo
+
+```py
+scala_config = use_extension(
+    "@rules_scala//scala/extensions:config.bzl",
+    "scala_config",
+)
+
+use_repo(scala_config, io_bazel_scala_config = "rules_scala_config")
+```
+
+If any of your dependencies still require `@io_bazel_rules_scala_config`, use
+one of the following mechanisms to override it with `@rules_scala_config`:
+
+#### Bzlmod
+
+For [`bazel_dep()`][] dependencies, use [`override_repo()`][] to
+override `@io_bazel_rules_scala_config` with `@rules_scala_config`:
+
+```py
+bazel_dep(name = "foo", version = "1.0.0")
+
+foo_ext = use_extension("@foo//:ext.bzl", "foo_ext")
+override_repo(foo_ext, io_bazel_rules_scala_config = "rules_scala_config")
+```
+
+[`bazel_dep()`]: https://bazel.build/rules/lib/globals/module#bazel_dep
+[`override_repo()`]: https://bazel.build/rules/lib/globals/module#override_repo
+
+For [`archive_override()`][] and [`git_override()`][] dependencies, use the
+`repo_mapping` attribute passed through to the underlying [`http_archive()`][]
+and [`git_repository()`][] rules:
+
+```py
+archive_override(
+    ...
+    repo_mapping = {
+        "@io_bazel_rules_scala_config": "@rules_scala_config",
+    }
+    ...
+)
+```
+
+[`archive_override()`]: https://bazel.build/rules/lib/globals/module#archive_override
+[`git_override()`]: https://bazel.build/rules/lib/globals/module#git_override
+[`http_archive()`]: https://bazel.build/rules/lib/repo/http#http_archive-repo_mapping
+[`git_repository()`]: https://bazel.build/rules/lib/repo/git#git_repository-repo_mapping
+
+#### `WORKSPACE`
+
+Use the `repo_mapping` attribute of [`http_archive()`][] or
+[`git_repository()`][]:
+
+```py
+http_archive(
+    ...
+    repo_mapping = {
+        "@io_bazel_rules_scala_config": "@rules_scala_config",
+    }
+    ...
+)
+```
+
 ### Bzlmod configuration (coming soon!)
 
 The upcoming Bzlmod implementation will funnel through the `scala_toolchains()`
