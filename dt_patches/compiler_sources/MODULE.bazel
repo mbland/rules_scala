@@ -12,4 +12,4 @@ scala_config = use_extension(
     "@rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
-use_repo(scala_config, "io_bazel_rules_scala_config")
+use_repo(scala_config, "rules_scala_config")

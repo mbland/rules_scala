@@ -3,13 +3,6 @@
 def _generate_testing_toolchain_build_file_args(repo_attr):
     framework_deps = {}
 
-    if repo_attr.testing:
-        framework_deps = {
-            "scalatest": "SCALATEST_DEPS",
-            "junit": "JUNIT_DEPS",
-            "specs2": "SPECS2_DEPS",
-            "specs2_junit": "SPECS2_JUNIT_DEPS",
-        }
     if repo_attr.scalatest:
         framework_deps["scalatest"] = "SCALATEST_DEPS"
     if repo_attr.specs2:
@@ -92,17 +85,41 @@ _scala_toolchains_repo = repository_rule(
     implementation = _scala_toolchains_repo_impl,
     doc = "Creates a repo containing Scala toolchain packages",
     attrs = {
-        "scala": attr.bool(default = True),
-        "scalatest": attr.bool(),
-        "junit": attr.bool(),
-        "specs2": attr.bool(),
-        "testing": attr.bool(),
-        "scalafmt": attr.bool(),
-        "scala_proto": attr.bool(),
-        "scala_proto_enable_all_options": attr.bool(),
-        "jmh": attr.bool(),
-        "twitter_scrooge": attr.bool(),
-        "twitter_scrooge_deps": attr.string_dict(),
+        "scala": attr.bool(
+            doc = "Instantiate the Scala compiler toolchain",
+            default = True,
+        ),
+        "scalatest": attr.bool(doc = "Instantiate the ScalaTest toolchain"),
+        "junit": attr.bool(doc = "Instantiate the JUnit toolchain"),
+        "specs2": attr.bool(doc = "Instantiate the Specs2 toolchain"),
+        "scalafmt": attr.bool(doc = "Instantiate the Scalafmt toolchain"),
+        "scala_proto": attr.bool(
+            doc = "Instantiate the scala_proto toolchain",
+        ),
+        "scala_proto_enable_all_options": attr.bool(
+            doc = (
+                "Enable all scala_proto_options; " +
+                "scala_proto must also be True for this to take effect"
+            ),
+        ),
+        "jmh": attr.bool(
+            doc = "Instantiate the Java Microbenchmarks Harness toolchain",
+        ),
+        "twitter_scrooge": attr.bool(
+            doc = "Instantiate the twitter_scrooge toolchain",
+        ),
+        # attr.string_keyed_label_dict isn't available in Bazel 6
+        "twitter_scrooge_deps": attr.string_dict(
+            doc = (
+                "overrides for twitter_scrooge toolchain dependency " +
+                "providers with keys:\n" +
+                "    libthrift\n" +
+                "    scrooge_core\n" +
+                "    scrooge_generator\n" +
+                "    util_core\n" +
+                "    util_logging"
+            ),
+        ),
     },
 )
 
@@ -120,11 +137,7 @@ load(
 )
 load("@@{rules_scala_repo}//scala:providers.bzl", "declare_deps_provider")
 load("@@{rules_scala_repo}//scala:scala_cross_version.bzl", "version_suffix")
-load(
-    "@io_bazel_rules_scala_config//:config.bzl",
-    "SCALA_VERSION",
-    "SCALA_VERSIONS",
-)
+load("@rules_scala_config//:config.bzl", "SCALA_VERSION", "SCALA_VERSIONS")
 
 [
     setup_scala_toolchain(
@@ -154,25 +167,26 @@ load(
 """
 
 _TESTING_TOOLCHAIN_BUILD = """
-load("@@{rules_scala_repo}//scala:scala_cross_version.bzl", "version_suffix")
 load(
-    "@@{rules_scala_repo}//testing:deps.bzl",
-    "{deps_symbols}",
+    "@@{rules_scala_repo}//scala:scala_cross_version.bzl",
+    "repositories",
+    "version_suffix",
 )
 load(
     "@@{rules_scala_repo}//testing:testing.bzl",
+    "{deps_symbols}",
     "setup_scala_testing_toolchain",
 )
-load("@io_bazel_rules_scala_config//:config.bzl", "SCALA_VERSIONS")
+load("@rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 [
     setup_scala_testing_toolchain(
         name = "testing_toolchain" + version_suffix(scala_version),
         scala_version = scala_version,
-        scalatest_classpath = {scalatest},
-        junit_classpath = {junit},
-        specs2_classpath = {specs2},
-        specs2_junit_classpath = {specs2_junit},
+        scalatest_classpath = repositories(scala_version, {scalatest}),
+        junit_classpath = repositories(scala_version, {junit}),
+        specs2_classpath = repositories(scala_version, {specs2}),
+        specs2_junit_classpath = repositories(scala_version, {specs2_junit}),
     )
     for scala_version in SCALA_VERSIONS
 ]

@@ -7,14 +7,14 @@ module(
     bazel_compatibility = [">=7.5.0"],
 )
 
-SCALA_VERSION = "2.13.15"
+SCALA_VERSION = "2.13.16"
 
 # These versions match those required by some tests, including
 # test_thirdparty_version.sh.
 SCALA_2_VERSIONS = [
     "2.11.12",
     "2.12.20",
-    "2.13.15",
+    "2.13.16",
 ]
 
 SCALA_3_VERSIONS = [
@@ -41,7 +41,7 @@ scala_config = use_extension(
     "//scala/extensions:config.bzl",
     "scala_config",
 )
-use_repo(scala_config, "io_bazel_rules_scala_config")
+use_repo(scala_config, "rules_scala_config")
 
 dev_config = use_extension(
     "//scala/extensions:config.bzl",
@@ -82,12 +82,10 @@ dev_deps = use_extension(
 dev_deps.toolchains(
     jmh = True,
     scala_proto = True,
-    #scala_proto_enable_all_options = True,
     scalafmt = True,
-    testing = True,
-    #scalatest = True,
-    #junit = True,
-    #specs2 = True,
+    scalatest = True,
+    junit = True,
+    specs2 = True,
     twitter_scrooge = True,
 )
 

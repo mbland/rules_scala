@@ -39,9 +39,7 @@ Bazel version.
 [Install Bazel]: https://docs.bazel.build/versions/master/install.html
 [Bazelisk]: https://docs.bazel.build/versions/master/install.html
 
-As of version 7.0.0, __`rules_scala` no longer requires the
-`io_bazel_rules_scala` repository name__ unless your `BUILD` files or those of
-your dependencies require it (bazelbuild/rules_scala#1696).
+Add the following configuration snippet to your `MODULE.bazel` file.
 
 ```py
 # MODULE.bazel
@@ -65,7 +63,7 @@ scala_config = use_extension(
     "scala_config",
 )
 
-scala_config.settings(scala_version = "2.13.15")
+scala_config.settings(scala_version = "2.13.16")
 
 # See the `scala/extensions/deps.bzl` docstring for a high level description of
 # the tag classes exported by this module extension.
@@ -118,30 +116,9 @@ single_version_override(
 
 One primary objective of `rules_scala` 8.x is to enable existing users to
 migrate to Bazel 8. [__`rules_scala` 8.0.0 drops support for Bazel 6.5.0 Bzlmod
-builds__](#6.5.0).
-
-If you're still on Bazel 6.5.0 for now, we recommend using `rules_scala` 7.x and
-adding the following stanza to your `MODULE.bazel` file:
-
-```py
-# Bazel 6 breaks with any higher version of `rules_cc`, because:
-#
-# - 0.0.10 requires Bazel 7 to define `CcSharedLibraryHintInfo`
-#
-# - 0.0.13 and up don't support `protobuf` v21.7, requiring at least v27.0
-#
-# - 0.1.0 should work, but requires `stardoc` 0.7.0, which requires Bazel 7
-#   (though it's a `dev_dependency`, it still gets pulled in during module
-#   resolution, breaking the build)
-#
-# Remove this after migrating to Bazel 7, then upgrade to `rules_scala` 8.x and
-# Bazel 8.
-bazel_dep(name = "rules_cc", version = "0.0.9")
-single_version_override(
-    module_name = "rules_cc",
-    version = "0.0.9",
-)
-```
+builds__](#6.5.0), supporting only `WORKSPACE` builds. We _strongly_ encourage
+using `rules_scala` 8.x to migrate from Bazel 6.5.0 to Bazel 7 or 8, then to
+Bzlmod, as soon as possible.
 
 ### Legacy `WORKSPACE` configuration
 
@@ -151,34 +128,31 @@ migrate to Bzlmod. `WORKSPACE` continues to work in `rules_scala` 8.x for Bazel
 
 [bazel-9]: https://bazel.build/external/migration
 
-If you continue to use `WORKSPACE`, add the following stanza to your `WORKSPACE`
-file and update versions with their sha256s if needed. This stanza is designed
-to ensure that users pick up the correct order of dependencies for
+If you continue to use `WORKSPACE`, add the following snippet to your
+`WORKSPACE` file and update versions with their sha256s if needed. This snippet
+is designed to ensure that users pick up the correct order of dependencies for
 `rules_scala`. If you want to override any of the following dependency versions,
 make sure to `load()` them before calling `rules_scala_dependencies()`.
-
-Note that __`rules_scala` 7 introduces a new `scala_toolchains()` API that is
-very different from `rules_scala` 6__.  (This API remains unchanged in
-`rules_scala` 8.) For details on what's changed, see the [New
-`scala_toolchains()` API for `WORKSPACE`](#new-toolchains-api) section below.
 
 ```py
 # WORKSPACE
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # See https://github.com/bazelbuild/rules_scala/releases for up to date version
-# information, including `<SHASUM>` values.
+# information, including `<VERSION>` and `<SHASUM>` values.
 http_archive(
     name = "rules_scala",  # Can be "io_bazel_rules_scala" if you still need it.
     sha256 = "<SHASUM>",
-    strip_prefix = "rules_scala-8.0.0",
-    url = "https://github.com/bazelbuild/rules_scala/releases/download/8.0.0/rules_scala-8.0.0.tar.gz",
+    strip_prefix = "rules_scala-<VERSION>",
+    url = "https://github.com/bazelbuild/rules_scala/releases/download/<VERSION>/rules_scala-<VERSION>.tar.gz",
 )
 
 load("@rules_scala//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
+# In `rules_scala` 8.x, `scala/deps.bzl` imports `rules_java` 8.x. This `load()`
+# statement differs from `rules_scala` 7.x, which uses `rules_java` 7.x.
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
 rules_java_dependencies()
@@ -200,13 +174,16 @@ load("@rules_python//python:repositories.bzl", "py_repositories")
 
 py_repositories()
 
-# Note that `rules_java` suggests loading `protobuf_deps()` after
+# Note that `rules_java` 8.x suggests loading `protobuf_deps()` after
 # `rules_java_dependencies` and before `rules_java_toolchains()`:
 # - https://github.com/bazelbuild/rules_java/releases/tag/8.9.0
+#
+# `rules_java` 7.x also works with this ordering.
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
 
+# This `load()` comes from `rules_java` 8.x.
 load("@rules_java//java:repositories.bzl", "rules_java_toolchains")
 
 rules_java_toolchains()
@@ -229,7 +206,7 @@ load("@rules_scala//:scala_config.bzl", "scala_config")
 #
 # 2.12 is the default version. Use other versions by passing them explicitly:
 #
-#   scala_config(scala_version = "2.13.15")
+#   scala_config(scala_version = "2.13.16")
 #
 # You may define your own custom toolchain using Maven artifact dependencies
 # configured by your `WORKSPACE` file, imported using external loader like
@@ -255,6 +232,20 @@ scala_toolchains(
 
 scala_register_toolchains()
 ```
+
+### Important changes in `rules_scala` v7.0.0 configuration
+
+The above configuration snippet reflects important changes since `rules_scala`
+v6.x:
+
+- __`rules_scala` no longer requires the `io_bazel_rules_scala` repository
+    name__ unless your `BUILD` files or those of your dependencies require it
+    (bazelbuild/rules_scala#1696).
+
+- __`rules_scala` v7.0.0 introduces a new `scala_toolchains()` API that is
+    very different from `rules_scala` 6__. For details on what's changed, see
+    the [New 'scala_toolchains()' API for 'WORKSPACE'](#new-toolchains-api)
+    section below.
 
 ### Loading the `scala_*` rules
 
@@ -495,7 +486,7 @@ rules_scala_toolchain_deps_repositories(fetch_sources = True)
 
 load("@rules_scala//:scala_config.bzl", "scala_config")
 
-scala_config(scala_version = "2.13.15")
+scala_config(scala_version = "2.13.16")
 
 load(
     "//testing:scalatest.bzl",
@@ -531,7 +522,7 @@ rules_scala_dependencies()
 
 load("@rules_scala//:scala_config.bzl", "scala_config")
 
-scala_config(scala_version = "2.13.15")
+scala_config(scala_version = "2.13.16")
 
 load(
     "@rules_scala//scala:toolchains.bzl",
@@ -548,7 +539,7 @@ scala_toolchains(
 scala_register_toolchains()
 ```
 
-See the [`scala_toolchains()` docstring](./scala/toolchains.bzl) for the
+See the [`scala_toolchains()`](./scala/toolchains.bzl) docstring for the
 parameter list, which is almost in complete correspondence with parameters from
 the previous macros. The `WORKSPACE` files in this repository also provide many
 examples.
@@ -590,11 +581,85 @@ extension. However, you must register explicitly in your `MODULE.bazel` file any
 toolchains that you want to take precedence over the toolchains configured by
 `scala_deps`.
 
+### `@io_bazel_rules_scala_config` is now `@rules_scala_config`
+
+Since `@io_bazel_rules_scala` is no longer hardcoded in `rules_scala` internals,
+we've shortened `@io_bazel_rules_scala_config` to `@rules_scala_config`. This
+shouldn't affect most users, but it may break some builds using
+`@io_bazel_rules_scala_config` to define custom [cross-compilation targets](
+./docs/cross-compilation.md).
+
+If you can't fix uses of `@io_bazel_rules_scala_config` in your own project
+immediately, you can remap `@rules_scala_config` via [`use_repo()`]:
+
+[`use_repo()`]: https://bazel.build/rules/lib/globals/module#use_repo
+
+```py
+scala_config = use_extension(
+    "@rules_scala//scala/extensions:config.bzl",
+    "scala_config",
+)
+
+use_repo(scala_config, io_bazel_scala_config = "rules_scala_config")
+```
+
+If any of your dependencies still require `@io_bazel_rules_scala_config`, use
+one of the following mechanisms to override it with `@rules_scala_config`:
+
+#### Bzlmod
+
+For [`bazel_dep()`][] dependencies, use [`override_repo()`][] to
+override `@io_bazel_rules_scala_config` with `@rules_scala_config`:
+
+```py
+bazel_dep(name = "foo", version = "1.0.0")
+
+foo_ext = use_extension("@foo//:ext.bzl", "foo_ext")
+override_repo(foo_ext, io_bazel_rules_scala_config = "rules_scala_config")
+```
+
+[`bazel_dep()`]: https://bazel.build/rules/lib/globals/module#bazel_dep
+[`override_repo()`]: https://bazel.build/rules/lib/globals/module#override_repo
+
+For [`archive_override()`][] and [`git_override()`][] dependencies, use the
+`repo_mapping` attribute passed through to the underlying [`http_archive()`][]
+and [`git_repository()`][] rules:
+
+```py
+archive_override(
+    ...
+    repo_mapping = {
+        "@io_bazel_rules_scala_config": "@rules_scala_config",
+    }
+    ...
+)
+```
+
+[`archive_override()`]: https://bazel.build/rules/lib/globals/module#archive_override
+[`git_override()`]: https://bazel.build/rules/lib/globals/module#git_override
+[`http_archive()`]: https://bazel.build/rules/lib/repo/http#http_archive-repo_mapping
+[`git_repository()`]: https://bazel.build/rules/lib/repo/git#git_repository-repo_mapping
+
+#### `WORKSPACE`
+
+Use the `repo_mapping` attribute of [`http_archive()`][] or
+[`git_repository()`][]:
+
+```py
+http_archive(
+    ...
+    repo_mapping = {
+        "@io_bazel_rules_scala_config": "@rules_scala_config",
+    }
+    ...
+)
+```
+
 ### Bzlmod configuration
 
 The Bzlmod implementation funnels through the `scala_toolchains()` macro as
 well, ensuring maximum compatibility with `WORKSPACE` configurations. The
-equivalent Bzlmod stanza for the `scala_toolchains()` stanza above would be:
+equivalent Bzlmod snippet for the `scala_toolchains()` snippet above would be:
 
 ```py
 bazel_dep(name = "rules_scala", version = "8.0.0")
@@ -604,7 +669,7 @@ scala_config = use_extension(
     "scala_config",
 )
 
-scala_config.settings(scala_version = "2.13.15")
+scala_config.settings(scala_version = "2.13.16")
 
 scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
@@ -630,8 +695,8 @@ The `MODULE.bazel` files in this repository provide many examples.
 
 ### Embedded resource paths no longer begin with `external/<repo_name>`
 
-[Any program compiled with an external repo asset in its `resources` attribute
-will need to strip the `external/` and repo name components from its
+[Any program compiled with an external repo asset in its 'resources' attribute
+will need to strip the 'external/' and repo name components from its
 path][ext-path]. For example, the path for `resources =
 ["@some_external_repo//:resource.txt"]` would change thus:
 
@@ -658,7 +723,7 @@ now, as there's not yet a corresponding [`toolchain_type()`](
 https://bazel.build/versions/6.1.0/reference/be/platform#toolchain_type) target
 in `@rules_java`.
 
-### Builtin repositories no longer visible without `use_repo()` under Bzlmod
+### Builtin repositories no longer visible by default under Bzlmod
 
 Under Bzlmod, repos are only visible to the module extension that creates them,
 unless the `MODULE.bazel` file brings them into scope with
@@ -668,7 +733,7 @@ lead to errors like those from the following example, which [originally called
 https://github.com/michalbogacz/scala-bazel-monorepo/blob/17f0890a4345529e09b9ce83bcb2e3d15687c522/BUILD.bazel):
 
 ```py
-load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_toolchain")
+load("@rules_scala//scala:scala.bzl", "setup_scala_toolchain")
 
 setup_scala_toolchain(
     name = "custom_scala_toolchain",
@@ -680,9 +745,12 @@ setup_scala_toolchain(
 )
 ```
 
-This worked under `WORKSPACE`, but broke under Bzlmod, the error message
-indicating that the builtin `@org_scala_sbt_compiler_interface` toolchain jar
-isn't visible:
+`setup_scala_toolchains` is a macro that can take user specified classpath
+targets as described in [docs/scala_toolchain.md](./docs/scala_toolchain.md).
+Without explicit `*_classpath` or `*_deps` arguments, `setup_scala_toolchain()`
+defaults to using dependency repositories generated by `rules_scala` itself.
+This worked under `WORKSPACE`, but breaks under Bzlmod, because the builtin
+toolchain dependency repos are no longer in the project's scope by default:
 
 ```txt
 ERROR: no such package
@@ -693,20 +761,12 @@ ERROR: no such package
     No repository visible as '@org_scala_sbt_compiler_interface_3_3_5'
 ```
 
-`setup_scala_toolchains` is a macro that can take user specified classpath
-targets as described in [docs/scala_toolchain.md](./docs/scala_toolchain.md).
-Otherwise, it _generates new classpath targets_ using the builtin `rules_scala`
-repositories, but these repositories are no longer in the global scope, causing
-the breakage. (A big part of the Bzlmodification work involved enabling
-`rules_scala` to generate and register toolchains _without_ forcing users to
-bring their dependencies into scope.)
+In this case, where the toolchain only sets different compiler options, the best
+fix is to [use `scala_toolchain` directly instead][scala_tc_direct]. Its
+underlying `BUILD` rule uses builtin toolchain dependencies via existing targets
+visible within `rules_scala`, without forcing users to import them:
 
-One way to fix this specific problem is to call `use_repo` for every such
-repository needed by the toolchain. Another fix, in this case, is to [use
-`scala_toolchain` directly instead](
-https://github.com/michalbogacz/scala-bazel-monorepo/blob/2cac860f386dcaa1c3be56cd25a84b247d335743/BUILD.bazel).
-Its underlying `BUILD` rule uses the builtin toolchain dependencies via existing
-targets visible within `rules_scala`, without forcing users to import them:
+[scala_tc_direct]: https://github.com/michalbogacz/scala-bazel-monorepo/blob/2cac860f386dcaa1c3be56cd25a84b247d335743/BUILD.bazel
 
 ```py
 load("@rules_scala//scala:scala_toolchain.bzl", "scala_toolchain")
@@ -727,6 +787,12 @@ toolchain(
     visibility = ["//visibility:public"],
 )
 ```
+
+A big part of the Bzlmodification work involved enabling `rules_scala` to
+generate and register toolchains _without_ forcing users to bring their
+dependencies into scope. However, another way to fix this specific problem is to
+call `use_repo` for every builtin repository needed by the
+`setup_scala_toolchain()` call.
 
 ## Breaking changes in `rules_scala` 8.x
 
@@ -749,16 +815,16 @@ future compatibility.
 
 ### <a id="6.5.0"></a>Limited Bazel 6.5.0 compatibility
 
-`rules_scala` 8.0.0 does not support Bzlmod with Bazel 6.5.0 because
-[Bazel 6.5.0 doesn't support `use_repo_rule`](
+`rules_scala` 8.0.0 will not support Bzlmod with Bazel 6.5.0 because
+[Bazel 6.5.0 doesn't support 'use_repo_rule'](
 https://bazel.build/versions/6.5.0/rules/lib/globals), which
-[`rules_jvm_external` >= 6.3 requires](
+['rules_jvm_external' >= 6.3 requires](
 https://github.com/bazelbuild/rules_scala/issues/1482#issuecomment-2515496234).
 
-`WORKSPACE` builds continue to work with Bazel 6.5.0, but not out of the box.
-Per #1647, using Bazel 6.5.0 with `rules_scala` 8.x requires adding the
-following flags to `.bazelrc`, required by the newer `abseil-cpp` version used
-by `protobuf`:
+`WORKSPACE` builds will continue to work with Bazel 6.5.0, but not out of the
+box. Per bazelbuild/rules_scala#1647, using Bazel 6.5.0 with `rules_scala` 8.x
+will require adding the following flags to `.bazelrc`, required by the newer
+`abseil-cpp` version used by `protobuf`:
 
 ```txt
 common --enable_platform_specific_config
@@ -780,8 +846,9 @@ improves performance.
 `rules_scala` 7.0.0 and 8.0.0 have different [`compatibility_level`](
 https://bazel.build/external/module#compatibility_level) values for their
 [`module()`](https://bazel.build/rules/lib/globals/module) directives. This is
-due to the gap in supported `protobuf` versions documented in #1647 (between
-v25.5 and v28) and dropping support for Bazel 6.5.0 Bzlmod builds.
+due to the gap in supported `protobuf` versions documented in
+bazelbuild/rules_scala#1647 (between v25.5 and v28) and dropping support for
+Bazel 6.5.0 Bzlmod builds.
 
 This ensures any users attempting to mismatch `protobuf` and `rules_scala`
 versions will break during module resolution, rather than during a later
@@ -796,8 +863,8 @@ versioning](https://semver.org/)), and clearly document the reason for the level
 bump. If a version bump may break builds for any known reason, we will explain
 why up front instead of waiting for users to be surprised.
 
-[A comment from #1647 illustrates how `rules_erlang` fails due to
-`compatibility_level` conflicts][erlang]. The [`rules_erlang` 3.0.0 release
+[A comment from #1647 illustrates how 'rules_erlang' fails due to
+'compatibility_level' conflicts][erlang]. The ['rules_erlang' 3.0.0 release
 notes](https://github.com/rabbitmq/rules_erlang/releases/tag/3.0.0) describe the
 breaking changes. This seems like a reasonable model to follow.
 

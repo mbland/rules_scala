@@ -19,7 +19,7 @@ scala_config = use_extension(
 scala_config.settings(
     scala_version = SCALA_VERSION,
 )
-use_repo(scala_config, "io_bazel_rules_scala_config")
+use_repo(scala_config, "rules_scala_config")
 
 scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
@@ -29,8 +29,8 @@ scala_deps.settings(
     fetch_sources = True,
 )
 
-# Setting `testing = True` would set scalatest, junit, and specs2 to `True`.
 scala_deps.toolchains(
+    junit = True,
     scalatest = True,
     specs2 = True,
 )

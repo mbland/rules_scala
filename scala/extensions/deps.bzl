@@ -100,7 +100,6 @@ _toolchains_defaults = {
     "scalatest": False,
     "junit": False,
     "specs2": False,
-    "testing": False,
     "scalafmt": False,
     "scala_proto": False,
     "scala_proto_enable_all_options": False,
@@ -120,13 +119,6 @@ _toolchains_attrs = {
     "specs2": attr.bool(
         default = _toolchains_defaults["specs2"],
         doc = "Register the Specs2 JUnit toolchain",
-    ),
-    "testing": attr.bool(
-        default = _toolchains_defaults["testing"],
-        doc = (
-            "Register the Scalatest, JUnit, and Specs2 JUnit toolchains " +
-            "(in place of individual settings)"
-        ),
     ),
     "scalafmt": attr.bool(
         default = _toolchains_defaults["scalafmt"],
