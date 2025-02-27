@@ -35,7 +35,7 @@ scala_config.settings(
     enable_compiler_dependency_tracking = True,
 )
 
-use_repo(scala_config, "io_bazel_rules_scala_config")
+use_repo(scala_config, "rules_scala_config")
 
 scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
