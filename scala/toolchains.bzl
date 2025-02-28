@@ -59,17 +59,20 @@ def scala_toolchains(
 
     Args:
         maven_servers: Maven servers used to fetch dependency jar files
-        overridden_artifacts: specific dependency jar files to use instead of
-            those from `maven_servers`, in the format:
+        overridden_artifacts: artifacts overriding the defaults for the
+            configured Scala version, in the format:
             ```starlark
             "repo_name": {
                 "artifact": "<maven coordinates>",
                 "sha256": "<checksum>",
                 "deps": [
-                    "repository_names_of_dependencies",
+                    "repository_labels_of_dependencies",
                 ],
             }
             ```
+            The default artifacts are defined by the
+            `third_party/repositories/scala_*.bzl` file matching the Scala
+            version.
         fetch_sources: whether to download dependency source jars
         validate_scala_version: whether to check if the configured Scala version
             matches the default version supported by rules_scala
