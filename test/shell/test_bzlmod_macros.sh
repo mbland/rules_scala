@@ -28,6 +28,10 @@ teardown_suite() {
 }
 trap 'teardown_suite' EXIT
 
+if [[ "$(bazel --version)" =~ ^bazel\ 6\. ]]; then
+  exit
+fi
+
 test_srcs_dir="${dir}/scala/private/macros/test"
 
 setup_test_module() {

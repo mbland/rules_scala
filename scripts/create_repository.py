@@ -29,14 +29,14 @@ PARSER_COMBINATORS_VERSION = '1.1.2'
 SBT_COMPILER_INTERFACE_VERSION = '1.10.7'
 SBT_UTIL_INTERFACE_VERSION = '1.10.7'
 SCALATEST_VERSION = "3.2.19"
-SCALAFMT_VERSION = "3.8.6"
+SCALAFMT_VERSION = "3.9.1"
 KIND_PROJECTOR_VERSION = "0.13.3"
 PROTOBUF_JAVA_VERSION = "4.29.3"
 JLINE_VERSION = '3.29.0'
-SCALAPB_VERSION = '0.11.17'
+SCALAPB_VERSION = '1.0.0-alpha.1'
 PROTOC_BRIDGE_VERSION = '0.9.8'
 GRPC_VERSION = '1.70.0'
-GRPC_COMMON_PROTOS_VERSION = '2.52.0'
+GRPC_COMMON_PROTOS_VERSION = '2.53.0'
 GRPC_LIBS = ['netty', 'protobuf', 'stub']
 GUAVA_VERSION = '33.4.0-jre'
 
@@ -253,10 +253,7 @@ class MavenCoordinates:
                 f'Expected {self.group}:{self.artifact}, ' +
                 f'got {other.group}:{other.artifact}'
             )
-        return (
-            self.__compare_versions(other.scala_version, self.scala_version) or
-            self.__compare_versions(other.version, self.version)
-        )
+        return self.__compare_versions(other.version, self.version)
 
     def __compare_versions(self, lhs, rhs):
         lhs_parts = lhs.split('.')
