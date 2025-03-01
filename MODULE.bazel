@@ -2,8 +2,8 @@
 
 module(
     name = "rules_scala",
-    version = "8.0.0",
-    compatibility_level = 8,
+    version = "7.0.0",
+    compatibility_level = 7,
     bazel_compatibility = [">=7.5.0"],
 )
 
@@ -267,4 +267,4 @@ use_repo(
     "org_golang_x_tools",
 )
 
-bazel_dep(name = "rules_python", version = "1.1.0", dev_dependency = True)
+bazel_dep(name = "rules_python", version = "1.2.0", dev_dependency = True)

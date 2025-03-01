@@ -45,7 +45,7 @@ Add the following configuration snippet to your `MODULE.bazel` file.
 # MODULE.bazel
 
 # You can add `repo_name = "io_bazel_rules_scala"` if you still need it.
-bazel_dep(name = "rules_scala", version = "8.0.0")
+bazel_dep(name = "rules_scala", version = "7.0.0")
 
 # Selects the Scala version and other configuration parameters.
 #
@@ -87,13 +87,6 @@ scala_deps.toolchains(
 
 ### Resolving `protobuf` conflicts
 
-For rules_scala 7.x, `scala_proto` and `scalafmt` users are revlocked between
-protobuf-v21.7 and protobuf-v25.5 ([which requires compiler flags to build under
-Bazel 6](#6.5.0)). rules_scala 8.0.0 drops Bazel 6.5.0 Bzlmod support and
-supports protobuf-v28.2 and later. See [Compatible Bazel
-versions](#compatible-bazel-versions) below for details regarding these
-`protobuf` related restrictions.
-
 If a newer `protobuf` version in the module graph breaks your build, use
 [`single_version_override`][] or [`multiple_version_override`][] to fix it:
 
@@ -112,19 +105,11 @@ single_version_override(
 )
 ```
 
-### Legacy Bazel 6.5.0 support
-
-One primary objective of `rules_scala` 8.x is to enable existing users to
-migrate to Bazel 8. [__`rules_scala` 8.0.0 drops support for Bazel 6.5.0 Bzlmod
-builds__](#6.5.0), supporting only `WORKSPACE` builds. We _strongly_ encourage
-using `rules_scala` 8.x to migrate from Bazel 6.5.0 to Bazel 7 or 8, then to
-Bzlmod, as soon as possible.
-
 ### Legacy `WORKSPACE` configuration
 
-Another primary objective of `rules_scala` 8.x is to enable existing users to
-migrate to Bzlmod. `WORKSPACE` continues to work in `rules_scala` 8.x for Bazel
-6.5.0, 7.5.0, and 8, but [__`WORKSPACE` is going away in Bazel 9__][bazel-9].
+`rules_scala` 7.x enables existing users to migrate to Bzlmod. `WORKSPACE`
+continues to work for Bazel [6.5.0 (for now)](#6.5.0), 7.5.0, and 8, but
+[__`WORKSPACE` is going away in Bazel 9__][bazel-9].
 
 [bazel-9]: https://bazel.build/external/migration
 
@@ -151,8 +136,6 @@ load("@rules_scala//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
-# In `rules_scala` 8.x, `scala/deps.bzl` imports `rules_java` 8.x. This `load()`
-# statement differs from `rules_scala` 7.x, which uses `rules_java` 7.x.
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
 rules_java_dependencies()
@@ -165,9 +148,9 @@ bazel_skylib_workspace()
 # Otherwise you may get the version defined in the `com_google_protobuf` repo.
 http_archive(
     name = "rules_python",
-    sha256 = "9c6e26911a79fbf510a8f06d8eedb40f412023cf7fa6d1461def27116bff022c",
-    strip_prefix = "rules_python-1.1.0",
-    url = "https://github.com/bazelbuild/rules_python/releases/download/1.1.0/rules_python-1.1.0.tar.gz",
+    sha256 = "2ef40fdcd797e07f0b6abda446d1d84e2d9570d234fddf8fcd2aa262da852d1c",
+    strip_prefix = "rules_python-1.2.0",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/1.2.0/rules_python-1.2.0.tar.gz",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
@@ -183,7 +166,6 @@ load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
 
-# This `load()` comes from `rules_java` 8.x.
 load("@rules_java//java:repositories.bzl", "rules_java_toolchains")
 
 rules_java_toolchains()
@@ -342,14 +324,14 @@ maximum available at the time of writing.
 
 [ci-config]: ./.bazelci/presubmit.yml
 
-| Bazel/Dependency | `rules_scala` 7.x | `rules_scala` 8.x |
-| :-: | :-: | :-: |
-| Bazel versions using Bzlmod | 6.5.0, 7.5.0 | 7.5.0, 8.x |
-| Bazel versions using `WORKSPACE` | 6.5.0, 7.5.0 | 6.5.0, 7.5.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
-| `protobuf` | v21.7<br/>(can support up to v25.5) | v29.3 |
-| `abseil-cpp` | 20220623.1 | 20250127.0 |
-| `rules_java` | 7.12.4 | 8.x |
-| `ScalaPB` | 0.11.17<br/>(0.9.8 for Scala 2.11) | 1.0.0-alpha.1 |
+| Bazel/Dependency |  `rules_scala` 7.x |
+| :-: |  :-: |
+| Bazel versions using Bzlmod | 7.5.0, 8.x |
+| Bazel versions using `WORKSPACE` | 6.5.0, 7.5.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
+| `protobuf` |  v29.3 |
+| `abseil-cpp` | 20250127.0 |
+| `rules_java` | 8.9.0 |
+| `ScalaPB` | 1.0.0-alpha.1 |
 
 ## Usage with [bazel-deps](https://github.com/johnynek/bazel-deps)
 
@@ -437,9 +419,13 @@ that folder.
 ## Breaking changes in `rules_scala` 7.x
 
 __The main objective of `rules_scala` 7.x is to enable existing users to migrate
-to Bazel 7 and Bzlmod.__ To facilitate a gradual migration, it remains
-compatible with both `WORKSPACE` and Bzlmod. However, it contains the following
-breaking changes when upgrading from `rules_scala` 6.x.
+to Bazel 8 and Bzlmod.__ To facilitate a gradual migration, it is compatible
+with both Bazel 7 and Bazel 8, and both `WORKSPACE` and Bzlmod. It remains
+compatible with Bazel 6.5.0 builds using `WORKSPACE` for the time being, but
+Bazel 6 is no longer officially supported.
+
+`rules_java` 7.x contains the following breaking changes when upgrading from
+`rules_scala` 6.x.
 
 ### <a id="new-toolchains-api"></a>New `scala_toolchains()` API for `WORKSPACE`
 
@@ -600,7 +586,7 @@ scala_config = use_extension(
     "scala_config",
 )
 
-use_repo(scala_config, io_bazel_scala_config = "rules_scala_config")
+use_repo(scala_config, io_bazel_rules_scala_config = "rules_scala_config")
 ```
 
 If any of your dependencies still require `@io_bazel_rules_scala_config`, use
@@ -662,7 +648,7 @@ well, ensuring maximum compatibility with `WORKSPACE` configurations. The
 equivalent Bzlmod snippet for the `scala_toolchains()` snippet above would be:
 
 ```py
-bazel_dep(name = "rules_scala", version = "8.0.0")
+bazel_dep(name = "rules_scala", version = "7.0.0")
 
 scala_config = use_extension(
     "@rules_scala//scala/extensions:config.bzl",
@@ -794,13 +780,6 @@ dependencies into scope. However, another way to fix this specific problem is to
 call `use_repo` for every builtin repository needed by the
 `setup_scala_toolchain()` call.
 
-## Breaking changes in `rules_scala` 8.x
-
-__The main objective of 8.x is to enable existing users to migrate to Bazel 8
-and Bzlmod.__ To facilitate a gradual migration, it remains compatible with both
-`WORKSPACE` and Bzlmod. However, it contains the following breaking changes when
-upgrading from `rules_scala` 7.x.
-
 ### Replace some `$(location)` calls with `$(rootpath)` for Bazel 8
 
 This isn't actually a `rules_scala` breakage, but a Bazel 8 breakage encountered
@@ -815,16 +794,16 @@ future compatibility.
 
 ### <a id="6.5.0"></a>Limited Bazel 6.5.0 compatibility
 
-`rules_scala` 8.0.0 will not support Bzlmod with Bazel 6.5.0 because
-[Bazel 6.5.0 doesn't support 'use_repo_rule'](
-https://bazel.build/versions/6.5.0/rules/lib/globals), which
+__`rules_scala` 7.x officially drops support for Bazel 6.5.0.__ Bzlmod builds
+with Bazel 6.5.0 won't work at all because [Bazel 6.5.0 doesn't support
+'use_repo_rule']( https://bazel.build/versions/6.5.0/rules/lib/globals), which
 ['rules_jvm_external' >= 6.3 requires](
 https://github.com/bazelbuild/rules_scala/issues/1482#issuecomment-2515496234).
 
-`WORKSPACE` builds will continue to work with Bazel 6.5.0, but not out of the
-box. Per bazelbuild/rules_scala#1647, using Bazel 6.5.0 with `rules_scala` 8.x
-will require adding the following flags to `.bazelrc`, required by the newer
-`abseil-cpp` version used by `protobuf`:
+At the moment, `WORKSPACE` builds mostly continue to work with Bazel 6.5.0, but
+not out of the box, and may break at any time. Per bazelbuild/rules_scala#1647,
+such builds require adding the following flags to `.bazelrc`, required by the
+newer `abseil-cpp` version used by `protobuf`:
 
 ```txt
 common --enable_platform_specific_config
@@ -841,27 +820,46 @@ Note that this example uses `common:` config settings instead of `build:`. This
 seems to prevent invalidating the action cache between `bazel` runs, which
 improves performance.
 
-### Bazel module compatibility levels between 7.0.0 and 8.0.0
+If you have another dependency that requires an earlier `protobuf` version, use
+the following maximum dependency versions:
 
-`rules_scala` 7.0.0 and 8.0.0 have different [`compatibility_level`](
-https://bazel.build/external/module#compatibility_level) values for their
-[`module()`](https://bazel.build/rules/lib/globals/module) directives. This is
-due to the gap in supported `protobuf` versions documented in
-bazelbuild/rules_scala#1647 (between v25.5 and v28) and dropping support for
-Bazel 6.5.0 Bzlmod builds.
+| Dependency | Max Bazel 6.5.0 compatible version | Reason |
+| :-: | :-: | :- |
+| `protobuf` | v25.6 | `ScalaPB` doesn't support `protobuf` v26 or v27. |
+| `abseil-cpp` | 20240722.0 | Latest that works with `protobuf` v25; requires C++ compiler flags. |
+| `rules_java` | 7.12.4 | 8.x requires `protobuf` v27 and later. |
+| `rules_cc` | 0.0.9 | 0.0.10 requires Bazel 7 to define `CcSharedLibraryHintInfo`.<br/>0.0.13 requires at least `protobuf` v27.0. |
+| `ScalaPB` | 0.11.17<br/>(0.9.8 for Scala 2.11) | Supports `protobuf` < v26. |
 
-This ensures any users attempting to mismatch `protobuf` and `rules_scala`
-versions will break during module resolution, rather than during a later
-execution step. (Though, as described in bazelbuild/rules_scala#1647, there are
-now measures in place to cause the build to crash during a mismatch instead of
-hanging.)
+### `scala_proto` not supported for Scala 2.11
+
+[ScalaPB 0.9.8](https://github.com/scalapb/ScalaPB/releases/tag/v0.9.8), the
+last version compatible with Scala 2.11, does not support `protobuf` >= v26.
+Since `rules_scala` now depends on a more recent `protobuf` version, we had to
+remove the Scala 2.11 test cases.
+
+Building `scala_proto` for Scala 2.11 requires [building with Bazel 6.5.0
+under `WORKSPACE`](#6.5.0), with the maximum dependency versions specified in
+that section. While this may continue to work for some time, it is not
+officially supported.
+
+### Bazel module compatibility levels
+
+`rules_scala` 7.0.0 will set the
+[`compatibility_level`](https://bazel.build/external/module#compatibility_level)
+value for its [`module()`](https://bazel.build/rules/lib/globals/module)
+directive. The `compatibility_level` for `rules_scala` will track major version
+numbers (per [semantic versioning](https://semver.org/)), and this `README` will
+clearly document the reason for the level bump. `compatibility_level` mismatches
+in the module graph will cause module resolution to fail, signaling the presence
+of known breaking changes.
 
 The concept of proper `compatibility_level` usage is still up for discussion in
-bazelbuild/bazel#24302. The `compatibility_level` for `rules_scala`
-implementation will track major version numbers (per [semantic
-versioning](https://semver.org/)), and clearly document the reason for the level
-bump. If a version bump may break builds for any known reason, we will explain
-why up front instead of waiting for users to be surprised.
+bazelbuild/bazel#24302. However, the policy above favors forcing module
+resolution to fail, rather than allowing a later execution step to fail with a
+potentially confusing error message. If a version bump may break builds for any
+known reason, we will explain why up front instead of waiting for users to be
+surprised.
 
 [A comment from #1647 illustrates how 'rules_erlang' fails due to
 'compatibility_level' conflicts][erlang]. The ['rules_erlang' 3.0.0 release
