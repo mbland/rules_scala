@@ -11,6 +11,14 @@ load("@rules_scala//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
+# For `--incompatible_enable_proto_toolchain_resolution`.
+load("@platforms//host:extension.bzl", "host_platform_repo")
+host_platform_repo(name = "host_platform")
+load("@bazel_features//:deps.bzl", "bazel_features_deps")
+bazel_features_deps()
+load("@rules_scala//scala:protoc.bzl", "register_precompiled_protoc_toolchain")
+register_precompiled_protoc_toolchain()
+
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
 rules_java_dependencies()
