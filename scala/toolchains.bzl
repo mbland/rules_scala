@@ -24,7 +24,6 @@ load(
     "twitter_scrooge_artifact_ids",
     _TWITTER_SCROOGE_DEPS = "TOOLCHAIN_DEPS",
 )
-load("@com_google_protobuf//bazel/common:proto_common.bzl", "proto_common")
 load("@rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 
 def _get_unknown_entries(entries, allowed_entries):
@@ -185,7 +184,6 @@ def scala_toolchains(
         )
 
     scala_toolchains_repo(
-        protoc = proto_common.INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION,
         protoc_platforms = protoc_platforms,
         scalatest = scalatest,
         junit = junit,

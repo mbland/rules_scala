@@ -33,27 +33,30 @@ This project defines core build rules for [Scala](https://www.scala-lang.org/) t
 ## Getting started
 
 [Install Bazel][], preferably using the [Bazelisk][] wrapper. See the
-[compatbile Bazel versions](#compatible-bazel-versions) section to select a suitable
+[compatible Bazel versions](#compatible-bazel-versions) section to select a suitable
 Bazel version.
 
 [Install Bazel]: https://docs.bazel.build/versions/master/install.html
 [Bazelisk]: https://docs.bazel.build/versions/master/install.html
 
-Add the following configuration snippet to your `WORKSPACE` file and update
-versions with their sha256s if needed. This snippet is designed to ensure that
-users pick up the correct order of dependencies for `rules_scala`. If you want
-to override any of the following dependency versions, make sure to `load()` them
-before calling `rules_scala_dependencies()`.
+Add the following configuration snippet to your `WORKSPACE` file and update the
+release `<VERSION>` and its `<SHA256>` as specified on the [rules_scala releases
+page][releases]. This snippet is designed to ensure that users pick up the
+correct order of dependencies for `rules_scala`. If you want to override any of
+the following dependency versions, make sure to `load()` them before calling
+`rules_scala_dependencies()`.
+
+[releases]: https://github.com/bazelbuild/rules_scala/releases
 
 ```py
 # WORKSPACE
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # See https://github.com/bazelbuild/rules_scala/releases for up to date version
-# information, including `<VERSION>` and `<SHASUM>` values.
+# information, including `<VERSION>` and `<SHA256>` values.
 http_archive(
     name = "rules_scala",  # Can be "io_bazel_rules_scala" if you still need it.
-    sha256 = "<SHASUM>",
+    sha256 = "<SHA256>",
     strip_prefix = "rules_scala-<VERSION>",
     url = "https://github.com/bazelbuild/rules_scala/releases/download/<VERSION>/rules_scala-<VERSION>.tar.gz",
 )
@@ -62,15 +65,18 @@ load("@rules_scala//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
-# Only required if using `--incompatible_enable_proto_toolchain_resolution`.
+# Only include the next two statements if using
+# `--incompatible_enable_proto_toolchain_resolution`.
+# See the "Using a precompiled protocol compiler" section below.
+load("@platforms//host:extension.bzl", "host_platform_repo")
+
 # Instantiates the `@host_platform` repo to work around:
 # - https://github.com/bazelbuild/bazel/issues/22558
-load("@platforms//host:extension.bzl", "host_platform_repo")
 host_platform_repo(name = "host_platform")
-load("@bazel_features//:deps.bzl", "bazel_features_deps")
-bazel_features_deps()
-load("@rules_scala//scala:protoc.bzl", "register_precompiled_protoc_toolchain")
-register_precompiled_protoc_toolchain()
+
+# This is optional, but still safe to include even when not using
+# `--incompatible_enable_proto_toolchain_resolution`.
+register_toolchains("@rules_scala//protoc:all")
 
 host_platform_repo(name = "host_platform")
 
@@ -183,9 +189,11 @@ load(
 ### <a id="protoc"></a>Using a precompiled protocol compiler
 
 `rules_scala` now supports
-[`--incompatible_enable_proto_toolchain_resolution`][]. When using this flag,
-`rules_scala` will use a precompiled protocol compiler binary by default. To set
-it in your `.bazelrc` file:
+[`--incompatible_enable_proto_toolchain_resolution`][]. When using this flag
+with the `MODULE.bazel` or `WORKSPACE` configurations below, `rules_scala` will
+use a precompiled protocol compiler binary by default.
+
+To set the flag in your `.bazelrc` file:
 
 [`--incompatible_enable_proto_toolchain_resolution`]: https://bazel.build/reference/command-line-reference#flag--incompatible_enable_proto_toolchain_resolution
 
@@ -193,14 +201,29 @@ it in your `.bazelrc` file:
 common --incompatible_enable_proto_toolchain_resolution
 ```
 
-Set the `protoc_platforms` attribute of `scala_toolchains()` if you need to
-configure protocol compilers for platforms other than the host platform.
-`WORKSPACE` must include the snippet from [Getting started](#getting-started)
-including `register_precompiled_protoc_toolchain()` _before_ any other
-`protobuf` toolchain registrations.
+In both `MODULE.bazel` and `WORKSPACE`, add the following statement _before_ any
+other toolchain registrations. It's safe to include even when not using
+`--incompatible_enable_proto_toolchain_resolution`.
 
-Windows builds now require the precompiled protocol compiler toolchain. See the
-[Windows MSVC builds of protobuf broken by default](#protoc-msvc) section
+```py
+# MODULE.bazel or WORKSPACE
+register_toolchains("@rules_scala//protoc:all")
+```
+
+`WORKSPACE` must include the `host_platform_repo` snippet from [Getting
+started](#getting-started):
+
+```py
+# WORKSPACE
+load("@platforms//host:extension.bzl", "host_platform_repo")
+
+# Instantiates the `@host_platform` repo to work around:
+# - https://github.com/bazelbuild/bazel/issues/22558
+host_platform_repo(name = "host_platform")
+```
+
+__Windows builds now require the precompiled protocol compiler toolchain.__ See
+the [Windows MSVC builds of protobuf broken by default](#protoc-msvc) section
 below for details.
 
 More background on proto toolchainization:
@@ -631,9 +654,8 @@ supporting Bazel + MSVC builds per:
 - [protocolbuffers/protobuf#20085: Breaking Change: Dropping support for
     Bazel+MSVC](https://github.com/protocolbuffers/protobuf/issues/20085)
 
-Enable [protocol compiler toolchainization](#protoc) to avoid recompiling
-`@com_google_protobuf//:protoc` on Windows platforms and fix broken Windows
-builds.
+Enable [protocol compiler toolchainization](#protoc) to fix broken Windows
+builds by avoiding `@com_google_protobuf//:protoc` recompilation.
 
 ### Bzlmod configuration (coming soon!)
 

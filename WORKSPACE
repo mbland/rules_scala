@@ -5,15 +5,17 @@ load("//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
-# Only required if using `--incompatible_enable_proto_toolchain_resolution`.
+# Only include the next two statements if using
+# `--incompatible_enable_proto_toolchain_resolution`.
+load("@platforms//host:extension.bzl", "host_platform_repo")
+
 # Instantiates the `@host_platform` repo to work around:
 # - https://github.com/bazelbuild/bazel/issues/22558
-load("@platforms//host:extension.bzl", "host_platform_repo")
 host_platform_repo(name = "host_platform")
-load("@bazel_features//:deps.bzl", "bazel_features_deps")
-bazel_features_deps()
-load("//scala:protoc.bzl", "register_precompiled_protoc_toolchain")
-register_precompiled_protoc_toolchain()
+
+# This is optional, but still safe to include even when not using
+# `--incompatible_enable_proto_toolchain_resolution`.
+register_toolchains("//protoc:all")
 
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 

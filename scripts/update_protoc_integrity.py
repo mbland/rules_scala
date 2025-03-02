@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
-"""Updates scala/private/protoc/protoc_integrity.bzl"""
+"""Updates `protoc/private/protoc_integrity.bzl`.
+
+`protoc_integrity.bzl` contains the mapping from supported precompiled `protoc`
+platforms to:
+
+- `exec_compatible_with` properties based on `@platforms`
+- `integrity` strings for each of the supported `PROTOC_VERSIONS`
+
+Only computes integrity information for a `protoc` distribution if it doesn't
+already exist in the integrity file.
+
+This borrows some code from `scripts/create_repository.py` that could probably
+be extracted into a common module. Specifically, `emit_protoc_integrity_file()`
+borrows heavily from `ArtifactUpdater.write_to_file()`.
+"""
 
 from base64 import b64encode
 from pathlib import Path
 
+import argparse
 import ast
 import hashlib
 import json
@@ -19,11 +34,6 @@ PROTOC_VERSIONS = [
     "28.3",
     "28.2",
 ]
-
-THIS_FILE = Path(__file__)
-REPO_ROOT = THIS_FILE.parent.parent
-OUTPUT_FILE = REPO_ROOT / 'scala/private/protoc/protoc_integrity.bzl'
-THIS_FILE_RELATIVE_TO_REPO_ROOT = THIS_FILE.relative_to(REPO_ROOT)
 
 PROTOC_RELEASES_URL = "https://github.com/protocolbuffers/protobuf/releases"
 PROTOC_DOWNLOAD_SUFFIX = "/download/v{version}/protoc-{version}-{platform}.zip"
@@ -68,12 +78,44 @@ PROTOC_BUILDS = {
     ],
 }
 
+THIS_FILE = Path(__file__)
+REPO_ROOT = THIS_FILE.parent.parent
+INTEGRITY_FILE = REPO_ROOT / 'protoc/private/protoc_integrity.bzl'
+INTEGRITY_FILE_HEADER = f'''"""Protocol compiler build and integrity metadata.
+
+Generated and updated by {THIS_FILE.relative_to(REPO_ROOT)}.
+"""
+
+PROTOC_RELEASES_URL = "{PROTOC_RELEASES_URL}"
+PROTOC_DOWNLOAD_URL = (
+    PROTOC_RELEASES_URL +
+    "{PROTOC_DOWNLOAD_SUFFIX}"
+)
+
+'''
+
 
 class UpdateProtocIntegrityError(Exception):
     """Errors raised explicitly by this module."""
 
 
 def get_protoc_integrity(platform, version):
+    """Emits the integrity string for the specified `protoc` distribution.
+
+    This will download the distribution specified by applying `platform` and
+    `version` to `PROTOC_DOWNLOAD_URL`.
+
+    Args:
+        platform: a platform key from `PROTOC_BUILDS`
+        version: a valid `protobuf` version specifier
+
+    Returns:
+        a string starting with `sha256-` and ending with the base 64 encoded
+            sha256 checksum of the `protoc` distribution file
+
+    Raises:
+        `UpdateProtocIntegrityError` if downloading or checksumming fails
+    """
     try:
         url = PROTOC_DOWNLOAD_URL.format(
           version = version,
@@ -92,8 +134,20 @@ def get_protoc_integrity(platform, version):
         msg = f'while processing {url}: {err}'
         raise UpdateProtocIntegrityError(msg) from err
 
-def update_build_data(platform, exec_compat, orig_build):
-    integrity = dict(orig_build.get("integrity", {}))
+
+def add_build_data(platform, exec_compat, existing_build):
+    """Adds `protoc` integrity data to `existing_build` for new protoc versions.
+
+    Args:
+        platform: a platform key from `PROTOC_BUILDS`
+        exec_compat: compatibility specifier values from `PROTOC_BUILDS`
+        existing_build: an existing `PROTOC_BUILDS` output value for `platform`,
+            or `{}` if it doesn't yet exist
+
+    Returns:
+        a new dictionary to emit as a `PROTOC_BUILDS` entry in the output file
+    """
+    integrity = dict(existing_build.get("integrity", {}))
 
     for version in PROTOC_VERSIONS:
         if version not in integrity:
@@ -104,7 +158,17 @@ def update_build_data(platform, exec_compat, orig_build):
         "integrity": dict(sorted(integrity.items(), reverse=True)),
     }
 
+
 def stringify_object(data):
+    """Pretty prints `data` as a Starlark object to emit into the output file.
+
+    Args:
+        data: a Python list or dict
+
+    Returns:
+        a pretty-printed string version of `data` to represent a valid Starlark
+            object in the output file
+    """
     result = (
         json.dumps(data, indent=4)
             .replace('true', 'True')
@@ -113,51 +177,74 @@ def stringify_object(data):
     # Add trailing commas.
     return re.sub(r'([]}"])\n', r'\1,\n', result) + '\n'
 
+
 def emit_protoc_integrity_file(output_file, integrity_data):
-    # Lifted this from ArtifactUpdater.write_to_file() from
-    # create_repository.py. Should probably extract it into a helper.
+    """Writes the updated `protoc` integrity data to the `output_file`.
 
+    Args:
+        output_file: path to the updated `protoc` integrity file
+        integrity_data: `protoc` integrity data to emit into `output_file`
+    """
     with output_file.open('w', encoding = 'utf-8') as data:
-        data.write('\n'.join([
-            '"""Protocol compiler build and integrity metadata.\n',
-            'Generated and updated by ' +
-            f'{THIS_FILE_RELATIVE_TO_REPO_ROOT}.',
-            '"""\n\n',
-        ]))
-
-        data.write(f'PROTOC_RELEASES_URL = "{PROTOC_RELEASES_URL}"\n')
-        data.write("PROTOC_DOWNLOAD_URL = (\n    PROTOC_RELEASES_URL +\n")
-        data.write(f'    "{PROTOC_DOWNLOAD_SUFFIX}"\n)\n\n')
-
+        data.write(INTEGRITY_FILE_HEADER)
         data.write("PROTOC_VERSIONS = ")
         data.write(stringify_object(PROTOC_VERSIONS))
-
         data.write("\nPROTOC_BUILDS = ")
         data.write(stringify_object(dict(sorted(integrity_data.items()))))
 
-def load_orig_data(output_file):
-    if not output_file.exists():
+
+def load_existing_data(existing_file):
+    """Loads existing `protoc` integrity data from `existing_file`.
+
+    This enables the script to avoid redownloading `protoc` distribution files
+    when the integrity information already exists.
+
+    Args:
+        existing_file: path to the existing integrity file
+
+    Returns:
+        the existing `PROTOC_BUILDS` integrity data from `existing_file`,
+            or `{}` if the file does not exist
+    """
+    if not existing_file.exists():
         return {}
 
-    with output_file.open('r', encoding='utf-8') as f:
+    with existing_file.open('r', encoding='utf-8') as f:
         data = f.read()
 
     marker = 'PROTOC_BUILDS = '
     start = data.find(marker)
 
     if start == -1:
-        msg = f'"{marker}" not found in {output_file}'
+        msg = f'"{marker}" not found in {existing_file}'
         raise UpdateProtocIntegrityError(msg)
+
     return ast.literal_eval(data[start + len(marker):])
 
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description = "Updates precompiled `protoc` distribution information.",
+    )
+
+    parser.add_argument(
+        '--integrity_file',
+        type=str,
+        default=str(INTEGRITY_FILE),
+        help=f'`protoc` integrity file path (default: {INTEGRITY_FILE})',
+    )
+
+    args = parser.parse_args()
+    integrity_file = Path(args.integrity_file)
+
     try:
-        orig_data = load_orig_data(OUTPUT_FILE)
+        existing_data = load_existing_data(integrity_file)
         updated_data = {
-            k: update_build_data(k, v, orig_data.get(k, {}))
+            k: add_build_data(k, v, existing_data.get(k, {}))
             for k, v in PROTOC_BUILDS.items()
         }
-        emit_protoc_integrity_file(OUTPUT_FILE, updated_data)
+        emit_protoc_integrity_file(integrity_file, updated_data)
+
     except UpdateProtocIntegrityError as err:
-        print(f'Failed to update {OUTPUT_FILE}: {err}', file=sys.stderr)
+        print(f'Failed to update {integrity_file}: {err}', file=sys.stderr)
         sys.exit(1)
