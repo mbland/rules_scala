@@ -5,6 +5,8 @@ load("//scala:deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
+register_toolchains("@rules_scala_toolchains//protoc/...:all")
+
 # The next two calls instantiate the `@host_platform` repo to work around:
 # - https://github.com/bazelbuild/bazel/issues/22558
 # Only required if using `--incompatible_enable_proto_toolchain_resolution`.
