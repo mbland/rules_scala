@@ -281,7 +281,7 @@ load("@platforms//host:extension.bzl", "host_platform_repo")
 host_platform_repo(name = "host_platform")
 ```
 
-#### More background on proto toolchainization
+#### More background on protocol compiler toolchainization
 
 - [Proto Toolchainisation Design Doc](
     https://docs.google.com/document/d/1CE6wJHNfKbUPBr7-mmk_0Yo3a4TaqcTPE0OWNuQkhPs/edit)
