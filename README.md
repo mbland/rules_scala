@@ -17,18 +17,18 @@ This project defines core build rules for [Scala](https://www.scala-lang.org/) t
 
 ## Rules
 
-- [scala_library](docs/scala_library.md)
-- [scala_macro_library](docs/scala_macro_library.md)
-- [scala_binary](docs/scala_binary.md)
-- [scala_test](docs/scala_test.md)
-- [scala_repl](docs/scala_repl.md)
-- [scala_library_suite](docs/scala_library_suite.md)
-- [scala_test_suite](docs/scala_test_suite.md)
-- [thrift_library](docs/thrift_library.md)
-- [scala_proto_library](docs/scala_proto_library.md)
-- [scala_toolchain](docs/scala_toolchain.md)
-- [scala_import](docs/scala_import.md)
-- [scala_doc](docs/scala_doc.md)
+- [scala_library](./docs/scala_library.md)
+- [scala_macro_library](./docs/scala_macro_library.md)
+- [scala_binary](./docs/scala_binary.md)
+- [scala_test](./docs/scala_test.md)
+- [scala_repl](./docs/scala_repl.md)
+- [scala_library_suite](./docs/scala_library_suite.md)
+- [scala_test_suite](./docs/scala_test_suite.md)
+- [thrift_library](./docs/thrift_library.md)
+- [scala_proto_library](./docs/scala_proto_library.md)
+- [scala_toolchain](./docs/scala_toolchain.md)
+- [scala_import](./docs/scala_import.md)
+- [scala_doc](./docs/scala_doc.md)
 
 ## Getting started
 
@@ -612,13 +612,61 @@ In `WORKSPACE`, this `register_toolchains()` call must come before calling
 `scala_register_toolchains()` to ensure this toolchain takes precedence. The
 same exact call will also work in `MODULE.bazel`.
 
+### Bzlmod configuration (coming soon!)
+
+The upcoming Bzlmod implementation will funnel through the `scala_toolchains()`
+macro as well, ensuring maximum compatibility with `WORKSPACE` configurations.
+The equivalent Bzlmod configuration for the `scala_toolchains()` configuration
+above would be:
+
+```py
+bazel_dep(name = "rules_scala", version = "7.0.0")
+
+scala_config = use_extension(
+    "@rules_scala//scala/extensions:config.bzl",
+    "scala_config",
+)
+
+scala_config.settings(scala_version = "2.13.16")
+
+scala_deps = use_extension(
+    "@rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+
+scala_deps.toolchains(
+    scalafmt = True,
+    scalatest = True,
+)
+```
+
+The module extensions will call `scala_config()` and `scala_toolchains()`
+respectively. The `MODULE.bazel` file for `rules_scala` declares its own
+dependencies via `bazel_dep()`, allowing Bazel to resolve versions according to
+the main repository/root module configuration. It also calls
+[`register_toolchains()`][reg_tool], so you don't have to (unless you want to
+register a specific toolchain to resolve first).
+
+[reg_tool]: https://bazel.build/rules/lib/globals/module#register_toolchains
+
+The `MODULE.bazel` files in this repository will also provide many examples
+(when they land per bazelbuild/rules_scala#1482).
+
 #### Copy `register_toolchains()` calls from `WORKSPACE` to `MODULE.bazel`
 
 The `MODULE.bazel` file from `rules_scala` will automatically call
 `register_toolchains()` for toolchains configured via its `scala_deps` module
 extension. However, you must register explicitly in your `MODULE.bazel` file any
 toolchains that you want to take precedence over the toolchains configured by
-`scala_deps`.
+`scala_deps`. This includes any [`scala_toolchain`](./docs/scala_toolchain.md)
+targets defined in your project, or optional `rules_scala` toolchains like the
+dependency checker error toolchain from above:
+
+```py
+register_toolchains(
+    "@rules_scala//scala:unused_dependency_checker_error_toolchain",
+)
+```
 
 ### `@io_bazel_rules_scala_config` is now `@rules_scala_config`
 
@@ -711,46 +759,6 @@ supporting Bazel + MSVC builds per:
 
 Enable [protocol compiler toolchainization](#protoc) to fix broken Windows
 builds by avoiding `@com_google_protobuf//:protoc` recompilation.
-
-### Bzlmod configuration (coming soon!)
-
-The upcoming Bzlmod implementation will funnel through the `scala_toolchains()`
-macro as well, ensuring maximum compatibility with `WORKSPACE` configurations.
-The equivalent Bzlmod configuration for the `scala_toolchains()` configuration
-above would be:
-
-```py
-bazel_dep(name = "rules_scala", version = "7.0.0")
-
-scala_config = use_extension(
-    "@rules_scala//scala/extensions:config.bzl",
-    "scala_config",
-)
-
-scala_config.settings(scala_version = "2.13.16")
-
-scala_deps = use_extension(
-    "@rules_scala//scala/extensions:deps.bzl",
-    "scala_deps",
-)
-
-scala_deps.toolchains(
-    scalafmt = True,
-    scalatest = True,
-)
-```
-
-The module extensions will call `scala_config()` and `scala_toolchains()`
-respectively. The `MODULE.bazel` file for `rules_scala` declares its own
-dependencies via `bazel_dep()`, allowing Bazel to resolve versions according to
-the main repository/root module configuration. It also calls
-[`register_toolchains()`][reg_tool], so you don't have to (unless you want to
-register a specific toolchain to resolve first).
-
-[reg_tool]: https://bazel.build/rules/lib/globals/module#register_toolchains
-
-The `MODULE.bazel` files in this repository will also provide many examples
-(when they land per bazelbuild/rules_scala#1482).
 
 ### Embedded resource paths no longer begin with `external/<repo_name>`
 
