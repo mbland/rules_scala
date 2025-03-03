@@ -29,6 +29,7 @@ _settings_defaults = {
     "maven_servers": default_maven_server_urls(),
     "fetch_sources": True,
     "validate_scala_version": True,
+    "protoc_platforms": [],
 }
 
 _settings_attrs = {
@@ -45,6 +46,16 @@ _settings_attrs = {
         doc = (
             "Check if the configured Scala version matches " +
             "the default version supported by rules_scala"
+        ),
+    ),
+    "protoc_platforms": attr.string_list(
+        default = _settings_defaults["protoc_platforms"],
+        doc = (
+            "Operating system and architecture identifiers for " +
+            "precompiled protocol compiler releases. If unspecified, will " +
+            "use the identifier matching the `HOST_CONSTRAINTS` from " +
+            "`@platforms//host:constraints.bzl`. Only takes effect when " +
+            "`--incompatible_enable_proto_toolchain_resolution` is `True`."
         ),
     ),
 }

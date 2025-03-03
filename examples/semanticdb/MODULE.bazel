@@ -26,5 +26,21 @@ scala_deps.settings(
 
 #Register and use the custom toolchain that has semanticdb enabled
 register_toolchains(
+    "@rules_scala//protoc:all",
     "//:semanticdb_toolchain",
+)
+
+# Temporarily required for `protoc` toolchainization until resolution of
+# protocolbuffers/protobuf#19679.
+bazel_dep(
+    name = "protobuf",
+    version = "29.3",
+    repo_name = "com_google_protobuf",
+)
+
+single_version_override(
+    module_name = "protobuf",
+    version = "29.3",
+    patches = ["//:protobuf.patch"],
+    patch_strip = 1,
 )
