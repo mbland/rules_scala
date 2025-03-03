@@ -56,6 +56,8 @@ run_in_test_repo() {
       MODULE.bazel.template >> $NEW_TEST_DIR/MODULE.bazel
   touch $NEW_TEST_DIR/WORKSPACE.bzlmod
   cp ../.bazel{rc,version} $NEW_TEST_DIR/
+  cp ../protoc/0001-protobuf-19679-rm-protoc-dep.patch \
+      $NEW_TEST_DIR/protobuf.patch
 
   cd $NEW_TEST_DIR
 

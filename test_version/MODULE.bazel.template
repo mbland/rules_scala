@@ -59,6 +59,16 @@ scala_deps.toolchains(
 )
 
 register_toolchains(
+    "@rules_scala//protoc:all",
     "@rules_scala//scala:unused_dependency_checker_error_toolchain",
     "@twitter_scrooge_test_toolchain//...:all",
+)
+
+# Temporarily required for `protoc` toolchainization until resolution of
+# protocolbuffers/protobuf#19679.
+single_version_override(
+    module_name = "protobuf",
+    version = "29.3",
+    patches = ["//:protobuf.patch"],
+    patch_strip = 1,
 )
