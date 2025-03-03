@@ -116,14 +116,10 @@ def get_protoc_integrity(platform, version):
     Raises:
         `UpdateProtocIntegrityError` if downloading or checksumming fails
     """
-    try:
-        url = PROTOC_DOWNLOAD_URL.format(
-          version = version,
-          platform = platform
-        )
-        print(f'Updating protoc {version} for {platform}:')
-        print(f'  {url}')
+    url = PROTOC_DOWNLOAD_URL.format(version = version, platform = platform)
+    print(f'Updating protoc {version} for {platform}:\n  {url}')
 
+    try:
         with urllib.request.urlopen(url) as data:
             body = data.read()
 
