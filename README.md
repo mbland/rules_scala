@@ -237,7 +237,6 @@ which also requires that the patch be a regular file in your own repo. In other
 words, neither `@rules_scala//protoc:0001-protobuf-19679-rm-protoc-dep.patch`
 nor an [`alias`][] to it will work.
 
-[`single_version_override`]: https://bazel.build/rules/lib/globals/module#single_version_override
 [`alias`]: https://bazel.build/reference/be/general#alias
 
 Assuming you've copied the patch to a file called `protobuf.patch` in the root
