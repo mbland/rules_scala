@@ -193,9 +193,15 @@ load(
 with the `MODULE.bazel` or `WORKSPACE` configurations below, `rules_scala` will
 use a precompiled protocol compiler binary by default.
 
-To set the flag in your `.bazelrc` file:
-
 [`--incompatible_enable_proto_toolchain_resolution`]: https://bazel.build/reference/command-line-reference#flag--incompatible_enable_proto_toolchain_resolution
+
+__Windows builds now require the precompiled protocol compiler toolchain.__ See
+the [Windows MSVC builds of protobuf broken by default](#protoc-msvc) section
+below for details.
+
+#### Common setup
+
+To set the flag in your `.bazelrc` file:
 
 ```txt
 common --incompatible_enable_proto_toolchain_resolution
@@ -210,8 +216,61 @@ other toolchain registrations. It's safe to include even when not using
 register_toolchains("@rules_scala//protoc:all")
 ```
 
-`WORKSPACE` must include the `host_platform_repo` snippet from [Getting
-started](#getting-started):
+#### Temporary required `protobuf` patch
+
+As of `protobuf` v29.3, enabling protocol compiler toolchainization requires
+applying [protoc/0001-protobuf-19679-rm-protoc-dep.patch][]. It is the `git
+diff` output from the branch used to create protocolbuffers/protobuf#19679.
+Without it, there remains a transitive dependency on
+`@com_google_protobuf//:protoc`, causing it to recompile even with the
+precompiled toolchain registered first.
+
+[protoc/0001-protobuf-19679-rm-protoc-dep.patch]: ./protoc/0001-protobuf-19679-rm-protoc-dep.patch
+
+If and when `protobuf` merges that pull request, or applies an equivalent fix,
+this patch will no longer be necessary.
+
+#### Bzlmod setup
+
+Applying the `protobuf` patch requires using [`single_version_override`][],
+which also requires that the patch be a regular file in your own repo. In other
+words, neither `@rules_scala//protoc:0001-protobuf-19679-rm-protoc-dep.patch`
+nor an [`alias`][] to it will work.
+
+[`single_version_override`]: https://bazel.build/rules/lib/globals/module#single_version_override
+[`alias`]: https://bazel.build/reference/be/general#alias
+
+Assuming you've copied the patch to a file called `protobuf.patch` in the root
+package of your repository, add the following to your `MODULE.bazel`:
+
+```py
+# MODULE.bazel
+
+# Required for protocol compiler toolchainization until resolution of
+# protocolbuffers/protobuf#19679.
+bazel_dep(
+    name = "protobuf",
+    version = "29.3",
+    repo_name = "com_google_protobuf",
+)
+
+single_version_override(
+    module_name = "protobuf",
+    version = "29.3",
+    patches = ["//:protobuf.patch"],
+    patch_strip = 1,
+)
+```
+
+#### `WORKSPACE` setup
+
+[`scala/deps.bzl`](./scala/deps.bzl) already applies the `protobuf` patch by
+default. If you need to apply it yourself, you can also copy it to your repo as
+described in the Bzlmod setup above. Then follow the example in `scala/deps.bzl`
+to apply it in your own `http_archive` call.
+
+However, `WORKSPACE` must include the `host_platform_repo` snippet from
+[Getting started](#getting-started) to work around bazelbuild/bazel#22558:
 
 ```py
 # WORKSPACE
@@ -222,11 +281,7 @@ load("@platforms//host:extension.bzl", "host_platform_repo")
 host_platform_repo(name = "host_platform")
 ```
 
-__Windows builds now require the precompiled protocol compiler toolchain.__ See
-the [Windows MSVC builds of protobuf broken by default](#protoc-msvc) section
-below for details.
-
-More background on proto toolchainization:
+#### More background on proto toolchainization
 
 - [Proto Toolchainisation Design Doc](
     https://docs.google.com/document/d/1CE6wJHNfKbUPBr7-mmk_0Yo3a4TaqcTPE0OWNuQkhPs/edit)
@@ -819,9 +874,14 @@ with Bazel 6.5.0 won't work at all because [Bazel 6.5.0 doesn't support
 https://github.com/bazelbuild/rules_scala/issues/1482#issuecomment-2515496234).
 
 At the moment, `WORKSPACE` builds mostly continue to work with Bazel 6.5.0, but
-not out of the box, and may break at any time. Per bazelbuild/rules_scala#1647,
-such builds require adding the following flags to `.bazelrc`, required by the
-newer `abseil-cpp` version used by `protobuf`:
+not out of the box, and may break at any time. You will have to choose one of
+the following approaches to resolve `protobuf` compatibility issues.
+
+First, you may choose to use protocol compiler toolchainization. See the [Using
+a precompiled protocol compiler](#protoc) section for details.
+
+Otherwise, per bazelbuild/rules_scala#1647, you must add the following flags to
+`.bazelrc`, required by the newer `abseil-cpp` version used by `protobuf`:
 
 ```txt
 common --enable_platform_specific_config
