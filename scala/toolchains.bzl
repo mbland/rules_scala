@@ -81,7 +81,7 @@ def scala_toolchains(
             compiler srcjar metadata dictionaries containing:
             - exactly one "label", "url", or "urls" key
             - optional "integrity" or "sha256" keys
-        protoc_builds: Operating system and architecture identifiers for
+        protoc_platforms: Operating system and architecture identifiers for
             precompiled protocol compiler releases. If unspecified, will use the
             identifier matching the `HOST_CONSTRAINTS` from
             `@platforms//host:constraints.bzl`. Only takes effect when
