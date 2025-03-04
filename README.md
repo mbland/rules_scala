@@ -166,12 +166,13 @@ v6.x:
 
 - __`rules_scala` no longer requires the `io_bazel_rules_scala` repository
     name__ unless your `BUILD` files or those of your dependencies require it
-    (bazelbuild/rules_scala#1696). You can use the `repo_mapping` attribute of
-    `http_archive`, or equivalent Bzlmod mechanisms, to translate `@rules_scala`
-    to `@io_bazel_rules_scala` for dependencies. The
-    ['@io_bazel_rules_scala_config' is now '@rules_scala_config'](#map) section
-    below describes these options in detail. (That section is about
-    `@rules_scala_config`, but the same mechanisms apply.)
+    (bazelbuild/rules_scala#1696).
+
+    You can use the `repo_mapping` attribute of `http_archive` or equivalent
+    Bzlmod mechanisms to translate `@rules_scala` to `@io_bazel_rules_scala`
+    for dependencies. See the ['@io_bazel_rules_scala_config' is now
+    '@rules_scala_config'](#map) section below for details. (That section is
+    about `@rules_scala_config`, but the same mechanisms apply.)
 
 - __`rules_scala` v7.0.0 introduces a new `scala_toolchains()` API that is
     very different from `rules_scala` 6__. For details on what's changed, see
@@ -384,7 +385,7 @@ maximum available at the time of writing.
 
 | Bazel/Dependency |  `rules_scala` 7.x |
 | :-: |  :-: |
-| Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.5.0, 8.x |
+| Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.5.0, 8.x,<br/>`rolling`, `last_green` |
 | Bazel versions using `WORKSPACE` | 6.5.0, 7.5.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
 | `protobuf` |  v29.3 |
 | `abseil-cpp` | 20250127.0 |
@@ -574,7 +575,8 @@ load(
     "scala_toolchains",
 )
 
-# Note that `rules_scala` toolchain repos are _always_ configured.
+# The `scala_version` toolchain repos used by `scala_library` and `scala_binary`
+# are _always_ configured, but all others are optional.
 scala_toolchains(
     scalafmt = True,
     scalatest = True,
@@ -590,9 +592,9 @@ examples.
 
 ### Replacing toolchain registration macros in `WORKSPACE`
 
-Almost all `rules_scala` toolchains are automatically configured and registered by
-`scala_toolchains()` and `scala_register_toolchains()`. There are two toolchain
-macro replacements that require special handling.
+Almost all `rules_scala` toolchains configured using `scala_toolchains()` are
+automatically registered by `scala_register_toolchains()`. There are two
+toolchain macro replacements that require special handling.
 
 The first is replacing `scala_proto_register_enable_all_options_toolchain()`
 with the following `scala_toolchains()` parameters:
@@ -681,12 +683,10 @@ shouldn't affect most users, but it may break some builds using
 `@io_bazel_rules_scala_config` to define custom [cross-compilation targets](
 ./docs/cross-compilation.md).
 
-If you can't fix uses of `@io_bazel_rules_scala_config` in your own project
-immediately, or have dependencies that need it, there are options.
-Use one of the following mechanisms to override it with `@rules_scala_config`.
-
-The same mechanisms also apply if you need to translate `@rules_scala` to
-`@io_bazel_rules_scala` for your dependencies.
+If you can't update `@io_bazel_rules_scala_config` references in your own
+project immediately, or have dependencies that require it, use the workarounds
+below. (The same workarounds also apply if you need to translate `@rules_scala`
+to `@io_bazel_rules_scala`.)
 
 #### Bzlmod
 
@@ -766,8 +766,8 @@ supporting Bazel + MSVC builds per:
 - [protocolbuffers/protobuf#20085: Breaking Change: Dropping support for
     Bazel+MSVC](https://github.com/protocolbuffers/protobuf/issues/20085)
 
-Enable [protocol compiler toolchainization](#protoc) to fix broken Windows
-builds by avoiding `@com_google_protobuf//:protoc` recompilation.
+To fix this problem, enable [protocol compiler toolchainization](#protoc) to
+avoid `@com_google_protobuf//:protoc` recompilation.
 
 ### Embedded resource paths no longer begin with `external/<repo_name>`
 
@@ -838,9 +838,9 @@ ERROR: no such package
 ```
 
 In this case, where the toolchain only sets different compiler options, the best
-fix is to [use `scala_toolchain` directly instead][scala_tc_direct]. Its
-underlying `BUILD` rule uses builtin toolchain dependencies via existing targets
-visible within `rules_scala`, without forcing users to import them:
+fix is to [use the 'scala_toolchain' rule directly instead][scala_tc_direct].
+Its underlying `BUILD` rule uses builtin toolchain dependencies via existing
+targets visible within `rules_scala`, without forcing users to import them:
 
 [scala_tc_direct]: https://github.com/michalbogacz/scala-bazel-monorepo/blob/2cac860f386dcaa1c3be56cd25a84b247d335743/BUILD.bazel
 
