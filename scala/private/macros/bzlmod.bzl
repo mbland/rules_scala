@@ -3,10 +3,10 @@
 These utilities facilitate the pattern of defining defaults, attrs, and tag
 class dictionaries, as employed by:
 
-- //scala/extensions:config.bzl
-- //scala/extensions:deps.bzl
-- //scala/private/extensions:dev_deps.bzl
-- //scala/private:macros/test/bzlmod_test_ext.bzl
+- `//scala/extensions:config.bzl`
+- `//scala/extensions:deps.bzl`
+- `//scala/private/extensions:dev_deps.bzl`
+- `//scala/private:macros/test/bzlmod_test_ext.bzl`
 
 This pattern overcomes the restriction that tag class attrs are not iterable,
 which would otherwise yield lots of initialization logic with duplicated default
@@ -90,16 +90,16 @@ example_ext = module_extension(
     implementation = _example_ext_impl,
     tag_classes = _tag_classes,
 )
-```py
+```
 """
 
 def root_module_tags(module_ctx, tag_class_names):
-    """Returns the bazel_module_tags from the root bazel_module or a fake.
+    """Returns the `bazel_module_tags` from the root `bazel_module`.
 
-    Returns a fake struct constructed from `tag_class_names` if `module_ctx`
-    doesn't contain the root module (i.e., the root module doesn't use the
-    module extension). This is useful for configuring default values in that
-    case, without having to add special case module extension logic.
+    If the root module doesn't use the module extension (`module_ctx` doesn't
+    contain the root module), returns a `struct` constructed from
+    `tag_class_names`. This is useful for configuring default values in that
+    case, without having to add extra module extension logic.
 
     Args:
         module_ctx: the module extension context
@@ -107,10 +107,7 @@ def root_module_tags(module_ctx, tag_class_names):
             detected
 
     Returns:
-        The bazel_module_tags from the root bazel_module object if
-            `module_ctx.modules` contains the root module,
-        or a struct mapping the specified tag class fields to the empty list
-            otherwise
+        `bazel_module_tags` or a `struct` constructed from `tag_class_names`
     """
     for module in module_ctx.modules:
         if module.is_root:
@@ -123,7 +120,7 @@ _single_tag_err = (
 )
 
 def single_tag_values(module_ctx, tags, tag_defaults):
-    """Returns a dictionary of tag attr names to explicit or default values.
+    """Returns a dictionary of tag `attr` names to explicit or default values.
 
     Use for tags that should appear at most once in a module as a regular tag
     and at most once as a `dev_dependency` tag.
@@ -131,19 +128,17 @@ def single_tag_values(module_ctx, tags, tag_defaults):
     Nondefault values from a `dev_dependency` instance will override the regular
     instance's values.
 
+    Fails if `tags` contains more than two tag instances, if both are
+    `dev_dependency` or regular instances, or if the regular instance doesn't
+    come first.
+
     Args:
         module_ctx: the module extension context
         tags: a list of tag class values from a `bazel_module_tags` object
         tag_defaults: a dictionary of tag attr names to default values
 
     Returns:
-        `tag_defaults` if `tags` is empty, or a new dict created from the
-            elements of `tags`
-
-    Raises:
-        If `tags` contains more than one two tag instances, if both are
-            `dev_dependency` or regular instances, or if the regular instance
-            doesn't come first
+        a dict of tag `attr` names to values
     """
     if len(tags) == 0:
         return tag_defaults
@@ -176,8 +171,10 @@ def single_tag_values(module_ctx, tags, tag_defaults):
 def repeated_tag_values(tags, attr_dict):
     """Compiles repeated tag instances into a dict of dicts.
 
-    The first key from `attr_dict` identifies the tag field used as the dict
-    key. Fails if more than one tag instance has the same key value, regardless
+    Returns a dict of dicts representing unique tag instance values, using the
+    first key from `attr_dict` as the key value.
+
+    Fails if more than one tag instance has the same key value, regardless
     of `dev_dependency` status.
 
     Args:
@@ -185,12 +182,8 @@ def repeated_tag_values(tags, attr_dict):
         attr_dict: a dict from `attr` name to `attr` instance
 
     Returns:
-        a dict of dicts representing unique `tag_name` instance values, using
-            the first key from `attr_dict` as the key value
-
-    Raises:
-        if more than one tag instance contains the same key value (i.e., the
-            same value for the first `attr` in `attr_dict`)
+        a dict from tag instance key values to a dict representing all tag
+            instance values
     """
     attr_names = attr_dict.keys()
     key_name = attr_names[0]

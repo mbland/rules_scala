@@ -1,4 +1,4 @@
-"""Configures core `rules_scala` parameters and exports @io_bazel_rules_scala.
+"""Core `rules_scala` configuration
 
 Provides the `scala_config` module extension with the `settings` tag class.
 See the `_settings_attrs` dict for documentation.
@@ -76,6 +76,6 @@ scala_config = module_extension(
     environ = ["SCALA_VERSION", "ENABLE_COMPILER_DEPENDENCY_TRACKING"],
     doc = (
         "Configures core `rules_scala` parameters and exports them via the " +
-        "@io_bazel_rules_scala repository"
+        "`@rules_scala_config` repository"
     ),
 )

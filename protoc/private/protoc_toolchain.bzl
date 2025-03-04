@@ -28,8 +28,6 @@ def _platform_build(platform):
         )
     return protoc_build
 
-_PROTOC_BUILD_ENTRY_TEMPLATE = """    "{platform}": [\n{specs}\n    ],"""
-
 def _download_build(repository_ctx, package, platform, protoc_build):
     repository_ctx.download_and_extract(
         url = PROTOC_DOWNLOAD_URL.format(
@@ -41,7 +39,7 @@ def _download_build(repository_ctx, package, platform, protoc_build):
     )
 
 def _emit_platform_entry(platform, protoc_build):
-    return _PROTOC_BUILD_ENTRY_TEMPLATE.format(
+    return '    "{platform}": [\n{specs}\n    ],'.format(
         platform = platform,
         specs = "\n".join([
             '        "%s",' % s

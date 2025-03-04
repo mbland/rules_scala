@@ -263,7 +263,12 @@ v6.x:
 
 - __`rules_scala` no longer requires the `io_bazel_rules_scala` repository
     name__ unless your `BUILD` files or those of your dependencies require it
-    (bazelbuild/rules_scala#1696).
+    (bazelbuild/rules_scala#1696). You can use the `repo_mapping` attribute of
+    `http_archive`, or equivalent Bzlmod mechanisms, to translate `@rules_scala`
+    to `@io_bazel_rules_scala` for dependencies. The
+    ['@io_bazel_rules_scala_config' is now '@rules_scala_config'](#map) section
+    below describes these options in detail. (That section is about
+    `@rules_scala_config`, but the same mechanisms apply.)
 
 - __`rules_scala` v7.0.0 introduces a new `scala_toolchains()` API that is
     very different from `rules_scala` 6__. For details on what's changed, see
@@ -762,7 +767,7 @@ register_toolchains(
 )
 ```
 
-### `@io_bazel_rules_scala_config` is now `@rules_scala_config`
+### <a id="map"></a>`@io_bazel_rules_scala_config` is now `@rules_scala_config`
 
 Since `@io_bazel_rules_scala` is no longer hardcoded in `rules_scala` internals,
 we've shortened `@io_bazel_rules_scala_config` to `@rules_scala_config`. This
@@ -771,7 +776,16 @@ shouldn't affect most users, but it may break some builds using
 ./docs/cross-compilation.md).
 
 If you can't fix uses of `@io_bazel_rules_scala_config` in your own project
-immediately, you can remap `@rules_scala_config` via [`use_repo()`]:
+immediately, or have dependencies that need it, there are options.
+Use one of the following mechanisms to override it with `@rules_scala_config`.
+
+The same mechanisms also apply if you need to translate `@rules_scala` to
+`@io_bazel_rules_scala` for your dependencies.
+
+#### Bzlmod
+
+You can remap `@rules_scala_config` via [`use_repo()`] if you need it in your
+own project:
 
 [`use_repo()`]: https://bazel.build/rules/lib/globals/module#use_repo
 
@@ -783,11 +797,6 @@ scala_config = use_extension(
 
 use_repo(scala_config, io_bazel_rules_scala_config = "rules_scala_config")
 ```
-
-If any of your dependencies still require `@io_bazel_rules_scala_config`, use
-one of the following mechanisms to override it with `@rules_scala_config`:
-
-#### Bzlmod
 
 For [`bazel_dep()`][] dependencies, use [`override_repo()`][] to
 override `@io_bazel_rules_scala_config` with `@rules_scala_config`:
