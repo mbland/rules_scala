@@ -29,7 +29,7 @@ SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "platforms", version = "0.0.11")
 bazel_dep(name = "rules_cc", version = "0.1.1")
-bazel_dep(name = "rules_java", version = "8.9.0")
+bazel_dep(name = "rules_java", version = "8.10.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
 
 bazel_dep(
@@ -239,7 +239,7 @@ go_sdk = use_extension(
     "go_sdk",
     dev_dependency = True,
 )
-go_sdk.download(version = "1.24.0")
+go_sdk.download(version = "1.24.1")
 
 go_deps = use_extension(
     "@gazelle//:extensions.bzl",

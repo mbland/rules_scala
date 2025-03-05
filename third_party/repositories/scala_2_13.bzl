@@ -522,8 +522,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalafmt_config": {
-        "artifact": "org.scalameta:scalafmt-config_2.13:3.9.1",
-        "sha256": "f543f1076717e6e8b96cc0149a08b3fc09e7e746c651f0dfadf64d33f3ba334a",
+        "artifact": "org.scalameta:scalafmt-config_2.13:3.9.2",
+        "sha256": "8d79ecc21bfaa166eb4287b72fc557d8e8f4716d79e810e62d73e18f3b2f28c9",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@org_scalameta_metaconfig_core",
@@ -531,8 +531,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalafmt_core": {
-        "artifact": "org.scalameta:scalafmt-core_2.13:3.9.1",
-        "sha256": "99612ddaf548a46c0beba1881b30c36340d0580252c966a95cccf0cfc464d6d9",
+        "artifact": "org.scalameta:scalafmt-core_2.13:3.9.2",
+        "sha256": "2fc1be62c89b3db576c73d1b5ac73f262fd45c966c5c43d3c19cb22a6979c12f",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@org_scalameta_mdoc_parser",
@@ -542,8 +542,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalafmt_macros": {
-        "artifact": "org.scalameta:scalafmt-macros_2.13:3.9.1",
-        "sha256": "1bd711d82ca30e4861c0f2849e32135967c63af2aa19cefd117df131119fc506",
+        "artifact": "org.scalameta:scalafmt-macros_2.13:3.9.2",
+        "sha256": "90ad18b7e04caed415529052ffd2efd1f1c21f938ea6dc3fbab1d9606bdb7b18",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -551,8 +551,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalafmt_sysops": {
-        "artifact": "org.scalameta:scalafmt-sysops_2.13:3.9.1",
-        "sha256": "86725f4905f2e090ebbadb16b4897e098d3d2dec9f003d9acbfc791b078e48d0",
+        "artifact": "org.scalameta:scalafmt-sysops_2.13:3.9.2",
+        "sha256": "17ce88d8833902c38ee8106f65a07492c6bc00269c48da459c7c4c93cc739f6c",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_parallel_collections",
