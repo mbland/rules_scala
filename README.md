@@ -168,10 +168,14 @@ v6.x:
     name__ unless your `BUILD` files or those of your dependencies require it
     (bazelbuild/rules_scala#1696).
 
+    Update your project's `@io_bazel_rules_scala` references to `@rules_scala`
+    if possible. Otherwise, use `repo_name = "io_bazel_rules_scala"` in
+    `bazel_dep()` or `name = "io_bazel_rules_scala"` in `http_archive`.
+
     You can use the `repo_mapping` attribute of `http_archive` or equivalent
-    Bzlmod mechanisms to translate `@rules_scala` to `@io_bazel_rules_scala`
-    for dependencies. See the ['@io_bazel_rules_scala_config' is now
-    '@rules_scala_config'](#map) section below for details. (That section is
+    Bzlmod mechanisms to translate `@rules_scala` to `@io_bazel_rules_scala` for
+    dependencies. See the [Translating repo names for
+    dependencies](#repo-mapping) section below for details. (That section is
     about `@rules_scala_config`, but the same mechanisms apply.)
 
 - __`rules_scala` v7.0.0 introduces a new `scala_toolchains()` API that is
@@ -368,7 +372,7 @@ Please check [cross-compilation.md](docs/cross-compilation.md) for more details 
 ## Compatible Bazel versions
 
 Bazel compatibility is tied directly to the versions of `protobuf` required by
-Bazel and `rules_java`, and their compatibility with [scalabp/ScalaPB](
+Bazel and `rules_java`, and their compatibility with [scalapb/ScalaPB](
 https://github.com/scalapb/ScalaPB) Maven artifacts. For extensive analysis,
 see bazelbuild/rules_scala#1647.
 
@@ -675,7 +679,7 @@ register_toolchains(
 )
 ```
 
-### <a id="map"></a>`@io_bazel_rules_scala_config` is now `@rules_scala_config`
+### `@io_bazel_rules_scala_config` is now `@rules_scala_config`
 
 Since `@io_bazel_rules_scala` is no longer hardcoded in `rules_scala` internals,
 we've shortened `@io_bazel_rules_scala_config` to `@rules_scala_config`. This
@@ -683,15 +687,10 @@ shouldn't affect most users, but it may break some builds using
 `@io_bazel_rules_scala_config` to define custom [cross-compilation targets](
 ./docs/cross-compilation.md).
 
-If you can't update `@io_bazel_rules_scala_config` references in your own
-project immediately, or have dependencies that require it, use the workarounds
-below. (The same workarounds also apply if you need to translate `@rules_scala`
-to `@io_bazel_rules_scala`.)
-
-#### Bzlmod
-
-You can remap `@rules_scala_config` via [`use_repo()`] if you need it in your
-own project:
+If your project uses Bzlmod, you can remap `@io_bazel_rules_scala_config` to
+`@rules_scala_config` for your own project via [`use_repo()`]. Use this only if
+updating your project's own `@io_bazel_rules_scala_config` references isn't
+immediately feasible.
 
 [`use_repo()`]: https://bazel.build/rules/lib/globals/module#use_repo
 
@@ -704,8 +703,20 @@ scala_config = use_extension(
 use_repo(scala_config, io_bazel_rules_scala_config = "rules_scala_config")
 ```
 
-For [`bazel_dep()`][] dependencies, use [`override_repo()`][] to
-override `@io_bazel_rules_scala_config` with `@rules_scala_config`:
+If your project uses `WORKSPACE` you _must_ update all
+`@io_bazel_rules_scala_config` references to `@rules_scala_config`. There is no
+`use_repo()` equivalent.
+
+#### <a id="repo-mapping"></a>Translating repo names for dependencies
+
+For any dependencies referencing `@io_bazel_rules_scala_config`, use the workarounds
+below. The same workarounds for your project's dependencies also apply to
+translating `@rules_scala` to `@io_bazel_rules_scala`.
+
+#### Bzlmod
+
+For module extensions, use [`override_repo()`][] to override
+`@io_bazel_rules_scala_config` with `@rules_scala_config`:
 
 ```py
 bazel_dep(name = "foo", version = "1.0.0")
@@ -714,12 +725,12 @@ foo_ext = use_extension("@foo//:ext.bzl", "foo_ext")
 override_repo(foo_ext, io_bazel_rules_scala_config = "rules_scala_config")
 ```
 
-[`bazel_dep()`]: https://bazel.build/rules/lib/globals/module#bazel_dep
-[`override_repo()`]: https://bazel.build/rules/lib/globals/module#override_repo
-
-For [`archive_override()`][] and [`git_override()`][] dependencies, use the
-`repo_mapping` attribute passed through to the underlying [`http_archive()`][]
-and [`git_repository()`][] rules:
+[`bazel_dep()`][] dependencies may still require `@io_bazel_rules_scala_config`
+(or `@io_bazel_rules_scala`) outside of a module extension. In this case, to
+avoid using the old name in your own project, use [`archive_override()`][] or
+[`git_override()`][] with the `repo_mapping` attribute. These overrides pass the
+`repo_mapping` through to the underlying [`http_archive()`][] and
+[`git_repository()`][] rules:
 
 ```py
 archive_override(
@@ -731,6 +742,8 @@ archive_override(
 )
 ```
 
+[`override_repo()`]: https://bazel.build/rules/lib/globals/module#override_repo
+[`bazel_dep()`]: https://bazel.build/rules/lib/globals/module#bazel_dep
 [`archive_override()`]: https://bazel.build/rules/lib/globals/module#archive_override
 [`git_override()`]: https://bazel.build/rules/lib/globals/module#git_override
 [`http_archive()`]: https://bazel.build/rules/lib/repo/http#http_archive-repo_mapping
@@ -738,7 +751,7 @@ archive_override(
 
 #### `WORKSPACE`
 
-Use the `repo_mapping` attribute of [`http_archive()`][] or
+For dependencies, use the `repo_mapping` attribute of [`http_archive()`][] or
 [`git_repository()`][]:
 
 ```py
