@@ -498,8 +498,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalafmt_config": {
-        "artifact": "org.scalameta:scalafmt-config_2.12:3.9.1",
-        "sha256": "4864b0544a9a35d79cba98df8b354713678b333bd7031790e7224cb9153efc34",
+        "artifact": "org.scalameta:scalafmt-config_2.12:3.9.2",
+        "sha256": "0fc67813542f2905c73061cf0cfc79a5d6126be6a2a288a6166a29cdb9e743ea",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@org_scalameta_metaconfig_core",
@@ -507,8 +507,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalafmt_core": {
-        "artifact": "org.scalameta:scalafmt-core_2.12:3.9.1",
-        "sha256": "1721418c28f4b1e71ec65d2fb8da6aef35142922cd397a4a14422a6015c3f9a1",
+        "artifact": "org.scalameta:scalafmt-core_2.12:3.9.2",
+        "sha256": "df77f03d1c6de6956a3cde8955f7f5d1f47fdb96d343ec42fa412ba587b5f00a",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@org_scalameta_mdoc_parser",
@@ -518,8 +518,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalafmt_macros": {
-        "artifact": "org.scalameta:scalafmt-macros_2.12:3.9.1",
-        "sha256": "0fc1e93bd59844b8f5bba287bf96d47b07df52f2252e61352ab777575290221b",
+        "artifact": "org.scalameta:scalafmt-macros_2.12:3.9.2",
+        "sha256": "5576e3c1029d74bcc3cf04a00fcd7b34d339f93e79d390002a35e3c0846737f0",
         "deps": [
             "@io_bazel_rules_scala_scala_library",
             "@io_bazel_rules_scala_scala_reflect",
@@ -527,8 +527,8 @@ artifacts = {
         ],
     },
     "org_scalameta_scalafmt_sysops": {
-        "artifact": "org.scalameta:scalafmt-sysops_2.12:3.9.1",
-        "sha256": "5ce1699ecf9fdd76301dfcac7997d0b2ab479f5b4db21e53d697764b41bc25f9",
+        "artifact": "org.scalameta:scalafmt-sysops_2.12:3.9.2",
+        "sha256": "760a3e8bb9f8e5d9e741152715fb7a17f0ac7c658351977f3e07ced6cbb34750",
         "deps": [
             "@com_github_bigwheel_util_backports",
             "@io_bazel_rules_scala_scala_library",
