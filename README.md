@@ -78,8 +78,6 @@ host_platform_repo(name = "host_platform")
 # `--incompatible_enable_proto_toolchain_resolution`.
 register_toolchains("@rules_scala//protoc:all")
 
-host_platform_repo(name = "host_platform")
-
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
 rules_java_dependencies()
@@ -928,22 +926,25 @@ Note that this example uses `common:` config settings instead of `build:`. This
 seems to prevent invalidating the action cache between `bazel` runs, which
 improves performance.
 
-If you have another dependency that requires an earlier `protobuf` version, use
-the following maximum dependency versions:
+If you have a dependency that requires `protobuf` version before v28, use the
+following maximum versions of key dependencies. Note that no `ScalaPB` release
+supports `protobuf` v25.6, v26, or v27.
 
-| Dependency | Max Bazel 6.5.0 compatible version | Reason |
+| Dependency | Max compatible version | Reason |
 | :-: | :-: | :- |
-| `protobuf` | v25.6 | `ScalaPB` doesn't support `protobuf` v26 or v27. |
-| `abseil-cpp` | 20240722.0 | Latest that works with `protobuf` v25; requires C++ compiler flags. |
+| `protobuf` | v25.5 | Maximum version supported by `ScalaPB` 0.11.17. |
 | `rules_java` | 7.12.4 | 8.x requires `protobuf` v27 and later. |
 | `rules_cc` | 0.0.9 | 0.0.10 requires Bazel 7 to define `CcSharedLibraryHintInfo`.<br/>0.0.13 requires at least `protobuf` v27.0. |
-| `ScalaPB` | 0.11.17<br/>(0.9.8 for Scala 2.11) | Supports `protobuf` < v26. |
+| `ScalaPB` | 0.11.17<br/>(0.9.8 for Scala 2.11) | Later versions only support `protobuf` >= v28. |
 
 ### `scala_proto` not supported for Scala 2.11
 
 [ScalaPB 0.9.8](https://github.com/scalapb/ScalaPB/releases/tag/v0.9.8), the
-last version compatible with Scala 2.11, does not support `protobuf` >= v26.
-Since `rules_scala` now depends on a more recent `protobuf` version, we had to
+last version compatible with Scala 2.11, doesn't support `protobuf` v25.6 or
+later. See bazelbuild/rules_scala#1712 for an example of what happens to Scala
+2.11 test cases when using `protobuf` v25.6. Since `rules_scala` now supports
+more recent `protobuf` versions via [ScalaPB 1.0.0-alpha1](
+https://github.com/scalapb/ScalaPB/releases/tag/v1.0.0-alpha.1), we had to
 remove the Scala 2.11 test cases.
 
 Building `scala_proto` for Scala 2.11 requires [building with Bazel 6.5.0
