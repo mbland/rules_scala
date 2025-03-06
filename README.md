@@ -260,13 +260,13 @@ package of your repository, add the following to your `MODULE.bazel`:
 # protocolbuffers/protobuf#19679.
 bazel_dep(
     name = "protobuf",
-    version = "29.3",
+    version = "30.0",
     repo_name = "com_google_protobuf",
 )
 
 single_version_override(
     module_name = "protobuf",
-    version = "29.3",
+    version = "30.0",
     patches = ["//:protobuf.patch"],
     patch_strip = 1,
 )
@@ -391,7 +391,7 @@ maximum available at the time of writing.
 | :-: |  :-: |
 | Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.5.0, 8.x,<br/>`rolling`, `last_green` |
 | Bazel versions using `WORKSPACE` | 6.5.0, 7.5.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
-| `protobuf` |  v29.3 |
+| `protobuf` |  v30.0 |
 | `abseil-cpp` | 20250127.0 |
 | `rules_java` | 8.10.0 |
 | `ScalaPB` | 1.0.0-alpha.1 |
