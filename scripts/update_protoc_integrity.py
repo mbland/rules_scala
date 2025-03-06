@@ -27,6 +27,7 @@ import urllib.request
 import sys
 
 PROTOC_VERSIONS = [
+    "30.0",
     "29.3",
     "29.2",
     "29.1",
