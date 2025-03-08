@@ -27,12 +27,11 @@ import urllib.request
 import sys
 
 PROTOC_VERSIONS = [
+    "30.0",
     "29.3",
     "29.2",
     "29.1",
     "29.0",
-    "28.3",
-    "28.2",
 ]
 
 PROTOC_RELEASES_URL = "https://github.com/protocolbuffers/protobuf/releases"
