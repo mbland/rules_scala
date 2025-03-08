@@ -196,16 +196,17 @@ load(
 
 ### <a id="protoc"></a>Using a precompiled protocol compiler
 
-`rules_scala` now supports
-[`--incompatible_enable_proto_toolchain_resolution`][]. When using this flag
-with the `MODULE.bazel` or `WORKSPACE` configurations below, `rules_scala` will
-use a precompiled protocol compiler binary by default.
+`rules_scala` now supports the
+[`--incompatible_enable_proto_toolchain_resolution`][] flag when using
+[`protobuf` v29 or later](#why-proto-v29). When using this flag with the
+`MODULE.bazel` or `WORKSPACE` configurations below, `rules_scala` will use a
+precompiled protocol compiler binary by default.
 
 [`--incompatible_enable_proto_toolchain_resolution`]: https://bazel.build/reference/command-line-reference#flag--incompatible_enable_proto_toolchain_resolution
 
-__Windows builds now require the precompiled protocol compiler toolchain.__ See
-the [Windows MSVC builds of protobuf broken by default](#protoc-msvc) section
-below for details.
+__Windows builds now require using `protobuf` v29 or later with the precompiled
+protocol compiler toolchain.__ See the [Windows MSVC builds of protobuf broken
+by default](#protoc-msvc) section below for details.
 
 #### Common setup
 
@@ -226,12 +227,11 @@ register_toolchains("@rules_scala//protoc:all")
 
 #### Temporary required `protobuf` patch
 
-As of `protobuf` v29.3, enabling protocol compiler toolchainization requires
-applying [protoc/0001-protobuf-19679-rm-protoc-dep.patch][]. It is the `git
-diff` output from the branch used to create protocolbuffers/protobuf#19679.
-Without it, there remains a transitive dependency on
-`@com_google_protobuf//:protoc`, causing it to recompile even with the
-precompiled toolchain registered first.
+At the moment, enabling protocol compiler toolchainization requires applying
+[protoc/0001-protobuf-19679-rm-protoc-dep.patch][]. It is the `git diff` output
+from the branch used to create protocolbuffers/protobuf#19679. Without it, a
+transitive dependency on `@com_google_protobuf//:protoc` remains, causing
+`protoc` to recompile even with the precompiled toolchain registered first.
 
 [protoc/0001-protobuf-19679-rm-protoc-dep.patch]: ./protoc/0001-protobuf-19679-rm-protoc-dep.patch
 
@@ -288,6 +288,55 @@ load("@platforms//host:extension.bzl", "host_platform_repo")
 # - https://github.com/bazelbuild/bazel/issues/22558
 host_platform_repo(name = "host_platform")
 ```
+
+#### <a id="why-proto-v29"></a>Why this requires `protobuf` v29 or later
+
+Using `--incompatible_enable_proto_toolchain_resolution` with versions of
+`protobuf` before v29 causes build failures due to a missing internal Bazel
+dependency.
+
+Bazel's builtin `bazel_java_proto_aspect` transitively depends on a toolchain
+with a [`toolchain_type`][] of `@rules_java//java/proto:toolchain_type`.
+Experimentation with `protobuf` v28.2 using both Bazel 6.5.0 and 7.5.0 led to
+the following error:
+
+```txt
+ERROR: .../external/bazel_tools/src/main/protobuf/BUILD:28:15:
+  in @@_builtins//:common/java/proto/java_proto_library.bzl%bazel_java_proto_aspect
+  aspect on proto_library rule
+  @@bazel_tools//src/main/protobuf:worker_protocol_proto:
+
+Traceback (most recent call last):
+  File "/virtual_builtins_bzl/common/java/proto/java_proto_library.bzl",
+    line 53, column 53, in _bazel_java_proto_aspect_impl
+  File "/virtual_builtins_bzl/common/proto/proto_common.bzl",
+    line 364, column 17, in _find_toolchain
+Error in fail: No toolchains registered for
+  '@rules_java//java/proto:toolchain_type'.
+
+ERROR: Analysis of target
+  '@@bazel_tools//src/main/protobuf:worker_protocol_proto' failed
+```
+
+See the commit "Only support protoc toolchainization for >= v29.0" from
+bazelbuild/rules_scala#1710 for details of the experiment.
+
+For `protobuf` v29.0, protocolbuffers/protobuf#18308 added the
+[`@protobuf//bazel/private/toolchains`][proto-private-tc] package and updated
+`protobuf_deps()` from `@protobuf//:protobuf_deps.bzl` to register it:
+
+```py
+native.register_toolchains("//bazel/private/toolchains:all")
+```
+
+[`toolchain_type`]: https://bazel.build/extending/toolchains#writing-rules-toolchains
+[proto-private-tc]: https://github.com/protocolbuffers/protobuf/blob/v29.0/bazel/private/toolchains/BUILD.bazel
+
+protocolbuffers/protobuf#18435 then introduced
+[`java_source_toolchain_bazel7`][java-proto-tc] with the required
+`toolchain_type`.
+
+[java-proto-tc]: https://github.com/protocolbuffers/protobuf/blob/v29.0/bazel/private/toolchains/BUILD.bazel#L50-L74
 
 #### More background on protocol compiler toolchainization
 
@@ -905,11 +954,36 @@ At the moment, `WORKSPACE` builds mostly continue to work with Bazel 6.5.0, but
 not out of the box, and may break at any time. You will have to choose one of
 the following approaches to resolve `protobuf` compatibility issues.
 
-First, you may choose to use protocol compiler toolchainization. See the [Using
-a precompiled protocol compiler](#protoc) section for details.
+First of all, you _must_ use `protobuf` v29 or earlier. `rules_scala` now uses
+v30 by default, which removes `py_proto_library` and other symbols that Bazel
+6.5.0 requires:
 
-Otherwise, per bazelbuild/rules_scala#1647, you must add the following flags to
-`.bazelrc`, required by the newer `abseil-cpp` version used by `protobuf`:
+```txt
+ERROR: Traceback (most recent call last):
+  File ".../external/bazel_tools/src/main/protobuf/BUILD",
+  line 1, column 46, in <toplevel>
+    load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
+
+Error: file '@com_google_protobuf//:protobuf.bzl'
+  does not contain symbol 'py_proto_library'
+
+ERROR: .../src/java/io/bazel/rulesscala/worker/BUILD:3:13:
+  no such target '@bazel_tools//src/main/protobuf:worker_protocol_java_proto':
+  target 'worker_protocol_java_proto'
+  not declared in package 'src/main/protobuf'
+  defined by .../external/bazel_tools/src/main/protobuf/BUILD
+  (Tip: use `query "@bazel_tools//src/main/protobuf:*"`
+    to see all the targets in that package)
+  and referenced by '//src/java/io/bazel/rulesscala/worker:worker'
+```
+
+You may use protocol compiler toolchainization with `protobuf` v29 to avoid
+recompiling `protoc`. See the [Using a precompiled protocol compiler](#protoc)
+section for details.
+
+Otherwise, per bazelbuild/rules_scala#1647, add the following flags to
+`.bazelrc` to compile the newer `abseil-cpp` versions used by newer `protobuf`
+versions:
 
 ```txt
 common --enable_platform_specific_config

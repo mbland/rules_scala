@@ -32,8 +32,6 @@ PROTOC_VERSIONS = [
     "29.2",
     "29.1",
     "29.0",
-    "28.3",
-    "28.2",
 ]
 
 PROTOC_RELEASES_URL = "https://github.com/protocolbuffers/protobuf/releases"
