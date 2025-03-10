@@ -416,8 +416,7 @@ ERROR: Analysis of target
   '@@bazel_tools//src/main/protobuf:worker_protocol_proto' failed
 ```
 
-See the commit "Only support protoc toolchainization for >= v29.0" from
-bazelbuild/rules_scala#1710 for details of the experiment.
+See bazelbuild/rules_scala#1710 for details of the experiment.
 
 For `protobuf` v29.0, protocolbuffers/protobuf#18308 added the
 [`@protobuf//bazel/private/toolchains`][proto-private-tc] package and updated
@@ -922,8 +921,8 @@ supporting Bazel + MSVC builds per:
 - [protocolbuffers/protobuf#20085: Breaking Change: Dropping support for
     Bazel+MSVC](https://github.com/protocolbuffers/protobuf/issues/20085)
 
-To fix this problem, enable [protocol compiler toolchainization](#protoc) to
-avoid `@com_google_protobuf//:protoc` recompilation.
+Enable [protocol compiler toolchainization](#protoc) to fix broken Windows
+builds by avoiding `@com_google_protobuf//:protoc` recompilation.
 
 ### Embedded resource paths no longer begin with `external/<repo_name>`
 
