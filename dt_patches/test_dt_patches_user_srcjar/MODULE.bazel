@@ -160,12 +160,8 @@ scala_deps.compiler_srcjar(
     version = "3.5.2",
 )
 scala_deps.compiler_srcjar(
-    url = "https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.6.2/scala3-compiler_3-3.6.2-sources.jar",
-    version = "3.6.2",
-)
-scala_deps.compiler_srcjar(
-    url = "https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.6.3/scala3-compiler_3-3.6.3-sources.jar",
-    version = "3.6.3",
+    url = "https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.6.4/scala3-compiler_3-3.6.4-sources.jar",
+    version = "3.6.4",
 )
 
 register_toolchains(
@@ -177,13 +173,13 @@ register_toolchains(
 # protocolbuffers/protobuf#19679.
 bazel_dep(
     name = "protobuf",
-    version = "29.3",
+    version = "30.0",
     repo_name = "com_google_protobuf",
 )
 
 single_version_override(
     module_name = "protobuf",
-    version = "29.3",
+    version = "30.0",
     patches = ["//:protobuf.patch"],
     patch_strip = 1,
 )

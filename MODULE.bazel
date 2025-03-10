@@ -21,7 +21,7 @@ SCALA_3_VERSIONS = [
     "3.1.3",
     "3.3.5",
     "3.5.2",
-    "3.6.3",
+    "3.6.4",
 ]
 
 SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
@@ -29,12 +29,13 @@ SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "platforms", version = "0.0.11")
 bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "abseil-cpp", version = "20250127.0")
 bazel_dep(name = "rules_java", version = "8.10.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
 
 bazel_dep(
     name = "protobuf",
-    version = "29.3",
+    version = "30.0",
     repo_name = "com_google_protobuf",
 )
 
@@ -42,7 +43,7 @@ bazel_dep(
 # protocolbuffers/protobuf#19679.
 single_version_override(
     module_name = "protobuf",
-    version = "29.3",
+    version = "30.0",
     patches = ["//protoc:0001-protobuf-19679-rm-protoc-dep.patch"],
     patch_strip = 1,
 )
@@ -258,11 +259,11 @@ go_deps = use_extension(
 # - https://go.dev/ref/mod#checksum-database
 #
 #   go list -m golang.org/x/tools@latest
-#   curl https://sum.golang.org/lookup/golang.org/x/tools@v0.29.0
+#   curl https://sum.golang.org/lookup/golang.org/x/tools@v0.31.0
 go_deps.module(
     path = "golang.org/x/tools",
-    sum = "h1:BgcpHewrV5AUp2G9MebG4XPFI1E2W41zU1SaqVA9vJY=",
-    version = "v0.30.0",
+    sum = "h1:0EedkvKDbh+qistFTd0Bcwe/YLh4vHwWEkiI0toFIBU=",
+    version = "v0.31.0",
 )
 
 go_deps.module(
