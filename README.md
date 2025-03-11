@@ -71,7 +71,6 @@ scala_config = use_extension(
     "@rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
-
 scala_config.settings(scala_version = "2.13.16")
 
 # See the `scala/extensions/deps.bzl` docstring for a high level description of
@@ -103,7 +102,6 @@ bazel_dep(
     version = "30.0",
     repo_name = "com_google_protobuf",
 )
-
 single_version_override(
     module_name = "protobuf",
     patch_strip = 1,
@@ -359,7 +357,6 @@ bazel_dep(
     version = "30.0",
     repo_name = "com_google_protobuf",
 )
-
 single_version_override(
     module_name = "protobuf",
     patch_strip = 1,
@@ -780,14 +777,12 @@ scala_config = use_extension(
     "@rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
-
 scala_config.settings(scala_version = "2.13.16")
 
 scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
-
 scala_deps.toolchains(
     scalafmt = True,
     scalatest = True,
@@ -1046,8 +1041,9 @@ with Bazel 6.5.0 won't work at all because [Bazel 6.5.0 doesn't support
 https://github.com/bazelbuild/rules_scala/issues/1482#issuecomment-2515496234).
 
 At the moment, `WORKSPACE` builds mostly continue to work with Bazel 6.5.0, but
-not out of the box, and may break at any time. You will have to choose one of
-the following approaches to resolve `protobuf` compatibility issues.
+not out of the box, and may break at any time.
+
+#### Maximum of `protobuf` v29
 
 First of all, you _must_ use `protobuf` v29 or earlier. `rules_scala` now uses
 v30 by default, which removes `py_proto_library` and other symbols that Bazel
@@ -1072,6 +1068,12 @@ ERROR: .../src/java/io/bazel/rulesscala/worker/BUILD:3:13:
   and referenced by '//src/java/io/bazel/rulesscala/worker:worker'
 ```
 
+#### Using a prebuilt `@com_google_protobuf//:protoc` or C++ compiler flags
+
+Newer versions of `@com_google_protobuf//:protoc` fail to compile under Bazel
+6.5.0 by default. You will have to choose one of the following approaches to
+resolve this problem, if migrating to Bazel 7 or 8 isn't an immediate option.
+
 You may use protocol compiler toolchainization with `protobuf` v29 to avoid
 recompiling `protoc`. See the [Using a precompiled protocol compiler](#protoc)
 section for details.
@@ -1094,6 +1096,8 @@ common:windows --host_cxxopt=/std=c++17
 Note that this example uses `common:` config settings instead of `build:`. This
 seems to prevent invalidating the action cache between `bazel` runs, which
 improves performance.
+
+#### Using older `protobuf` versions
 
 If you have a dependency that requires `protobuf` version before v28, use the
 following maximum versions of key dependencies. Note that no `ScalaPB` release
@@ -1120,6 +1124,48 @@ Building `scala_proto` for Scala 2.11 requires [building with Bazel 6.5.0
 under `WORKSPACE`](#6.5.0), with the maximum dependency versions specified in
 that section. While this may continue to work for some time, it is not
 officially supported.
+
+### Removal of `bind()` aliases for `twitter_scrooge` dependencies
+
+`rules_scala` 7.x removes all of the obsolete [`bind()`][] aliases under
+`//external:io_bazel_rules_scala/dependency/` created for `twitter_scrooge`
+toolchain dependencies. If your project happens to depend on these aliases, you
+can replace them with the following repository references:
+
+| `bind()` alias under `//external:io_bazel_rules_scala/dependency/` | Repository reference |
+| :-- | :-- |
+| `scala/guava` | `@io_bazel_rules_scala_guava` |
+| `thrift/javax_annotation_api` | `@io_bazel_rules_scala_javax_annotation_api` |
+| `thrift/libthrift` | `@libthrift` |
+| `thrift/mustache` | `@io_bazel_rules_scala_mustache` |
+| `thrift/scopt` | `@io_bazel_rules_scala_scopt` |
+| `thrift/scrooge_core` | `@io_bazel_rules_scala_scrooge_core` |
+| `thrift/scrooge_generator` | `@io_bazel_rules_scala_scrooge_generator` |
+| `thrift/util_core` | `@io_bazel_rules_scala_util_core` |
+| `thrift/util_logging` | `@io_bazel_rules_scala_util_logging` |
+
+[`bind()`]: https://bazel.build/reference/be/workspace#bind
+
+To access these repositories under Bzlmod, you'll need to add the following to
+your `MODULE.bazel` file:
+
+```py
+scala_deps.toolchains(
+    twitter_scrooge = True,
+)
+use_repo(
+    scala_deps,
+    "io_bazel_rules_scala_guava",
+    "io_bazel_rules_scala_javax_annotation_api",
+    "io_bazel_rules_scala_mustache",
+    "io_bazel_rules_scala_scopt",
+    "io_bazel_rules_scala_scrooge_core",
+    "io_bazel_rules_scala_scrooge_generator",
+    "io_bazel_rules_scala_util_core",
+    "io_bazel_rules_scala_util_logging",
+    "libthrift",
+)
+```
 
 ### Bazel module compatibility levels
 
