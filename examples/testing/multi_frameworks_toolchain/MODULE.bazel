@@ -28,7 +28,6 @@ scala_deps = use_extension(
 scala_deps.settings(
     fetch_sources = True,
 )
-
 scala_deps.toolchains(
     junit = True,
     scalatest = True,
@@ -79,10 +78,9 @@ bazel_dep(
     version = "30.0",
     repo_name = "com_google_protobuf",
 )
-
 single_version_override(
     module_name = "protobuf",
-    version = "30.0",
-    patches = ["//:protobuf.patch"],
     patch_strip = 1,
+    patches = ["//:protobuf.patch"],
+    version = "30.0",
 )

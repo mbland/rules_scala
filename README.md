@@ -100,15 +100,15 @@ scala_deps.toolchains(
 # compiler" section below.
 bazel_dep(
     name = "protobuf",
-    version = "29.3",
+    version = "30.0",
     repo_name = "com_google_protobuf",
 )
 
 single_version_override(
     module_name = "protobuf",
-    version = "29.3",
-    patches = ["//:protobuf.patch"],
     patch_strip = 1,
+    patches = ["//:protobuf.patch"],
+    version = "30.0",
 )
 ```
 
@@ -362,9 +362,9 @@ bazel_dep(
 
 single_version_override(
     module_name = "protobuf",
-    version = "30.0",
-    patches = ["//:protobuf.patch"],
     patch_strip = 1,
+    patches = ["//:protobuf.patch"],
+    version = "30.0",
 )
 ```
 
