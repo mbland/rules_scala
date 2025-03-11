@@ -20,7 +20,6 @@ scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
-
 scala_deps.settings(
     fetch_sources = False,
 )
@@ -55,7 +54,6 @@ scala_deps.overridden_artifact(
     artifact = "org.scala-lang:scala-library:2.13.14",
     sha256 = "43e0ca1583df1966eaf02f0fbddcfb3784b995dd06bfc907209347758ce4b7e3",
 )
-
 scala_deps.toolchains(
     scalatest = True,
 )
@@ -71,10 +69,9 @@ bazel_dep(
     version = "30.0",
     repo_name = "com_google_protobuf",
 )
-
 single_version_override(
     module_name = "protobuf",
-    version = "30.0",
-    patches = ["//:protobuf.patch"],
     patch_strip = 1,
+    patches = ["//:protobuf.patch"],
+    version = "30.0",
 )

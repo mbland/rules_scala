@@ -2,10 +2,9 @@
 
 module(name = "rules_scala_test_version")
 
-bazel_dep(name = "rules_java", version = "8.9.0")
+bazel_dep(name = "rules_java", version = "8.10.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
 bazel_dep(name = "rules_cc", version = "0.1.1")
-
 bazel_dep(
     name = "protobuf",
     version = "30.0",
@@ -16,33 +15,30 @@ bazel_dep(
 # protocolbuffers/protobuf#19679.
 single_version_override(
     module_name = "protobuf",
-    version = "30.0",
-    patches = ["//:protobuf.patch"],
     patch_strip = 1,
+    patches = ["//:protobuf.patch"],
+    version = "30.0",
 )
 
 bazel_dep(name = "rules_scala")
 local_path_override(
     module_name = "rules_scala",
-    path = "../.."
+    path = "../..",
 )
 
 scala_config = use_extension(
     "@rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
-
 scala_config.settings(
     enable_compiler_dependency_tracking = True,
 )
-
 use_repo(scala_config, "rules_scala_config")
 
 scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
-
 scala_deps.settings(
     fetch_sources = True,
 )
@@ -51,8 +47,7 @@ scrooge_repos = use_extension(
     "//:scrooge_repositories.bzl",
     "scrooge_repositories_ext",
 )
-${twitter_scrooge_repositories}
-use_repo(
+${twitter_scrooge_repositories}use_repo(
     scrooge_repos,
     "io_bazel_rules_scala_scrooge_core",
     "io_bazel_rules_scala_scrooge_generator",

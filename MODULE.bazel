@@ -3,8 +3,8 @@
 module(
     name = "rules_scala",
     version = "7.0.0",
-    compatibility_level = 7,
     bazel_compatibility = [">=7.5.0"],
+    compatibility_level = 7,
 )
 
 SCALA_VERSION = "2.13.16"
@@ -32,7 +32,6 @@ bazel_dep(name = "rules_cc", version = "0.1.1")
 bazel_dep(name = "abseil-cpp", version = "20250127.0")
 bazel_dep(name = "rules_java", version = "8.10.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
-
 bazel_dep(
     name = "protobuf",
     version = "30.0",
@@ -43,9 +42,9 @@ bazel_dep(
 # protocolbuffers/protobuf#19679.
 single_version_override(
     module_name = "protobuf",
-    version = "30.0",
-    patches = ["//protoc:0001-protobuf-19679-rm-protoc-dep.patch"],
     patch_strip = 1,
+    patches = ["//protoc:0001-protobuf-19679-rm-protoc-dep.patch"],
+    version = "30.0",
 )
 
 scala_config = use_extension(
@@ -96,14 +95,13 @@ dev_deps = use_extension(
 )
 dev_deps.toolchains(
     jmh = True,
+    junit = True,
     scala_proto = True,
     scalafmt = True,
     scalatest = True,
-    junit = True,
     specs2 = True,
     twitter_scrooge = True,
 )
-
 use_repo(
     dev_deps,
     "scala_proto_rules_scalapb_compilerplugin",
@@ -131,8 +129,9 @@ use_repo(
             "io_bazel_rules_scala_scala_library",
         ] + (
             # We can remove this condition once we drop support for Scala 2.11.
-            ["scala_proto_rules_scalapb_protoc_gen"]
-            if not scala_version.startswith("2.11.") else []
+            [] if scala_version.startswith("2.11.") else [
+                "scala_proto_rules_scalapb_protoc_gen",
+            ]
         )
     ]
     for scala_version in SCALA_VERSIONS
@@ -187,7 +186,6 @@ java_toolchains = use_extension(
     "toolchains",
     dev_dependency = True,
 )
-
 use_repo(
     java_toolchains,
     # //test/toolchains:java21_toolchain
@@ -203,7 +201,10 @@ use_repo(
 [
     (
         bazel_dep(name = name, dev_dependency = True),
-        local_path_override(module_name = name, path = path)
+        local_path_override(
+            module_name = name,
+            path = path,
+        ),
     )
     for name, path in [
         (
@@ -231,7 +232,7 @@ bazel_dep(
     name = "rules_go",
     version = "0.53.0",
     dev_dependency = True,
-    repo_name = "io_bazel_rules_go", # for com_github_bazelbuild_buildtools
+    repo_name = "io_bazel_rules_go",  # for com_github_bazelbuild_buildtools
 )
 bazel_dep(name = "gazelle", version = "0.42.0", dev_dependency = True)
 
@@ -265,7 +266,6 @@ go_deps.module(
     sum = "h1:0EedkvKDbh+qistFTd0Bcwe/YLh4vHwWEkiI0toFIBU=",
     version = "v0.31.0",
 )
-
 go_deps.module(
     path = "github.com/golang/protobuf",
     sum = "h1:i7eJL8qZTpSEXOPTxNKhASYpMn+8e5Q6AdndVa1dWek=",
