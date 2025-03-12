@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -eou pipefail
-
 dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 NC='\033[0m'
 GREEN='\033[0;32m'

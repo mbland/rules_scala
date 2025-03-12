@@ -42,6 +42,11 @@ scala_deps = use_extension(
 scala_deps.settings(
     fetch_sources = True,
 )
+scala_deps.toolchains(
+    scala_proto = True,
+    scalatest = True,
+    specs2 = True,
+)
 
 scrooge_repos = use_extension(
     "//:scrooge_repositories.bzl",
@@ -54,12 +59,6 @@ ${twitter_scrooge_repositories}use_repo(
     "io_bazel_rules_scala_util_core",
     "io_bazel_rules_scala_util_logging",
     "twitter_scrooge_test_toolchain",
-)
-
-scala_deps.toolchains(
-    scala_proto = True,
-    scalatest = True,
-    specs2 = True,
 )
 
 register_toolchains(

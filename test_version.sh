@@ -41,6 +41,14 @@ compilation_should_fail() {
   fi
 }
 
+teardown_test_repo() {
+  local test_dir="$1"
+
+  #make sure bazel still not running or consuming space for this workspace
+  bazel clean --expunge_async 2>/dev/null
+  rm -rf "$test_dir"
+}
+
 run_in_test_repo() {
   local SCALA_VERSION=${SCALA_VERSION:-$SCALA_VERSION_DEFAULT}
 
@@ -61,7 +69,7 @@ run_in_test_repo() {
 
   if [[ -n "$TWITTER_SCROOGE_VERSION" ]]; then
     local version_param="version = \"$TWITTER_SCROOGE_VERSION\""
-    scrooge_ws="$version_param\\n"
+    scrooge_ws="$version_param"
     scrooge_mod="scrooge_repos.settings($version_param)\\n"
   fi
 
@@ -76,16 +84,11 @@ run_in_test_repo() {
 
   cd $NEW_TEST_DIR
 
+  #make sure bazel still not running or consuming space for this workspace
+  trap "teardown_test_repo '$PWD'" EXIT
+
   ${test_command}
-  RESPONSE_CODE=$?
-
-  #make sure bazel still not running for this workspace
-  bazel shutdown
-
-  cd ..
-  rm -rf $NEW_TEST_DIR
-
-  exit $RESPONSE_CODE
+  exit $?
 }
 
 check_module_bazel_template() {
