@@ -22,7 +22,7 @@ cd "$test_tmpdir"
 
 teardown_suite() {
     # Make sure bazel isn't still running for this workspace.
-    bazel shutdown
+    bazel clean --expunge_async 2>/dev/null
     cd "$original_dir"
     rm -rf "$test_tmpdir"
 }
