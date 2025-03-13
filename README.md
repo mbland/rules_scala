@@ -227,24 +227,29 @@ register_toolchains("@rules_scala//protoc:all")
 
 #### Specifying additional `protoc` platforms
 
-Use the `protoc_platforms` parameter to specify additional required
-[platforms][] if the execution or target platforms differ from the host
-platform. Valid values come from [protocolbuffers/protobuf releases][] file name
-suffixes. It's also safe to explicitly include the host platform.
+Use the `protoc_platforms` parameter to specify additional [platforms][] if the
+execution platform may differ from the host platform, as when building with
+remote execution. Valid values come from the file name suffixes of
+[protocolbuffers/protobuf releases][]. It's also safe to explicitly include the
+host platform.
 
 [platforms]: https://bazel.build/extending/platforms
 [protocolbuffers/protobuf releases]: https://github.com/protocolbuffers/protobuf/releases
 
-For example, imagine the execution or target platform is Linux running on an x86
-processor, but the host platform is macOS running on Apple Silicon.
+For example, imagine the host platform is macOS running on Apple Silicon, but
+the remote execution platform is Linux running on an x86 processor.
 `rules_scala` configures the `"osx-aarch_64"` platform automatically. Then in
 `MODULE.bazel` you would include:
 
 ```py
 # MODULE.bazel
 
+scala_deps = use_extension(
+    "@rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+
 scala_deps.toolchains(
-    # Other settings...
     protoc_platforms = ["linux-x86_64"],
 )
 ```
@@ -254,8 +259,12 @@ In `WORKSPACE` you would include:
 ```py
 # WORKSPACE
 
+load(
+    "@rules_scala//scala:toolchains.bzl",
+    "scala_toolchains",
+)
+
 scala_toolchains(
-    # Other settings...
     protoc_platforms = ["linux-x86_64"],
 )
 ```
