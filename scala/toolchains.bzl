@@ -32,7 +32,6 @@ def _get_unknown_entries(entries, allowed_entries):
 def scala_toolchains(
         maven_servers = default_maven_server_urls(),
         overridden_artifacts = {},
-        load_scala_toolchain_dependencies = True,
         fetch_sources = False,
         validate_scala_version = True,
         scala_compiler_srcjars = {},
@@ -82,9 +81,10 @@ def scala_toolchains(
             - exactly one "label", "url", or "urls" key
             - optional "integrity" or "sha256" keys
         protoc_platforms: Operating system and architecture identifiers for
-            precompiled protocol compiler releases. If unspecified, will use the
-            identifier matching the `HOST_CONSTRAINTS` from
-            `@platforms//host:constraints.bzl`. Only takes effect when
+            precompiled protocol compiler releases, taken from
+            protocolbuffers/protobuf releases file name suffixes. If
+            unspecified, will use the identifier matching the `HOST_CONSTRAINTS`
+            from `@platforms//host:constraints.bzl`. Only takes effect when
             `--incompatible_enable_proto_toolchain_resolution` is `True`.
         scalatest: whether to instantiate the ScalaTest toolchain
         junit: whether to instantiate the JUnit toolchain
