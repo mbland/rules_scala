@@ -8,14 +8,14 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Prepare workspace snippet
-        run: .github/workflows/workspace_snippet.sh ${{ env.GITHUB_REF_NAME }} > release_notes.txt
+        run: .github/workflows/workspace_snippet.sh ${{ github.ref_name }} > release_notes.txt
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -25,3 +25,11 @@ jobs:
           body_path: release_notes.txt
           fail_on_unmatched_files: true
           files: rules_scala-*.tar.gz
+
+  publish-to-bcr:
+    needs: release
+    uses: ./.github/workflows/publish-to-bcr.yml
+    with:
+      tag_name: ${{ github.ref_name }}
+    permissions:
+      contents: write # allow appending new attestation files to the release
