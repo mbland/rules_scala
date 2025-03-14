@@ -34,7 +34,7 @@ bazel_dep(name = "rules_java", version = "8.11.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
 bazel_dep(
     name = "protobuf",
-    version = "30.0",
+    version = "30.1",
     repo_name = "com_google_protobuf",
 )
 
@@ -44,7 +44,7 @@ single_version_override(
     module_name = "protobuf",
     patch_strip = 1,
     patches = ["//protoc:0001-protobuf-19679-rm-protoc-dep.patch"],
-    version = "30.0",
+    version = "30.1",
 )
 
 scala_config = use_extension(
