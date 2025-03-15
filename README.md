@@ -295,7 +295,7 @@ load(
 
 `rules_scala` now supports the
 [`--incompatible_enable_proto_toolchain_resolution`][] flag when using
-[`protobuf` v29 or later](#why-proto-v29). When using this flag with the
+[protobuf v29 or later](#why-proto-v29). When using this flag with the
 `MODULE.bazel` or `WORKSPACE` configurations below, `rules_scala` will use a
 precompiled protocol compiler binary by default.
 
@@ -345,7 +345,6 @@ scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
-
 scala_deps.toolchains(
     protoc_platforms = ["linux-x86_64"],
 )
@@ -880,7 +879,6 @@ scala_config = use_extension(
     "@rules_scala//scala/extensions:config.bzl",
     "scala_config",
 )
-
 use_repo(scala_config, io_bazel_rules_scala_config = "rules_scala_config")
 ```
 
@@ -999,7 +997,7 @@ Under Bzlmod, repos are only visible to the module extension that creates them,
 unless the `MODULE.bazel` file brings them into scope with
 [`use_repo()`](https://bazel.build/rules/lib/globals/module#use_repo). This can
 lead to errors like those from the following example, which [originally called
-`setup_scala_toolchain()` under Bzlmod](
+'setup_scala_toolchain()' under Bzlmod](
 https://github.com/michalbogacz/scala-bazel-monorepo/blob/17f0890a4345529e09b9ce83bcb2e3d15687c522/BUILD.bazel):
 
 ```py
@@ -1165,7 +1163,7 @@ https://github.com/scalapb/ScalaPB/releases/tag/v1.0.0-alpha.1), we had to
 remove the Scala 2.11 test cases.
 
 Building `scala_proto` for Scala 2.11 requires [building with Bazel 6.5.0
-under `WORKSPACE`](#6.5.0), with the maximum dependency versions specified in
+under WORKSPACE](#6.5.0), with the maximum dependency versions specified in
 that section. While this may continue to work for some time, it is not
 officially supported.
 
