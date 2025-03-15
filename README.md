@@ -577,7 +577,7 @@ maximum available at the time of writing.
 | Bazel versions using `WORKSPACE` | 6.5.0, 7.5.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
 | `protobuf` |  v30.1 |
 | `abseil-cpp` | 20250127.0 |
-| `rules_java` | 8.10.0 |
+| `rules_java` | 8.11.0 |
 | `ScalaPB` | 1.0.0-alpha.1 |
 
 ## Usage with [bazel-deps](https://github.com/johnynek/bazel-deps)
