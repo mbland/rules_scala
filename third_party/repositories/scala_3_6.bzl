@@ -511,8 +511,8 @@ artifacts = {
         ],
     },
     "org_scala_sbt_util_interface": {
-        "artifact": "org.scala-sbt:util-interface:1.10.10",
-        "sha256": "b20ffb47611c23e9e1b4d9bc208fd6bd7bd316620a0d4c5edc0fd57cfebaf07d",
+        "artifact": "org.scala-sbt:util-interface:1.10.11",
+        "sha256": "7e6105457832910ee1b9e00065b08abdee25aaf05c943dc2d98bd6df1e53ae9a",
     },
     "org_scalameta_common": {
         "artifact": "org.scalameta:common_2.13:4.13.4",
