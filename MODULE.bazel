@@ -29,7 +29,7 @@ SCALA_VERSIONS = SCALA_2_VERSIONS + SCALA_3_VERSIONS
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "platforms", version = "0.0.11")
 bazel_dep(name = "rules_cc", version = "0.1.1")
-bazel_dep(name = "abseil-cpp", version = "20250127.0")
+bazel_dep(name = "abseil-cpp", version = "20250127.1")
 bazel_dep(name = "rules_java", version = "8.11.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")
 bazel_dep(
