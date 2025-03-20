@@ -78,9 +78,6 @@ def _scala_toolchains_repo_impl(repository_ctx):
     if repo_attr.scalafmt:
         toolchains["scalafmt"] = _SCALAFMT_TOOLCHAIN_BUILD
 
-    if len(toolchains) == 0:
-        fail("no toolchains specified")
-
     for pkg, build in toolchains.items():
         repository_ctx.file(
             pkg + "/BUILD",

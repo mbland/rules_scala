@@ -75,7 +75,8 @@ load("@platforms//host:extension.bzl", "host_platform_repo")
 host_platform_repo(name = "host_platform")
 
 # This is optional, but still safe to include even when not using
-# `--incompatible_enable_proto_toolchain_resolution`.
+# `--incompatible_enable_proto_toolchain_resolution`. Requires calling
+# `scala_toolchains()`.
 register_toolchains("@rules_scala//protoc:all")
 
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
@@ -224,6 +225,10 @@ other toolchain registrations. It's safe to include even when not using
 # MODULE.bazel or WORKSPACE
 register_toolchains("@rules_scala//protoc:all")
 ```
+
+Note that you _must_ call `scala_toolchains()` in `WORKSPACE`, even if all other
+toolchains are disabled (i.e., if using `scala_toolchains(scala = False)`). This
+isn't necessary under Bzlmod.
 
 #### Specifying additional `protoc` platforms
 
@@ -480,9 +485,40 @@ maximum available at the time of writing.
 | Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.5.0, 8.x,<br/>`rolling`, `last_green` |
 | Bazel versions using `WORKSPACE` | 6.5.0, 7.5.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
 | `protobuf` |  v30.1 |
-| `abseil-cpp` | 20250127.0 |
+| `abseil-cpp` | 20250127.1 |
 | `rules_java` | 8.11.0 |
 | `ScalaPB` | 1.0.0-alpha.1 |
+
+### Using a prebuilt `@com_google_protobuf//:protoc` or C++ compiler flags
+
+Newer versions of `abseil-cpp`, required by newer versions of
+`@com_google_protobuf//:protoc`, fail to compile under Bazel 6.5.0 and 7.5.0 by
+default. [protoc will also fail to build on Windows when using
+MSVC](#protoc-msvc). You will have to choose one of the following approaches to
+resolve this problem.
+
+You may use protocol compiler toolchainization with `protobuf` v29 or later to
+avoid recompiling `protoc`. You may want to enable this even if your build
+doesn't break, as it saves time by avoiding frequent `protoc` recompilation. See
+the [Using a precompiled protocol compiler](#protoc) section for details.
+
+Otherwise, if migrating to Bazel 8 isn't an immediate option, you will need to
+set the following compiler flags in `.bazelrc` per bazelbuild/rules_scala#1647:
+
+```txt
+common --enable_platform_specific_config
+
+common:linux --cxxopt=-std=c++17
+common:linux --host_cxxopt=-std=c++17
+common:macos --cxxopt=-std=c++17
+common:macos --host_cxxopt=-std=c++17
+common:windows --cxxopt=/std=c++17
+common:windows --host_cxxopt=/std=c++17
+```
+
+Note that this example uses `common:` config settings instead of `build:`. This
+seems to prevent invalidating the action cache between `bazel` runs, which
+improves performance.
 
 ## Usage with [bazel-deps](https://github.com/johnynek/bazel-deps)
 
@@ -711,23 +747,25 @@ In `WORKSPACE`, this `register_toolchains()` call must come before calling
 `scala_register_toolchains()` to ensure this toolchain takes precedence. The
 same exact call will also work in `MODULE.bazel`.
 
-### Disabling Scala version validation when defining a custom Scala toolchain
+### Disabling builtin Scala toolchains when defining custom Scala toolchains
 
 When [defining a 'scala_toolchain()' using custom compiler JARs](
 docs/scala_toolchain.md#b-defining-your-own-scala_toolchain), while using
-`scala_toolchains()` to instantiate other builtin toolchains, set
-`validate_scala_version = False`:
+`scala_toolchains()` to instantiate builtin toolchains (like the [protoc
+toolchain](#protoc)), set `scala = False`:
 
 ```py
 # WORKSPACE
 scala_toolchains(
-    validate_scala_version = False,
+    scala = False,
     # ...other toolchain parameters...
 )
 ```
 
-This differs from the previous API in two ways that avoided instantiating the
-default Scala compiler JAR repositories, and thus Scala version validation:
+This avoids instantiating the default Scala toolchain and compiler JAR
+repositories and a corresponding Scala version check, which may fail when
+defining a custom toolchain. It's equivalent to two ways in which the previous
+API avoided the same default behavior:
 
 - Calling `scala_repositories(load_jar_deps = False)` would instantiate only
     other `rules_scala` dependency repos (`rules_java`, `protobuf`, etc.) and
@@ -896,6 +934,29 @@ supporting Bazel + MSVC builds per:
 Enable [protocol compiler toolchainization](#protoc) to fix broken Windows
 builds by avoiding `@com_google_protobuf//:protoc` recompilation.
 
+### Minimum of `protobuf` v28
+
+`rules_scala` requires at least `protobuf` v28, which contains the
+`bazel/common/proto_common.bzl` required for [protocol compiler
+toolchain](#protoc) support. This file appeared in v27, and no `ScalaPB` release
+supports `protobuf` v25.6, v26, or v27.
+
+#### Using earlier `protobuf` versions
+
+If you can't update to `protobuf` v28 or later right now, you will need to patch:
+
+- `scala/toolchains.bzl`: remove `setup_protoc_toolchains()` references
+- `protoc/BUILD`: remove entirely
+
+Then build using Bazel 7 and the following maximum versions of key dependencies:
+
+| Dependency | Max compatible version | Reason |
+| :-: | :-: | :- |
+| `protobuf` | v25.5 | Maximum version supported by `ScalaPB` 0.11.17. |
+| `rules_java` | 7.12.4 | 8.x requires `protobuf` v27 and later. |
+| `rules_cc` | 0.0.9 | 0.0.10 requires Bazel 7 to define `CcSharedLibraryHintInfo`.<br/>0.0.13 requires at least `protobuf` v27.0. |
+| `ScalaPB` | 0.11.17<br/>(0.9.8 for Scala 2.11) | Later versions only support `protobuf` >= v28. |
+
 ### Embedded resource paths no longer begin with `external/<repo_name>`
 
 [Any program compiled with an external repo asset in its 'resources' attribute
@@ -1022,9 +1083,8 @@ not out of the box, and may break at any time.
 
 #### Maximum of `protobuf` v29
 
-First of all, you _must_ use `protobuf` v29 or earlier. `rules_scala` now uses
-v30 by default, which removes `py_proto_library` and other symbols that Bazel
-6.5.0 requires:
+You _must_ use `protobuf` v29 or earlier. `rules_scala` now uses v30 by default,
+which removes `py_proto_library` and other symbols that Bazel 6.5.0 requires:
 
 ```txt
 ERROR: Traceback (most recent call last):
@@ -1045,47 +1105,17 @@ ERROR: .../src/java/io/bazel/rulesscala/worker/BUILD:3:13:
   and referenced by '//src/java/io/bazel/rulesscala/worker:worker'
 ```
 
-#### Using a prebuilt `@com_google_protobuf//:protoc` or C++ compiler flags
+#### Configuring the protocol compiler toolchain
 
-Newer versions of `@com_google_protobuf//:protoc` fail to compile under Bazel
-6.5.0 by default. You will have to choose one of the following approaches to
-resolve this problem, if migrating to Bazel 7 or 8 isn't an immediate option.
+See [Using a prebuilt @com_google_protobuf//:protoc or C++ compiler
+flags][protoc-opts] for protocol compiler configuration requirements.
 
-You may use protocol compiler toolchainization with `protobuf` v29 to avoid
-recompiling `protoc`. See the [Using a precompiled protocol compiler](#protoc)
-section for details.
+[protoc-opts]: #using-a-prebuilt-com_google_protobufprotoc-or-c-compiler-flags
 
-Otherwise, per bazelbuild/rules_scala#1647, add the following flags to
-`.bazelrc` to compile the newer `abseil-cpp` versions used by newer `protobuf`
-versions:
+#### Using older versions of `protobuf`
 
-```txt
-common --enable_platform_specific_config
-
-common:linux --cxxopt=-std=c++17
-common:linux --host_cxxopt=-std=c++17
-common:macos --cxxopt=-std=c++17
-common:macos --host_cxxopt=-std=c++17
-common:windows --cxxopt=/std=c++17
-common:windows --host_cxxopt=/std=c++17
-```
-
-Note that this example uses `common:` config settings instead of `build:`. This
-seems to prevent invalidating the action cache between `bazel` runs, which
-improves performance.
-
-#### Using older `protobuf` versions
-
-If you have a dependency that requires `protobuf` version before v28, use the
-following maximum versions of key dependencies. Note that no `ScalaPB` release
-supports `protobuf` v25.6, v26, or v27.
-
-| Dependency | Max compatible version | Reason |
-| :-: | :-: | :- |
-| `protobuf` | v25.5 | Maximum version supported by `ScalaPB` 0.11.17. |
-| `rules_java` | 7.12.4 | 8.x requires `protobuf` v27 and later. |
-| `rules_cc` | 0.0.9 | 0.0.10 requires Bazel 7 to define `CcSharedLibraryHintInfo`.<br/>0.0.13 requires at least `protobuf` v27.0. |
-| `ScalaPB` | 0.11.17<br/>(0.9.8 for Scala 2.11) | Later versions only support `protobuf` >= v28. |
+See [Minimum of protobuf v28](#minimum-of-protobuf-v28) for details on using
+older versions of protobuf.
 
 ### `scala_proto` not supported for Scala 2.11
 

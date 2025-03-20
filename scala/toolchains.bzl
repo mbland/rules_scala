@@ -36,6 +36,7 @@ def scala_toolchains(
         validate_scala_version = True,
         scala_compiler_srcjars = {},
         protoc_platforms = [],
+        scala = True,
         scalatest = False,
         junit = False,
         specs2 = False,
@@ -74,8 +75,9 @@ def scala_toolchains(
             `third_party/repositories/scala_*.bzl` file matching the Scala
             version.
         fetch_sources: whether to download dependency source jars
-        validate_scala_version: whether to check if the configured Scala version
-            matches the default version supported by rules_scala
+        validate_scala_version: Whether to check if the configured Scala
+            versions matches the default versions supported by rules_scala. Only
+            takes effect if `scala` is `True`.
         scala_compiler_srcjars: optional dictionary of Scala version string to
             compiler srcjar metadata dictionaries containing:
             - exactly one "label", "url", or "urls" key
@@ -86,6 +88,8 @@ def scala_toolchains(
             unspecified, will use the identifier matching the `HOST_CONSTRAINTS`
             from `@platforms//host:constraints.bzl`. Only takes effect when
             `--incompatible_enable_proto_toolchain_resolution` is `True`.
+        scala: whether to instantiate default Scala toolchains for configured
+            Scala versions
         scalatest: whether to instantiate the ScalaTest toolchain
         junit: whether to instantiate the JUnit toolchain
         specs2: whether to instantiate the Specs2 JUnit toolchain
@@ -152,10 +156,13 @@ def scala_toolchains(
         })
 
     for scala_version in SCALA_VERSIONS:
-        version_specific_artifact_ids = {
-            id: fetch_sources
-            for id in scala_version_artifact_ids(scala_version)
-        }
+        version_specific_artifact_ids = {}
+
+        if scala:
+            version_specific_artifact_ids.update({
+                id: fetch_sources
+                for id in scala_version_artifact_ids(scala_version)
+            })
 
         if scala_proto:
             version_specific_artifact_ids.update({
@@ -180,7 +187,7 @@ def scala_toolchains(
             fetch_sources_by_id = all_artifacts,
             # Note the internal macro parameter misspells "overriden".
             overriden_artifacts = overridden_artifacts,
-            validate_scala_version = validate_scala_version,
+            validate_scala_version = (scala and validate_scala_version),
         )
 
     scala_toolchains_repo(

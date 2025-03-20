@@ -6,14 +6,14 @@ load(
 load("@com_google_protobuf//bazel/common:proto_common.bzl", "proto_common")
 load("@rules_proto//proto:proto_common.bzl", "toolchains")
 
-_TOOLCHAIN_TYPE = Label("@rules_scala_toolchains//protoc:toolchain_type")
+_TOOLCHAIN_TYPE = Label("//protoc:toolchain_type")
 
 # Inspired by: https://github.com/protocolbuffers/protobuf/pull/19679
 def _protoc(ctx):
     if proto_common.INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION:
         toolchain = ctx.toolchains[_TOOLCHAIN_TYPE]
         if not toolchain:
-            fail("Protocol compiler toolchain could not be resolved.")
+            fail("Couldn't resolve protocol compiler for %s" % _TOOLCHAIN_TYPE)
         return toolchain.proto.proto_compiler.executable
     else:
         return ctx.attr.protoc[DefaultInfo].files_to_run.executable

@@ -103,29 +103,21 @@ register_toolchains("//toolchains:my_scala_toolchain")
 
 #### Step 3 (optional)
 
-If you use `scala_toolchains()` to instantiate other builtin toolchains, set
-`validate_scala_version = False`:
+If you use `scala_toolchains()` to instantiate other builtin toolchains like the
+precompiled proto compiler toolchain, set `scala = False`:
 
 ```py
 # WORKSPACE
 scala_toolchains(
-    validate_scala_version = False,
+    scala = False,
     # ...other toolchain parameters...
 )
 ```
 
-This prevents `rules_scala` from checking that the Scala versions specified via
-`scala_config` match the `scala_version` values from
-`third_party/repositories/scala_*.bzl`.
-
-`scala_toolchains()` uses these `scala_*.bzl` files to instantiate dependency
-JAR repositories required by the builtin toolchains. It always instantiates a
-default Scala toolchain, along with its compiler JAR repositories, since [most
-users expect this behavior][1633-comment]. (As always, calling
-`register_toolchains()` on your own toolchain in `MODULE.bazel`, or before
-`scala_register_toolchains()` in `WORKSPACE`, overrides the builtin toolchain.)
-
-[1633-comment]: https://github.com/bazelbuild/rules_scala/pull/1633#discussion_r1834378901
+Otherwise, `scala_toolchains()` will try to instantiate a default Scala
+toolchain and its compiler JAR dependency repositories. The build will then fail
+if the configured Scala version doesn't match the `scala_version` value in
+the corresponding `third_party/repositories/scala_*.bzl` file.
 
 ## Configuration options
 

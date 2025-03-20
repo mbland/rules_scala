@@ -81,18 +81,6 @@ def setup_protoc_toolchains(repository_ctx, package):
 
 _PROTOC_TOOLCHAIN_BUILD = """
 load(":platforms.bzl", "PROTOC_PLATFORMS")
-load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain")
-
-toolchain_type(
-    name = "toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
-proto_lang_toolchain(
-    name = "protoc_scala_toolchain",
-    command_line = "unused-because-we-pass-protoc-to-scalapb",
-    toolchain_type = ":toolchain_type",
-)
 
 [
     alias(
