@@ -35,7 +35,6 @@ def scala_toolchains(
         fetch_sources = False,
         validate_scala_version = True,
         scala_compiler_srcjars = {},
-        protoc_platforms = [],
         scala = True,
         scalatest = False,
         junit = False,
@@ -82,12 +81,6 @@ def scala_toolchains(
             compiler srcjar metadata dictionaries containing:
             - exactly one "label", "url", or "urls" key
             - optional "integrity" or "sha256" keys
-        protoc_platforms: Operating system and architecture identifiers for
-            precompiled protocol compiler releases, taken from
-            protocolbuffers/protobuf releases file name suffixes. If
-            unspecified, will use the identifier matching the `HOST_CONSTRAINTS`
-            from `@platforms//host:constraints.bzl`. Only takes effect when
-            `--incompatible_enable_proto_toolchain_resolution` is `True`.
         scala: whether to instantiate default Scala toolchains for configured
             Scala versions
         scalatest: whether to instantiate the ScalaTest toolchain
@@ -191,7 +184,6 @@ def scala_toolchains(
         )
 
     scala_toolchains_repo(
-        protoc_platforms = protoc_platforms,
         scalatest = scalatest,
         junit = junit,
         specs2 = specs2,

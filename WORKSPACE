@@ -56,6 +56,11 @@ load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 
+# Must come after loading `platforms` and `com_google_protobuf`.
+load("//protoc:toolchains.bzl", "scala_protoc_toolchains")
+
+scala_protoc_toolchains()
+
 load("//:scala_config.bzl", "scala_config")
 
 scala_config(enable_compiler_dependency_tracking = True)

@@ -76,7 +76,7 @@ host_platform_repo(name = "host_platform")
 
 # This is optional, but still safe to include even when not using
 # `--incompatible_enable_proto_toolchain_resolution`. Requires calling
-# `scala_toolchains()`.
+# `scala_protoc_toolchains()` as seen below.
 register_toolchains("@rules_scala//protoc:all")
 
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
@@ -124,6 +124,13 @@ rules_proto_setup()
 load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
+
+# Include this after loading `platforms` and `com_google_protobuf` to enable the
+# `//protoc` precompiled protocol compiler toolchains. See the "Using a
+# precompiled protocol compiler" section below.
+load("@rules_scala//protoc:toolchains.bzl", "scala_protoc_toolchains")
+
+scala_protoc_toolchains()
 
 load("@rules_scala//:scala_config.bzl", "scala_config")
 
@@ -226,13 +233,37 @@ other toolchain registrations. It's safe to include even when not using
 register_toolchains("@rules_scala//protoc:all")
 ```
 
-Note that you _must_ call `scala_toolchains()` in `WORKSPACE`, even if all other
-toolchains are disabled (i.e., if using `scala_toolchains(scala = False)`). This
-isn't necessary under Bzlmod.
+#### Using `scala_protoc` in `MODULE.bazel`
+
+The `scala_protoc` extension instantiates the protocol compiler toolchain
+binaries under Bzlmod:
+
+```py
+# MODULE.bazel
+
+scala_protoc = use_extension(
+    "@rules_scala//scala/extensions:protoc.bzl",
+    "scala_protoc",
+)
+```
+
+#### Calling `scala_protoc_toolchains()` in `WORKSPACE`
+
+The `scala_protoc_toolchains` macro instantiates the protocol compiler toolchain
+binaries under `WORKSPACE`:
+
+```py
+# WORKSPACE
+
+# Include this after loading `platforms` and `com_google_protobuf`.
+load("@rules_scala//protoc:toolchains.bzl", "scala_protoc_toolchains")
+
+scala_protoc_toolchains()
+```
 
 #### Specifying additional `protoc` platforms
 
-Use the `protoc_platforms` parameter to specify additional [platforms][] if the
+Use the `platforms` parameter to specify additional [platforms][] if the
 execution platform may differ from the host platform, as when building with
 remote execution. Valid values come from the file name suffixes of
 [protocolbuffers/protobuf releases][]. It's also safe to explicitly include the
@@ -249,12 +280,8 @@ the remote execution platform is Linux running on an x86 processor.
 ```py
 # MODULE.bazel
 
-scala_deps = use_extension(
-    "@rules_scala//scala/extensions:deps.bzl",
-    "scala_deps",
-)
-scala_deps.toolchains(
-    protoc_platforms = ["linux-x86_64"],
+scala_protoc.toolchains(
+    platforms = ["linux-x86_64"],
 )
 ```
 
@@ -263,13 +290,8 @@ In `WORKSPACE` you would include:
 ```py
 # WORKSPACE
 
-load(
-    "@rules_scala//scala:toolchains.bzl",
-    "scala_toolchains",
-)
-
-scala_toolchains(
-    protoc_platforms = ["linux-x86_64"],
+scala_protoc_toolchains(
+    platforms = ["linux-x86_64"],
 )
 ```
 
@@ -936,19 +958,15 @@ builds by avoiding `@com_google_protobuf//:protoc` recompilation.
 
 ### Minimum of `protobuf` v28
 
-`rules_scala` requires at least `protobuf` v28, which contains the
-`bazel/common/proto_common.bzl` required for [protocol compiler
-toolchain](#protoc) support. This file appeared in v27, and no `ScalaPB` release
-supports `protobuf` v25.6, v26, or v27.
+`rules_scala` requires at least `protobuf` v28, and at least v29 for [protocol
+compiler toolchain](#protoc) support. No `ScalaPB` release supports `protobuf`
+v25.6, v26, or v27.
 
 #### Using earlier `protobuf` versions
 
-If you can't update to `protobuf` v28 or later right now, you will need to patch:
-
-- `scala/toolchains.bzl`: remove `setup_protoc_toolchains()` references
-- `protoc/BUILD`: remove entirely
-
-Then build using Bazel 7 and the following maximum versions of key dependencies:
+If you can't update to `protobuf` v28 or later right now, build using Bazel 7
+and the following maximum versions of key dependencies. This is not officially
+supported, but should work for some time.
 
 | Dependency | Max compatible version | Reason |
 | :-: | :-: | :- |
@@ -1114,8 +1132,8 @@ flags][protoc-opts] for protocol compiler configuration requirements.
 
 #### Using older versions of `protobuf`
 
-See [Minimum of protobuf v28](#minimum-of-protobuf-v28) for details on using
-older versions of protobuf.
+See [Using earlier protobuf versions](#using-earlier-protobuf-versions) for
+details on using older versions of protobuf if necessary.
 
 ### `scala_proto` not supported for Scala 2.11
 

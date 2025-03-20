@@ -28,13 +28,13 @@ def _platform_build(platform):
         )
     return protoc_build
 
-def _download_build(repository_ctx, package, platform, protoc_build):
+def _download_build(repository_ctx, platform, protoc_build):
     repository_ctx.download_and_extract(
         url = PROTOC_DOWNLOAD_URL.format(
             platform = platform,
             version = PROTOC_VERSION,
         ),
-        output = "%s/%s" % (package, platform),
+        output = platform,
         integrity = protoc_build["integrity"][PROTOC_VERSION],
     )
 
@@ -47,40 +47,49 @@ def _emit_platform_entry(platform, protoc_build):
         ]),
     )
 
-def _generate_protoc_platforms(repository_ctx, package, builds):
+def _generate_protoc_platforms(repository_ctx, builds):
     content = ["PROTOC_PLATFORMS = {"]
     content.extend([_emit_platform_entry(p, b) for p, b in builds])
     content.append("}\n")
 
     repository_ctx.file(
-        package + "/platforms.bzl",
+        "platforms.bzl",
         content = "\n".join(content),
         executable = False,
     )
 
-def setup_protoc_toolchains(repository_ctx, package):
+ENABLE_PROTOC_TOOLCHAIN_ATTR = "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION"
+
+def _scala_protoc_toolchains_impl(repository_ctx):
     builds = []
     build_file_content = ""
 
-    if proto_common.INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION:
+    if getattr(proto_common, ENABLE_PROTOC_TOOLCHAIN_ATTR, False):
         platforms = [_default_platform()]
-        platforms += repository_ctx.attr.protoc_platforms
+        platforms += repository_ctx.attr.platforms
         builds = {p: _platform_build(p) for p in platforms}.items()
         build_file_content = _PROTOC_TOOLCHAIN_BUILD
 
     for platform, build in builds:
-        _download_build(repository_ctx, package, platform, build)
+        _download_build(repository_ctx, platform, build)
 
-    _generate_protoc_platforms(repository_ctx, package, builds)
+    _generate_protoc_platforms(repository_ctx, builds)
 
+    # Always generate a root package, even if it's empty, to ensure
+    # `register_toolchains("@rules_scala//protoc:all")` always works.
     repository_ctx.file(
-        package + "/BUILD",
+        "BUILD",
         content = build_file_content,
         executable = False,
     )
 
-_PROTOC_TOOLCHAIN_BUILD = """
-load(":platforms.bzl", "PROTOC_PLATFORMS")
+scala_protoc_toolchains = repository_rule(
+    implementation = _scala_protoc_toolchains_impl,
+    doc = "Precompiled protocol compiler toolchain binaries",
+    attrs = {"platforms": attr.string_list()},
+)
+
+_PROTOC_TOOLCHAIN_BUILD = """load(":platforms.bzl", "PROTOC_PLATFORMS")
 
 [
     alias(

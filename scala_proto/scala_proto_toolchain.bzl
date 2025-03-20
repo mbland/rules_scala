@@ -4,6 +4,7 @@ load(
     _scala_proto_deps_providers = "scala_proto_deps_providers",
 )
 load("@com_google_protobuf//bazel/common:proto_common.bzl", "proto_common")
+load("@rules_java//java/common:java_info.bzl", "JavaInfo")
 load("@rules_proto//proto:proto_common.bzl", "toolchains")
 
 _TOOLCHAIN_TYPE = Label("//protoc:toolchain_type")
