@@ -711,6 +711,35 @@ In `WORKSPACE`, this `register_toolchains()` call must come before calling
 `scala_register_toolchains()` to ensure this toolchain takes precedence. The
 same exact call will also work in `MODULE.bazel`.
 
+### Disabling Scala version validation when defining a custom Scala toolchain
+
+When [defining a 'scala_toolchain()' using custom compiler JARs](
+docs/scala_toolchain.md#b-defining-your-own-scala_toolchain), while using
+`scala_toolchains()` to instantiate other builtin toolchains, set
+`validate_scala_version = False`:
+
+```py
+# WORKSPACE
+scala_toolchains(
+    validate_scala_version = False,
+    # ...other toolchain parameters...
+)
+```
+
+This differs from the previous API in two ways that avoided instantiating the
+default Scala compiler JAR repositories, and thus Scala version validation:
+
+- Calling `scala_repositories(load_jar_deps = False)` would instantiate only
+    other `rules_scala` dependency repos (`rules_java`, `protobuf`, etc.) and
+    compiler source JAR repos.
+
+- Calling `rules_scala_setup()` directly, instead of indirectly via
+    `scala_repositories()`, instantiated the other dependency repositories only.
+
+See ["Defining your own scala_toolchain > Step 3 (optional)" from
+docs/scala_toolchain.md](docs/scala_toolchain.md#step-3-optional) for futher
+details.
+
 ### Bzlmod configuration (coming soon!)
 
 The upcoming Bzlmod implementation will funnel through the `scala_toolchains()`
