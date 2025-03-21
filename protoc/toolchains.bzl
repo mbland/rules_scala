@@ -1,34 +1,33 @@
-"""Precompiled protocol compiler toolchain repository interface.
+"""Precompiled protocol compiler toolchains repository rule.
+
+To use this under `WORKSPACE`:
 
 ```py
 # WORKSPACE
 
-# Include this as early in the file as possible.
-register_toolchains("@rules_scala//protoc:all")
+# Register this toolchain before any others.
+register_toolchains("@rules_scala_protoc_toolchains//...:all")
 
-# Include this after loading `platforms` and `com_google_protobuf`.
+load("@platforms//host:extension.bzl", "host_platform_repo")
+
+# Instantiates the `@host_platform` repo to work around:
+# - https://github.com/bazelbuild/bazel/issues/22558
+host_platform_repo(name = "host_platform")
+
+# ...load `com_google_protobuf`, `rules_proto`, etc...
+
 load("@rules_scala//protoc:toolchains.bzl", "scala_protoc_toolchains")
 
-scala_protoc_toolchains()
+# The name can be anything, but we recommend `rules_scala_protoc_toolchains`.
+# Only include `platforms` if you need additional platforms other than the
+# automatically detected host platform.
+scala_protoc_toolchains(
+    name = "rules_scala_protoc_toolchains",
+    platforms = ["linux-x86_64"],
+)
 ```
 """
 
 load(":private/protoc_toolchain.bzl", _toolchains = "scala_protoc_toolchains")
 
-def scala_protoc_toolchains(platforms = []):
-    """Creates a repo of precompiled protocol compiler toolchain binaries.
-
-    Used by `//protoc` to implement precompiled protocol compiler toochains.
-
-    Args:
-        platforms: Operating system and architecture identifiers for
-            precompiled protocol compiler releases, taken from
-            protocolbuffers/protobuf releases file name suffixes. If
-            unspecified, will use the identifier matching the `HOST_CONSTRAINTS`
-            from `@platforms//host:constraints.bzl`. Only takes effect when
-            `--incompatible_enable_proto_toolchain_resolution` is `True`.
-    """
-    _toolchains(
-        name = "rules_scala_protoc_toolchains",
-        platforms = platforms,
-    )
+scala_protoc_toolchains = _toolchains

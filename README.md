@@ -74,10 +74,11 @@ load("@platforms//host:extension.bzl", "host_platform_repo")
 # - https://github.com/bazelbuild/bazel/issues/22558
 host_platform_repo(name = "host_platform")
 
-# This is optional, but still safe to include even when not using
-# `--incompatible_enable_proto_toolchain_resolution`. Requires calling
-# `scala_protoc_toolchains()` as seen below.
-register_toolchains("@rules_scala//protoc:all")
+# This is optional, but register this toolchain before any others. Requires
+# invoking the `scala_protoc_toolchains` repo rule, but is safe to include even
+# `--incompatible_enable_proto_toolchain_resolution` is `False`.
+# See the "Using a precompiled protocol compiler" section below.
+register_toolchains("@rules_scala_protoc_toolchains//...:all")
 
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
@@ -125,12 +126,13 @@ load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 
-# Include this after loading `platforms` and `com_google_protobuf` to enable the
-# `//protoc` precompiled protocol compiler toolchains. See the "Using a
-# precompiled protocol compiler" section below.
+# Include this after loading `platforms`, `com_google_protobuf`, and
+# `rules_proto` to enable the `//protoc` precompiled protocol compiler
+# toolchains. See the "Using a precompiled protocol compiler" section below.
 load("@rules_scala//protoc:toolchains.bzl", "scala_protoc_toolchains")
 
-scala_protoc_toolchains()
+# This name can be anything, but we recommend `rules_scala_protoc_toolchains`.
+scala_protoc_toolchains(name = "rules_scala_protoc_toolchains")
 
 load("@rules_scala//:scala_config.bzl", "scala_config")
 
@@ -224,19 +226,29 @@ To set the flag in your `.bazelrc` file:
 common --incompatible_enable_proto_toolchain_resolution
 ```
 
-In both `MODULE.bazel` and `WORKSPACE`, add the following statement _before_ any
-other toolchain registrations. It's safe to include even when not using
-`--incompatible_enable_proto_toolchain_resolution`.
+In both `MODULE.bazel` and `WORKSPACE`, you must register the protocol compiler
+toolchains _before_ any other toolchains. It's safe to use even when
+`--incompatible_enable_proto_toolchain_resolution` is `False`.
+
+It is OK to call `register_toolchains` before using the `scala_protoc` extension
+under Bzlmod, and before the `scala_protoc_toolchains()` repo rule under
+`WORKSPACE`.
 
 ```py
-# MODULE.bazel or WORKSPACE
-register_toolchains("@rules_scala//protoc:all")
+# MODULE.bazel
+register_toolchains(
+    "@rules_scala_protoc_toolchains//...:all",
+    dev_dependency = True,
+)
+
+# WORKSPACE
+register_toolchains("@rules_scala_protoc_toolchains//...:all")
 ```
 
-#### Using `scala_protoc` in `MODULE.bazel`
+#### Using the `scala_protoc` module extension under Bzlmod
 
-The `scala_protoc` extension instantiates the protocol compiler toolchain
-binaries under Bzlmod:
+The `scala_protoc` module extension instantiates the protocol compiler
+toolchain under Bzlmod. It _must_ be marked as a `dev_dependency`.
 
 ```py
 # MODULE.bazel
@@ -244,21 +256,25 @@ binaries under Bzlmod:
 scala_protoc = use_extension(
     "@rules_scala//scala/extensions:protoc.bzl",
     "scala_protoc",
+    dev_dependency = True,
 )
+use_repo(scala_protoc, "rules_scala_protoc_toolchains")
 ```
 
-#### Calling `scala_protoc_toolchains()` in `WORKSPACE`
+#### Invoking the `scala_protoc_toolchains()` repo rule under `WORKSPACE`
 
-The `scala_protoc_toolchains` macro instantiates the protocol compiler toolchain
-binaries under `WORKSPACE`:
+The `scala_protoc_toolchains` repo rule instantiates the protocol compiler
+toolchain. The repo name can be anything, but we recommend
+`rules_scala_protoc_toolchains`.
 
 ```py
 # WORKSPACE
 
-# Include this after loading `platforms` and `com_google_protobuf`.
+# Include this after loading `platforms`, `com_google_protobuf`, and
+# `rules_proto`.
 load("@rules_scala//protoc:toolchains.bzl", "scala_protoc_toolchains")
 
-scala_protoc_toolchains()
+scala_protoc_toolchains(name = "rules_scala_protoc_toolchains")
 ```
 
 #### Specifying additional `protoc` platforms
@@ -280,8 +296,10 @@ the remote execution platform is Linux running on an x86 processor.
 ```py
 # MODULE.bazel
 
-scala_protoc.toolchains(
+scala_protoc_toolchains(
+    name = "rules_scala_protoc_toolchains",
     platforms = ["linux-x86_64"],
+    dev_dependency = True,
 )
 ```
 
@@ -291,6 +309,7 @@ In `WORKSPACE` you would include:
 # WORKSPACE
 
 scala_protoc_toolchains(
+    name = "rules_scala_protoc_toolchains",
     platforms = ["linux-x86_64"],
 )
 ```
@@ -308,7 +327,7 @@ transitive dependency on `@com_google_protobuf//:protoc` remains, causing
 If and when `protobuf` merges that pull request, or applies an equivalent fix,
 this patch will no longer be necessary.
 
-#### Bzlmod setup
+#### `protobuf` patch setup under Bzlmod
 
 Applying the `protobuf` patch requires using [`single_version_override`][],
 which also requires that the patch be a regular file in your own repo. In other
@@ -339,7 +358,7 @@ single_version_override(
 )
 ```
 
-#### `WORKSPACE` setup
+#### `protobuf` patch setup under `WORKSPACE`
 
 [`scala/deps.bzl`](./scala/deps.bzl) already applies the `protobuf` patch by
 default. If you need to apply it yourself, you can also copy it to your repo as

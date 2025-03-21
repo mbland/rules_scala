@@ -1,23 +1,22 @@
+load(
+    "//protoc:private/protoc_toolchain.bzl",
+    "PROTOC_ATTR",
+    "PROTOC_TOOLCHAINS",
+    "protoc_executable",
+)
 load("//scala:providers.bzl", "DepsInfo")
 load(
     "//scala_proto/default:default_deps.bzl",
     _scala_proto_deps_providers = "scala_proto_deps_providers",
 )
-load("@com_google_protobuf//bazel/common:proto_common.bzl", "proto_common")
 load("@rules_java//java/common:java_info.bzl", "JavaInfo")
-load("@rules_proto//proto:proto_common.bzl", "toolchains")
-
-_TOOLCHAIN_TYPE = Label("//protoc:toolchain_type")
 
 # Inspired by: https://github.com/protocolbuffers/protobuf/pull/19679
 def _protoc(ctx):
-    if proto_common.INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION:
-        toolchain = ctx.toolchains[_TOOLCHAIN_TYPE]
-        if not toolchain:
-            fail("Couldn't resolve protocol compiler for %s" % _TOOLCHAIN_TYPE)
-        return toolchain.proto.proto_compiler.executable
-    else:
-        return ctx.attr.protoc[DefaultInfo].files_to_run.executable
+    return (
+        protoc_executable(ctx) or
+        ctx.attr.protoc[DefaultInfo].files_to_run.executable
+    )
 
 def _generators(ctx):
     return dict(
@@ -139,15 +138,8 @@ scala_proto_toolchain = rule(
             executable = False,
             cfg = "exec",
         ),
-    } | toolchains.if_legacy_toolchain({
-        "protoc": attr.label(
-            allow_files = True,
-            cfg = "exec",
-            default = Label("@com_google_protobuf//:protoc"),
-            executable = True,
-        ),
-    }),
-    toolchains = toolchains.use_toolchain(_TOOLCHAIN_TYPE),
+    } | PROTOC_ATTR,
+    toolchains = PROTOC_TOOLCHAINS,
 )
 
 def _scala_proto_deps_toolchain(ctx):
