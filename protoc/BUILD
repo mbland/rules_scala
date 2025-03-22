@@ -1,14 +1,9 @@
-load(
-    "@com_google_protobuf//bazel/toolchains:proto_toolchain.bzl",
-    "proto_toolchain",
+exports_files(
+    ["toolchains.bzl"],
+    visibility = ["//visibility:public"],
 )
-load("@rules_scala_toolchains//protoc:platforms.bzl", "PROTOC_PLATFORMS")
 
-[
-    proto_toolchain(
-        name = platform,
-        exec_compatible_with = specs,
-        proto_compiler = "@rules_scala_toolchains//protoc:" + platform,
-    )
-    for platform, specs in PROTOC_PLATFORMS.items()
-]
+toolchain_type(
+    name = "toolchain_type",
+    visibility = ["//visibility:public"],
+)
