@@ -61,8 +61,15 @@ ${twitter_scrooge_repositories}use_repo(
     "twitter_scrooge_test_toolchain",
 )
 
+scala_protoc = use_extension(
+    "@rules_scala//scala/extensions:protoc.bzl",
+    "scala_protoc",
+    dev_dependency = True,
+)
+use_repo(scala_protoc, "rules_scala_protoc_toolchains")
+
 register_toolchains(
-    "@rules_scala//protoc:all",
+    "@rules_scala_protoc_toolchains//...:all",
     "@rules_scala//scala:unused_dependency_checker_error_toolchain",
     "@twitter_scrooge_test_toolchain//...:all",
 )

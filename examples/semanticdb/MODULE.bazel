@@ -24,10 +24,18 @@ scala_deps.settings(
     fetch_sources = True,
 )
 
-#Register and use the custom toolchain that has semanticdb enabled
+scala_protoc = use_extension(
+    "@rules_scala//scala/extensions:protoc.bzl",
+    "scala_protoc",
+    dev_dependency = True,
+)
+use_repo(scala_protoc, "rules_scala_protoc_toolchains")
+
+# Register and use the custom toolchain that has semanticdb enabled
 register_toolchains(
-    "@rules_scala//protoc:all",
+    "@rules_scala_protoc_toolchains//...:all",
     "//:semanticdb_toolchain",
+    dev_dependency = True,
 )
 
 # Temporarily required for `protoc` toolchainization until resolution of

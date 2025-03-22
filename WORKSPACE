@@ -14,8 +14,10 @@ load("@platforms//host:extension.bzl", "host_platform_repo")
 host_platform_repo(name = "host_platform")
 
 # This is optional, but still safe to include even when not using
-# `--incompatible_enable_proto_toolchain_resolution`.
-register_toolchains("//protoc:all")
+# `--incompatible_enable_proto_toolchain_resolution`. Requires invoking the
+# `scala_protoc_toolchains` repo rule. Register this toolchain before any
+# others.
+register_toolchains("@rules_scala_protoc_toolchains//...:all")
 
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
@@ -55,6 +57,14 @@ rules_proto_setup()
 load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
+
+# Include this after loading `platforms`, `com_google_protobuf`, and
+# `rules_proto` to enable the `//protoc` precompiled protocol compiler
+# toolchains.
+load("@rules_scala//protoc:toolchains.bzl", "scala_protoc_toolchains")
+
+# This name can be anything, but we recommend `rules_scala_protoc_toolchains`.
+scala_protoc_toolchains(name = "rules_scala_protoc_toolchains")
 
 load("//:scala_config.bzl", "scala_config")
 
