@@ -143,8 +143,8 @@ load("@rules_scala//:scala_config.bzl", "scala_config")
 #   scala_config(scala_version = "2.13.16")
 #
 # You may define your own custom toolchain using Maven artifact dependencies
-# configured by your `WORKSPACE` file, imported using external loader like
-# https://github.com/bazelbuild/rules_jvm_external.
+# configured by your `WORKSPACE` file, imported using an external loader like
+# https://github.com/bazelbuild/rules_jvm_external. See docs/scala_toolchain.md.
 scala_config()
 
 load(
@@ -153,16 +153,17 @@ load(
     "scala_toolchains",
 )
 
-# Defines a default toolchain repo for the configured Scala version that
-# loads Maven deps like the Scala compiler and standard libs. On production
-# projects, you may consider defining a custom toolchain to use your project's
-# required dependencies instead.
+# Defines a default toolchain repo for the configured Scala version that loads
+# Maven deps like the Scala compiler and standard libs. Enable other builtin
+# toolchains by setting their corresponding parameters to `True`. See the
+# `scala_toolchains()` docstring for all builtin toolchain configuration
+# options.
 #
-# Optional builtin rules_scala toolchains may be configured by setting
-# parameters as documented in the `scala_toolchains()` docstring.
-scala_toolchains(
-    scalatest = True,
-)
+# On production projects, you may consider defining a custom toolchain to use
+# your project's required dependencies instead. In that case, you can omit
+# `scala_toolchains()` or explicitly set `scala = False` if you use it to
+# instantiate other builtin toolchains.
+scala_toolchains()
 
 scala_register_toolchains()
 ```
@@ -360,12 +361,27 @@ single_version_override(
 
 #### `protobuf` patch setup under `WORKSPACE`
 
-[`scala/deps.bzl`](./scala/deps.bzl) already applies the `protobuf` patch by
-default. If you need to apply it yourself, you can also copy it to your repo as
-described in the Bzlmod setup above. Then follow the example in `scala/deps.bzl`
-to apply it in your own `http_archive` call.
+[`scala/deps.bzl`](./scala/deps.bzl) currently applies the `protobuf` patch to `protobuf` v30.1.
 
-However, `WORKSPACE` must include the `host_platform_repo` snippet from
+If you need to apply the patch to a different version of `protobuf`, copy it to
+your repo as described in the Bzlmod setup above. Then apply it in your own
+`http_archive` call:
+
+```py
+http_archive(
+    name = "com_google_protobuf",
+    sha256 = "1451b03faec83aed17cdc71671d1bbdfd72e54086b827f5f6fd02bf7a4041b68",
+    strip_prefix = "protobuf-30.1",
+    url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v30.1.tar.gz",
+    repo_mapping = {"@com_google_absl": "@abseil-cpp"},
+    patches = ["//protobuf.patch"],
+    patch_args = ["-p1"],
+)
+```
+
+#### Setting up the `@host_platform` repo under `WORKSPACE`
+
+`WORKSPACE` must include the `host_platform_repo` snippet from
 [Getting started](#getting-started) to work around bazelbuild/bazel#22558:
 
 ```py
@@ -744,8 +760,6 @@ load(
     "scala_toolchains",
 )
 
-# The `scala_version` toolchain repos used by `scala_library` and `scala_binary`
-# are _always_ configured, but all others are optional.
 scala_toolchains(
     scalafmt = True,
     scalatest = True,
@@ -791,9 +805,10 @@ same exact call will also work in `MODULE.bazel`.
 ### Disabling builtin Scala toolchains when defining custom Scala toolchains
 
 When [defining a 'scala_toolchain()' using custom compiler JARs](
-docs/scala_toolchain.md#b-defining-your-own-scala_toolchain), while using
-`scala_toolchains()` to instantiate builtin toolchains (like the [protoc
-toolchain](#protoc)), set `scala = False`:
+docs/scala_toolchain.md#b-defining-your-own-scala_toolchain), don't use
+`scala_toolchains()` if you don't need any other builtin toolchains.
+
+If you do need other builtin toolchains, then set `scala = False`:
 
 ```py
 # WORKSPACE

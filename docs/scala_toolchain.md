@@ -103,8 +103,8 @@ register_toolchains("//toolchains:my_scala_toolchain")
 
 #### Step 3 (optional)
 
-If you use `scala_toolchains()` to instantiate other builtin toolchains like the
-precompiled proto compiler toolchain, set `scala = False`:
+If you use `scala_toolchains()` to instantiate other builtin toolchains, set
+`scala = False`:
 
 ```py
 # WORKSPACE
@@ -116,8 +116,8 @@ scala_toolchains(
 
 Otherwise, `scala_toolchains()` will try to instantiate a default Scala
 toolchain and its compiler JAR dependency repositories. The build will then fail
-if the configured Scala version doesn't match the `scala_version` value in
-the corresponding `third_party/repositories/scala_*.bzl` file.
+if the configured Scala version doesn't match the `scala_version` value in the
+corresponding `third_party/repositories/scala_*.bzl` file.
 
 ## Configuration options
 

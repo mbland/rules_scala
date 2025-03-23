@@ -71,6 +71,10 @@ def _scala_toolchains_repo_impl(repository_ctx):
     if repo_attr.scalafmt:
         toolchains["scalafmt"] = _SCALAFMT_TOOLCHAIN_BUILD
 
+    # Generate a root package so that the `register_toolchains` call in
+    # `MODULE.bazel` always succeeds.
+    repository_ctx.file("BUILD", executable = False)
+
     for pkg, build in toolchains.items():
         repository_ctx.file(
             pkg + "/BUILD",
