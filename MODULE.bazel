@@ -72,6 +72,11 @@ dev_config.settings(
 )
 
 scala_deps = use_extension("//scala/extensions:deps.bzl", "scala_deps")
+use_repo(
+    scala_deps,
+    "rules_scala_toolchains",
+    "scala_compiler_sources",
+)
 
 # Register some of our testing toolchains first when building our repo.
 register_toolchains(
@@ -84,12 +89,6 @@ register_toolchains(
     "//test/proto:scalapb_toolchain",
     "//test/toolchains:java21_toolchain_definition",
     dev_dependency = True,
-)
-
-use_repo(
-    scala_deps,
-    "rules_scala_toolchains",
-    "scala_compiler_sources",
 )
 
 register_toolchains("@rules_scala_toolchains//...:all")

@@ -44,7 +44,8 @@ _settings_attrs = {
         default = _settings_defaults["validate_scala_version"],
         doc = (
             "Check if the configured Scala version matches " +
-            "the default version supported by rules_scala"
+            "the default version supported by rules_scala. " +
+            "Only takes effect if `scala_deps.toolchains(scala = True)`."
         ),
     ),
 }
@@ -158,7 +159,10 @@ def _toolchains(mctx):
         toolchains_tags = mod.tags.toolchains
         values = single_tag_values(mctx, toolchains_tags, _toolchains_defaults)
 
-        # Don't overwrite `True` values from one tag with `False` from another.
+        if mod.is_root:
+            return values
+
+        # Don't overwrite `True` values with `False` from another tag.
         result.update({k: v for k, v in values.items() if v})
 
     return result
@@ -198,8 +202,10 @@ matching the Scala version.
     "compiler_srcjar": tag_class(
         attrs = _compiler_srcjar_attrs,
         doc = """
-Metadata for locating compiler source jars. Can be specified multiple times,
-but each `version` must be unique. Each instance must contain:
+Metadata for locating compiler source jars.
+
+Can be specified multiple times, but each `version` must be unique. Each
+instance must contain:
 
     - `version`
     - exactly one of `label`, `url`, or `urls`
@@ -208,10 +214,13 @@ but each `version` must be unique. Each instance must contain:
     ),
     "toolchains": tag_class(
         attrs = _toolchains_attrs,
-        doc = (
-            "Selects which builtin toolchains to use; the toolchain for the " +
-            "configured Scala version is always enabled"
-        ),
+        doc = """
+Selects which builtin toolchains to use.
+
+If the root module explicitly uses the extension, it assumes responsibility for
+selecting all required toolchains. It can also disable any toolchains it doesn't
+actually use.
+""",
     ),
     "twitter_scrooge": tag_class(
         attrs = _twitter_scrooge_attrs,
