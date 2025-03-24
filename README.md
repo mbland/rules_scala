@@ -912,7 +912,7 @@ same exact call will also work in `MODULE.bazel`.
 
 ### Disabling builtin Scala toolchains when defining custom Scala toolchains
 
-When [defining a 'scala_toolchain()' using custom compiler JARs](
+When [using 'setup_scala_toolchain()' with custom compiler JARs](
 docs/scala_toolchain.md#b-defining-your-own-scala_toolchain), don't use
 `scala_deps` or `scala_toolchains()` if you don't need any other builtin
 toolchains.
@@ -934,9 +934,9 @@ scala_toolchains(
 ```
 
 This avoids instantiating the default Scala toolchain and compiler JAR
-repositories and a corresponding Scala version check, which may fail when
-defining a custom toolchain. It's equivalent to two ways in which the previous
-API avoided the same default behavior:
+repositories, and disables the corresponding Scala version check, which may
+otherwise fail. This is equivalent to two ways in which the previous API avoided
+the same default behavior:
 
 - Calling `scala_repositories(load_jar_deps = False)` would instantiate only
     other `rules_scala` dependency repos (`rules_java`, `protobuf`, etc.) and
