@@ -149,11 +149,7 @@ srcjars_by_version = {
     },
 }
 
-load(
-    "@rules_scala//scala:toolchains.bzl",
-    "scala_register_toolchains",
-    "scala_toolchains",
-)
+load("@rules_scala//scala:toolchains.bzl", "scala_toolchains")
 
 scala_toolchains(
     fetch_sources = True,
@@ -162,5 +158,3 @@ scala_toolchains(
 )
 
 register_toolchains(":dt_scala_toolchain")
-
-scala_register_toolchains()
