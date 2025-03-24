@@ -103,7 +103,8 @@ register_toolchains("//toolchains:my_scala_toolchain")
 
 #### Step 3 (optional)
 
-If you use `scala_deps` or `scala_toolchains()` to instantiate other builtin
+When using your own JARs for every `setup_scala_toolchain()` argument, while
+using `scala_deps` or`scala_toolchains()` to instantiate other builtin
 toolchains, set `scala = False`:
 
 ```py
@@ -121,9 +122,26 @@ scala_toolchains(
 ```
 
 Otherwise, `scala_deps` or `scala_toolchains()` will try to instantiate a
-default Scala toolchain and its compiler JAR dependency repositories. The build
-will then fail if the configured Scala version doesn't match the `scala_version`
-value in the corresponding `third_party/repositories/scala_*.bzl` file.
+default Scala toolchain and its compiler JAR repositories. The build will then
+fail if the configured Scala version doesn't match the `scala_version` value in
+the corresponding `third_party/repositories/scala_*.bzl` file.
+
+If you don't specify your own jars for every `setup_scala_toolchain()` argument,
+set `validate_scala_version = False` to disable the Scala version check.
+
+```py
+# MODULE.bazel
+scala_deps.toolchains(
+    validate_scala_version = False,
+    # ...other toolchain parameters...
+)
+
+# WORKSPACE
+scala_toolchains(
+    validate_scala_version = False,
+    # ...other toolchain parameters...
+)
+```
 
 ## Configuration options
 
