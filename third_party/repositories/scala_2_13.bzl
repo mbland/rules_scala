@@ -100,14 +100,13 @@ artifacts = {
         "sha256": "8a8f81cf9b359e3f6dfa691a1e776985c061ef2f223c9b2c80753e1b458e8064",
     },
     "io_bazel_rules_scala_guava": {
-        "artifact": "com.google.guava:guava:33.4.0-jre",
-        "sha256": "b918c98a7e44dbe94ebd9fe3e40cddaadb5a93e6a78eb6008b42df237241e538",
+        "artifact": "com.google.guava:guava:33.4.4-jre",
+        "sha256": "95bde613be18dfa2f0b870e4029ac264d5ba6989967204fc92ffe9ad5370cf5e",
         "deps": [
-            "@com_google_code_findbugs_jsr305",
             "@com_google_errorprone_error_prone_annotations",
             "@com_google_j2objc_j2objc_annotations",
             "@io_bazel_rules_scala_failureaccess",
-            "@org_checkerframework_checker_qual",
+            "@org_jspecify_jspecify",
         ],
     },
     "io_bazel_rules_scala_javax_annotation_api": {
@@ -430,6 +429,10 @@ artifacts = {
     "org_jline_jline": {
         "artifact": "org.jline:jline:3.29.0",
         "sha256": "99c22a966838ba4291e69a5dd5689afd049500eb9362b23baace731f9c9c97dd",
+    },
+    "org_jspecify_jspecify": {
+        "artifact": "org.jspecify:jspecify:1.0.0",
+        "sha256": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab",
     },
     "org_scala_lang_modules_scala_collection_compat": {
         "artifact": "org.scala-lang.modules:scala-collection-compat_2.13:2.13.0",
