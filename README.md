@@ -532,19 +532,25 @@ maximum available at the time of writing.
 - For the actual versions used by `rules_scala`, see
     [scala/deps.bzl](scala/deps.bzl).
 
-- See [the configuration file][ci-config] for the exact Bazel versions verified
-    with the continuous-integration builds.
-
-[ci-config]: ./.bazelci/presubmit.yml
+- See [.bazelci/presubmit.yml](./.bazelci/presubmit.yml) for the exact Bazel
+    versions verified by the continuous integration builds.
 
 | Bazel/Dependency |  `rules_scala` 7.x |
 | :-: |  :-: |
 | Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.5.0, 8.x,<br/>`rolling`, `last_green` |
 | Bazel versions using `WORKSPACE` | 6.5.0, 7.5.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
 | `protobuf` |  v30.1 |
+| `rules_proto` | 7.1.0 |
 | `abseil-cpp` | 20250127.1 |
 | `rules_java` | 8.11.0 |
 | `ScalaPB` | 1.0.0-alpha.1 |
+
+The next major release will likely drop support for `protobuf` versions before
+v29 and remove `rules_proto` completely. This is to comply with the guidance in
+[Protobuf News: News Announcements for Version 29.x](
+https://protobuf.dev/news/v29/). For more details, see this [comment from #1710
+explaining why rules_proto remains for now](
+https://github.com/bazelbuild/rules_scala/pull/1710#issuecomment-2750001012).
 
 ### Using a prebuilt `@com_google_protobuf//:protoc` or C++ compiler flags
 
@@ -1005,6 +1011,7 @@ supported, but should work for some time.
 | Dependency | Max compatible version | Reason |
 | :-: | :-: | :- |
 | `protobuf` | v25.5 | Maximum version supported by `ScalaPB` 0.11.17. |
+| `rules_proto` | 6.0.2 | Maximum version supporting `protobuf` v25.5 |
 | `rules_java` | 7.12.4 | 8.x requires `protobuf` v27 and later. |
 | `rules_cc` | 0.0.9 | 0.0.10 requires Bazel 7 to define `CcSharedLibraryHintInfo`.<br/>0.0.13 requires at least `protobuf` v27.0. |
 | `ScalaPB` | 0.11.17<br/>(0.9.8 for Scala 2.11) | Later versions only support `protobuf` >= v28. |
