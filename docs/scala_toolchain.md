@@ -57,7 +57,7 @@ toolchain(
 
 If you want to use your own compiler JARs, use `setup_scala_toolchain()`
 instead. This example assumes the external libraries are resolved with
-[rules_jvm_external](https://github.com/bazelbuild/rules_jvm_external)
+[rules_jvm_external](https://github.com/bazelbuild/rules_jvm_external):
 
 ```py
 # //toolchains/BUILD
