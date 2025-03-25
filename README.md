@@ -537,8 +537,8 @@ maximum available at the time of writing.
 
 | Bazel/Dependency |  `rules_scala` 7.x |
 | :-: |  :-: |
-| Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.5.0, 8.x,<br/>`rolling`, `last_green` |
-| Bazel versions using `WORKSPACE` | 6.5.0, 7.5.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
+| Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.6.0, 8.x,<br/>`rolling`, `last_green` |
+| Bazel versions using `WORKSPACE` | 6.5.0, 7.6.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
 | `protobuf` |  v30.1 |
 | `rules_proto` | 7.1.0 |
 | `abseil-cpp` | 20250127.1 |
@@ -555,7 +555,7 @@ https://github.com/bazelbuild/rules_scala/pull/1710#issuecomment-2750001012).
 ### Using a prebuilt `@com_google_protobuf//:protoc` or C++ compiler flags
 
 Newer versions of `abseil-cpp`, required by newer versions of
-`@com_google_protobuf//:protoc`, fail to compile under Bazel 6.5.0 and 7.5.0 by
+`@com_google_protobuf//:protoc`, fail to compile under Bazel 6.5.0 and 7.6.0 by
 default. [protoc will also fail to build on Windows when using
 MSVC](#protoc-msvc). You will have to choose one of the following approaches to
 resolve this problem.
@@ -1126,7 +1126,7 @@ bazelbuild/bazel#25198 describes how the semantics of some instances of
 `$(rootpath)` fixed them.
 
 The good news is that replacing such instances `$(location)` with `$(rootpath)`
-is backwards compatible to Bazel 6.5.0 and 7.5.0. Updating them now will ensure
+is backwards compatible to Bazel 6.5.0 and 7.6.0. Updating them now will ensure
 future compatibility.
 
 ### <a id="6.5.0"></a>Limited Bazel 6.5.0 compatibility
