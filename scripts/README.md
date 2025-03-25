@@ -117,7 +117,7 @@ The [bazelisk](https://github.com/bazelbuild/bazelisk) wrapper for Bazel uses
 also override the Bazel version, keeping the `.bazelversion` files synchronized
 helps avoid suprises when not using `USE_BAZEL_VERSION`.
 
-## [`update_protoc_integrity`](./update_protoc_integrity.py)
+## [`update_protoc_integrity.py`](./update_protoc_integrity.py)
 
 Updates `protoc/private/protoc_integrity.bzl`.
 
