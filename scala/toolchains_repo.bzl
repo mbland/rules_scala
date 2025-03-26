@@ -46,7 +46,7 @@ def _scala_toolchains_repo_impl(repository_ctx):
     repo_attr = repository_ctx.attr
     format_args = {
         "rules_scala_repo": Label("//:all").repo_name,
-        "proto_enable_all_options": repo_attr.scala_proto_enable_all_options,
+        "proto_options": repo_attr.scala_proto_options,
     }
     toolchains = {}
 
@@ -97,10 +97,10 @@ _scala_toolchains_repo = repository_rule(
         "scala_proto": attr.bool(
             doc = "Instantiate the scala_proto toolchain",
         ),
-        "scala_proto_enable_all_options": attr.bool(
+        "scala_proto_options": attr.string_list(
             doc = (
-                "Enable all scala_proto_options; " +
-                "scala_proto must also be True for this to take effect"
+                "Protobuf generator options; " +
+                "`scala_proto` must also be `True` for this to take effect"
             ),
         ),
         "jmh": attr.bool(
@@ -217,21 +217,14 @@ load(
 
 setup_scala_proto_toolchains(
     name = "scala_proto",
-    enable_all_options = {proto_enable_all_options},
+    default_gen_opts = {proto_options},
 )
 
 declare_deps_provider(
     name = "scalapb_compile_deps_provider",
     deps_id = "scalapb_compile_deps",
     visibility = ["//visibility:public"],
-    deps = DEFAULT_SCALAPB_COMPILE_DEPS,
-)
-
-declare_deps_provider(
-    name = "scalapb_grpc_deps_provider",
-    deps_id = "scalapb_grpc_deps",
-    visibility = ["//visibility:public"],
-    deps = DEFAULT_SCALAPB_GRPC_DEPS,
+    deps = DEFAULT_SCALAPB_COMPILE_DEPS + DEFAULT_SCALAPB_GRPC_DEPS,
 )
 
 declare_deps_provider(

@@ -103,7 +103,7 @@ _toolchains_defaults = {
     "specs2": False,
     "scalafmt": False,
     "scala_proto": False,
-    "scala_proto_enable_all_options": False,
+    "scala_proto_options": [],
     "twitter_scrooge": False,
     "jmh": False,
 }
@@ -132,10 +132,10 @@ _toolchains_attrs = {
         default = _toolchains_defaults["scala_proto"],
         doc = "Register the scala_proto toolchain",
     ),
-    "scala_proto_enable_all_options": attr.bool(
-        default = _toolchains_defaults["scala_proto_enable_all_options"],
+    "scala_proto_options": attr.string_list(
+        default = _toolchains_defaults["scala_proto_options"],
         doc = (
-            "Register the scala_proto toolchain with all options enabled; " +
+            "Protobuf options, like 'scala3_sources' or 'grpc'; " +
             "`scala_proto` must also be `True` for this to take effect"
         ),
     ),
