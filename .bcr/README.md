@@ -21,13 +21,18 @@ Related documentation:
 
 - [bazelbuild/bazel-central-registry](
     https://github.com/bazelbuild/bazel-central-registry)
+- [SLSA: Provenance](https://slsa.dev/spec/v1.0/provenance)
+- [in-toto](https://in-toto.io/)
 - [GitHub Actions](https://docs.github.com/actions)
-- [slsa-framework/slsa-verifier](
-    https://github.com/slsa-framework/slsa-verifier)
 - [Security for GitHub Actions](
     https://docs.github.com/en/actions/security-for-github-actions)
 - [Security for GitHub Actions: Using artifact attestations](
     https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations)
+- [actions/attest-build-provenance](
+    https://github.com/actions/attest-build-provenance)
+- [in-toto/attestation](https://github.com/in-toto/attestation)
+- [slsa-framework/slsa-verifier](
+    https://github.com/slsa-framework/slsa-verifier)
 
 ---
 
@@ -35,4 +40,5 @@ Originally based on the examples from aspect-build/rules_lint#498 and
 aspect-build/rules_lint#501. See also:
 
 - bazelbuild/bazel-central-registry#4060
+- bazelbuild/bazel-central-registry#4146
 - slsa-framework/slsa-verifier#840
