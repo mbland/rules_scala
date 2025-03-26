@@ -1,55 +1,16 @@
-"""Precompiled protoc toolchain utilities
+"""Precompiled protoc toolchains repo rule
 
-Implements `--incompatible_enable_proto_toolchain_resolution` compatibility to
-provide a precompiled protocol compiler toolchain.
+Provides precompiled protocol compiler toolchains.
 """
 
 load(":private/protoc_integrity.bzl", "PROTOC_BUILDS", "PROTOC_DOWNLOAD_URL")
+load(
+    ":private/toolchain_impl.bzl",
+    "PROTOC_TOOLCHAIN_ENABLED",
+    "PROTOC_TOOLCHAIN_TYPE",
+)
 load("@com_google_protobuf//:protobuf_version.bzl", "PROTOC_VERSION")
 load("@platforms//host:constraints.bzl", "HOST_CONSTRAINTS")
-load("@rules_proto//proto:proto_common.bzl", "toolchains")
-
-PROTOC_ATTR = toolchains.if_legacy_toolchain({
-    "protoc": attr.label(
-        allow_files = True,
-        cfg = "exec",
-        default = Label("@com_google_protobuf//:protoc"),
-        executable = True,
-    ),
-})
-PROTOC_TOOLCHAIN_TYPE = Label("//protoc:toolchain_type")
-PROTOC_TOOLCHAINS = toolchains.use_toolchain(PROTOC_TOOLCHAIN_TYPE)
-
-_PROTOC_TOOLCHAIN_ENABLED = not bool(toolchains.if_legacy_toolchain(True))
-
-# Inspired by: https://github.com/protocolbuffers/protobuf/pull/19679
-def protoc_executable(ctx):
-    """Returns `protoc` executable path for rules using `PROTOC_*` symbols.
-
-    Requires that rules use `PROTOC_ATTR` and `PROTOC_TOOLCHAINS` as follows:
-
-    ```py
-    attrs = {
-        # ...other attrs...
-    } | PROTOC_ATTR,
-    toolchains = PROTOC_TOOLCHAINS,
-    ```
-
-    Args:
-        ctx: the rule context object
-
-    Returns:
-        the precompiled `protoc` executable path from the precompiled toolchain
-        if `--incompatible_enable_proto_toolchain_resolution` is enabled,
-        or the path to the `protoc` compiled by `protobuf` otherwise
-    """
-    if not _PROTOC_TOOLCHAIN_ENABLED:
-        return ctx.attr.protoc[DefaultInfo].files_to_run.executable
-
-    toolchain = ctx.toolchains[PROTOC_TOOLCHAIN_TYPE]
-    if not toolchain:
-        fail("Couldn't resolve protocol compiler for " + PROTOC_TOOLCHAIN_TYPE)
-    return toolchain.proto.proto_compiler.executable
 
 def _default_platform():
     host_platform = sorted(HOST_CONSTRAINTS)
@@ -104,13 +65,11 @@ def _generate_protoc_platforms(repository_ctx, builds):
         executable = False,
     )
 
-ENABLE_PROTOC_TOOLCHAIN_ATTR = "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION"
-
 def _scala_protoc_toolchains_impl(repository_ctx):
     builds = []
     build_file_content = ""
 
-    if _PROTOC_TOOLCHAIN_ENABLED:
+    if PROTOC_TOOLCHAIN_ENABLED:
         platforms = [_default_platform()]
         platforms += repository_ctx.attr.platforms
         builds = {p: _platform_build(p) for p in platforms}.items()
