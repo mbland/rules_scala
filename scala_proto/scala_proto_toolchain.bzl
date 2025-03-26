@@ -11,13 +11,6 @@ load(
 )
 load("@rules_java//java/common:java_info.bzl", "JavaInfo")
 
-# Inspired by: https://github.com/protocolbuffers/protobuf/pull/19679
-def _protoc(ctx):
-    return (
-        protoc_executable(ctx) or
-        ctx.attr.protoc[DefaultInfo].files_to_run.executable
-    )
-
 def _generators(ctx):
     return dict(
         ctx.attr.named_generators,
@@ -55,7 +48,7 @@ def _ignored_proto_targets_by_label(ctx):
 def _worker_flags(ctx, generators, jars):
     env = dict(
         {"GEN_" + k: v for k, v in generators.items()},
-        PROTOC = _protoc(ctx).path,
+        PROTOC = protoc_executable(ctx).path,
         JARS = ctx.configuration.host_path_separator.join(
             [f.path for f in jars.to_list()],
         ),
@@ -71,7 +64,7 @@ def _scala_proto_toolchain_impl(ctx):
         generators_opts = _generators_opts(ctx),
         compile_dep_ids = _compile_dep_ids(ctx),
         blacklisted_protos = _ignored_proto_targets_by_label(ctx),
-        protoc = _protoc(ctx),
+        protoc = protoc_executable(ctx),
         scalac = ctx.attr.scalac.files_to_run,
         worker = ctx.attr.code_generator.files_to_run,
         worker_flags = _worker_flags(ctx, generators, generators_jars),
