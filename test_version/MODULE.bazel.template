@@ -44,6 +44,7 @@ scala_deps.settings(
 )
 scala_deps.toolchains(
     scala_proto = True,
+    scala_proto_options = ["grpc"],
     scalatest = True,
     specs2 = True,
 )

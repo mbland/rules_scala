@@ -31,7 +31,7 @@ See the `scala/private/macros/bzlmod.bzl` docstring for a description of
 the defaults, attrs, and tag class dictionaries pattern employed here.
 """
 
-load("//protoc:private/protoc_toolchain.bzl", "scala_protoc_toolchains")
+load("//protoc:private/protoc_toolchains.bzl", "scala_protoc_toolchains")
 load(
     "//scala/private:macros/bzlmod.bzl",
     "root_module_tags",
