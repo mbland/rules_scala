@@ -28,6 +28,6 @@ scala_protoc_toolchains(
 ```
 """
 
-load(":private/protoc_toolchain.bzl", _toolchains = "scala_protoc_toolchains")
+load(":private/protoc_toolchains.bzl", _toolchains = "scala_protoc_toolchains")
 
 scala_protoc_toolchains = _toolchains

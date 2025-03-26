@@ -1,5 +1,5 @@
 load(
-    "//protoc:private/protoc_toolchain.bzl",
+    "//protoc:private/toolchain_impl.bzl",
     "PROTOC_ATTR",
     "PROTOC_TOOLCHAINS",
     "protoc_executable",
