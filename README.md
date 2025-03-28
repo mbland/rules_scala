@@ -406,10 +406,8 @@ the remote execution platform is Linux running on an x86 processor.
 ```py
 # MODULE.bazel
 
-scala_protoc_toolchains(
-    name = "rules_scala_protoc_toolchains",
+scala_protoc.toolchains(
     platforms = ["linux-x86_64"],
-    dev_dependency = True,
 )
 ```
 
