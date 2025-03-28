@@ -111,14 +111,14 @@ register_toolchains(
 # compiler" section below.
 bazel_dep(
     name = "protobuf",
-    version = "30.1",
+    version = "30.2",
     repo_name = "com_google_protobuf",
 )
 single_version_override(
     module_name = "protobuf",
     patch_strip = 1,
     patches = ["//:protobuf.patch"],
-    version = "30.1",
+    version = "30.2",
 )
 ```
 
@@ -145,7 +145,7 @@ single_version_override(
 ### Legacy `WORKSPACE` configuration
 
 `rules_scala` 7.x enables existing users to migrate to Bzlmod. `WORKSPACE`
-continues to work for Bazel [6.5.0 (for now)](#6.5.0), 7.6.0, and 8, but
+continues to work for Bazel [6.5.0 (for now)](#6.5.0), 7.6.1, and 8, but
 [__`WORKSPACE` is going away in Bazel 9__][bazel-9].
 
 [bazel-9]: https://bazel.build/external/migration
@@ -454,20 +454,20 @@ package of your repository, add the following to your `MODULE.bazel`:
 # protocolbuffers/protobuf#19679.
 bazel_dep(
     name = "protobuf",
-    version = "30.1",
+    version = "30.2",
     repo_name = "com_google_protobuf",
 )
 single_version_override(
     module_name = "protobuf",
     patch_strip = 1,
     patches = ["//:protobuf.patch"],
-    version = "30.1",
+    version = "30.2",
 )
 ```
 
 #### `protobuf` patch setup under `WORKSPACE`
 
-[`scala/deps.bzl`](./scala/deps.bzl) currently applies the `protobuf` patch to `protobuf` v30.1.
+[`scala/deps.bzl`](./scala/deps.bzl) currently applies the `protobuf` patch to `protobuf` v30.2.
 
 If you need to apply the patch to a different version of `protobuf`, copy it to
 your repo as described in the Bzlmod setup above. Then apply it in your own
@@ -476,9 +476,9 @@ your repo as described in the Bzlmod setup above. Then apply it in your own
 ```py
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "1451b03faec83aed17cdc71671d1bbdfd72e54086b827f5f6fd02bf7a4041b68",
-    strip_prefix = "protobuf-30.1",
-    url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v30.1.tar.gz",
+    sha256 = "07a43d88fe5a38e434c7f94129cad56a4c43a51f99336074d0799c2f7d4e44c5",
+    strip_prefix = "protobuf-30.2",
+    url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v30.2.tar.gz",
     repo_mapping = {"@com_google_absl": "@abseil-cpp"},
     patches = ["//protobuf.patch"],
     patch_args = ["-p1"],
@@ -643,9 +643,9 @@ maximum available at the time of writing.
 
 | Bazel/Dependency |  `rules_scala` 7.x |
 | :-: |  :-: |
-| Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.6.0, 8.x,<br/>`rolling`, `last_green` |
-| Bazel versions using `WORKSPACE` | 6.5.0, 7.6.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
-| `protobuf` |  v30.1 |
+| Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.6.1, 8.x,<br/>`rolling`, `last_green` |
+| Bazel versions using `WORKSPACE` | 6.5.0, 7.6.1, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
+| `protobuf` |  v30.2 |
 | `rules_proto` | 7.1.0 |
 | `abseil-cpp` | 20250127.1 |
 | `rules_java` | 8.11.0 |
@@ -661,7 +661,7 @@ https://github.com/bazelbuild/rules_scala/pull/1710#issuecomment-2750001012).
 ### Using a prebuilt `@com_google_protobuf//:protoc` or C++ compiler flags
 
 Newer versions of `abseil-cpp`, required by newer versions of
-`@com_google_protobuf//:protoc`, fail to compile under Bazel 6.5.0 and 7.6.0 by
+`@com_google_protobuf//:protoc`, fail to compile under Bazel 6.5.0 and 7.6.1 by
 default. [protoc will also fail to build on Windows when using
 MSVC](#protoc-msvc). You will have to choose one of the following approaches to
 resolve this problem.
@@ -1237,7 +1237,7 @@ bazelbuild/bazel#25198 describes how the semantics of some instances of
 `$(rootpath)` fixed them.
 
 The good news is that replacing such instances `$(location)` with `$(rootpath)`
-is backwards compatible to Bazel 6.5.0 and 7.6.0. Updating them now will ensure
+is backwards compatible to Bazel 6.5.0 and 7.6.1. Updating them now will ensure
 future compatibility.
 
 ### <a id="6.5.0"></a>Limited Bazel 6.5.0 compatibility
