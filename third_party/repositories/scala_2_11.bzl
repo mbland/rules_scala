@@ -111,12 +111,12 @@ artifacts = {
         "sha256": "c160fbd78f51a0c2375a794e435ce2112524a6871f64d0331895e9e26ee8b9ee",
     },
     "io_bazel_rules_scala_failureaccess": {
-        "artifact": "com.google.guava:failureaccess:1.0.2",
-        "sha256": "8a8f81cf9b359e3f6dfa691a1e776985c061ef2f223c9b2c80753e1b458e8064",
+        "artifact": "com.google.guava:failureaccess:1.0.3",
+        "sha256": "cbfc3906b19b8f55dd7cfd6dfe0aa4532e834250d7f080bd8d211a3e246b59cb",
     },
     "io_bazel_rules_scala_guava": {
-        "artifact": "com.google.guava:guava:33.4.4-jre",
-        "sha256": "95bde613be18dfa2f0b870e4029ac264d5ba6989967204fc92ffe9ad5370cf5e",
+        "artifact": "com.google.guava:guava:33.4.7-jre",
+        "sha256": "e3a0c740b72ee0ee79a1d86fbb8129d11776822fc17c624514ff1ddc018642b2",
         "deps": [
             "@com_google_errorprone_error_prone_annotations",
             "@com_google_j2objc_j2objc_annotations",

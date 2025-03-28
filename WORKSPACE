@@ -29,9 +29,9 @@ bazel_skylib_workspace()
 
 http_archive(
     name = "rules_python",
-    sha256 = "2ef40fdcd797e07f0b6abda446d1d84e2d9570d234fddf8fcd2aa262da852d1c",
-    strip_prefix = "rules_python-1.2.0",
-    url = "https://github.com/bazelbuild/rules_python/releases/download/1.2.0/rules_python-1.2.0.tar.gz",
+    sha256 = "2cc26bbd53854ceb76dd42a834b1002cd4ba7f8df35440cf03482e045affc244",
+    strip_prefix = "rules_python-1.3.0",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/1.3.0/rules_python-1.3.0.tar.gz",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
@@ -123,7 +123,7 @@ load(
 
 go_rules_dependencies()
 
-go_register_toolchains(version = "1.24.1")
+go_register_toolchains(version = "1.24.2")
 
 http_archive(
     name = "bazelci_rules",
