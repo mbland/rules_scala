@@ -53,9 +53,9 @@ def rules_scala_dependencies():
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "1451b03faec83aed17cdc71671d1bbdfd72e54086b827f5f6fd02bf7a4041b68",
-        strip_prefix = "protobuf-30.1",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v30.1.tar.gz",
+        sha256 = "07a43d88fe5a38e434c7f94129cad56a4c43a51f99336074d0799c2f7d4e44c5",
+        strip_prefix = "protobuf-30.2",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v30.2.tar.gz",
         repo_mapping = {"@com_google_absl": "@abseil-cpp"},
         patches = [Label("//protoc:0001-protobuf-19679-rm-protoc-dep.patch")],
         patch_args = ["-p1"],

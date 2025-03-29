@@ -111,14 +111,14 @@ register_toolchains(
 # compiler" section below.
 bazel_dep(
     name = "protobuf",
-    version = "30.1",
+    version = "30.2",
     repo_name = "com_google_protobuf",
 )
 single_version_override(
     module_name = "protobuf",
     patch_strip = 1,
     patches = ["//:protobuf.patch"],
-    version = "30.1",
+    version = "30.2",
 )
 ```
 
@@ -406,10 +406,8 @@ the remote execution platform is Linux running on an x86 processor.
 ```py
 # MODULE.bazel
 
-scala_protoc_toolchains(
-    name = "rules_scala_protoc_toolchains",
+scala_protoc.toolchains(
     platforms = ["linux-x86_64"],
-    dev_dependency = True,
 )
 ```
 
@@ -456,20 +454,20 @@ package of your repository, add the following to your `MODULE.bazel`:
 # protocolbuffers/protobuf#19679.
 bazel_dep(
     name = "protobuf",
-    version = "30.1",
+    version = "30.2",
     repo_name = "com_google_protobuf",
 )
 single_version_override(
     module_name = "protobuf",
     patch_strip = 1,
     patches = ["//:protobuf.patch"],
-    version = "30.1",
+    version = "30.2",
 )
 ```
 
 #### `protobuf` patch setup under `WORKSPACE`
 
-[`scala/deps.bzl`](./scala/deps.bzl) currently applies the `protobuf` patch to `protobuf` v30.1.
+[`scala/deps.bzl`](./scala/deps.bzl) currently applies the `protobuf` patch to `protobuf` v30.2.
 
 If you need to apply the patch to a different version of `protobuf`, copy it to
 your repo as described in the Bzlmod setup above. Then apply it in your own
@@ -478,9 +476,9 @@ your repo as described in the Bzlmod setup above. Then apply it in your own
 ```py
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "1451b03faec83aed17cdc71671d1bbdfd72e54086b827f5f6fd02bf7a4041b68",
-    strip_prefix = "protobuf-30.1",
-    url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v30.1.tar.gz",
+    sha256 = "07a43d88fe5a38e434c7f94129cad56a4c43a51f99336074d0799c2f7d4e44c5",
+    strip_prefix = "protobuf-30.2",
+    url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v30.2.tar.gz",
     repo_mapping = {"@com_google_absl": "@abseil-cpp"},
     patches = ["//protobuf.patch"],
     patch_args = ["-p1"],
@@ -647,7 +645,7 @@ maximum available at the time of writing.
 | :-: |  :-: |
 | Bazel versions using Bzlmod<br/>(Coming soon! See bazelbuild/rules_scala#1482.) | 7.6.0, 8.x,<br/>`rolling`, `last_green` |
 | Bazel versions using `WORKSPACE` | 6.5.0, 7.6.0, 8.x<br/>(see the [notes on 6.5.0 compatibility](#6.5.0)) |
-| `protobuf` |  v30.1 |
+| `protobuf` |  v30.2 |
 | `rules_proto` | 7.1.0 |
 | `abseil-cpp` | 20250127.1 |
 | `rules_java` | 8.11.0 |
