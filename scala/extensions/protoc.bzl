@@ -38,6 +38,8 @@ load(
     "single_tag_values",
 )
 
+_TOOLCHAINS_REPO = "rules_scala_protoc_toolchains"
+
 _toolchains_defaults = {
     "platforms": [],
 }
@@ -71,8 +73,12 @@ def _scala_protoc_impl(module_ctx):
 
     tags = root_module_tags(module_ctx, _tag_classes.keys())
     scala_protoc_toolchains(
-        name = "rules_scala_protoc_toolchains",
+        name = _TOOLCHAINS_REPO,
         **single_tag_values(module_ctx, tags.toolchains, _toolchains_defaults)
+    )
+    return module_ctx.extension_metadata(
+        root_module_direct_deps = [],
+        root_module_direct_dev_deps = [_TOOLCHAINS_REPO],
     )
 
 scala_protoc = module_extension(
