@@ -13,9 +13,9 @@ test_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/test/shell
 runner=$(get_test_runner "${1:-local}")
 
 "${test_dir}"/test_bzlmod_macros.sh
-$runner bazel build test/...
-#$runner bazel build "test/... --all_incompatible_changes"
-$runner bazel test test/...
+$runner bazel build "src/... test/..."
+#$runner bazel build "src/... test/... --all_incompatible_changes"
+$runner bazel test "src/... test/..."
 $runner bazel test third_party/...
 $runner bazel build "--extra_toolchains=//test/toolchains:high_level_transitive_deps_strict_deps_error -- test/..."
 $runner bazel build "--extra_toolchains=//scala:minimal_direct_source_deps -- test/..."
