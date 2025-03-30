@@ -16,7 +16,7 @@ test_output_flag="--test_output=errors"
 test_target_filter=""
 
 if is_windows; then
-  test_target_filter="-- //src/java/io/bazel/rulesscala/worker:worker_test"
+  test_target_filter="-- -//src/java/io/bazel/rulesscala/worker:worker_test"
 fi
 
 "${test_dir}"/test_bzlmod_macros.sh
