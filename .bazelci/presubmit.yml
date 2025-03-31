@@ -102,10 +102,10 @@ tasks:
     shell_commands:
       - "./test_cross_build.sh"
   lint_linux:
-    name: "bazel //tools:lint_check"
+    name: "./test_lint.sh"
     platform: ubuntu2004
-    run_targets:
-    -  "//tools:lint_check"
+    shell_commands:
+    -  "./test_lint.sh"
   test_rules_scala_jdk21:
     name: "./test_rules_scala with jdk21"
     platform: ubuntu2004
