@@ -248,7 +248,7 @@ go_sdk = use_extension(
     "go_sdk",
     dev_dependency = True,
 )
-go_sdk.download(version = "1.24.1")
+go_sdk.download(version = "1.24.2")
 
 go_deps = use_extension(
     "@gazelle//:extensions.bzl",
