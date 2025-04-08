@@ -1,7 +1,7 @@
 workspace(name = "rules_scala")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("//scala:deps.bzl", "rules_scala_dependencies")
+load("//scala:latest_deps.bzl", "rules_scala_dependencies")
 
 rules_scala_dependencies()
 
@@ -123,7 +123,7 @@ load(
 
 go_rules_dependencies()
 
-go_register_toolchains(version = "1.24.1")
+go_register_toolchains(version = "1.24.2")
 
 http_archive(
     name = "bazelci_rules",
