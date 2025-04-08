@@ -19,7 +19,7 @@ def _default_platform():
             return platform
     fail(
         "no protoc build found for host platform with constraints: " +
-        HOST_CONSTRAINTS,
+        ", ".join(HOST_CONSTRAINTS),
     )
 
 def _platform_build(platform):
