@@ -503,7 +503,8 @@ single_version_override(
 
 #### `protobuf` patch setup under `WORKSPACE`
 
-[`scala/deps.bzl`](./scala/deps.bzl) currently applies the `protobuf` patch to `protobuf` v30.2.
+[`scala/latest-deps.bzl`](./scala/latest-deps.bzl) currently applies the
+`protobuf` patch to `protobuf` v30.2.
 
 If you need to apply the patch to a different version of `protobuf`, copy it to
 your repo as described in the Bzlmod setup above. Then apply it in your own

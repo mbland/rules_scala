@@ -100,8 +100,8 @@ artifacts = {
         "sha256": "cbfc3906b19b8f55dd7cfd6dfe0aa4532e834250d7f080bd8d211a3e246b59cb",
     },
     "io_bazel_rules_scala_guava": {
-        "artifact": "com.google.guava:guava:33.4.6-jre",
-        "sha256": "958a035b74ff6c7d0cdff9c384524b645eb618f7117b60e1ee915f9cffd0e716",
+        "artifact": "com.google.guava:guava:33.4.7-jre",
+        "sha256": "e3a0c740b72ee0ee79a1d86fbb8129d11776822fc17c624514ff1ddc018642b2",
         "deps": [
             "@com_google_errorprone_error_prone_annotations",
             "@com_google_j2objc_j2objc_annotations",

@@ -287,8 +287,8 @@ go_deps = use_extension(
 #   curl https://sum.golang.org/lookup/golang.org/x/tools@v0.31.0
 go_deps.module(
     path = "golang.org/x/tools",
-    sum = "h1:0EedkvKDbh+qistFTd0Bcwe/YLh4vHwWEkiI0toFIBU=",
-    version = "v0.31.0",
+    sum = "h1:Q7N1vhpkQv7ybVzLFtTjvQya2ewbwNDZzUgfXGqtMWU=",
+    version = "v0.32.0",
 )
 go_deps.module(
     path = "github.com/golang/protobuf",
