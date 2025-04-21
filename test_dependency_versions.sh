@@ -20,9 +20,21 @@ test_source="${dir}/${BASH_SOURCE[0]##*/}"
 # shellcheck source=./test_runner.sh
 . "${dir}"/test/shell/test_runner.sh
 . "${dir}"/test/shell/test_helper.sh
-runner=$(get_test_runner "${1:-local}")
 
-setup_test_tmpdir_for_file "$dir" "$test_source"
+setup_suite() {
+  original_dir="$PWD"
+  setup_test_tmpdir_for_file "$dir" "$test_source"
+  test_tmpdir="$PWD"
+
+  if is_windows && [[ -z "$RULES_SCALA_TEST_REGEX" ]]; then
+    # Windows now requires a precompiled protoc.
+    windows_regex="test_precompiled_protoc"
+  fi
+}
+
+teardown_suite() {
+  teardown_test_tmpdir "$original_dir" "$test_tmpdir"
+}
 
 # Explicitly disable this, since this test sets the Bazel version.
 export USE_BAZEL_VERSION=""
@@ -144,9 +156,6 @@ do_build_and_test() {
   bazel build //...
   bazel test //...
   bazel run //:ScalafmtTest.format-test
-
-  # Make sure bazel isn't still running for this workspace.
-  bazel shutdown
 }
 
 test_minimum_supported_versions() {
@@ -195,10 +204,7 @@ test_precompiled_protoc_rules_java_8_3_2() {
     --rules_proto=7.0.0
 }
 
-if is_windows && [[ -z "$RULES_SCALA_TEST_REGEX" ]]; then
-  # Windows now requires a precompiled protoc.
-  windows_regex="test_precompiled_protoc"
-fi
-
+setup_suite
 RULES_SCALA_TEST_REGEX="${RULES_SCALA_TEST_REGEX:-$windows_regex}" \
-  run_tests "$test_source" "$runner"
+  run_tests "$test_source" "$(get_test_runner "${1:-local}")"
+teardown_suite
