@@ -61,12 +61,11 @@ scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
-scala_deps.toolchains(
-    jmh = True,
-    junit = True,
-    scala_proto = True,
-    scalafmt = True,
-    scalatest = True,
-    specs2 = True,
-    twitter_scrooge = True,
-)
+scala_deps.scala()
+scala_deps.jmh()
+scala_deps.junit()
+scala_deps.scala_proto()
+scala_deps.scalafmt()
+scala_deps.scalatest()
+scala_deps.specs2()
+scala_deps.twitter_scrooge()
