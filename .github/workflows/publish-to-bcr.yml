@@ -24,11 +24,11 @@ on:
 
 jobs:
   publish-to-bcr:
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v0.0.3
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v0.1.0
     with:
       tag_name: ${{ inputs.tag_name }}
       # bazelbuild/bazel-central-registry fork used to open a pull request.
-      registry_fork: simuons/bazel-central-registry
+      registry_fork: bazel-contrib/bazel-central-registry
     permissions:
       attestations: write
       contents: write
