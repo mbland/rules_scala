@@ -20,9 +20,7 @@ scala_deps = use_extension(
     "@rules_scala//scala/extensions:deps.bzl",
     "scala_deps",
 )
-scala_deps.toolchains(
-    scalafmt = True,
-)
+scala_deps.scalafmt()
 ```
 
 or to `WORKSPACE`:
@@ -81,9 +79,6 @@ a custom configuration:
 
     ```py
     # MODULE.bazel
-    scala_deps.toolchains(
-        scalafmt = True,
-    )
     scala_deps.scalafmt(
         default_config = "//path/to/my/custom:scalafmt.conf",
     )
@@ -91,8 +86,7 @@ a custom configuration:
     # WORKSPACE
     scala_toolchains(
         # Other toolchains settings...
-        scalafmt = True,
-        scalafmt_default_config = "//path/to/my/custom:scalafmt.conf",
+        scalafmt = {"default_config": "//path/to/my/custom:scalafmt.conf"},
     )
     ```
 
