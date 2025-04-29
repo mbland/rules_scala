@@ -14,9 +14,11 @@ on:
         required: true
         type: string
 
-# Based on the following, which uses the `release_ruleset` workflow to generate
-# provenance attestation files referenced by the `publish-to-bcr` workflow.
-# https://github.com/aspect-build/rules_lint/blob/v1.3.1/.github/workflows/release.yml
+# Uses the `release_ruleset` workflow to generate provenance attestation files
+# referenced by the `publish-to-bcr` workflow.
+#
+# Based on .github/workflows/release.yml from aspect-build/rules_lint v1.3.5.
+# See .bcr/README.md.
 
 permissions:
   attestations: write # Needed to attest provenance
@@ -31,12 +33,12 @@ jobs:
       prerelease: false
       release_files: rules_scala-*.tar.gz
       release_prep_command: .github/workflows/workspace_snippet.sh
-      tag_name: ${{ github.ref_name }}
+      tag_name: ${{ inputs.tag_name || github.ref_name }}
 
   publish-to-bcr:
     needs: release
     uses: ./.github/workflows/publish-to-bcr.yml
     with:
-      tag_name: ${{ github.ref_name }}
+      tag_name: ${{ inputs.tag_name || github.ref_name }}
     secrets:
-      publish_token: ${{ secrets.PUBLISH_TOKEN }}
+      bcr_publish_token: ${{ secrets.bcr_publish_token }}
