@@ -19,7 +19,7 @@ TOOLCHAIN_DEFAULTS = {
     "semanticdb_deps": [],
     "enable_semanticdb": False,
     "toolchain_type": Label("//scala:toolchain_type"),
-    "visibility": ["//visibility:public"]
+    "visibility": [Label("//visibility:public")]
 } | _scala_toolchain_rule_defaults
 
 _defaults = TOOLCHAIN_DEFAULTS
@@ -64,6 +64,8 @@ TOOLCHAIN_ATTRS = {
         default = _defaults["visibility"],
     ),
 } | scala_toolchain_attrs
+
+[d.pop("dep_providers") for d in [TOOLCHAIN_DEFAULTS, TOOLCHAIN_ATTRS]]
 
 def setup_scala_toolchain(
         name,

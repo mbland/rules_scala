@@ -7,6 +7,7 @@ load(
     "scala_version_artifact_ids",
     "setup_scala_compiler_sources",
 )
+load("//scala/private:macros/stringify.bzl", "stringify_args")
 load("//scala/private:toolchain_defaults.bzl", "TOOLCHAIN_DEFAULTS")
 load("//scala/scalafmt:scalafmt_repositories.bzl", "scalafmt_artifact_ids")
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
@@ -144,12 +145,14 @@ def scala_toolchains(
         twitter_scrooge: bool or dictionary of `setup_scrooge_toolchain()`
             options
     """
+    scala, scala_options = _toolchain_opts(scala)
     scalafmt, scalafmt_options = _toolchain_opts(scalafmt)
     scala_proto, scala_proto_options = _toolchain_opts(scala_proto)
     twitter_scrooge, twitter_scrooge_options = _toolchain_opts(twitter_scrooge)
 
     errors = _process_toolchain_options(
         TOOLCHAIN_DEFAULTS,
+        scala = scala_options,
         scalafmt = scalafmt_options,
         scala_proto = scala_proto_options,
         twitter_scrooge = twitter_scrooge_options,
@@ -163,6 +166,12 @@ def scala_toolchains(
         junit = True
 
     artifact_ids_to_fetch_sources = {}
+    toolchain_targets = {
+        toolchain: _generate_target(toolchain, **options)
+        for toolchain, options in {
+            "scala": scala_options,
+        }.items()
+    }
 
     if scalatest:
         artifact_ids_to_fetch_sources.update({
@@ -237,6 +246,7 @@ def scala_toolchains(
         jmh = jmh,
         twitter_scrooge = twitter_scrooge,
         twitter_scrooge_deps = twitter_scrooge_options,
+        toolchain_targets = {k: v for k, v in toolchain_targets.items() if v},
     )
 
 def scala_register_toolchains(name = _DEFAULT_TOOLCHAINS_REPO_NAME):
@@ -246,3 +256,15 @@ def scala_register_unused_deps_toolchains():
     native.register_toolchains(
         "//scala:unused_dependency_checker_error_toolchain",
     )
+
+def _generate_target(toolchain, **kwargs):
+    defaults = TOOLCHAIN_DEFAULTS[toolchain]
+    args = {k: v for k, v in kwargs.items() if v != defaults[k]}
+
+    if not args:
+        return None
+    return [_TOOLCHAIN_TARGET_TEMPLATES[toolchain] % stringify_args(args)]
+
+_TOOLCHAIN_TARGET_TEMPLATES = {
+    "scala": "setup_scala_toolchain(\n%s)",
+}

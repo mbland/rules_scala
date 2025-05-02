@@ -131,7 +131,7 @@ TOOLCHAIN_DEFAULTS = {
     "scalac_jvm_flags": [],
     "scala_test_jvm_flags": [],
     "enable_diagnostics_report": False,
-    "jacocorunner": "@bazel_tools//tools/jdk:JacocoCoverage",
+    "jacocorunner": Label("@bazel_tools//tools/jdk:JacocoCoverage"),
     "enable_stats_file": True,
     "enable_semanticdb": False,
     "semanticdb_bundle_in_jar": False,

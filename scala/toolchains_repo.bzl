@@ -1,5 +1,7 @@
 """Repository rule to instantiate @rules_scala_toolchains"""
 
+load("//scala/private:macros/stringify.bzl", "stringify_args")
+
 def _generate_testing_toolchain_build_file_args(repo_attr):
     framework_deps = {}
 
@@ -28,16 +30,8 @@ def _generate_testing_toolchain_build_file_args(repo_attr):
         "specs2_junit": framework_deps.get("specs2_junit"),
     }
 
-def _stringify(value):
-    """Wraps string values in double quotes for use in `BUILD` files."""
-    return "\"%s\"" % value if type(value) == "string" else value
-
-def _stringify_args(args, indent = " " * 4):
-    """Formats a dict as `BUILD` rule or macro arguments."""
-    return "".join([
-        "%s%s = %s,\n" % (indent, k, _stringify(v))
-        for k, v in args.items()
-    ])
+def _stringify_targets(targets):
+    return ("%s\n\n" % "\n\n".join(targets)) if len(targets) else ""
 
 def _scala_toolchains_repo_impl(repository_ctx):
     repo_attr = repository_ctx.attr
@@ -48,16 +42,19 @@ def _scala_toolchains_repo_impl(repository_ctx):
 
     if repo_attr.scala:
         toolchains["scala"] = _SCALA_TOOLCHAIN_BUILD
+        format_args["scala_toolchain_targets"] = _stringify_targets(
+            repo_attr.toolchain_targets.get("scala", [])
+        )
     if repo_attr.scala_proto:
         toolchains["scala_proto"] = _SCALA_PROTO_TOOLCHAIN_BUILD
-        format_args["scala_proto_opts"] = _stringify_args({
+        format_args["scala_proto_opts"] = stringify_args({
             "default_gen_opts": repo_attr.scala_proto_options,
         })
     if repo_attr.jmh:
         toolchains["jmh"] = _JMH_TOOLCHAIN_BUILD
     if repo_attr.twitter_scrooge:
         toolchains["twitter_scrooge"] = _TWITTER_SCROOGE_TOOLCHAIN_BUILD
-        format_args["twitter_scrooge_opts"] = _stringify_args(
+        format_args["twitter_scrooge_opts"] = stringify_args(
             repo_attr.twitter_scrooge_deps,
         )
 
@@ -117,11 +114,13 @@ scala_toolchains_repo = repository_rule(
         "twitter_scrooge_deps": attr.string_dict(
             doc = "twitter_scrooge toolchain dependency provider overrides",
         ),
+        "toolchain_targets": attr.string_list_dict(
+            doc = "Dict of toolchain name to user defined target strings",
+        )
     },
 )
 
-_SCALA_TOOLCHAIN_BUILD = """
-load(
+_SCALA_TOOLCHAIN_BUILD = """load(
     "@@{rules_scala_repo}//scala/private:macros/setup_scala_toolchain.bzl",
     "default_deps",
     "setup_scala_toolchain",
@@ -130,7 +129,7 @@ load("@@{rules_scala_repo}//scala:providers.bzl", "declare_deps_provider")
 load("@@{rules_scala_repo}//scala:scala_cross_version.bzl", "version_suffix")
 load("@rules_scala_config//:config.bzl", "SCALA_VERSION", "SCALA_VERSIONS")
 
-[
+{scala_toolchain_targets}[
     setup_scala_toolchain(
         name = "toolchain" + version_suffix(scala_version),
         scala_version = scala_version,
