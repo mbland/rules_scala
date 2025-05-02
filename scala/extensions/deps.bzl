@@ -224,6 +224,9 @@ def _scala_deps_impl(module_ctx):
     tags = root_module_tags(module_ctx, _tag_classes.keys())
     tc_names = [tc for tc in _toolchain_tag_classes]
 
+    module_ctx.file("foo.txt", "Hello, World!", executable = False)
+    foo_path = module_ctx.path("foo.txt")
+    print("CONTENTS OF %s:" % foo_path, module_ctx.read(foo_path))
     scala_toolchains(
         overridden_artifacts = repeated_tag_values(
             tags.overridden_artifact,
