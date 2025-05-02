@@ -27,7 +27,11 @@ load(
     "root_module_tags",
     "single_tag_values",
 )
-load("//scala/private:toolchain_defaults.bzl", "TOOLCHAIN_DEFAULTS")
+load(
+    "//scala/private:toolchain_defaults.bzl",
+    "TOOLCHAIN_ATTRS",
+    "TOOLCHAIN_DEFAULTS",
+)
 load("//scala:scala_cross_version.bzl", "default_maven_server_urls")
 load("//scala:toolchains.bzl", "scala_toolchains")
 
@@ -93,11 +97,23 @@ _compiler_srcjar_attrs = {
 _scalafmt_defaults = TOOLCHAIN_DEFAULTS["scalafmt"]
 
 _scalafmt_attrs = {
+    "name": attr.label(default = _scalafmt_defaults["name"]),
     "default_config": attr.label(
         default = _scalafmt_defaults["default_config"],
         doc = "The default config file for Scalafmt targets",
         allow_single_file = True,
     ),
+    "scalafmt_classpath": attr.label_list(
+        default = _scalafmt_defaults["scalafmt_classpath"],
+        doc = "Scalafmt JAR dependency targets",
+    ),
+    "scala_version": attr.string(
+        default = _scalafmt_defaults["scala_version"],
+    ),
+    "toolchain_type": attr.label(
+        default = _scalafmt_defaults["toolchain_type"],
+    ),
+    "visibility": attr.label_list(default = _scalafmt_defaults["visibility"]),
 }
 
 _scala_proto_defaults = TOOLCHAIN_DEFAULTS["scala_proto"]
@@ -150,6 +166,7 @@ instance must contain:
 # Tag classes for supported toolchains.
 _toolchain_tag_classes = {
     "scala": tag_class(
+        attrs = TOOLCHAIN_ATTRS["scala"],
         doc = "Configures the Scala toolchain",
     ),
     "scalatest": tag_class(
@@ -224,9 +241,6 @@ def _scala_deps_impl(module_ctx):
     tags = root_module_tags(module_ctx, _tag_classes.keys())
     tc_names = [tc for tc in _toolchain_tag_classes]
 
-    module_ctx.file("foo.txt", "Hello, World!", executable = False)
-    foo_path = module_ctx.path("foo.txt")
-    print("CONTENTS OF %s:" % foo_path, module_ctx.read(foo_path))
     scala_toolchains(
         overridden_artifacts = repeated_tag_values(
             tags.overridden_artifact,

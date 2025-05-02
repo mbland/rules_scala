@@ -1,7 +1,69 @@
-load("//scala:scala_toolchain.bzl", "scala_toolchain")
+load(
+    "//scala:scala_toolchain.bzl",
+    "scala_toolchain",
+    "scala_toolchain_attrs",
+    _scala_toolchain_rule_defaults = "TOOLCHAIN_DEFAULTS",
+)
 load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala:scala_cross_version.bzl", "repositories", "version_suffix")
 load("@rules_scala_config//:config.bzl", "SCALA_VERSION")
+
+TOOLCHAIN_DEFAULTS = {
+    "name": "scala_toolchain" + version_suffix(SCALA_VERSION),
+    "scala_compile_classpath": [],
+    "scala_library_classpath": [],
+    "scala_macro_classpath": [],
+    "scala_version": SCALA_VERSION,
+    "scala_xml_deps": [],
+    "parser_combinators_deps": [],
+    "semanticdb_deps": [],
+    "enable_semanticdb": False,
+    "toolchain_type": Label("//scala:toolchain_type"),
+    "visibility": ["//visibility:public"]
+} | _scala_toolchain_rule_defaults
+
+_defaults = TOOLCHAIN_DEFAULTS
+
+TOOLCHAIN_ATTRS = {
+    "name": attr.string(default = _defaults["name"]),
+    "scala_compile_classpath": attr.label_list(
+        default = _defaults["scala_compile_classpath"],
+        doc = "Scala compiler JAR targets",
+    ),
+    "scala_library_classpath": attr.label_list(
+        default = _defaults["scala_library_classpath"],
+        doc = "Scala library JAR targets",
+    ),
+    "scala_macro_classpath": attr.label_list(
+        default = _defaults["scala_macro_classpath"],
+        doc = "Scala macro JAR targets",
+    ),
+    "scala_version": attr.string(
+        default = _defaults["scala_version"],
+    ),
+    "scala_xml_deps": attr.label_list(
+        default = _defaults["scala_xml_deps"],
+        doc = "Scala XML JAR targets",
+    ),
+    "parser_combinators_deps": attr.label_list(
+        default = _defaults["parser_combinators_deps"],
+        doc = "Parser combinators JAR targets",
+    ),
+    "semanticdb_deps": attr.label_list(
+        default = _defaults["semanticdb_deps"],
+        doc = "Semantic DB JAR targets",
+    ),
+    "enable_semanticdb": attr.bool(
+        default = _defaults["enable_semanticdb"],
+        doc = "Enable Semantic DB",
+    ),
+    "toolchain_type": attr.label(
+        default = _defaults["toolchain_type"],
+    ),
+    "visibility": attr.label_list(
+        default = _defaults["visibility"],
+    ),
+} | scala_toolchain_attrs
 
 def setup_scala_toolchain(
         name,
@@ -13,7 +75,8 @@ def setup_scala_toolchain(
         parser_combinators_deps = None,
         semanticdb_deps = None,
         enable_semanticdb = False,
-        visibility = ["//visibility:public"],
+        toolchain_type = _defaults["toolchain_type"],
+        visibility = _defaults["visibility"],
         **kwargs):
     scala_xml_provider = "%s_scala_xml_provider" % name
     parser_combinators_provider = "%s_parser_combinators_provider" % name
@@ -22,7 +85,7 @@ def setup_scala_toolchain(
     scala_macro_classpath_provider = "%s_scala_macro_classpath_provider" % name
     semanticdb_deps_provider = "%s_semanticdb_deps_provider" % name
 
-    if scala_compile_classpath == None:
+    if not scala_compile_classpath:
         scala_compile_classpath = default_deps("scala_compile_classpath", scala_version)
     declare_deps_provider(
         name = scala_compile_classpath_provider,
@@ -31,7 +94,7 @@ def setup_scala_toolchain(
         deps = scala_compile_classpath,
     )
 
-    if scala_library_classpath == None:
+    if not scala_library_classpath:
         scala_library_classpath = default_deps("scala_library_classpath", scala_version)
     declare_deps_provider(
         name = scala_library_classpath_provider,
@@ -40,7 +103,7 @@ def setup_scala_toolchain(
         deps = scala_library_classpath,
     )
 
-    if scala_macro_classpath == None:
+    if not scala_macro_classpath:
         scala_macro_classpath = default_deps("scala_macro_classpath", scala_version)
     declare_deps_provider(
         name = scala_macro_classpath_provider,
@@ -49,7 +112,7 @@ def setup_scala_toolchain(
         deps = scala_macro_classpath,
     )
 
-    if scala_xml_deps == None:
+    if not scala_xml_deps:
         scala_xml_deps = default_deps("scala_xml", scala_version)
     declare_deps_provider(
         name = scala_xml_provider,
@@ -58,7 +121,7 @@ def setup_scala_toolchain(
         deps = scala_xml_deps,
     )
 
-    if parser_combinators_deps == None:
+    if not parser_combinators_deps:
         parser_combinators_deps = default_deps("parser_combinators", scala_version)
     declare_deps_provider(
         name = parser_combinators_provider,
@@ -76,7 +139,7 @@ def setup_scala_toolchain(
     ]
 
     if enable_semanticdb == True:
-        if semanticdb_deps == None:
+        if not semanticdb_deps:
             semanticdb_deps = default_deps("semanticdb", scala_version)
         declare_deps_provider(
             name = semanticdb_deps_provider,
@@ -97,7 +160,7 @@ def setup_scala_toolchain(
     native.toolchain(
         name = name,
         toolchain = ":%s_impl" % name,
-        toolchain_type = Label("//scala:toolchain_type"),
+        toolchain_type = toolchain_type,
         target_settings = [
             "@rules_scala_config//:scala_version" +
             version_suffix(scala_version),

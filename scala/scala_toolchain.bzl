@@ -118,67 +118,99 @@ def _default_dep_providers():
         for p in dep_providers
     ]
 
+TOOLCHAIN_DEFAULTS = {
+    "scalacopts": [],
+    "dep_providers": _default_dep_providers(),
+    "dependency_mode": "direct",
+    "strict_deps_mode": "default",
+    "unused_dependency_checker_mode": "off",
+    "compiler_deps_mode": "off",
+    "dependency_tracking_method": "default",
+    "dependency_tracking_strict_deps_patterns": [""],
+    "dependency_tracking_unused_deps_patterns": [""],
+    "scalac_jvm_flags": [],
+    "scala_test_jvm_flags": [],
+    "enable_diagnostics_report": False,
+    "jacocorunner": "@bazel_tools//tools/jdk:JacocoCoverage",
+    "enable_stats_file": True,
+    "enable_semanticdb": False,
+    "semanticdb_bundle_in_jar": False,
+    "use_argument_file_in_runner": False,
+}
+
+_defaults = TOOLCHAIN_DEFAULTS
+
+scala_toolchain_attrs = {
+    "scalacopts": attr.string_list(default = _defaults["scalacopts"]),
+    "dep_providers": attr.label_list(
+        default = _defaults["dep_providers"],
+        providers = [_DepsInfo],
+    ),
+    "dependency_mode": attr.string(
+        default = _defaults["dependency_mode"],
+        values = ["direct", "plus-one", "transitive"],
+    ),
+    "strict_deps_mode": attr.string(
+        default = _defaults["strict_deps_mode"],
+        values = ["off", "warn", "error", "default"],
+    ),
+    "unused_dependency_checker_mode": attr.string(
+        default = _defaults["unused_dependency_checker_mode"],
+        values = ["off", "warn", "error"],
+    ),
+    "compiler_deps_mode": attr.string(
+        default = _defaults["compiler_deps_mode"],
+        values = ["off", "warn", "error"],
+    ),
+    "dependency_tracking_method": attr.string(
+        default = _defaults["dependency_tracking_method"],
+        values = ["ast-plus", "ast", "high-level", "default"],
+    ),
+    "dependency_tracking_strict_deps_patterns": attr.string_list(
+        default = _defaults["dependency_tracking_strict_deps_patterns"],
+        doc = "List of target prefixes included for strict deps analysis. Exclude patterns with '-'",
+    ),
+    "dependency_tracking_unused_deps_patterns": attr.string_list(
+        default = _defaults["dependency_tracking_unused_deps_patterns"],
+        doc = "List of target prefixes included for unused deps analysis. Exclude patterns with '-'",
+    ),
+    "scalac_jvm_flags": attr.string_list(
+        default = _defaults["scalac_jvm_flags"],
+    ),
+    "scala_test_jvm_flags": attr.string_list(
+        default = _defaults["scala_test_jvm_flags"],
+    ),
+    "enable_diagnostics_report": attr.bool(
+        default = _defaults["enable_diagnostics_report"],
+        doc = "Enable the output of structured diagnostics through the BEP",
+    ),
+    "jacocorunner": attr.label(
+        default = _defaults["jacocorunner"],
+    ),
+    "enable_stats_file": attr.bool(
+        doc = "Enable writing of statsfile",
+        default = _defaults["enable_stats_file"],
+    ),
+    "enable_semanticdb": attr.bool(
+        doc = "Enable SemanticDb",
+        default = _defaults["enable_semanticdb"],
+    ),
+    "semanticdb_bundle_in_jar": attr.bool(
+        default = _defaults["semanticdb_bundle_in_jar"],
+        doc = "Option to bundle the semanticdb files inside the output jar file",
+    ),
+    "use_argument_file_in_runner": attr.bool(
+        default = _defaults["use_argument_file_in_runner"],
+        doc = "Changes java binaries scripts (including tests) to use argument files and not classpath jars to improve performance, requires java > 8",
+    ),
+    "_scala_version": attr.label(
+        default = "@rules_scala_config//:scala_version",
+    ),
+}
+
 _scala_toolchain = rule(
     _scala_toolchain_impl,
-    attrs = {
-        "scalacopts": attr.string_list(),
-        "dep_providers": attr.label_list(
-            default = _default_dep_providers(),
-            providers = [_DepsInfo],
-        ),
-        "dependency_mode": attr.string(
-            default = "direct",
-            values = ["direct", "plus-one", "transitive"],
-        ),
-        "strict_deps_mode": attr.string(
-            default = "default",
-            values = ["off", "warn", "error", "default"],
-        ),
-        "unused_dependency_checker_mode": attr.string(
-            default = "off",
-            values = ["off", "warn", "error"],
-        ),
-        "compiler_deps_mode": attr.string(
-            default = "off",
-            values = ["off", "warn", "error"],
-        ),
-        "dependency_tracking_method": attr.string(
-            default = "default",
-            values = ["ast-plus", "ast", "high-level", "default"],
-        ),
-        "dependency_tracking_strict_deps_patterns": attr.string_list(
-            doc = "List of target prefixes included for strict deps analysis. Exclude patterns with '-'",
-            default = [""],
-        ),
-        "dependency_tracking_unused_deps_patterns": attr.string_list(
-            doc = "List of target prefixes included for unused deps analysis. Exclude patterns with '-'",
-            default = [""],
-        ),
-        "scalac_jvm_flags": attr.string_list(),
-        "scala_test_jvm_flags": attr.string_list(),
-        "enable_diagnostics_report": attr.bool(
-            doc = "Enable the output of structured diagnostics through the BEP",
-        ),
-        "jacocorunner": attr.label(
-            default = "@bazel_tools//tools/jdk:JacocoCoverage",
-        ),
-        "enable_stats_file": attr.bool(
-            default = True,
-            doc = "Enable writing of statsfile",
-        ),
-        "enable_semanticdb": attr.bool(
-            default = False,
-            doc = "Enable SemanticDb",
-        ),
-        "semanticdb_bundle_in_jar": attr.bool(default = False, doc = "Option to bundle the semanticdb files inside the output jar file"),
-        "use_argument_file_in_runner": attr.bool(
-            default = False,
-            doc = "Changes java binaries scripts (including tests) to use argument files and not classpath jars to improve performance, requires java > 8",
-        ),
-        "_scala_version": attr.label(
-            default = "@rules_scala_config//:scala_version",
-        ),
-    },
+    attrs = scala_toolchain_attrs,
     fragments = ["java"],
 )
 
@@ -202,8 +234,14 @@ def _expand_patterns(patterns):
 
 def scala_toolchain(**kwargs):
     """Creates a Scala toolchain target."""
-    strict = kwargs.pop("dependency_tracking_strict_deps_patterns", [""])
-    unused = kwargs.pop("dependency_tracking_unused_deps_patterns", [""])
+    strict = kwargs.pop(
+        "dependency_tracking_strict_deps_patterns",
+        _defaults["dependency_tracking_strict_deps_patterns"],
+    )
+    unused = kwargs.pop(
+        "dependency_tracking_unused_deps_patterns",
+        _defaults["dependency_tracking_unused_deps_patterns"],
+    )
     _scala_toolchain(
         dependency_tracking_strict_deps_patterns = _expand_patterns(strict),
         dependency_tracking_unused_deps_patterns = _expand_patterns(unused),
