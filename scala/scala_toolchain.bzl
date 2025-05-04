@@ -118,9 +118,8 @@ def _default_dep_providers():
         for p in dep_providers
     ]
 
-TOOLCHAIN_DEFAULTS = {
+toolchain_defaults = {
     "scalacopts": [],
-    "dep_providers": _default_dep_providers(),
     "dependency_mode": "direct",
     "strict_deps_mode": "default",
     "unused_dependency_checker_mode": "off",
@@ -138,14 +137,10 @@ TOOLCHAIN_DEFAULTS = {
     "use_argument_file_in_runner": False,
 }
 
-_defaults = TOOLCHAIN_DEFAULTS
+_defaults = toolchain_defaults
 
-scala_toolchain_attrs = {
+toolchain_attrs = {
     "scalacopts": attr.string_list(default = _defaults["scalacopts"]),
-    "dep_providers": attr.label_list(
-        default = _defaults["dep_providers"],
-        providers = [_DepsInfo],
-    ),
     "dependency_mode": attr.string(
         default = _defaults["dependency_mode"],
         values = ["direct", "plus-one", "transitive"],
@@ -203,14 +198,23 @@ scala_toolchain_attrs = {
         default = _defaults["use_argument_file_in_runner"],
         doc = "Changes java binaries scripts (including tests) to use argument files and not classpath jars to improve performance, requires java > 8",
     ),
-    "_scala_version": attr.label(
-        default = "@rules_scala_config//:scala_version",
-    ),
 }
 
 _scala_toolchain = rule(
     _scala_toolchain_impl,
-    attrs = scala_toolchain_attrs,
+    attrs = toolchain_attrs | {
+        # We specify this separately because TOOLCHAIN_DEFAULTS and
+        # TOOLCHAIN_ATTRS shouldn't contain it. `setup_scala_toolchains` and the
+        # `scala_deps.scala` tag class define separate providers lists, so that
+        # the user need specify only a subset.
+        "dep_providers": attr.label_list(
+            default = _default_dep_providers(),
+            providers = [_DepsInfo],
+        ),
+        "_scala_version": attr.label(
+            default = "@rules_scala_config//:scala_version",
+        ),
+    },
     fragments = ["java"],
 )
 

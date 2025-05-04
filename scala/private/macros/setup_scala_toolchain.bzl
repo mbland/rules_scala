@@ -1,8 +1,8 @@
 load(
     "//scala:scala_toolchain.bzl",
     "scala_toolchain",
-    "scala_toolchain_attrs",
-    _scala_toolchain_rule_defaults = "TOOLCHAIN_DEFAULTS",
+    "toolchain_attrs",
+    "toolchain_defaults",
 )
 load("//scala:providers.bzl", "declare_deps_provider")
 load("//scala:scala_cross_version.bzl", "repositories", "version_suffix")
@@ -19,8 +19,8 @@ TOOLCHAIN_DEFAULTS = {
     "semanticdb_deps": [],
     "enable_semanticdb": False,
     "toolchain_type": Label("//scala:toolchain_type"),
-    "visibility": [Label("//visibility:public")]
-} | _scala_toolchain_rule_defaults
+    "visibility": [Label("//visibility:public")],
+} | toolchain_defaults
 
 _defaults = TOOLCHAIN_DEFAULTS
 
@@ -63,9 +63,7 @@ TOOLCHAIN_ATTRS = {
     "visibility": attr.label_list(
         default = _defaults["visibility"],
     ),
-} | scala_toolchain_attrs
-
-[d.pop("dep_providers") for d in [TOOLCHAIN_DEFAULTS, TOOLCHAIN_ATTRS]]
+} | toolchain_attrs
 
 def setup_scala_toolchain(
         name,
@@ -140,7 +138,7 @@ def setup_scala_toolchain(
         scala_macro_classpath_provider,
     ]
 
-    if enable_semanticdb == True:
+    if enable_semanticdb == True or semanticdb_deps:
         if not semanticdb_deps:
             semanticdb_deps = default_deps("semanticdb", scala_version)
         declare_deps_provider(
