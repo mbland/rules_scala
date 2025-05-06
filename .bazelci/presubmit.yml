@@ -45,7 +45,7 @@ tasks:
   test_rules_scala_win:
     name: "./test_rules_scala"
     platform: windows
-    environment:      
+    environment:
       MSYS2_ARG_CONV_EXCL: "*"
     batch_commands:
     - "set PATH=/usr/bin;%PATH%" #Make sure bash uses msys commands over windows commands. (i.e. find).
@@ -74,7 +74,7 @@ tasks:
     shell_commands:
     - "./test_reproducibility.sh"
   versions_linux:
-    name: "./test_version.sh"      
+    name: "./test_version.sh"
     platform: ubuntu2004
     shell_commands:
     - "./test_version.sh"
@@ -84,7 +84,7 @@ tasks:
     shell_commands:
     - "./test_version.sh"
   thirdparty_version_linux:
-    name: "./test_thirdparty_version.sh"      
+    name: "./test_thirdparty_version.sh"
     platform: ubuntu2204_java17
     shell_commands:
     - "./test_thirdparty_version.sh"
@@ -130,7 +130,7 @@ tasks:
   dependency_versions_windows:
     name: "./test_dependency_versions"
     platform: windows
-    environment:      
+    environment:
       MSYS2_ARG_CONV_EXCL: "*"
     batch_commands:
     - "set PATH=/usr/bin;%PATH%" #Make sure bash uses msys commands over windows commands. (i.e. find).
