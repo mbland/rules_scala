@@ -37,9 +37,9 @@ def rules_scala_dependencies():
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "07a43d88fe5a38e434c7f94129cad56a4c43a51f99336074d0799c2f7d4e44c5",
-        strip_prefix = "protobuf-30.2",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v30.2.tar.gz",
+        sha256 = "2b695cb1eaef8e173f884235ee6d55f57186e95d89ebb31361ee55cb5fd1b996",
+        strip_prefix = "protobuf-31.0",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v31.0.tar.gz",
         patches = [Label("//protoc:0001-protobuf-19679-rm-protoc-dep.patch")],
         patch_args = ["-p1"],
     )

@@ -48,8 +48,8 @@ artifacts = {
         "sha256": "88241573467ddca44ffd4d74aa04c2bbfd11bf7c17e0c342c94c9de7a70a7c64",
     },
     "com_google_protobuf_protobuf_java": {
-        "artifact": "com.google.protobuf:protobuf-java:4.30.2",
-        "sha256": "0f3a4e9264db07cec429f2a68a66030e9b7487277b76863cdd0e9238cece249b",
+        "artifact": "com.google.protobuf:protobuf-java:4.31.0",
+        "sha256": "68773dccd6cc5835af7a748759cecf5ea20ff083136e3847fbe94572b8e0ed6a",
     },
     "com_lihaoyi_fansi": {
         "artifact": "com.lihaoyi:fansi_2.13:0.5.0",
@@ -418,8 +418,8 @@ artifacts = {
         "sha256": "adea029247c3f16e55e29c1708b897812fd1fe335ac55fe3903e5d2f428ef4b3",
     },
     "net_java_dev_jna_jna": {
-        "artifact": "net.java.dev.jna:jna:5.16.0",
-        "sha256": "3f5233589a799eb66dc2969afa3433fb56859d3d787c58b9bc7dd9e86f0a250c",
+        "artifact": "net.java.dev.jna:jna:5.17.0",
+        "sha256": "b3a9408e7c51e08ef0e3bfcc08f443f6ec0f6191ba8cd7c18d53d2b22e5bdbc0",
     },
     "org_apache_commons_commons_lang_3_5": {
         "testonly": True,
@@ -435,38 +435,38 @@ artifacts = {
         "sha256": "c720e6e5bcbe6b2f48ded75a47bccdb763eede79d14330102e0d352e3d89ed92",
     },
     "org_jline_jline": {
-        "artifact": "org.jline:jline:3.29.0",
-        "sha256": "99c22a966838ba4291e69a5dd5689afd049500eb9362b23baace731f9c9c97dd",
+        "artifact": "org.jline:jline:jar:jdk8:3.30.1",
+        "sha256": "2188b9110ee5bb2bcb11fb60ab901033a5e51a3feda6044b3f3e5a6250f34f8f",
     },
     "org_jline_jline_native": {
-        "artifact": "org.jline:jline-native:3.29.0",
-        "sha256": "19cfcc9d3c78a1c6cfe4c6c9599f16a657e4bf8da43940fc4b875373236dc258",
+        "artifact": "org.jline:jline-native:3.30.1",
+        "sha256": "e48e670018077ca568d34d7b4edcd79f14b946baf3092d4f1cdf969b1fadfe66",
     },
     "org_jline_jline_reader": {
-        "artifact": "org.jline:jline-reader:3.29.0",
-        "sha256": "a4cb0a5fde9289f2f1b614e04f94b202f6ff5c9c96476425837b1184c92ef81d",
+        "artifact": "org.jline:jline-reader:3.30.1",
+        "sha256": "374f4d707bc6ff48ee5d611e0202721116f283bbe38a44c3d01f7db630dba3a6",
         "deps": [
             "@org_jline_jline_terminal",
         ],
     },
     "org_jline_jline_terminal": {
-        "artifact": "org.jline:jline-terminal:3.29.0",
-        "sha256": "fd68a98b32b1132035c62102e5df0b0fdc358e7c87a9f876ce7071450b4d10da",
+        "artifact": "org.jline:jline-terminal:3.30.1",
+        "sha256": "56e89120700cf3cc8dca8a6a58f16d367e6cabb0fa3417b6b54cd290ba127090",
         "deps": [
             "@org_jline_jline_native",
         ],
     },
     "org_jline_jline_terminal_jna": {
-        "artifact": "org.jline:jline-terminal-jna:3.29.0",
-        "sha256": "2ec6081192dfa07bf0237acedad8648c168d75c51106e773ea091f8885bda65b",
+        "artifact": "org.jline:jline-terminal-jna:3.30.1",
+        "sha256": "52d32972eeacd9c3a6e5cb4ebb12a1217b5ff4ca83fe0a411016a6f8eb37a1d5",
         "deps": [
             "@net_java_dev_jna_jna",
             "@org_jline_jline_terminal",
         ],
     },
     "org_jline_jline_terminal_jni": {
-        "artifact": "org.jline:jline-terminal-jni:3.29.0",
-        "sha256": "13fef8bcc0e4788c8e192dc76c33758683c6bfdbaef6f67b41445eb8986773ad",
+        "artifact": "org.jline:jline-terminal-jni:3.30.1",
+        "sha256": "1f94a0072147b7ccf6ee45804a8ef3f8585ade08c84af8a384a442e8ee6c7770",
         "deps": [
             "@org_jline_jline_native",
             "@org_jline_jline_terminal",
@@ -881,8 +881,8 @@ artifacts = {
         "sha256": "c7b478503ec524e55df19b424d46d27c8a68aeb801664fadd4f069b71f52d0f6",
     },
     "scala_proto_rules_proto_google_common_protos": {
-        "artifact": "com.google.api.grpc:proto-google-common-protos:2.55.3",
-        "sha256": "6a35af8ee0ec85266f9b0656be1a17b3e73ec029fed76c3073dccdd79d921664",
+        "artifact": "com.google.api.grpc:proto-google-common-protos:2.57.0",
+        "sha256": "475d3d14197b45a02e8731a5d9736f5f859d459025bc19c7b7f2f74a0f6cb320",
         "deps": [
             "@com_google_protobuf_protobuf_java",
         ],
