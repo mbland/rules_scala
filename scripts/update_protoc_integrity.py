@@ -9,22 +9,20 @@ platforms to:
 
 Only computes integrity information for a `protoc` distribution if it doesn't
 already exist in the integrity file.
-
-This borrows some code from `scripts/create_repository.py` that could probably
-be extracted into a common module. Specifically, `emit_protoc_integrity_file()`
-borrows heavily from `ArtifactUpdater.write_to_file()`.
 """
 
-from base64 import b64encode
 from pathlib import Path
 
 import argparse
-import ast
-import hashlib
-import json
-import re
-import urllib.request
 import sys
+
+from lib.update_integrity import (
+    generate_integrity_file_path_and_docstring,
+    get_artifact_integrity,
+    stringify_object,
+    load_existing_data,
+)
+
 
 PROTOC_VERSIONS = [
     "31.1",
@@ -81,13 +79,12 @@ PROTOC_BUILDS = {
     ],
 }
 
-THIS_FILE = Path(__file__)
-REPO_ROOT = THIS_FILE.parent.parent
-INTEGRITY_FILE = REPO_ROOT / 'protoc/private/protoc_integrity.bzl'
-INTEGRITY_FILE_HEADER = f'''"""Protocol compiler build and integrity metadata.
-
-Generated and updated by {THIS_FILE.relative_to(REPO_ROOT)}.
-"""
+INTEGRITY_FILE, DOCSTRING = generate_integrity_file_path_and_docstring(
+    __file__,
+    'protoc/private/protoc_integrity.bzl',
+    "Protocol compiler build and integrity metadata.",
+)
+INTEGRITY_FILE_HEADER = f'''{DOCSTRING}
 
 PROTOC_RELEASES_URL = "{PROTOC_RELEASES_URL}"
 PROTOC_DOWNLOAD_URL = (
@@ -117,21 +114,11 @@ def get_protoc_integrity(platform, version):
             sha256 checksum of the `protoc` distribution file
 
     Raises:
-        `UpdateProtocIntegrityError` if downloading or checksumming fails
+        `UpdateIntegrityError` if downloading or checksumming fails
     """
     url = PROTOC_DOWNLOAD_URL.format(version = version, platform = platform)
     print(f'Updating protoc {version} for {platform}:\n  {url}')
-
-    try:
-        with urllib.request.urlopen(url) as data:
-            body = data.read()
-
-        sha256 = hashlib.sha256(body).digest()
-        return f'sha256-{b64encode(sha256).decode('utf-8')}'
-
-    except Exception as err:
-        msg = f'while processing {url}: {err}'
-        raise UpdateProtocIntegrityError(msg) from err
+    return get_artifact_integrity(url)
 
 
 def add_build_data(platform, exec_compat, existing_build):
@@ -158,25 +145,6 @@ def add_build_data(platform, exec_compat, existing_build):
     }
 
 
-def stringify_object(data):
-    """Pretty prints `data` as a Starlark object to emit into the output file.
-
-    Args:
-        data: a Python list or dict
-
-    Returns:
-        a pretty-printed string version of `data` to represent a valid Starlark
-            object in the output file
-    """
-    result = (
-        json.dumps(data, indent=4)
-            .replace('true', 'True')
-            .replace('false', 'False')
-    )
-    # Add trailing commas.
-    return re.sub(r'([]}"])\n', r'\1,\n', result) + '\n'
-
-
 def emit_protoc_integrity_file(output_file, integrity_data):
     """Writes the updated `protoc` integrity data to the `output_file`.
 
@@ -190,35 +158,6 @@ def emit_protoc_integrity_file(output_file, integrity_data):
         data.write(stringify_object(PROTOC_VERSIONS))
         data.write("\nPROTOC_BUILDS = ")
         data.write(stringify_object(dict(sorted(integrity_data.items()))))
-
-
-def load_existing_data(existing_file):
-    """Loads existing `protoc` integrity data from `existing_file`.
-
-    This enables the script to avoid redownloading `protoc` distribution files
-    when the integrity information already exists.
-
-    Args:
-        existing_file: path to the existing integrity file
-
-    Returns:
-        the existing `PROTOC_BUILDS` integrity data from `existing_file`,
-            or `{}` if the file does not exist
-    """
-    if not existing_file.exists():
-        return {}
-
-    with existing_file.open('r', encoding='utf-8') as f:
-        data = f.read()
-
-    marker = 'PROTOC_BUILDS = '
-    start = data.find(marker)
-
-    if start == -1:
-        msg = f'"{marker}" not found in {existing_file}'
-        raise UpdateProtocIntegrityError(msg)
-
-    return ast.literal_eval(data[start + len(marker):])
 
 
 if __name__ == "__main__":
@@ -237,7 +176,7 @@ if __name__ == "__main__":
     integrity_file = Path(args.integrity_file)
 
     try:
-        existing_data = load_existing_data(integrity_file)
+        existing_data = load_existing_data(integrity_file, 'PROTOC_BUILDS = ')
         updated_data = {
             k: add_build_data(k, v, existing_data.get(k, {}))
             for k, v in PROTOC_BUILDS.items()

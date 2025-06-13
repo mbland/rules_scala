@@ -1,0 +1,113 @@
+"""Utilities for `update_*_integrity.py` scripts."""
+
+from base64 import b64encode
+
+from pathlib import Path
+
+import ast
+import hashlib
+import json
+import re
+import urllib.request
+
+
+class UpdateIntegrityError(Exception):
+    """Errors raised explicitly by this module."""
+
+
+def generate_integrity_file_path_and_docstring(
+    script_path,
+    integrity_file_path,
+    docstring,
+):
+    """Generates the integrity file's absolute path and its docstring.
+
+    Appends a "Generated and updated by" message to the generated file's
+    docstring.
+
+    Args:
+        script_path: path to the calling script, presumed to be in //scripts
+        integrity_file_path: integrity file path relative to the repo root
+        docstring: the generated file's docstring
+    """
+    script_file = Path(script_path)
+    repo_root = script_file.parent.parent
+    integrity_file = repo_root / integrity_file_path
+    docstring = f'''"""{docstring}
+
+Generated and updated by {script_file.relative_to(repo_root)}.
+"""'''
+    return integrity_file, docstring
+
+
+def get_artifact_integrity(url):
+    """Emits the integrity string for the specified artifact at `url`.
+
+    Args:
+        url: URL from which to download the artifact
+
+    Returns:
+        a string starting with `sha256-` and ending with the base 64 encoded
+            sha256 checksum of the artifact file
+
+    Raises:
+        `UpdateIntegrityError` if downloading or checksumming fails
+    """
+    try:
+        with urllib.request.urlopen(url) as data:
+            body = data.read()
+
+        sha256 = hashlib.sha256(body).digest()
+        return f'sha256-{b64encode(sha256).decode('utf-8')}'
+
+    except Exception as err:
+        msg = f'while processing {url}: {err}'
+        raise UpdateIntegrityError(msg) from err
+
+
+def stringify_object(data):
+    """Pretty prints `data` as a Starlark object to emit into the output file.
+
+    Args:
+        data: a Python list or dict
+
+    Returns:
+        a pretty-printed string version of `data` to represent a valid Starlark
+            object in the output file
+    """
+    result = (
+        json.dumps(data, indent=4)
+            .replace('true', 'True')
+            .replace('false', 'False')
+    )
+    # Add trailing commas.
+    return re.sub(r'([]}"])\n', r'\1,\n', result) + '\n'
+
+
+def load_existing_data(existing_file, marker):
+    """Loads existing integrity data from `existing_file`.
+
+    This enables the script to avoid redownloading artifacts when the integrity
+    information already exists.
+
+    Args:
+        existing_file: path to the existing integrity file
+        marker: string identifying the beginning of the integrity data object
+
+    Returns:
+        the existing integrity data from `existing_file`,
+            or `{}` if the file does not exist
+    """
+    if not existing_file.exists():
+        return {}
+
+    with existing_file.open('r', encoding='utf-8') as f:
+        data = f.read()
+
+    start = data.find(marker)
+
+    if start == -1:
+        msg = f'"{marker}" not found in {existing_file}'
+        raise UpdateIntegrityError(msg)
+
+    return ast.literal_eval(data[start + len(marker):])
