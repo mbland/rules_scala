@@ -60,6 +60,15 @@ def _validate_scalac_srcjar(srcjar):
             count += 1
     return count == 1
 
+_compiler_source_url(scala_version):
+    prefix = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/"
+    jar_fmt = "scala-compiler-%s-sources.jar"
+
+    if scala_version.startswith("3."):
+        jar_fmt = "scala3-compiler_3-%s-sources.jar"
+
+    return prefix + scala_version + jar_fmt % scala_version
+
 def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
     scala_major_version = extract_major_version(scala_version)
     scala_minor_version = extract_minor_version(scala_version)
@@ -87,7 +96,7 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
         ")",
     ])
     default_scalac_srcjar = {
-        "url": "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/%s/scala-compiler-%s-sources.jar" % (scala_version, scala_version) if scala_major_version.startswith("2.") else "https://repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/%s/scala3-compiler_3-%s-sources.jar" % (scala_version, scala_version),
+        "url": _compiler_source_url(scala_version),
     }
     srcjar = scala_compiler_srcjar if scala_compiler_srcjar != None else default_scalac_srcjar
     _validate_scalac_srcjar(srcjar) or fail(
