@@ -14,7 +14,7 @@ import argparse
 import sys
 
 from lib.update_integrity import (
-    generate_integrity_file_path_and_docstring,
+    get_integrity_file_path_and_generated_by,
 #    get_artifact_integrity,
     stringify_object,
     load_existing_data,
@@ -36,12 +36,14 @@ SCALA_VERSIONS.extend([f'3.5.{patch}' for patch in range(0, 2 + 1)])
 SCALA_VERSIONS.extend([f'3.6.{patch}' for patch in range(0, 4 + 1)])
 SCALA_VERSIONS.extend([f'3.7.{patch}' for patch in range(0, 1 + 1)])
 
-INTEGRITY_FILE, DOCSTRING = generate_integrity_file_path_and_docstring(
-    __file__,
+INTEGRITY_FILE, GENERATED_BY = get_integrity_file_path_and_generated_by(
     'scala/private/macros/compiler_sources_integrity.bzl',
-    "Scala compiler source JAR integrity metadata.",
+    __file__,
 )
-INTEGRITY_FILE_HEADER = f'''{DOCSTRING}
+INTEGRITY_FILE_HEADER = f'''"""Scala compiler source JAR integrity metadata.
+
+{GENERATED_BY}
+"""
 
 _compiler_source_url(scala_version):
     prefix = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/"

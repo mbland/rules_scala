@@ -15,10 +15,9 @@ class UpdateIntegrityError(Exception):
     """Errors raised explicitly by this module."""
 
 
-def generate_integrity_file_path_and_docstring(
-    script_path,
+def get_integrity_file_path_and_generated_by(
     integrity_file_path,
-    docstring,
+    script_path,
 ):
     """Generates the integrity file's absolute path and its docstring.
 
@@ -26,18 +25,16 @@ def generate_integrity_file_path_and_docstring(
     docstring.
 
     Args:
-        script_path: path to the calling script, presumed to be in //scripts
         integrity_file_path: integrity file path relative to the repo root
-        docstring: the generated file's docstring
+        script_path: path to the calling script, presumed to be in //scripts
     """
     script_file = Path(script_path)
     repo_root = script_file.parent.parent
     integrity_file = repo_root / integrity_file_path
-    docstring = f'''"""{docstring}
-
-Generated and updated by {script_file.relative_to(repo_root)}.
-"""'''
-    return integrity_file, docstring
+    return (
+        integrity_file,
+        f'Generated and updated by {script_file.relative_to(repo_root)}.',
+    )
 
 
 def get_artifact_integrity(url):

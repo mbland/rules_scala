@@ -17,7 +17,7 @@ import argparse
 import sys
 
 from lib.update_integrity import (
-    generate_integrity_file_path_and_docstring,
+    get_integrity_file_path_and_generated_by,
     get_artifact_integrity,
     stringify_object,
     load_existing_data,
@@ -79,12 +79,14 @@ PROTOC_BUILDS = {
     ],
 }
 
-INTEGRITY_FILE, DOCSTRING = generate_integrity_file_path_and_docstring(
-    __file__,
+INTEGRITY_FILE, GENERATED_BY = get_integrity_file_path_and_generated_by(
     'protoc/private/protoc_integrity.bzl',
-    "Protocol compiler build and integrity metadata.",
+    __file__,
 )
-INTEGRITY_FILE_HEADER = f'''{DOCSTRING}
+INTEGRITY_FILE_HEADER = f'''"""Protocol compiler build and integrity metadata.
+
+{GENERATED_BY}
+"""
 
 PROTOC_RELEASES_URL = "{PROTOC_RELEASES_URL}"
 PROTOC_DOWNLOAD_URL = (
