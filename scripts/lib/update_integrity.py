@@ -63,7 +63,7 @@ def get_artifact_integrity(url):
 
 
 def stringify_object(data):
-    """Pretty prints `data` as a Starlark object to emit into the output file.
+    """Pretty prints `data` as a Starlark object to emit into an output file.
 
     Args:
         data: a Python list or dict

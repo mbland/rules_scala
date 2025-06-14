@@ -45,21 +45,21 @@ INTEGRITY_FILE_HEADER = f'''"""Scala compiler source JAR integrity metadata.
 {GENERATED_BY}
 """
 
-_compiler_source_url(scala_version):
-    prefix = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/"
-    jar_fmt = "scala-compiler-%s-sources.jar"
-
-    if scala_version.startswith("3."):
-        jar_fmt = "scala3-compiler_3-%s-sources.jar"
-
-    return prefix + scala_version + jar_fmt % scala_version
-
-
 '''
 
 
 class UpdateCompilerSourcesIntegrityError(Exception):
     """Errors raised explicitly by this module."""
+
+
+def compiler_source_url(scala_version):
+    prefix = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/"
+    jar_fmt = "/scala-compiler-%s-sources.jar"
+
+    if scala_version.startswith("3."):
+        jar_fmt = "/scala3-compiler_3-%s-sources.jar"
+
+    return prefix + scala_version + jar_fmt % scala_version
 
 
 def emit_compiler_sources_integrity_file(output_file, integrity_data):
@@ -72,13 +72,15 @@ def emit_compiler_sources_integrity_file(output_file, integrity_data):
     """
     with output_file.open('w', encoding = 'utf-8') as data:
         data.write(INTEGRITY_FILE_HEADER)
-        data.write("SCALA_VERSIONS = ")
-        data.write(stringify_object(SCALA_VERSIONS))
+        data.write("COMPILER_SOURCES = ")
+        data.write(stringify_object(integrity_data))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description = "Updates precompiled `protoc` distribution information.",
+        description = (
+            "Updates Scala compiler source JAR integrity information."
+        ),
     )
 
     parser.add_argument(
@@ -94,12 +96,17 @@ if __name__ == "__main__":
     integrity_file = Path(args.integrity_file)
 
     try:
-        existing_data = load_existing_data(integrity_file, 'SCALA_VERSIONS = ')
-        #updated_data = {
-        #    k: add_build_data(k, v, existing_data.get(k, {}))
-        #    for k, v in PROTOC_BUILDS.items()
-        #}
-        updated_data = existing_data
+        existing_data = load_existing_data(
+            integrity_file,
+            'COMPILER_SOURCES = '
+        )
+        updated_data = existing_data | {
+            version: {
+                "url": compiler_source_url(version),
+                "integrity": "",
+            }
+            for version in SCALA_VERSIONS
+        }
         emit_compiler_sources_integrity_file(integrity_file, updated_data)
 
     except UpdateCompilerSourcesIntegrityError as err:
