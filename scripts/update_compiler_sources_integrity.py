@@ -8,16 +8,11 @@ Only computes the integrity information if it doesn't already exist in the
 integrity file.
 """
 
-from pathlib import Path
-
-import argparse
-import sys
-
 from lib.update_integrity import (
+    get_artifact_integrity,
     get_integrity_file_path_and_generated_by,
-#    get_artifact_integrity,
     stringify_object,
-    load_existing_data,
+    update_integrity_file,
 )
 
 
@@ -48,67 +43,57 @@ INTEGRITY_FILE_HEADER = f'''"""Scala compiler source JAR integrity metadata.
 '''
 
 
-class UpdateCompilerSourcesIntegrityError(Exception):
-    """Errors raised explicitly by this module."""
+def get_compiler_source_integrity(scala_version):
+    """Generates the URL and integrity value for a specific Scala version.
 
+    Args:
+        scala_version: the scala version for which to generate a URL and
+            integrity value
 
-def compiler_source_url(scala_version):
-    prefix = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/"
-    jar_fmt = "/scala-compiler-%s-sources.jar"
+    Returns:
+        a `{"url", "integrity"}` dict for the `scala_version` compiler sources
+    """
+    prefix = "https://repo1.maven.org/maven2/org/scala-lang/"
+    suffix = "scala-compiler/{version}/scala-compiler-{version}-sources.jar"
 
     if scala_version.startswith("3."):
-        jar_fmt = "/scala3-compiler_3-%s-sources.jar"
+        suffix = (
+            "scala3-compiler_3/{version}/" +
+            "scala3-compiler_3-{version}-sources.jar"
+        )
 
-    return prefix + scala_version + jar_fmt % scala_version
+    url = prefix + suffix.format(version = scala_version)
+
+    print(f'Generating integrity for:\n  {url}')
+    return {"url": url, "integrity": get_artifact_integrity(url)}
 
 
-def emit_compiler_sources_integrity_file(output_file, integrity_data):
+def emit_compiler_sources_integrity_data(output_file, integrity_data):
     """Writes the updated compiler_sources integrity data to the `output_file`.
 
     Args:
-        output_file: path to the updated compiler sources integrity file
+        output_file: open file handle to the updated compiler sources integrity
+            file
         integrity_data: compiler sources integrity data to emit into
             `output_file`
     """
-    with output_file.open('w', encoding = 'utf-8') as data:
-        data.write(INTEGRITY_FILE_HEADER)
-        data.write("COMPILER_SOURCES = ")
-        data.write(stringify_object(integrity_data))
+    output_file.write(INTEGRITY_FILE_HEADER)
+    output_file.write("COMPILER_SOURCES = ")
+    output_file.write(stringify_object(integrity_data))
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description = (
-            "Updates Scala compiler source JAR integrity information."
-        ),
+    update_integrity_file(
+        "Updates Scala compiler source JAR integrity information.",
+        INTEGRITY_FILE,
+        "COMPILER_SOURCES = ",
+        lambda existing_data: dict(sorted(
+            (existing_data | {
+                version: get_compiler_source_integrity(version)
+                for version in SCALA_VERSIONS
+                if version not in existing_data
+            }).items(),
+            key=lambda item: [int(n) for n in item[0].split(".")],
+        )),
+        emit_compiler_sources_integrity_data,
     )
-
-    parser.add_argument(
-        '--integrity_file',
-        type=str,
-        default=str(INTEGRITY_FILE),
-        help=(
-            f'compiler sources integrity file path (default: {INTEGRITY_FILE})'
-        )
-    )
-
-    args = parser.parse_args()
-    integrity_file = Path(args.integrity_file)
-
-    try:
-        existing_data = load_existing_data(
-            integrity_file,
-            'COMPILER_SOURCES = '
-        )
-        updated_data = existing_data | {
-            version: {
-                "url": compiler_source_url(version),
-                "integrity": "",
-            }
-            for version in SCALA_VERSIONS
-        }
-        emit_compiler_sources_integrity_file(integrity_file, updated_data)
-
-    except UpdateCompilerSourcesIntegrityError as err:
-        print(f'Failed to update {integrity_file}: {err}', file=sys.stderr)
-        sys.exit(1)

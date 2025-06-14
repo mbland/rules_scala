@@ -11,16 +11,11 @@ Only computes integrity information for a `protoc` distribution if it doesn't
 already exist in the integrity file.
 """
 
-from pathlib import Path
-
-import argparse
-import sys
-
 from lib.update_integrity import (
-    get_integrity_file_path_and_generated_by,
     get_artifact_integrity,
+    get_integrity_file_path_and_generated_by,
     stringify_object,
-    load_existing_data,
+    update_integrity_file,
 )
 
 
@@ -97,10 +92,6 @@ PROTOC_DOWNLOAD_URL = (
 '''
 
 
-class UpdateProtocIntegrityError(Exception):
-    """Errors raised explicitly by this module."""
-
-
 def get_protoc_integrity(platform, version):
     """Emits the integrity string for the specified `protoc` distribution.
 
@@ -147,44 +138,28 @@ def add_build_data(platform, exec_compat, existing_build):
     }
 
 
-def emit_protoc_integrity_file(output_file, integrity_data):
+def emit_protoc_integrity_data(output_file, integrity_data):
     """Writes the updated `protoc` integrity data to the `output_file`.
 
     Args:
-        output_file: path to the updated `protoc` integrity file
+        output_file: open file handle to the updated `protoc` integrity file
         integrity_data: `protoc` integrity data to emit into `output_file`
     """
-    with output_file.open('w', encoding = 'utf-8') as data:
-        data.write(INTEGRITY_FILE_HEADER)
-        data.write("PROTOC_VERSIONS = ")
-        data.write(stringify_object(PROTOC_VERSIONS))
-        data.write("\nPROTOC_BUILDS = ")
-        data.write(stringify_object(dict(sorted(integrity_data.items()))))
+    output_file.write(INTEGRITY_FILE_HEADER)
+    output_file.write("PROTOC_VERSIONS = ")
+    output_file.write(stringify_object(PROTOC_VERSIONS))
+    output_file.write("\nPROTOC_BUILDS = ")
+    output_file.write(stringify_object(integrity_data))
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description = "Updates precompiled `protoc` distribution information.",
-    )
-
-    parser.add_argument(
-        '--integrity_file',
-        type=str,
-        default=str(INTEGRITY_FILE),
-        help=f'`protoc` integrity file path (default: {INTEGRITY_FILE})',
-    )
-
-    args = parser.parse_args()
-    integrity_file = Path(args.integrity_file)
-
-    try:
-        existing_data = load_existing_data(integrity_file, 'PROTOC_BUILDS = ')
-        updated_data = {
+    update_integrity_file(
+        "Updates precompiled `protoc` distribution information.",
+        INTEGRITY_FILE,
+        "PROTOC_BUILDS = ",
+        lambda existing_data: dict(sorted({
             k: add_build_data(k, v, existing_data.get(k, {}))
             for k, v in PROTOC_BUILDS.items()
-        }
-        emit_protoc_integrity_file(integrity_file, updated_data)
-
-    except UpdateProtocIntegrityError as err:
-        print(f'Failed to update {integrity_file}: {err}', file=sys.stderr)
-        sys.exit(1)
+        }.items())),
+        emit_protoc_integrity_data,
+    )

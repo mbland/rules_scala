@@ -4,10 +4,12 @@ from base64 import b64encode
 
 from pathlib import Path
 
+import argparse
 import ast
 import hashlib
 import json
 import re
+import sys
 import urllib.request
 
 
@@ -108,3 +110,40 @@ def load_existing_data(existing_file, marker):
         raise UpdateIntegrityError(msg)
 
     return ast.literal_eval(data[start + len(marker):])
+
+
+def update_integrity_file(usage, file_path, data_marker, update_data, emit_data):
+    """Implements `main()` for integrity file updater scripts.
+
+    Args:
+        usage: command line usage summary line
+        file_path: path to the integrity file to generate or update
+        data_marker: line prefix marking the start of the integrity data
+        update_data: function `(existing data) -> updated data`
+        emit_data: function `(open file handle, updated data) -> None`
+
+    Raises:
+        UpdateIntegrityError if any operation fails
+    """
+    parser = argparse.ArgumentParser(description = usage)
+
+    parser.add_argument(
+        '--integrity_file',
+        type=str,
+        default=str(file_path),
+        help=f'integrity file path (default: {file_path})',
+    )
+
+    args = parser.parse_args()
+    integrity_file = Path(args.integrity_file)
+
+    try:
+        existing_data = load_existing_data(integrity_file, data_marker)
+        updated_data = update_data(existing_data)
+
+        with integrity_file.open('w', encoding = 'utf-8') as f:
+            emit_data(f, updated_data)
+
+    except UpdateIntegrityError as err:
+        print(f'Failed to update {integrity_file}: {err}', file=sys.stderr)
+        sys.exit(1)
