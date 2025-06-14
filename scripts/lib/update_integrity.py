@@ -23,9 +23,6 @@ def get_integrity_file_path_and_generated_by(
 ):
     """Generates the integrity file's absolute path and its docstring.
 
-    Appends a "Generated and updated by" message to the generated file's
-    docstring.
-
     Args:
         integrity_file_path: integrity file path relative to the repo root
         script_path: path to the calling script, presumed to be in //scripts
@@ -81,6 +78,15 @@ def stringify_object(data):
     )
     # Add trailing commas.
     return re.sub(r'([]}"])\n', r'\1,\n', result) + '\n'
+
+
+def sorted_semver_keyed_dict(semver_keyed_dict, reverse=False):
+    """Returns a sorted copy of semver_keyed_dict."""
+    return dict(sorted(
+        semver_keyed_dict.items(),
+        key=lambda item: [int(n) for n in item[0].split(".")],
+        reverse=reverse,
+    ))
 
 
 def load_existing_data(existing_file, marker):

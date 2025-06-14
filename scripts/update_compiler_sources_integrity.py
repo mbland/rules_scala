@@ -4,13 +4,14 @@
 `compiler_sources_integrity.bzl` contains the mapping from Scala versions to
 their source URLs and integrity hashes.
 
-Only computes the integrity information if it doesn't already exist in the
-integrity file.
+Only computes the integrity information for compiler versions that don't already
+exist in the integrity file.
 """
 
 from lib.update_integrity import (
     get_artifact_integrity,
     get_integrity_file_path_and_generated_by,
+    sorted_semver_keyed_dict,
     stringify_object,
     update_integrity_file,
 )
@@ -31,6 +32,7 @@ SCALA_VERSIONS.extend([f'3.5.{patch}' for patch in range(0, 2 + 1)])
 SCALA_VERSIONS.extend([f'3.6.{patch}' for patch in range(0, 4 + 1)])
 SCALA_VERSIONS.extend([f'3.7.{patch}' for patch in range(0, 1 + 1)])
 
+DATA_MARKER = "COMPILER_SOURCES = "
 INTEGRITY_FILE, GENERATED_BY = get_integrity_file_path_and_generated_by(
     'scala/private/macros/compiler_sources_integrity.bzl',
     __file__,
@@ -40,7 +42,7 @@ INTEGRITY_FILE_HEADER = f'''"""Scala compiler source JAR integrity metadata.
 {GENERATED_BY}
 """
 
-'''
+{DATA_MARKER}'''
 
 
 def get_compiler_source_integrity(scala_version):
@@ -68,17 +70,37 @@ def get_compiler_source_integrity(scala_version):
     return {"url": url, "integrity": get_artifact_integrity(url)}
 
 
+def update_compiler_sources_integrity_data(existing_data):
+    """Generates or updates compiler sources integrity data.
+
+    Does not generate new compiler source integrity data for Scala versions
+    already in `existing_data`.
+
+    Args:
+        existing_data: existing compiler source integrity data
+
+    Returns:
+        a new `{scala version: integrity data}` dict combining existing and new
+            compiler sources integrity data
+    """
+    updated_data = existing_data | {
+        version: get_compiler_source_integrity(version)
+        for version in SCALA_VERSIONS
+        if version not in existing_data
+    }
+    return sorted_semver_keyed_dict(updated_data)
+
+
 def emit_compiler_sources_integrity_data(output_file, integrity_data):
     """Writes the updated compiler_sources integrity data to the `output_file`.
 
     Args:
-        output_file: open file handle to the updated compiler sources integrity
+        output_file: open file object for the updated compiler sources integrity
             file
         integrity_data: compiler sources integrity data to emit into
             `output_file`
     """
     output_file.write(INTEGRITY_FILE_HEADER)
-    output_file.write("COMPILER_SOURCES = ")
     output_file.write(stringify_object(integrity_data))
 
 
@@ -86,14 +108,7 @@ if __name__ == "__main__":
     update_integrity_file(
         "Updates Scala compiler source JAR integrity information.",
         INTEGRITY_FILE,
-        "COMPILER_SOURCES = ",
-        lambda existing_data: dict(sorted(
-            (existing_data | {
-                version: get_compiler_source_integrity(version)
-                for version in SCALA_VERSIONS
-                if version not in existing_data
-            }).items(),
-            key=lambda item: [int(n) for n in item[0].split(".")],
-        )),
+        DATA_MARKER,
+        update_compiler_sources_integrity_data,
         emit_compiler_sources_integrity_data,
     )

@@ -14,6 +14,7 @@ already exist in the integrity file.
 from lib.update_integrity import (
     get_artifact_integrity,
     get_integrity_file_path_and_generated_by,
+    sorted_semver_keyed_dict,
     stringify_object,
     update_integrity_file,
 )
@@ -74,6 +75,7 @@ PROTOC_BUILDS = {
     ],
 }
 
+DATA_MARKER = "PROTOC_BUILDS = "
 INTEGRITY_FILE, GENERATED_BY = get_integrity_file_path_and_generated_by(
     'protoc/private/protoc_integrity.bzl',
     __file__,
@@ -89,7 +91,7 @@ PROTOC_DOWNLOAD_URL = (
     "{PROTOC_DOWNLOAD_SUFFIX}"
 )
 
-'''
+PROTOC_VERSIONS = '''
 
 
 def get_protoc_integrity(platform, version):
@@ -134,21 +136,44 @@ def add_build_data(platform, exec_compat, existing_build):
 
     return {
         "exec_compat": exec_compat,
-        "integrity": dict(sorted(integrity.items(), reverse=True)),
+        "integrity": sorted_semver_keyed_dict(integrity, reverse=True),
     }
+
+
+def update_protoc_integrity_data(existing_data):
+    """Generates or updates `protoc` integrity data.
+
+    Does not generate new `protoc` integrity data for versions and builds
+    already in `existing_data`.
+
+    Args:
+        existing_data: existing `protoc` integrity data
+
+    Returns:
+        a new `{protobuf version: integrity data}` dict combining existing and
+            new `protoc` integrity data
+    """
+    updated_data = {
+        platform: add_build_data(
+            platform,
+            exec_compat,
+            existing_data.get(platform, {}),
+        )
+        for platform, exec_compat in PROTOC_BUILDS.items()
+    }
+    return dict(sorted(updated_data.items()))
 
 
 def emit_protoc_integrity_data(output_file, integrity_data):
     """Writes the updated `protoc` integrity data to the `output_file`.
 
     Args:
-        output_file: open file handle to the updated `protoc` integrity file
+        output_file: open file object for the updated `protoc` integrity file
         integrity_data: `protoc` integrity data to emit into `output_file`
     """
     output_file.write(INTEGRITY_FILE_HEADER)
-    output_file.write("PROTOC_VERSIONS = ")
     output_file.write(stringify_object(PROTOC_VERSIONS))
-    output_file.write("\nPROTOC_BUILDS = ")
+    output_file.write("\n" + DATA_MARKER)
     output_file.write(stringify_object(integrity_data))
 
 
@@ -156,10 +181,7 @@ if __name__ == "__main__":
     update_integrity_file(
         "Updates precompiled `protoc` distribution information.",
         INTEGRITY_FILE,
-        "PROTOC_BUILDS = ",
-        lambda existing_data: dict(sorted({
-            k: add_build_data(k, v, existing_data.get(k, {}))
-            for k, v in PROTOC_BUILDS.items()
-        }.items())),
+        DATA_MARKER,
+        update_protoc_integrity_data,
         emit_protoc_integrity_data,
     )
