@@ -1,6 +1,10 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@rules_scala_config//:config.bzl", "SCALA_VERSIONS")
 load(
+    "//scala/private:macros/compiler_sources_integrity.bzl",
+    "COMPILER_SOURCES",
+)
+load(
     "//scala:scala_cross_version.bzl",
     "extract_major_version",
     "extract_minor_version",
@@ -50,24 +54,40 @@ compiler_sources_repo = repository_rule(
     implementation = _compiler_sources_repo_impl,
 )
 
+def _get_compiler_srcjar(scala_version, scala_compiler_srcjar):
+    if scala_compiler_srcjar:
+        return scala_compiler_srcjar
+
+    compiler_srcjar = COMPILER_SOURCES.get(scala_version, None)
+
+    if not compiler_srcjar:
+        fail(" ".join([
+            "No compiler source integrity data exists for Scala version",
+            "%s;" % scala_version,
+            "please supply a compiler_srcjar object in your MODULE.bazel or",
+            "legacy WORKSPACE file. See the `compiler_srcjar` tag class",
+            "docstring in scala/extensions/deps.bzl or the scala_toolchains()",
+            "docstring in scala/toolchains.bzl for documentation. See",
+            "dt_patches/test_dt_patches_user_srcjar/{MODULE.bazel,WORKSPACE}",
+            "for examples."
+        ]))
+
+    return compiler_srcjar
+
 def _validate_scalac_srcjar(srcjar):
-    if type(srcjar) != "dict":
-        return False
-    oneof = ["url", "urls", "label"]
     count = 0
-    for key in oneof:
-        if srcjar.get(key):
-            count += 1
-    return count == 1
 
-_compiler_source_url(scala_version):
-    prefix = "https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/"
-    jar_fmt = "scala-compiler-%s-sources.jar"
+    if type(srcjar) == "dict":
+        for key in ["url", "urls", "label"]:
+            if srcjar.get(key):
+                count += 1
 
-    if scala_version.startswith("3."):
-        jar_fmt = "scala3-compiler_3-%s-sources.jar"
-
-    return prefix + scala_version + jar_fmt % scala_version
+    if count != 1:
+        fail(
+            "scala_compiler_srcjar invalid, must be a dict " +
+            "with exactly one of \"label\", \"url\" or \"urls\" keys, got: " +
+            repr(srcjar)
+        )
 
 def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
     scala_major_version = extract_major_version(scala_version)
@@ -95,14 +115,9 @@ def dt_patched_compiler_setup(scala_version, scala_compiler_srcjar = None):
         "    srcs=[\"scala/tools/nsc/symtab/SymbolLoaders.scala\"]," if scala_major_version.startswith("2.") else "    srcs=[\"dotty/tools/dotc/core/SymbolLoaders.scala\"],",
         ")",
     ])
-    default_scalac_srcjar = {
-        "url": _compiler_source_url(scala_version),
-    }
-    srcjar = scala_compiler_srcjar if scala_compiler_srcjar != None else default_scalac_srcjar
-    _validate_scalac_srcjar(srcjar) or fail(
-        ("scala_compiler_srcjar invalid, must be a dict with exactly one of \"label\", \"url\"" +
-         " or \"urls\" keys, got: ") + repr(srcjar),
-    )
+    srcjar = _get_compiler_srcjar(scala_version, scala_compiler_srcjar)
+    _validate_scalac_srcjar(srcjar)
+
     if srcjar.get("label"):
         dt_patched_compiler(
             name = "scala_compiler_source" + version_suffix(scala_version),
