@@ -16,6 +16,7 @@ test_scalafmt_library() {
 test_scalafmt_test() {
   run_formatting test/scalafmt test test
 }
+
 test_custom_conf() {
   run_formatting test/scalafmt custom-conf custom-conf
 }

@@ -26,25 +26,13 @@ ext_scalafmt = {
         "_java_host_runtime": attr.label(
             default = "@rules_java//toolchains:current_host_java_runtime",
         ),
-        "_runner": attr.label(
-            allow_single_file = True,
-            default = "//scala/scalafmt:runner",
-        ),
-        "_testrunner": attr.label(
-            allow_single_file = True,
-            default = "//scala/scalafmt:testrunner",
-        ),
-    },
-    "outputs": {
-        "scalafmt_runner": "%{name}.format",
-        "scalafmt_testrunner": "%{name}.format-test",
     },
     "phase_providers": [
         "//scala/scalafmt:phase_scalafmt",
     ],
 }
 
-def _scalafmt_singleton_implementation(ctx):
+def _scalafmt_singleton_implementation(_):
     return [
         _ScalaRulePhase(
             custom_phases = [

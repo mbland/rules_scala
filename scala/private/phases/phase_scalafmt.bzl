@@ -4,19 +4,48 @@
 # Outputs to format the scala files when it is explicitly specified
 #
 load("//scala/private:paths.bzl", _scala_extension = "scala_extension")
+load("//scala/scalafmt:providers.bzl", "ScalafmtScriptInfo")
 
-def phase_scalafmt(ctx, p):
-    if ctx.attr.format:
-        manifest, files, srcs = _build_format(ctx)
-        _formatter(ctx, manifest, files, ctx.file._runner, ctx.outputs.scalafmt_runner)
-        _formatter(ctx, manifest, files, ctx.file._testrunner, ctx.outputs.scalafmt_testrunner)
+def phase_scalafmt(ctx, _):
+    """Runs Scalafmt on source files when the target sets 'format = True'.
 
-        # Return a depset containing all the relevant files, so a wrapping `sh_test` can successfully access them.
-        return struct(runfiles = depset([manifest] + files + srcs))
-    else:
-        _write_empty_content(ctx, ctx.outputs.scalafmt_runner)
-        _write_empty_content(ctx, ctx.outputs.scalafmt_testrunner)
+    Emits formatted files as a separate outputs, plus a manifest file mapping
+    original files to their formatted versions. The Scalafmt rule macros
+    `scalafmt_scala_{binary,library,test}` generate `name.format` and
+    `name.format-test` targets that make use of these outputs:
+
+    - `.format` reformats the original files
+    - `.format-test` validates the current formatting of the original files
+
+    Args:
+        ctx: rule context
+        _: unused
+
+    Returns:
+        None if `format = False`
+        else a struct with DefaultInfo and ScalafmtScriptInfo as
+            external_providers
+    """
+    if not ctx.attr.format:
         return None
+
+    # Return a depset containing all the relevant files, so a wrapping `sh_test`
+    # can successfully access them.
+    manifest, files, srcs = _build_format(ctx)
+    generated_files = [manifest] + files
+
+    return struct(
+        external_providers = {
+            "DefaultInfo": DefaultInfo(
+                files = depset(generated_files),
+                runfiles = ctx.runfiles(files = generated_files + srcs),
+            ),
+            "ScalafmtScriptInfo": ScalafmtScriptInfo(
+                manifest = manifest,
+                files = files,
+            ),
+        },
+    )
 
 def _build_format(ctx):
     files = []
@@ -45,32 +74,6 @@ def _build_format(ctx):
     ctx.actions.write(manifest, "\n".join(manifest_content) + "\n")
 
     return manifest, files, srcs
-
-def _formatter(ctx, manifest, files, template, output_runner):
-    ctx.actions.run_shell(
-        inputs = [template, manifest] + files,
-        outputs = [output_runner],
-        # replace %workspace% and %manifest% in template and rewrite it to output_runner
-        command = """
-set -o errexit
-set -o nounset
-set -o pipefail
-cat $1 | sed -e s#%workspace%#$2# -e s#%manifest%#$3# > $4
-""",
-        arguments = [
-            template.path,
-            ctx.workspace_name,
-            manifest.short_path,
-            output_runner.path,
-        ],
-        execution_requirements = {},
-    )
-
-def _write_empty_content(ctx, output_runner):
-    ctx.actions.write(
-        output = output_runner,
-        content = "",
-    )
 
 def _format_args(ctx, src, file):
     args = ctx.actions.args()
