@@ -12,15 +12,17 @@ load(
     "PROTOC_TOOLCHAIN_TYPE",
 )
 
+# Temporary measure until native Windows ARM64 builds exist.
+_WIN_AARCH_64_PLATFORM = "win-aarch_64"
+
 def _default_platform():
     host_platform = sorted(HOST_CONSTRAINTS)
     for platform, info in PROTOC_BUILDS.items():
         if sorted(info["exec_compat"]) == host_platform:
             return platform
 
-    # Temporary measure until native Windows ARM64 builds exist.
     if host_platform == ["@platforms//cpu:aarch64", "@platforms//os:windows"]:
-        return "win64"
+        return _WIN_AARCH_64_PLATFORM
 
     fail(
         "no protoc build found for host platform with constraints: " +
@@ -28,6 +30,9 @@ def _default_platform():
     )
 
 def _platform_build(platform):
+    exec_platform = platform
+    if platform == _WIN_AARCH_64_PLATFORM:
+        platform = "win64"
     if platform not in PROTOC_BUILDS:
         fail("no protoc build found for platform: " + platform)
 
@@ -38,6 +43,13 @@ def _platform_build(platform):
             "no protoc %s build found for platform: %s" %
             (PROTOC_VERSION, platform),
         )
+    elif exec_platform == _WIN_AARCH_64_PLATFORM:
+        return protoc_build | {
+            "exec_compat": [
+                "@platforms//os:windows",
+                "@platforms//cpu:aarch64",
+            ],
+        }
     return protoc_build
 
 def _download_build(repository_ctx, platform, protoc_build):
