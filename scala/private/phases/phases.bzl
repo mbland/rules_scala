@@ -62,7 +62,10 @@ load(
     _phase_scalainfo_provider_non_macro = "phase_scalainfo_provider_non_macro",
 )
 load("//scala/private:phases/phase_semanticdb.bzl", _phase_semanticdb = "phase_semanticdb")
-load("//scala/private:phases/phase_test_environment.bzl", _phase_test_environment = "phase_test_environment")
+load(
+    "//scala/private:phases/phase_runenvironmentinfo_provider.bzl",
+    _phase_runenvironmentinfo_provider = "phase_runenvironmentinfo_provider",
+)
 load(
     "//scala/private:phases/phase_write_executable.bzl",
     _phase_write_executable_common = "phase_write_executable_common",
@@ -149,8 +152,8 @@ phase_runfiles_common = _phase_runfiles_common
 # default_info
 phase_default_info = _phase_default_info
 
-# test_environment
-phase_test_environment = _phase_test_environment
+# runenvironmentinfo_provider
+phase_runenvironmentinfo_provider = _phase_runenvironmentinfo_provider
 
 # scalafmt
 phase_scalafmt = _phase_scalafmt

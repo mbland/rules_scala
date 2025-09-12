@@ -23,6 +23,7 @@ load(
     "phase_dependency_common",
     "phase_java_wrapper_common",
     "phase_merge_jars",
+    "phase_runenvironmentinfo_provider",
     "phase_runfiles_common",
     "phase_scalac_provider",
     "phase_scalacopts",
@@ -54,12 +55,14 @@ def _scala_binary_impl(ctx):
             ("runfiles", phase_runfiles_common),
             ("write_executable", phase_write_executable_common),
             ("default_info", phase_default_info),
+            ("runenvironmentinfo_provider", phase_runenvironmentinfo_provider),
         ],
     )
 
 _scala_binary_attrs = {
     "main_class": attr.string(mandatory = True),
     "classpath_resources": attr.label_list(allow_files = True),
+    "env": attr.string_dict(default = {}),
     "jvm_flags": attr.string_list(),
     "runtime_jdk": attr.label(
         default = "@rules_java//toolchains:current_java_runtime",
