@@ -751,3 +751,17 @@ scala_library(
     ],
     deps = [":InlinableExported"],
 )
+
+scala_test(
+    name = "EnvAttributeTest",
+    size = "small",  # Not a macro, can pass test-specific attributes.
+    srcs = ["EnvAttributeTest.scala"],
+    data = ["//test/data:foo.txt"],
+    env = {
+        "LOCATION": "West of House",
+        "DATA_PATH": "$(rootpath //test/data:foo.txt)",
+        "BINDIR": "$(BINDIR)",
+        "ESCAPED": "$$(rootpath //test/data:foo.txt) $$(BINDIR)",
+    },
+)
+
