@@ -759,13 +759,13 @@ TEST_ENV = {
     "ESCAPED": "$$(rootpath //test/data:foo.txt) $$(BINDIR)",
 }
 
-#scala_binary(
-#    name = "EnvAttributeBinary",
-#    srcs = ["EnvAttributeBinary.scala"],
-#    main_class = "scalarules.test.EnvAttributeBinary",
-#    data = ["//test/data:foo.txt"],
-#    env = TEST_ENV,
-#)
+scala_binary(
+    name = "EnvAttributeBinary",
+    srcs = ["EnvAttributeBinary.scala"],
+    main_class = "scalarules.test.EnvAttributeBinary",
+    data = ["//test/data:foo.txt"],
+    env = TEST_ENV,
+)
 
 scala_test(
     name = "EnvAttributeTest",

@@ -1,8 +1,8 @@
 package scalarules.test
 
-class EnvAttributeBinary {
-  def main(args: Array[String]): Unit = {
-    val envVars = Array( 
+object EnvAttributeBinary {
+  def main(args: Array[String]) {
+    val envVars = Array(
       "LOCATION",
       "DATA_PATH",
       "BINDIR",
