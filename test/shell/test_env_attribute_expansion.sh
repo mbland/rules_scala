@@ -10,8 +10,30 @@ test_source="${dir}/test/shell/${BASH_SOURCE[0]#*test/shell/}"
 # shellcheck source=./test_runner.sh
 . "${dir}"/test/shell/test_runner.sh
 
-test_scala_binary_env_attribute_expansion() {
-  bazel run //test:EnvAttributeBinary
+setup_suite() {
+  original_dir="$PWD"
+  setup_test_tmpdir_for_file "$original_dir" "$test_source"
+  test_tmpdir="$PWD"
+  cd "$original_dir"
 }
 
+teardown_suite() {
+  rm -rf "$test_tmpdir"
+}
+
+test_scala_binary_env_attribute_expansion() {
+  bazel run //test:EnvAttributeBinary > "${test_tmpdir}/actual.txt"
+
+  printf '%s\n' \
+    'LOCATION: West of House' \
+    'DATA_PATH: test/data/foo.txt' \
+    'BINDIR: bazel-out/darwin_arm64-fastbuild/bin' \
+    'ESCAPED: $(rootpath //test/data:foo.txt) $(BINDIR)' \
+      > "${test_tmpdir}/expected.txt"
+
+  diff -u "${test_tmpdir}"/{expected,actual}.txt
+}
+
+setup_suite
 run_tests "$test_source" "$(get_test_runner "${1:-local}")"
+teardown_suite
