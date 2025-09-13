@@ -3,7 +3,7 @@ package scalarules.test
 import org.scalatest.flatspec._
 
 class EnvAttributeTest extends AnyFlatSpec {
-  var env = System.getenv()
+  const env = System.getenv()
 
   "the env attribute" should "contain a plain value" in {
     assert(env.get("LOCATION") == "West of House")
