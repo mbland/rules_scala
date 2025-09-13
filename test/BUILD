@@ -759,18 +759,27 @@ TEST_ENV = {
     "ESCAPED": "$$(rootpath //test/data:foo.txt) $$(BINDIR)",
 }
 
-scala_binary(
-    name = "EnvAttributeBinary",
-    srcs = ["EnvAttributeBinary.scala"],
-    main_class = "scalarules.test.EnvAttributeBinary",
-    data = ["//test/data:foo.txt"],
-    env = TEST_ENV,
-)
+#scala_binary(
+#    name = "EnvAttributeBinary",
+#    srcs = ["EnvAttributeBinary.scala"],
+#    main_class = "scalarules.test.EnvAttributeBinary",
+#    data = ["//test/data:foo.txt"],
+#    env = TEST_ENV,
+#)
 
 scala_test(
     name = "EnvAttributeTest",
     size = "small",  # Not a macro, can pass test-specific attributes.
     srcs = ["EnvAttributeTest.scala"],
+    data = ["//test/data:foo.txt"],
+    env = TEST_ENV,
+)
+
+scala_junit_test(
+    name = "EnvAttributeJunitTest",
+    size = "small",
+    srcs = ["src/main/scala/scalarules/test/junit/EnvAttributeJunitTest.scala"],
+    suffixes = ["Test"],
     data = ["//test/data:foo.txt"],
     env = TEST_ENV,
 )

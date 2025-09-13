@@ -26,19 +26,17 @@ def expand_vars(ctx, attr_name, value, targets, additional_subs):
         for p in value.split("$$")
     ])
 
-def phase_test_environment(ctx, _):
+def phase_expand_environment(ctx, _):
     # Not sure if we'll ever include additional substitutions, but
     # `ctx.expand_make_variables` requires it.
     additional_subs = {}
-    test_env = {
-        k: expand_vars(ctx, "env", v, ctx.attr.data, additional_subs)
-        for k, v in ctx.attr.env.items()
-    }
-    return struct(
-        external_providers = {
-            "RunEnvironmentInfo": RunEnvironmentInfo(
-                environment = test_env,
-                inherited_environment = ctx.attr.env_inherit,
-            ),
+
+    run_env_info = RunEnvironmentInfo(
+        environment = {
+            k: expand_vars(ctx, "env", v, ctx.attr.data, additional_subs)
+            for k, v in ctx.attr.env.items()
         },
+        inherited_environment = getattr(ctx.attr, "env_inherit", []),
     )
+
+    return struct(external_providers = {"RunEnvironmentInfo": run_env_info})

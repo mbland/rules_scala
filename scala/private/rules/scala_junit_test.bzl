@@ -21,6 +21,7 @@ load(
     "phase_declare_executable",
     "phase_default_info",
     "phase_dependency_common",
+    "phase_expand_environment",
     "phase_java_wrapper_common",
     "phase_jvm_flags",
     "phase_merge_jars",
@@ -29,7 +30,6 @@ load(
     "phase_scalacopts",
     "phase_scalainfo_provider_non_macro",
     "phase_semanticdb",
-    "phase_test_environment",
     "phase_write_executable_junit_test",
     "phase_write_manifest",
     "run_phases",
@@ -62,7 +62,7 @@ def _scala_junit_test_impl(ctx):
             ("jvm_flags", phase_jvm_flags),
             ("write_executable", phase_write_executable_junit_test),
             ("default_info", phase_default_info),
-            ("test_environment", phase_test_environment),
+            ("expand_environment", phase_expand_environment),
         ],
     )
 

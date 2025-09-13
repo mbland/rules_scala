@@ -21,6 +21,7 @@ load(
     "phase_declare_executable",
     "phase_default_info",
     "phase_dependency_common",
+    "phase_expand_environment",
     "phase_java_wrapper_common",
     "phase_merge_jars",
     "phase_runfiles_scalatest",
@@ -28,7 +29,6 @@ load(
     "phase_scalacopts",
     "phase_scalainfo_provider_non_macro",
     "phase_semanticdb",
-    "phase_test_environment",
     "phase_write_executable_scalatest",
     "phase_write_manifest",
     "run_phases",
@@ -56,7 +56,7 @@ def _scala_test_impl(ctx):
             ("coverage_runfiles", phase_coverage_runfiles),
             ("write_executable", phase_write_executable_scalatest),
             ("default_info", phase_default_info),
-            ("test_environment", phase_test_environment),
+            ("expand_environment", phase_expand_environment),
         ],
     )
 
