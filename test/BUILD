@@ -806,3 +806,23 @@ env_vars(
     name = "test_vars",
     vars = {"FOOBAR": "bazquux"},
 )
+
+# Used by test_scala_test_env_attribute_with_env_inherit_and_test_env
+# from test/shell/test_env_attribute_expansion.sh.
+scala_test(
+    name = "EnvAttributeManualTest",
+    size = "small",
+    srcs = ["EnvAttributeManualTest.scala"],
+    env = {
+        "FROM_TEST_ENV_AND_ENV_ATTR": "env attribute value",
+        "FROM_ENV_INHERIT_AND_ENV_ATTR": "env attribute value",
+        "FROM_ALL_SOURCES": "env attribute value",
+    },
+    env_inherit = [
+        "FROM_ENV_INHERIT",
+        "FROM_ENV_INHERIT_AND_ENV_ATTR",
+        "FROM_ENV_INHERIT_AND_TEST_ENV",
+        "FROM_ALL_SOURCES",
+    ],
+    tags = ["manual"],
+)

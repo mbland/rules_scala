@@ -40,6 +40,21 @@ test_scala_binary_env_attribute_expansion() {
   diff -u --strip-trailing-cr "${test_tmpdir}"/{expected,actual}.txt
 }
 
+test_scala_test_env_attribute_with_env_inherit_and_test_env() {
+  FROM_ENV_INHERIT="inherited value" \
+    NOT_IN_ENV_INHERIT="inherited value" \
+    FROM_ENV_INHERIT_AND_ENV_ATTR="inherited value" \
+    FROM_ENV_INHERIT_AND_TEST_ENV="inherited value" \
+    FROM_ALL_SOURCES="inherited value" \
+    bazel test \
+    --test_env=FROM_TEST_ENV="test env value" \
+    --test_env=FROM_TEST_ENV_AND_ENV_ATTR="test env value" \
+    --test_env=FROM_ENV_INHERIT_AND_TEST_ENV="test env value" \
+    --test_env=FROM_ALL_SOURCES="test env value" \
+    --test_output=all \
+    //test:EnvAttributeManualTest
+}
+
 setup_suite
 run_tests "$test_source" "$(get_test_runner "${1:-local}")"
 teardown_suite
