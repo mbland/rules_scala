@@ -39,7 +39,7 @@ def expand_vars(ctx, attr_name, value, targets, additional_vars):
         for s in value.split("$$")
     ])
 
-def run_environment_info(ctx, additional_attr_names = []):
+def run_environment_info(ctx, additional_attrs = []):
     """Create a RunEnvironmentInfo provider from `ctx.attr.env` values.
 
     Implements the "values are subject to `$(location)` and "Make variable"
@@ -56,17 +56,17 @@ def run_environment_info(ctx, additional_attr_names = []):
 
     Args:
         ctx: Rule context object
-        additional_attr_names: list of attribute names containing targets to use
-            when invoking `ctx.expand_location`; already includes "data",
-            "deps", and "srcs"
+        additional_attrs: `attr.label_list` values containing targets to use
+            when invoking `ctx.expand_location` in addition to "data", "deps",
+            and "srcs"
 
     Returns:
         a RunEnvironmentInfo object containing `ctx.attr.env` values after
             expanding location and Make variables
     """
-    targets = []
-    for attr_name in ["data"] + additional_attr_names:
-        targets.extend(getattr(ctx.attr, attr_name, []))
+    targets = getattr(ctx.attr, "data", [])
+    for additional_attr in additional_attrs:
+        targets.extend(additional_attr)
 
     return RunEnvironmentInfo(
         environment = {
