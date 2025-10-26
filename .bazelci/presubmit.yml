@@ -41,6 +41,7 @@ tasks:
     shell_commands:
     # Install xmllint
     - sudo apt update && sudo apt install --reinstall libxml2-utils -y
+    - echo "common --lockfile_mode=update" >>.bazelrc
     - "./test_rules_scala.sh"
     soft_fail:
       - exit_status: "*"
@@ -150,8 +151,12 @@ tasks:
     working_directory: "examples/crossbuild"
     platform: ${{ bcr_platform }}
     bazel: ${{ bcr_bazel }}
+    build_flags:
+      - "--lockfile_mode=update"
     build_targets:
       - "//..."
+    test_flags:
+      - "--lockfile_mode=update"
     test_targets:
       - "//..."
     soft_fail:

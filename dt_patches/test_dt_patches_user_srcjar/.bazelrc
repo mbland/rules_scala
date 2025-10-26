@@ -1,1 +1,6 @@
 import ../../.bazelrc
+
+# `MODULE.bazel` contains `scala_deps.compiler_srcjar` tags without `sha256`,
+# `integrity`, or `label` attributes. `--repo_env=SCALA_VERSION` values from
+# test cases change the `MODULE.bazel.lock` file as a result.
+common --lockfile_mode=update

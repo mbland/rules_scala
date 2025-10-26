@@ -9,7 +9,11 @@ bcr_test_module:
       name: "Build and test the example module"
       platform: ${{ platform }}
       bazel: ${{ bazel }}
+      build_flags:
+        - "--lockfile_mode=update"
       build_targets:
         - "//..."
+      test_flags:
+        - "--lockfile_mode=update"
       test_targets:
         - "//..."
