@@ -25,7 +25,7 @@ setup_suite() {
   setup_test_tmpdir_for_file "$original_dir" "$test_source"
   test_tmpdir="$PWD"
 
-  rules_scala_dir="$(relative_path_to_parent "$original_dir" "$test_tmpdir")"
+  rules_scala_dir="$(convert_msys2_path "$dir")"
   test_srcs_dir="${dir}/scala/private/macros/test"
   test_tmpdir_base="${test_tmpdir##*/}"
   test_module_bazel_regex="[^ ]+${test_tmpdir_base}/MODULE.bazel"
@@ -49,6 +49,7 @@ setup_test_module() {
   set -e
   cp "${dir}"/.bazelversion "${test_srcs_dir}"/bzlmod_test_ext.bzl .
   sed -e "s/--lockfile_mode=error/--lockfile_mode=update/" \
+      -e "s/common --@.*prefer_prebuilt_protoc/# &/" \
       "${dir}/.bazelrc" > ./.bazelrc
   cp "${test_srcs_dir}/BUILD.bzlmod_test" 'BUILD'
 
