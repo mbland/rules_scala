@@ -204,10 +204,10 @@ convert_msys2_path() {
   local path="$1"
 
   if command -v cygpath >/dev/null; then
-    cygpath -w "$path"
-  else
-    printf "$path"
+    path="$(cygpath -w "$path")"
+    path="${path//\\/\\\\}"
   fi
+  printf "$path"
 }
 
 # Runs test cases extracted from a file whose name matches `test_*() {`.
