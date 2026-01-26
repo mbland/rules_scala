@@ -26,6 +26,7 @@ setup_suite() {
   test_tmpdir="$PWD"
 
   rules_scala_dir="$(convert_msys2_path "$dir")"
+  latest_deps_dir="$(convert_msys2_path "${dir}/deps/latest")"
   test_srcs_dir="${dir}/scala/private/macros/test"
   test_tmpdir_base="${test_tmpdir##*/}"
   test_module_bazel_regex="[^ ]+${test_tmpdir_base}/MODULE.bazel"
@@ -53,6 +54,7 @@ setup_test_module() {
   cp "${test_srcs_dir}/BUILD.bzlmod_test" 'BUILD'
 
   sed -e "s%\${rules_scala_dir}%${rules_scala_dir}%" \
+    -e "s%\${latest_deps_dir}%${latest_deps_dir}%" \
     "${test_srcs_dir}/MODULE.bzlmod_test" > 'MODULE.bazel'
 
   printf '%s\n' "$@" >>'MODULE.bazel'
@@ -98,9 +100,11 @@ test_bzlmod_creates_fake_root_module_tags_when_unused_by_root_module() {
   mkdir "$test_module_dir"
   cd "$test_module_dir"
   setup_test_module
+  test_module_dir="$(convert_msys2_path "$PWD")"
   cd "$test_tmpdir"
 
   sed -e "s%\${rules_scala_dir}%${rules_scala_dir}%" \
+    -e "s%\${latest_deps_dir}%${latest_deps_dir}%" \
     -e "s%\${test_module_dir}%${test_module_dir}%" \
     "${test_srcs_dir}/MODULE.bzlmod_test_root_module" > 'MODULE.bazel'
 
