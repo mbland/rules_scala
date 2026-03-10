@@ -21,6 +21,7 @@ from lib.update_integrity import (
 
 
 PROTOC_VERSIONS = [
+    "34.0",
     "33.5",
     "33.4",
     # yanked: https://registry.bazel.build/modules/protobuf/33.3

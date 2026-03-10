@@ -66,7 +66,7 @@ bazel_dep(
 )
 single_version_override(
     module_name = "protobuf",
-    version = "33.5",
+    version = "34.0.bcr.1",
 )
 
 # See //src/java/io/bazel/rulesscala/worker:worker_protocol_java_proto.
@@ -262,7 +262,7 @@ go_sdk = use_extension(
     "go_sdk",
     dev_dependency = True,
 )
-go_sdk.download(version = "1.26.0")
+go_sdk.download(version = "1.26.1")
 
 go_deps = use_extension(
     "@gazelle//:extensions.bzl",
@@ -298,5 +298,5 @@ use_repo(
     "org_golang_x_tools",
 )
 
-bazel_dep(name = "rules_python", version = "1.8.5", dev_dependency = True)
+bazel_dep(name = "rules_python", version = "1.9.0", dev_dependency = True)
 bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)

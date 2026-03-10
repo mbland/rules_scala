@@ -10,6 +10,7 @@ PROTOC_DOWNLOAD_URL = (
 )
 
 PROTOC_VERSIONS = [
+    "34.0",
     "33.5",
     "33.4",
     "33.2",
@@ -34,6 +35,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:aarch64",
         ],
         "integrity": {
+            "34.0": "sha256-8Liq0ovl6mFQwIL5asV+AoFUr7nuKfTOCStaOd+K5sg=",
             "33.5": "sha256-Kw/Pmywyy63MwOt6iLhB//7NSgb8gKzborW+RegVw4o=",
             "33.4": "sha256-FaqYj0pgkGNlJewjao5LOqtB7vQCdRvVuy32r9m3taU=",
             "33.2": "sha256-cGZiozJoOqL//hxOphWIJ50xZ5zULZHH1gppZRdo7bg=",
@@ -58,6 +60,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:ppc64le",
         ],
         "integrity": {
+            "34.0": "sha256-ThxOfb+KtrG/XugJIID+YNiA2x9orlNH/iNnXYoTIYs=",
             "33.5": "sha256-7vdQshGfwDvaBJwkMid3reSgIVvTmWoE+RXR62ooMyg=",
             "33.4": "sha256-l/wHjUPNa7jTj3zOIN3Q4Ye0unnZcudUPt0Wuz/zDWI=",
             "33.2": "sha256-FrSjbAfaq0WLwEBSOx8zPd034UQPpxY08pekWMf+9MQ=",
@@ -82,6 +85,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:s390x",
         ],
         "integrity": {
+            "34.0": "sha256-MvdTyiyvVIfvkNEufhQa+4u7tWxZqicCsHqXEqvirU4=",
             "33.5": "sha256-itxRwodhtSzAqSS8b3iBWkO8uI+/8lANuwQBqrY3GZs=",
             "33.4": "sha256-RNzGFfDCP2RAM/KVhikC0TwfZ+ZQhRuyLnazg3qFIas=",
             "33.2": "sha256-xTxlE+vWzYw1kuLXXqnYqhqRvjuh4X87+Vyrwta4w+A=",
@@ -106,6 +110,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:x86_32",
         ],
         "integrity": {
+            "34.0": "sha256-kHYw07lUSgcNi/46udjeKnX/y9bTItnpbwJgtSF4KOg=",
             "33.5": "sha256-adhefH2FgIHnN0/37hp1yAbwkTMwAaNgCeVWCK5EgUM=",
             "33.4": "sha256-wrkEmkjV0NFY3wCZ2fcJ26kSOvej7afFIL9pZRs/FO0=",
             "33.2": "sha256-306teVEW+qRe7CotlkE1vgQ5Kkg9e/GwQcdfid+9Ti0=",
@@ -130,6 +135,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:x86_64",
         ],
         "integrity": {
+            "34.0": "sha256-6akbb8/kF37CzTX8jxXB6BH6Ds3vk3J1XNbTUT1fqqs=",
             "33.5": "sha256-JOWPsjHVAwbuKEkfM6FwMB6ZVA9+KcpGHg6A/RI5+NE=",
             "33.4": "sha256-wAQOqa7wj96yx0ymCbGNX9v8ROoAQvz7+ziGDTX33WY=",
             "33.2": "sha256-sktT+HwVG/1IsRL+TDpuZXTlGYh084A2r/Qd80VrjK8=",
@@ -154,6 +160,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:aarch64",
         ],
         "integrity": {
+            "34.0": "sha256-PvNRh6PIrtge5X55Iifkg+VY+lbJP85SXlab/1V5TBo=",
             "33.5": "sha256-cITGSC47tBajP+IWK6VmcRdzuELmlTv2yxgWR7nvV8A=",
             "33.4": "sha256-cmKX3P7VhZL9NWIKWmJGrgIMOeiPP9TLGCffe889/PE=",
             "33.2": "sha256-W+FCcSd4jJ9919YGw+aYQ901hzJ96pk5F//Ld+cjS0Q=",
@@ -178,6 +185,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:x86_64",
         ],
         "integrity": {
+            "34.0": "sha256-1Y/NQTqe1FgoPVQCPkCf1c92faTtIl0f+v/YPPJ2T1M=",
             "33.5": "sha256-fzFiX4vsSSkIKukgnhAcHANpJiRFfMYzL4NzbbSV7pI=",
             "33.4": "sha256-pJvsENA56QLTtD5Jk4xCUm+QARRnYJhk+mOGrEAU2lg=",
             "33.2": "sha256-26Uc/MhQdtVufeAaZHhlxaf5lcPc5CfVIVtT5Qt75D8=",
@@ -202,6 +210,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:x86_32",
         ],
         "integrity": {
+            "34.0": "sha256-iVEmds6H0qerzlNd82bR7DzCo2ulUaEt+RWNskDgFKo=",
             "33.5": "sha256-a/mh2DKJZky7yalfw4iclxufAowOb2F7qAC6xAHDa+E=",
             "33.4": "sha256-W3Bp5jfWKBcdYsOYKy1PEOwsznZC4Ci2/EhzvBl5ayU=",
             "33.2": "sha256-u3YHfEWkJUpl8G90bdqc00bYtVWrGiXrxVVIgpwGtM4=",
@@ -226,6 +235,7 @@ PROTOC_BUILDS = {
             "@platforms//cpu:x86_64",
         ],
         "integrity": {
+            "34.0": "sha256-dt3rWuejHI+fd1nTuEOkyt2iFQrAN60MF5RmXWzzH84=",
             "33.5": "sha256-fjRozR+9Guk2GlME1Kwo+9WTqhpCW1RkvZ1NpfyiJLQ=",
             "33.4": "sha256-CzG+AZuf5Fo4jpO/HxbXCv35zlyvlY6keJL7yGi1obM=",
             "33.2": "sha256-N2dwzUBzvrY9tW/dM5Jg7bmVezxEcuBadfX57I+Y2PU=",
